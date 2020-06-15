@@ -1,0 +1,49 @@
+<body style=width:100%;>
+    <div class="header">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <a class="navbar-brand" href="#">Vibin</a>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/upload">Upload</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">signout</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <select class="custom-select" id="orderOption">
+                    <option value="relevance" selected="">Relevance</option>
+                    <option value="date">Date</option>
+                    <option value="viewCount">View</option>
+                </select>
+                <select class="custom-select" id="durationOption">
+                    <option value="any" selected="">Any</option>
+                    <option value="short">Short</option>
+                    <option value="medium">Medium</option>
+                    <option value="long">Long</option>
+                </select>
+                <input id="userInput" class="form-control mr-sm-2" type="text" placeholder="Search">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit" onclick="search()">Search</button>
+            </form>
+        </nav>
+    </div>
+    <div class="row mt-5">
+        <div class="col-md-10 m-auto">
+            <div class="card card-body text-center">
+                <h1><i class="fab fa-node-js fa-3x"></i></h1>
+                <h1>DansAR</h1>
+                <p>Dance with everyone on the earth</p>
+                <p>Start with a Google Account</p>
+            </div>
+        </div>
+    </div>
+    <div class="card-deck">
+        <div class="card" style="margin:20px;">
+            <img src="" id="thumbnail0"
+                class="card-img-top" alt="Tracker">
+            <div class="card-body">
+                <h4 class="card-title" id="title0"></h4>
+                <p class="card-text" id="channelTitle0"></p>
+                <a id="videoId0" href="https://www.youtube.com/embed/" class="btn btn-primary">Dance now</a>
+            </div>
+        </div>
