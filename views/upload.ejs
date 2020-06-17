@@ -1,0 +1,36 @@
+<div class="row mt-5">
+    <div class="col-md-6 m-auto">
+      <div class="card card-body">
+        <h1 class="text-center mb-3">
+         <i class="fas fa-user-plus"></i> Upload
+        </h1>
+        <form action="/upload" method="POST">
+          <div class="form-group">
+            <label for="title">Title</label>
+            <input
+              type="title"
+              id="title"
+              name="title"
+              class="form-control"
+              placeholder="Enter Title"
+              value="<%= typeof title != 'undefined' ? title : '' %>"
+            />
+          <div class="form-group">
+            <label for="name">URL</label>
+            <input
+              type="url"
+              id="url"
+              name="url"
+              class="form-control"
+              placeholder="Enter URL"
+              value="<%= typeof dance != 'undefined' ? dance : '' %>"
+            />
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">
+            Upload
+          </button>
+        </form>
+        <p class="lead mt-4"><a href="/dashboard">Go back</a></p>
+      </div>
+    </div>
+  </div>

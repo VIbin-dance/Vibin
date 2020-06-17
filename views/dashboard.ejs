@@ -1,8 +1,36 @@
-<body style=width:100%;>
-    <div class="header">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-            <a class="navbar-brand" href="#">Vibin</a>
-            <ul class="navbar-nav mr-auto">
+<div class="header">
+    <header id="header" class="fixed-top ">
+        <div class="container d-flex align-items-center justify-content-between">
+
+          <h1 class="logo"><a href="/">Vibin'</a></h1>
+          <!-- Uncomment below if you prefer to use an image logo -->
+          <!-- <a href="index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+
+          <nav class="nav-menu d-none d-lg-block">
+            <ul>
+              <li class="active"><a href="#header">Home</a></li>
+              <li><a href="#about">About</a></li>
+              <li><a href="#contact">Contact</a></li>
+              <li class="drop-down"><a href="">Drop Down</a>
+                <ul>
+                  <li><a href="#">Drop Down 1</a></li>
+                  <li><a href="#">Drop Down 2</a></li>
+                  <li><a href="#">Drop Down 3</a></li>
+                  <li><a href="#">Drop Down 4</a></li>
+                </ul>
+              </li>
+            </ul>
+
+          </nav><!-- .nav-menu -->
+          <div class="col-lg-4 col-md-6 footer-newsletter">
+            <form action="" method="post">
+              <input type="email" name="email"><input type="submit" value="Subscribe">
+            </form>
+          </div>
+        </div>
+      </header><!-- End Header -->
+
+            <!-- <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="/upload">Upload</a>
                 </li>
@@ -26,7 +54,8 @@
                 <button class="btn btn-secondary my-2 my-sm-0" type="submit" onclick="search()">Search</button>
             </form>
         </nav>
-    </div>
+    </div> -->
+
     <div class="row mt-5">
         <div class="col-md-10 m-auto">
             <div class="card card-body text-center">
