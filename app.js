@@ -1,16 +1,10 @@
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
-const mongoose = require('mongoose');
 const session = require('express-session');
 
 const app = express();
 
-const db = require('./config/keys').MongoURI;
-
-mongoose.connect(db, {useNewUrlParser: true, useUnifiedTopology: true})
-    .then(() => console.log('MongoDB is connected!'))
-    .catch(err => console.log(err));
-
+app.use(express.static(__dirname + '/public'));
 app.use(expressLayouts);
 app.set('view engine', 'ejs');
 
