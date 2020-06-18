@@ -251,7 +251,7 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid #ff7583;
 }
 
-#search .search-bar form input[type="email"] {
+#search .search-bar form input[type="search"] {
   border: 0;
   padding: 4px 8px;
   width: 50%;

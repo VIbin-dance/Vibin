@@ -23,19 +23,24 @@
   <!-- Search bar -->
   <section id="search" class="search">
     <div class="col-lg-8 col-md-6 search-bar">
-      <form action="" method="post">
-        <select class="custom-select" id="orderOption">
-          <option value="relevance" selected="">Relevance</option>
-          <option value="date">Date</option>
-          <option value="viewCount">View</option>
+      <form action="/dashboard" method="POST">
+
+        <select class="custom-select" type="language" id="language" name="language">
+          <option selected="null">Language</option>
+          <option value="Japanese">Japanese</option>
+          <option value="English">English</option>
         </select>
-        <select class="custom-select" id="durationOption">
-          <option value="any" selected="">Any</option>
-          <option value="short">Short</option>
-          <option value="medium">Medium</option>
-          <option value="long">Long</option>
+
+        <select class="custom-select" type="level" id="level" name="level">
+          <option selected="null">Level</option>
+          <option value="Beginner">Beginner</option>
+          <option value="Intermediate">Intermediate</option>
+          <option value="Advanced">Advanced</option>
         </select>
-        <input type="email" name="email" placeholder="Search"><input type="submit" value="Search">
+
+        <input type="search" id="search" name="search" placeholder="Search" value="<%= typeof title != 'undefined' ? title : '' %>">
+        <input type="submit" value="Search">
+
       </form>
     </div>
   </section>
@@ -50,7 +55,7 @@
         <div class="col-lg-4">
           <div class="box">
             <span>01</span>
-            <h4>Lorem Ipsum</h4>
+            <h4></h4>
             <p>Ulamco laboris nisi ut aliquip ex ea commodo consequat. Et consectetur ducimus vero placeat</p>
           </div>
         </div>

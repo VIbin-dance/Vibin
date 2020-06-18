@@ -13,6 +13,11 @@ const VideoSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    language: {
+        type: String,
+        required: true,
+        enum: ["Japanese", "English"]
+    },
     level: {
         type: String,
         required: true,
