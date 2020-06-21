@@ -25,62 +25,179 @@
     <div class="col-lg-8 col-md-6 search-bar">
       <form action="/dashboard" method="POST">
 
-        <select class="custom-select" type="language" id="language" name="language">
-          <option selected="null">Language</option>
-          <option value="Japanese">Japanese</option>
-          <option value="English">English</option>
-        </select>
+        <!-- <div class="form-group">
+          <label for="choreographer">Choreographer</label>
+          <input type="choreographer" id="choreographer" name="choreographer" class="form-control"
+            placeholder="Enter The Choreographer"
+            value="<%= typeof choreographer != 'undefined' ? choreographer : '' %>" />
+        </div> -->
 
-        <select class="custom-select" type="level" id="level" name="level">
-          <option selected="null">Level</option>
-          <option value="Beginner">Beginner</option>
-          <option value="Intermediate">Intermediate</option>
-          <option value="Advanced">Advanced</option>
-        </select>
+        <!-- <div class="form-group">
+          <label for="length">Length</label>
+          <select class="custom-select" type="length" id="length" name="length">
+            <option selected="null" value="any">prefer not to answer</option>
+            <option value="5-10">5 to 10 minutes</option>
+            <option value="10-30">10 to 30 minutes</option>
+            <option value="30-60">30 to 60 minutes</option>
+            <option value="60<">Over 60 minutes</option>
+          </select>
+        </div> -->
 
-        <input type="search" id="search" name="search" placeholder="Search" value="<%= typeof title != 'undefined' ? title : '' %>">
+        <!-- <div class="form-group">
+          <label for="language">Language</label>
+          <select class="custom-select" type="language" id="language" name="language">
+            <option selected="null" value="any">prefer not to answer</option>
+            <option value="Japanese">Japanese</option>
+            <option value="English">English</option>
+          </select>
+        </div> -->
+
+        <!-- <div class="form-group">
+          <label for="level">Level</label>
+          <select class="custom-select" type="level" id="level" name="level">
+            <option selected="null" value="any">prefer not to answer</option>
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advanced">Advanced</option>
+          </select>
+        </div> -->
+
+        <div class="form-group">
+          <label for="length">Length</label>
+          <fieldset class="form-group">
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="length" name="length" class="form-check-input" type="checkbox"
+                value="5-10">5 to 10 minutes</label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="length" name="length" class="form-check-input" class="form-check-input" type="checkbox"
+                value="10-30">10 to 30 minutes</label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="length" name="length" class="form-check-input" class="form-check-input" type="checkbox"
+                value="30-60">30 to 60 minutes</label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="length" name="length" class="form-check-input" class="form-check-input" type="checkbox"
+                value="60<">Over 60 minutes</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+          <label for="language">Language</label>
+          <fieldset class="form-group">
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="language" name="language" class="form-check-input" type="checkbox"
+                value="Japanese">Japanese</label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="language" name="language" class="form-check-input" class="form-check-input" type="checkbox"
+                value="English">English</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+          <label for="level">Level</label>
+          <fieldset class="form-group">
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="level" name="level" class="form-check-input" type="checkbox"
+                value="Beginner">Beginner</label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="level" name="level" class="form-check-input" class="form-check-input" type="checkbox"
+                value="Intermediate">Intermediate</label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="level" name="level" class="form-check-input" class="form-check-input" type="checkbox"
+                value="Advanced">Advanced</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+          <label for="genre">Genre</label>
+          <fieldset class="form-group">
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="genre" name="genre" class="form-check-input" type="checkbox" value="Hip Hop">Hip Hop</label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="genre" name="genre" class="form-check-input" class="form-check-input" type="checkbox"
+                  value="Locking">Locking</label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="genre" name="genre" class="form-check-input" class="form-check-input" type="checkbox"
+                  value="Jazz">Jazz</label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="genre" name="genre" class="form-check-input" class="form-check-input" type="checkbox"
+                  value="Breakin">Breakin</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+          <label for="purpose">Purpose</label>
+          <fieldset class="form-group">
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="purpose" name="purpose" class="form-check-input" type="checkbox"
+                  value="Learning">Learning</label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="purpose" name="purpose" class="form-check-input" class="form-check-input" type="checkbox"
+                  value="Diet">Diet</label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="purpose" name="purpose" class="form-check-input" class="form-check-input" type="checkbox"
+                  value="Health">Health</label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="purpose" name="purpose" class="form-check-input" class="form-check-input" type="checkbox"
+                  value="Entertainment">Entertainment</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+          <label for="mood">Mood</label>
+          <fieldset class="form-group">
+            <div class="form-check">
+              <label class="form-check-label">
+              <input id="mood" name="mood" class="form-check-input" type="checkbox"
+              value="Groovy">Groovy</label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+              <input id="mood" name="mood" class="form-check-input" class="form-check-input" type="checkbox"
+              value="Funky">Funky</label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="mood" name="mood" class="form-check-input" class="form-check-input" type="checkbox"
+                value="Chill">Chill</label>
+            </div>
+        </div>
+
+        <!-- <input type="search" id="search" name="search" placeholder="Search"
+          value="<%= typeof title != 'undefined' ? title : '' %>"> -->
         <input type="submit" value="Search">
 
       </form>
     </div>
   </section>
-
-  <!-- ======= Why Us Section ======= -->
-  <section id="why-us" class="why-us">
-    <div class="container">
-      <%- include ('partials/messages') %>
-
-      <div class="row">
-
-        <div class="col-lg-4">
-          <div class="box">
-            <span>01</span>
-            <h4></h4>
-            <p>Ulamco laboris nisi ut aliquip ex ea commodo consequat. Et consectetur ducimus vero placeat</p>
-          </div>
-        </div>
-
-        <div class="col-lg-4 mt-4 mt-lg-0">
-          <div class="box">
-            <span>02</span>
-            <h4>Repellat Nihil</h4>
-            <p>Dolorem est fugiat occaecati voluptate velit esse. Dicta veritatis dolor quod et vel dire leno para dest
-            </p>
-          </div>
-        </div>
-
-        <div class="col-lg-4 mt-4 mt-lg-0">
-          <div class="box">
-            <span>03</span>
-            <h4> Ad ad velit qui</h4>
-            <p>Molestiae officiis omnis illo asperiores. Aut doloribus vitae sunt debitis quo vel nam quis</p>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-  </section><!-- End Why Us Section -->
 
   <!-- <ul class="navbar-nav mr-auto">
                 <li class="nav-item">

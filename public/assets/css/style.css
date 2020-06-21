@@ -1696,3 +1696,53 @@ section {
   background: #EB5160;
   color: #fff;
 }
+
+/* Results page */
+.results {
+  padding-top:5%;
+}
+
+.results .box {
+  margin-top: 35px;
+  padding: 50px 30px;
+  box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+  transition: all ease-in-out 0.3s;
+  min-height: 300px;
+}
+
+.results img {
+  max-width: 100%;
+  max-height: 50%;
+}
+
+.results .box span {
+  display: block;
+  font-size: 28px;
+  font-weight: 700;
+  color: #ff7583;
+}
+
+.results .box h4 {
+  font-size: 24px;
+  font-weight: 600;
+  padding: 0;
+  margin: 20px 0;
+  color: #434175;
+}
+
+.results .box p {
+  color: #aaaaaa;
+  font-size: 15px;
+  margin: 0;
+  padding: 0;
+}
+
+.results .box:hover {
+  background: #EB5160;
+  padding: 30px 30px 70px 30px;
+  box-shadow: 10px 15px 30px rgba(0, 0, 0, 0.18);
+}
+
+.results .box:hover span, .results .box:hover h4, .results .box:hover p {
+  color: #fff;
+}

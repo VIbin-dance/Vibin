@@ -70,8 +70,16 @@
 
         <div class="form-group">
           <label for="choreographer">Choreographer</label>
-          <input type="choreographer" id="choreographer" name="choreographer" class="form-control" placeholder="Enter The Choreographer"
+          <input type="choreographer" id="choreographer" name="choreographer" class="form-control"
+            placeholder="Enter The Choreographer"
             value="<%= typeof choreographer != 'undefined' ? choreographer : '' %>" />
+        </div>
+
+        <div class="form-group">
+          <label for="thumbnail">Thumbnail</label>
+          <input type="thumbnail" id="thumbnail" name="thumbnail" class="form-control"
+            placeholder="Enter The Thumbnail"
+            value="<%= typeof thumbnail != 'undefined' ? thumbnail : '' %>" />
         </div>
 
         <div class="form-group">
@@ -81,9 +89,20 @@
         </div>
 
         <div class="form-group">
+          <label for="length">Length</label>
+          <select class="custom-select" type="length" id="length" name="length">
+            <option selected="null" value="any">prefer not to answer</option>
+            <option value="5-10">5 to 10 minutes</option>
+            <option value="10-30">10 to 30 minutes</option>
+            <option value="30-60">30 to 60 minutes</option>
+            <option value="60<">Over 60 minutes</option>
+          </select>
+        </div>
+
+        <div class="form-group">
           <label for="language">Language</label>
           <select class="custom-select" type="language" id="language" name="language">
-            <option selected="null">prefer not to answer</option>
+            <option selected="null" value="any">prefer not to answer</option>
             <option value="Japanese">Japanese</option>
             <option value="English">English</option>
           </select>
@@ -92,11 +111,78 @@
         <div class="form-group">
           <label for="level">Level</label>
           <select class="custom-select" type="level" id="level" name="level">
-            <option selected="null">prefer not to answer</option>
+            <option selected="null" value="any">prefer not to answer</option>
             <option value="Beginner">Beginner</option>
             <option value="Intermediate">Intermediate</option>
             <option value="Advanced">Advanced</option>
           </select>
+        </div>
+
+        <div class="form-group">
+          <label for="genre">Genre</label>
+          <fieldset class="form-group">
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="genre" name="genre" class="form-check-input" type="checkbox" value="Hip Hop">Hip Hop</label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="genre" name="genre" class="form-check-input" class="form-check-input" type="checkbox"
+                  value="Locking">Locking</label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="genre" name="genre" class="form-check-input" class="form-check-input" type="checkbox"
+                  value="Jazz">Jazz</label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="genre" name="genre" class="form-check-input" class="form-check-input" type="checkbox"
+                  value="Breakin">Breakin</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+          <label for="purpose">Purpose</label>
+          <fieldset class="form-group">
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="purpose" name="purpose" class="form-check-input" type="checkbox" value="Learning">Learning</label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="purpose" name="purpose" class="form-check-input" class="form-check-input" type="checkbox"
+                  value="Diet">Diet</label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="purpose" name="purpose" class="form-check-input" class="form-check-input" type="checkbox"
+                  value="Health">Health</label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="purpose" name="purpose" class="form-check-input" class="form-check-input" type="checkbox"
+                  value="Entertainment">Entertainment</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+          <label for="mood">Mood</label>
+          <fieldset class="form-group">
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="mood" name="mood" class="form-check-input" type="checkbox" value="Groovy">Groovy</label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="mood" name="mood" class="form-check-input" class="form-check-input" type="checkbox"
+                  value="Funky">Funky</label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="mood" name="mood" class="form-check-input" class="form-check-input" type="checkbox"
+                  value="Chill">Chill</label>
+            </div>
         </div>
 
         <div class="text-center"><button class="button" type="submit">Upload</button></div>
