@@ -14,14 +14,12 @@ const VideoSchema = new mongoose.Schema({
         required: true
     },
     language: {
-        type: String,
+        type: Array,
         required: true,
-        enum: ["any", "Japanese", "English"]
     },
     level: {
-        type: String,
+        type: Array,
         required: true,
-        enum: ["any", "Beginner", "Intermediate", "Advanced"]
     },
     thumbnail: {
         type: String,
@@ -30,16 +28,14 @@ const VideoSchema = new mongoose.Schema({
     genre: {
         type: Array,
         required: true,
-
     },
     purpose: {
         type: Array,
         required: true
     },
     length: {
-        type: String,
+        type: Array,
         required: true,
-        enum: ["5-10", "10-30", "30-60", "60<"]
     },
     mood: {
         type: Array,

@@ -77,8 +77,7 @@
 
         <div class="form-group">
           <label for="thumbnail">Thumbnail</label>
-          <input type="thumbnail" id="thumbnail" name="thumbnail" class="form-control"
-            placeholder="Enter The Thumbnail"
+          <input type="thumbnail" id="thumbnail" name="thumbnail" class="form-control" placeholder="Enter The Thumbnail"
             value="<%= typeof thumbnail != 'undefined' ? thumbnail : '' %>" />
         </div>
 
@@ -90,32 +89,62 @@
 
         <div class="form-group">
           <label for="length">Length</label>
-          <select class="custom-select" type="length" id="length" name="length">
-            <option selected="null" value="any">prefer not to answer</option>
-            <option value="5-10">5 to 10 minutes</option>
-            <option value="10-30">10 to 30 minutes</option>
-            <option value="30-60">30 to 60 minutes</option>
-            <option value="60<">Over 60 minutes</option>
-          </select>
+          <fieldset class="form-group">
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="length" name="length" class="form-check-input" type="checkbox" value="5-10">5 to 10
+                minutes</label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="length" name="length" class="form-check-input" class="form-check-input" type="checkbox"
+                  value="10-30">10 to 30 minutes</label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="length" name="length" class="form-check-input" class="form-check-input" type="checkbox"
+                  value="30-60">30 to 60 minutes</label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="length" name="length" class="form-check-input" class="form-check-input" type="checkbox"
+                  value="60<">Over 60 minutes</label>
+            </div>
         </div>
 
         <div class="form-group">
           <label for="language">Language</label>
-          <select class="custom-select" type="language" id="language" name="language">
-            <option selected="null" value="any">prefer not to answer</option>
-            <option value="Japanese">Japanese</option>
-            <option value="English">English</option>
-          </select>
+          <fieldset class="form-group">
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="language" name="language" class="form-check-input" type="checkbox"
+                  value="Japanese">Japanese</label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="language" name="language" class="form-check-input" class="form-check-input" type="checkbox"
+                  value="English">English</label>
+            </div>
         </div>
 
         <div class="form-group">
           <label for="level">Level</label>
-          <select class="custom-select" type="level" id="level" name="level">
-            <option selected="null" value="any">prefer not to answer</option>
-            <option value="Beginner">Beginner</option>
-            <option value="Intermediate">Intermediate</option>
-            <option value="Advanced">Advanced</option>
-          </select>
+          <fieldset class="form-group">
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="level" name="level" class="form-check-input" type="checkbox"
+                  value="Beginner">Beginner</label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="level" name="level" class="form-check-input" class="form-check-input" type="checkbox"
+                  value="Intermediate">Intermediate</label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="level" name="level" class="form-check-input" class="form-check-input" type="checkbox"
+                  value="Advanced">Advanced</label>
+            </div>
         </div>
 
         <div class="form-group">
@@ -123,7 +152,8 @@
           <fieldset class="form-group">
             <div class="form-check">
               <label class="form-check-label">
-                <input id="genre" name="genre" class="form-check-input" type="checkbox" value="Hip Hop">Hip Hop</label>
+                <input id="genre" name="genre" class="form-check-input" type="checkbox" value="Hip Hop">Hip
+                Hop</label>
             </div>
             <div class="form-check">
               <label class="form-check-label">
@@ -137,7 +167,7 @@
             </div>
             <div class="form-check">
               <label class="form-check-label">
-                <input id="genre" name="genre" class="form-check-input" class="form-check-input" type="checkbox"
+                <input id="genre" name="checkbox" class="form-check-input" class="form-check-input" type="checkbox"
                   value="Breakin">Breakin</label>
             </div>
         </div>
@@ -147,7 +177,8 @@
           <fieldset class="form-group">
             <div class="form-check">
               <label class="form-check-label">
-                <input id="purpose" name="purpose" class="form-check-input" type="checkbox" value="Learning">Learning</label>
+                <input id="purpose" name="purpose" class="form-check-input" type="checkbox"
+                  value="Learning">Learning</label>
             </div>
             <div class="form-check">
               <label class="form-check-label">
@@ -241,3 +272,22 @@
       </div>
     </div>
   </footer><!-- End Footer -->
+
+  <script>
+    function checkboxlimit(checkgroup, limit) {
+      var checkgroup = checkgroup;
+      var limit = limit;
+      for (let i = 0; i < checkgroup.length; i++) {
+        checkgroup[i].onclick = function () {
+          var checkedcount = 0;
+          for (let i = 0; i < checkgroup.length; i++)
+            checkedcount += (checkgroup[i].checked) ? 1 : 0;
+          if (checkedcount > limit) {
+            alert("You can only select a maximum of " + limit + " checkboxes");
+            this.checked = false;
+          }
+        }
+      }
+    }
+
+  </script>
