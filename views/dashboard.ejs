@@ -280,6 +280,38 @@
             </div>
         </div> -->
 
+  <section id="results" class="results">
+    <div class="container">
+      <p>There are <%= videos.length %> videos in total</p>
+      <%- include ('partials/messages') %>
+      <div class="row">
+        <% for(let i=0; i < videos.length; i++) { %>
+        <div class="col-lg-4">
+          <div class="box">
+            <a href="/player/<%= url[i] %>">
+              <img src="<%= thumbnail[i] %>">
+            </a>
+            <h4><%= title[i] %></h4>
+            <p><%= choreographer[i] %></p>
+            <p><%= level[i] %></p>
+          </div>
+        </div>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- <% if (paginate.hasPreviousPages || paginate.hasNextPages(pageCount)) { %>
+      <ul class="pagination">
+        <% if (paginate.hasPreviousPages) { %>
+          <li><a href="paginate.href(true)"><span>&laquo</span></a></li>
+    <%  } %>
+        <% if (pages) { %>
+
+    <%    }   %>
+ <%    }   %> -->
+
+  </section><!-- End Why Us Section -->
+
   <!-- ======= Footer ======= -->
   <footer id="footer">
 

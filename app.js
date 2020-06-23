@@ -3,6 +3,7 @@ const expressLayouts = require('express-ejs-layouts');
 const session = require('express-session');
 const mongoose = require('mongoose');
 const flash = require('connect-flash');
+const paginate = require('express-paginate');
 
 const app = express();
 
@@ -35,6 +36,8 @@ app.use((req, res, next) => {
     res.locals.error = req.flash('error');
     next();
 });
+
+app.use(paginate.middleware(10, 50))
 
 app.use('/', require('./routes/index'));
 

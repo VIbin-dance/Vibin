@@ -1,13 +1,59 @@
 const express = require('express');
 const router = express.Router();
 const async = require('async');
+const paginate = require('express-paginate');
 
 const Video = require('../models/Video');
 
 router.get('/', (req, res) => res.render('landing'));
-router.get('/dashboard', (req, res) => res.render('dashboard'));
+
+router.get('/dashboard', (req, res) => {
+  Video.paginate({}, {page: req.query.page, limit: req.query.limit}, (err, result) => {
+    const title = [];
+    const choreographer = [];
+    const url = [];
+    const level = [];
+    const thumbnail = [];
+    for (let i = 0; i < result.docs.length; i++) {
+      title[i] = result.docs[i].title;
+      choreographer[i] = result.docs[i].choreographer;
+      url[i] = result.docs[i].url;
+      level[i] = result.docs[i].level;
+      thumbnail[i] = result.docs[i].thumbnail;
+    }
+    res.render('dashboard', {
+      videos: result.docs,
+      title: title,
+      choreographer: choreographer,
+      url: url,
+      level: level,
+      thumbnail: thumbnail,
+      currentPage: result.page,
+      pageCount: result.pages,
+      pages: paginate.getArrayPages(req)(3, result.pages, req.query.page)
+    });
+  });
+
+  // Video.find({}, (err, results) => {
+  //   let resultsTitle = results.map(results => results.title);
+  //   let resultsChoreo = results.map(results => results.choreographer);
+  //   let resultsURL = results.map(results => results.url);
+  //   let resultsLevel = results.map(results => results.level);
+  //   let resultsThumbnail = results.map(results => results.thumbnail);
+  //   res.render('dashboard', {
+  //     title: resultsTitle,
+  //     choreographer: resultsChoreo,
+  //     url: resultsURL,
+  //     level: resultsLevel,
+  //     thumbnail: resultsThumbnail,
+  //     results: results
+  //   })
+  // })
+});
+
 router.get('/results', (req, res) => res.render('results'));
 router.get('/upload', (req, res) => res.render('upload'));
+router.get('/player', (req, res) => res.render('player'));
 
 router.post('/dashboard', (req, res) => {
   const { length, language, level, genre, purpose, mood } = req.body;
@@ -92,7 +138,6 @@ router.post('/upload', (req, res) => {
       }
     }
   );
-
 })
 
 module.exports = router;
