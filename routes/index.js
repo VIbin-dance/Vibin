@@ -52,7 +52,11 @@ router.get('/dashboard', (req, res) => {
 });
 
 router.get('/results', (req, res) => res.render('results'));
-router.get('/upload', (req, res) => res.render('upload'));
+router.get('/upload', (req, res) => res.render('upload', {
+  API_key: process.env.API_key,
+  CLIENT_id: process.env.CLIENT_id
+}));
+
 router.get('/player', (req, res) => res.render('player'));
 
 router.post('/dashboard', (req, res) => {
@@ -93,16 +97,16 @@ router.post('/dashboard', (req, res) => {
 })
 
 router.post('/upload', (req, res) => {
-  const { title, choreographer, thumbnail, url, length, language, level, genre, purpose, mood } = req.body;
+  const { title, choreographer, thumbnail, url, publishedDate, length, language, level, genre, purpose, mood } = req.body;
   let errors = [];
 
   // Check required fields
-  if (title == '' || choreographer == '' || thumbnail == '' || url == '' || length == '' ||  language == '' || level == '' || genre == '' || purpose == '' || mood == '') {
+  if (title == '' || choreographer == '' || thumbnail == '' || url == '' || publishedDate == '' || length == '' ||  language == '' || level == '' || genre == '' || purpose == '' || mood == '') {
     errors.push({ msg: 'Please fill in all fields' });
   }
 
   if (errors.length > 0) {
-    res.render('upload', { errors, title, choreographer, thumbnail, url, length, language, level, genre, purpose, mood });
+    res.render('upload', { errors, title, choreographer, thumbnail, url, publishedDate, length, language, level, genre, purpose, mood });
   } else {
     Video.findOne({ url: url })
       .then(video => {
@@ -112,7 +116,7 @@ router.post('/upload', (req, res) => {
             errors
           });
         } else {
-          const newVideo = new Video({ title, choreographer, thumbnail, url, length, language, level, genre, purpose, mood });
+          const newVideo = new Video({ title, choreographer, thumbnail, url, publishedDate, length, language, level, genre, purpose, mood });
           newVideo.save()
             .then(function (video) {
               req.flash('success_msg', 'The dance is now registered');

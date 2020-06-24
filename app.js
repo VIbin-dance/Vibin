@@ -6,6 +6,7 @@ const flash = require('connect-flash');
 const paginate = require('express-paginate');
 
 const app = express();
+require('dotenv').config();
 
 app.use(express.static(__dirname + '/public'));
 app.use(expressLayouts);
