@@ -5,8 +5,6 @@
     <div class="container d-flex align-items-center justify-content-between">
 
       <h1 class="logo"><a href="/">Vibin'</a></h1>
-      <!-- Uncomment below if you prefer to use an image logo -->
-      <!-- <a href="index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 
       <nav class="nav-menu d-none d-lg-block">
         <ul>
@@ -18,7 +16,6 @@
       </nav><!-- .nav-menu -->
 
       <a href="/auth/google" class="get-started-btn scrollto">Get Started</a>
-
     </div>
   </header><!-- End Header -->
 
@@ -26,12 +23,13 @@
   <section id="hero" class="d-flex align-items-center">
 
     <div class="container">
+      <%- include ('partials/messages') %>
       <div class="row">
         <div class="col-lg-6 pt-2 pt-lg-0 order-2 order-lg-1 d-flex flex-column justify-content-center">
-          <h1>Free Dance Video Platform</h1>
+          <h1>Free Online <br>Dancing Platform</h1>
           <ul>
             <li><i class="ri-check-line"></i> Completely free</li>
-            <li><i class="ri-check-line"></i> Amazing searching system</li>
+            <li><i class="ri-check-line"></i> Efficient searching system</li>
             <li><i class="ri-check-line"></i> Simple user interface</li>
           </ul>
           <div class="mt-3">
@@ -51,15 +49,15 @@
 
       <div class="row content">
         <div class="col-lg-6">
-          <h2>Dance anywhere for free</h2>
-          <h3>“Dancing” is in all of us. When we listen to music our bodies naturally move in some kind of way. However,
-            when people don’t know how to dance or when we feel anxious about our dancing skills, we tend to force
+          <h2>“Dancing” is in all of us.</h2>
+          <h3>When we listen to music our bodies naturally move in some kind of way. However,
+            when we don’t know how to dance or when we feel anxious about our dancing skills, we tend to force
             ourselves to stop our bodies from moving and vibing. That’s why we created a place where anyone can learn
             how to dance.</h3>
         </div>
         <div class="col-lg-6 pt-4 pt-lg-0">
           <p>
-            We also noticed other problems that dancers face when learning how to dance such as:
+            We noticed other problems that dancers face when learning how to dance such as:
           </p>
           <ul>
             <li><i class="ri-check-double-line"></i> Dance lessons are quite costly.</li>
@@ -82,16 +80,16 @@
         <div class="col-lg-4">
           <div class="box">
             <span>01</span>
-            <h4>Lorem Ipsum</h4>
-            <p>Ulamco laboris nisi ut aliquip ex ea commodo consequat. Et consectetur ducimus vero placeat</p>
+            <h4>Quality Videos</h4>
+            <p>Access the video you are looking for with just one search</p>
           </div>
         </div>
 
         <div class="col-lg-4 mt-4 mt-lg-0">
           <div class="box">
             <span>02</span>
-            <h4>Repellat Nihil</h4>
-            <p>Dolorem est fugiat occaecati voluptate velit esse. Dicta veritatis dolor quod et vel dire leno para dest
+            <h4>Free Forever</h4>
+            <p>Use it as much as you want without caring about your wallet
             </p>
           </div>
         </div>
@@ -99,8 +97,8 @@
         <div class="col-lg-4 mt-4 mt-lg-0">
           <div class="box">
             <span>03</span>
-            <h4> Ad ad velit qui</h4>
-            <p>Molestiae officiis omnis illo asperiores. Aut doloribus vitae sunt debitis quo vel nam quis</p>
+            <h4>Keep Track</h4>
+            <p>Schedule your time to learn the dream dance moves</p>
           </div>
         </div>
 
@@ -108,104 +106,6 @@
 
     </div>
   </section><!-- End Why Us Section -->
-
-  <!-- ======= Frequently Asked Questions Section ======= -->
-  <section id="faq" class="faq">
-    <div class="container">
-
-      <div class="section-title">
-        <h2>Frequently Asked Questions</h2>
-      </div>
-
-      <ul class="faq-list">
-
-        <li>
-          <a data-toggle="collapse" class="" href="#faq1">Non consectetur a erat nam at lectus urna duis? <i
-              class="icofont-simple-up"></i></a>
-          <div id="faq1" class="collapse show" data-parent=".faq-list">
-            <p>
-              Feugiat pretium nibh ipsum consequat. Tempus iaculis urna id volutpat lacus laoreet non curabitur gravida.
-              Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non.
-            </p>
-          </div>
-        </li>
-
-        <li>
-          <a data-toggle="collapse" href="#faq2" class="collapsed">Feugiat scelerisque varius morbi enim nunc faucibus a
-            pellentesque? <i class="icofont-simple-up"></i></a>
-          <div id="faq2" class="collapse" data-parent=".faq-list">
-            <p>
-              Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet id donec
-              ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est pellentesque elit
-              ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt dui.
-            </p>
-          </div>
-        </li>
-
-        <li>
-          <a data-toggle="collapse" href="#faq3" class="collapsed">Dolor sit amet consectetur adipiscing elit
-            pellentesque habitant morbi? <i class="icofont-simple-up"></i></a>
-          <div id="faq3" class="collapse" data-parent=".faq-list">
-            <p>
-              Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Faucibus pulvinar elementum
-              integer enim. Sem nulla pharetra diam sit amet nisl suscipit. Rutrum tellus pellentesque eu tincidunt.
-              Lectus urna duis convallis convallis tellus. Urna molestie at elementum eu facilisis sed odio morbi quis
-            </p>
-          </div>
-        </li>
-
-        <li>
-          <a data-toggle="collapse" href="#faq4" class="collapsed">Ac odio tempor orci dapibus. Aliquam eleifend mi in
-            nulla? <i class="icofont-simple-up"></i></a>
-          <div id="faq4" class="collapse" data-parent=".faq-list">
-            <p>
-              Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet id donec
-              ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est pellentesque elit
-              ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt dui.
-            </p>
-          </div>
-        </li>
-
-        <li>
-          <a data-toggle="collapse" href="#faq5" class="collapsed">Tempus quam pellentesque nec nam aliquam sem et
-            tortor consequat? <i class="icofont-simple-up"></i></a>
-          <div id="faq5" class="collapse" data-parent=".faq-list">
-            <p>
-              Molestie a iaculis at erat pellentesque adipiscing commodo. Dignissim suspendisse in est ante in. Nunc vel
-              risus commodo viverra maecenas accumsan. Sit amet nisl suscipit adipiscing bibendum est. Purus gravida
-              quis blandit turpis cursus in
-            </p>
-          </div>
-        </li>
-
-        <li>
-          <a data-toggle="collapse" href="#faq6" class="collapsed">Tortor vitae purus faucibus ornare. Varius vel
-            pharetra vel turpis nunc eget lorem dolor? <i class="icofont-simple-up"></i></a>
-          <div id="faq6" class="collapse" data-parent=".faq-list">
-            <p>
-              Laoreet sit amet cursus sit amet dictum sit amet justo. Mauris vitae ultricies leo integer malesuada nunc
-              vel. Tincidunt eget nullam non nisi est sit amet. Turpis nunc eget lorem dolor sed. Ut venenatis tellus in
-              metus vulputate eu scelerisque. Pellentesque diam volutpat commodo sed egestas egestas fringilla phasellus
-              faucibus. Nibh tellus molestie nunc non blandit massa enim nec.
-            </p>
-          </div>
-        </li>
-
-      </ul>
-
-    </div>
-  </section><!-- End Frequently Asked Questions Section -->
-
-  <!-- <div class="row mt-5">
-      <div class="col-md-6 m-auto">
-        <div class="card card-body text-center">
-          <h1><i class="fab fa-node-js fa-3x"></i></h1>
-          <h1>DansAR</h1>
-          <p>Dance with everyone on the earth</p>
-          <a class="btn btn-primary btn-block mb-2" href="/dashboard">Dancer</a>
-        </div>
-      </div>
-    </div> -->
 
   <!-- ======= Footer ======= -->
   <footer id="footer">
@@ -225,8 +125,8 @@
           <div class="col-lg-2 col-md-6 footer-links">
             <h4>Sitemap</h4>
             <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Home</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">About us</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#hero">Home</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#about">About us</a></li>
               <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
               <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
             </ul>
@@ -241,9 +141,8 @@
           </div>
 
           <div class="social-links text-center text-md-right pt-3 pt-md-0">
-            <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
-            <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
-            <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+            <a href="https://www.facebook.com/Vibin-107436974343750" class="facebook"><i class="bx bxl-facebook"></i></a>
+            <a href="https://www.instagram.com/vibin_dance/" class="instagram"><i class="bx bxl-instagram"></i></a>
           </div>
         </div>
       </div>
@@ -253,7 +152,7 @@
 
       <div class="mr-md-auto text-center text-md-left">
         <div class="copyright">
-          &copy; Copyright <strong><span>Resi</span></strong>. All Rights Reserved
+          &copy; Copyright <strong><span>Vibin'</span></strong>. All Rights Reserved
         </div>
       </div>
     </div>

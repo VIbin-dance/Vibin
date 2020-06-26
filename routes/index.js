@@ -1,19 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const async = require('async');
 const paginate = require('express-paginate');
+const passport = require('passport');
+const { ensureAuthenticated } = require('../config/auth');
 
 const Video = require('../models/Video');
 
 router.get('/', (req, res) => {
   if (req.session.passport) {
-    // req.flash('success', 'Success! You are logged in');
+    req.flash('success_msg', 'You are logged in');
     res.redirect('/dashboard');
-    // res.send(req.session.passport.user.displayName);
 } else {
-    // res.send('未ログイン');
-    res.render('landing')
-}
+    res.render('landing')}
 });
 
 router.get('/logout', (req, res) => {
@@ -22,6 +20,28 @@ router.get('/logout', (req, res) => {
   res.redirect('/');
 });
 
+router.get('/auth/google', passport.authenticate('google', {
+  scope: [
+      'https://www.googleapis.com/auth/userinfo.profile',
+      'https://www.googleapis.com/auth/userinfo.email'
+  ]
+}));
+
+// コールバック処理
+router.get(process.env.GOOGLE_CALLBACK_URL,
+  passport.authenticate('google', {
+      failureRedirect: '/error',
+      session: true
+  }),
+  (req, res) => {
+    req.flash('success_msg', 'You are logged in!')
+    res.redirect('/dashboard');
+  }
+);
+
+router.get('/error', (req, res) => {
+  res.send('ログインエラー');
+});
 
 router.get('/dashboard', (req, res) => {
   Video.paginate({}, {page: req.query.page, limit: req.query.limit}, (err, result) => {
@@ -39,7 +59,10 @@ router.get('/dashboard', (req, res) => {
       thumbnail[i] = result.docs[i].thumbnail;
       id[i] = result.docs[i].id;
     }
+    Video.countDocuments({}, (err, count) => {
     res.render('dashboard', {
+      count: count,
+      username: req.session.passport.user.displayName,
       videos: result.docs,
       title: title,
       choreographer: choreographer,
@@ -50,6 +73,7 @@ router.get('/dashboard', (req, res) => {
       currentPage: result.page,
       pageCount: result.pages,
       pages: paginate.getArrayPages(req)(3, result.pages, req.query.page)
+    })
     });
   });
 });
@@ -84,7 +108,11 @@ router.post('/dashboard', (req, res) => {
   Video.find(query, (err, results) => {
     if (!results.length) {
       errors.push({ msg: 'There is no such video!' });
-      res.render('dashboard', { errors });
+    }
+
+    if (errors.length > 0) {
+      req.flash('error_msg', 'There is no such video');
+      res.redirect('/dashboard');
     } else {
       let resultsTitle = results.map(results => results.title);
       let resultsChoreo = results.map(results => results.choreographer);
@@ -92,6 +120,7 @@ router.post('/dashboard', (req, res) => {
       let resultsLevel = results.map(results => results.level);
       let resultsThumbnail = results.map(results => results.thumbnail);
       res.render('results', {
+        username: req.session.passport.user.displayName,
         title: resultsTitle,
         choreographer: resultsChoreo,
         url: resultsURL,
@@ -113,7 +142,7 @@ router.post('/upload', (req, res) => {
   }
 
   if (errors.length > 0) {
-    res.render('upload', { errors, title, choreographer, thumbnail, url, id, publishedDate, length, language, level, genre, purpose, mood });
+    res.render('upload', { errors, API_key: process.env.API_key, CLIENT_id: process.env.CLIENT_id, title, choreographer, thumbnail, url, id, publishedDate, length, language, level, genre, purpose, mood });
   } else {
     Video.findOne({ url: url })
       .then(video => {

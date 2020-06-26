@@ -9,34 +9,24 @@
       <nav class="nav-menu d-none d-lg-block">
         <ul>
           <li class="active"><a href="/dashboard">Home</a></li>
-          <li><a href="/upload">Upload</a></li>
           <li><a href="/logout">Logout</a></li>
-          <li>You are logged in as username</li>
         </ul>
 
       </nav><!-- .nav-menu -->
 
       <a href="/upload" class="get-started-btn scrollto">Upload</a>
-
     </div>
   </header><!-- End Header -->
 
   <!-- Search bar -->
   <section id="search" class="search">
-    <div class="col-lg-8 col-md-6 search-bar">
+    <div class="search-bar">
       <form action="/dashboard" method="POST">
-
-        <!-- <div class="form-group">
-          <label for="choreographer">Choreographer</label>
-          <input type="choreographer" id="choreographer" name="choreographer" class="form-control"
-            placeholder="Enter The Choreographer"
-            value="<%= typeof choreographer != 'undefined' ? choreographer : '' %>" />
-        </div> -->
+        <h4 class="user">Welcome <%= username %>! What's your vibes today?</h4>
 
         <div class="form-group">
-          <label for="length">Length</label>
-          <select class="custom-select" type="length" id="length" name="length">
-            <option selected="null" value="any">prefer not to answer</option>
+          <select class="chosen-value" type="length" id="inputState" name="length">
+            <option selected="null" value="any">Length</option>
             <option value="5-10">5 to 10 minutes</option>
             <option value="10-30">10 to 30 minutes</option>
             <option value="30-60">30 to 60 minutes</option>
@@ -45,18 +35,16 @@
         </div>
 
         <div class="form-group">
-          <label for="language">Language</label>
-          <select class="custom-select" type="language" id="language" name="language">
-            <option selected="null" value="any">prefer not to answer</option>
+          <select class="chosen-value" type="language" id="inputState" name="language">
+            <option selected="null" value="any">Language</option>
             <option value="Japanese">Japanese</option>
             <option value="English">English</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label for="level">Level</label>
-          <select class="custom-select" type="level" id="level" name="level">
-            <option selected="null" value="any">prefer not to answer</option>
+          <select class="chosen-value" type="level" id="inputState" name="level">
+            <option selected="null" value="any">Level</option>
             <option value="Beginner">Beginner</option>
             <option value="Intermediate">Intermediate</option>
             <option value="Advanced">Advanced</option>
@@ -64,226 +52,52 @@
         </div>
 
         <div class="form-group">
-          <label for="genre">Genre</label>
-          <select class="custom-select" type="genre" id="genre" name="genre">
-            <option selected="null" value="any">prefer not to answer</option>
+          <select class="chosen-value" type="genre" id="inputState" name="genre">
+            <option selected="null" value="any">Genre</option>
             <option value="Hip Hop">Hip Hop</option>
             <option value="Locking">Locking</option>
             <option value="Jazz">Jazz</option>
             <option value="Breakin">Breakin</option>
+            <option value="House">House</option>
+            <option value="Popping">Popping</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label for="purpose">Purpose</label>
-          <select class="custom-select" type="purpose" id="purpose" name="purpose">
-            <option selected="null" value="any">prefer not to answer</option>
-            <option value="Learning">Learning</option>
-            <option value="Diet">Diet</option>
-            <option value="Health">Health</option>
+          <select class="chosen-value" type="purpose" id="inputState" name="purpose">
+            <option selected="null" value="any">Purpose</option>
+            <option value="Skill Improvements">Skill Improvements</option>
+            <option value="Health and Exercise">Health and Exercise</option>
             <option value="Entertainment">Entertainment</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label for="mood">Mood</label>
-          <select class="custom-select" type="mood" id="mood" name="mood">
-            <option selected="null" value="any">prefer not to answer</option>
+          <select class="chosen-value" type="mood" id="inputState" name="mood">
+            <option selected="null" value="any">Mood</option>
             <option value="Groovy">Groovy</option>
             <option value="Funky">Funky</option>
             <option value="Chill">Chill</option>
+            <option value="Romantic">Romantic</option>
+            <option value="Calm">Calm</option>
+            <option value="Angry">Angry</option>
+            <option value="Peaceful">Peaceful</option>
+            <option value="Sad">Sad</option>
+            <option value="Fearful">Fearful</option>
+            <option value="Happy">Happy</option>
+            <option value="Tense">Tense</option>
           </select>
         </div>
-
-        <!-- <div class="form-group">
-          <label for="length">Length</label>
-          <fieldset class="form-group">
-            <div class="form-check">
-              <label class="form-check-label">
-                <input id="length" name="length" class="form-check-input" type="checkbox"
-                value="5-10">5 to 10 minutes</label>
-            </div>
-            <div class="form-check">
-              <label class="form-check-label">
-                <input id="length" name="length" class="form-check-input" class="form-check-input" type="checkbox"
-                value="10-30">10 to 30 minutes</label>
-            </div>
-            <div class="form-check">
-              <label class="form-check-label">
-                <input id="length" name="length" class="form-check-input" class="form-check-input" type="checkbox"
-                value="30-60">30 to 60 minutes</label>
-            </div>
-            <div class="form-check">
-              <label class="form-check-label">
-                <input id="length" name="length" class="form-check-input" class="form-check-input" type="checkbox"
-                value="60<">Over 60 minutes</label>
-            </div>
-        </div>
-
-        <div class="form-group">
-          <label for="language">Language</label>
-          <fieldset class="form-group">
-            <div class="form-check">
-              <label class="form-check-label">
-                <input id="language" name="language" class="form-check-input" type="checkbox"
-                value="Japanese">Japanese</label>
-            </div>
-            <div class="form-check">
-              <label class="form-check-label">
-                <input id="language" name="language" class="form-check-input" class="form-check-input" type="checkbox"
-                value="English">English</label>
-            </div>
-        </div>
-
-        <div class="form-group">
-          <label for="level">Level</label>
-          <fieldset class="form-group">
-            <div class="form-check">
-              <label class="form-check-label">
-                <input id="level" name="level" class="form-check-input" type="checkbox"
-                value="Beginner">Beginner</label>
-            </div>
-            <div class="form-check">
-              <label class="form-check-label">
-                <input id="level" name="level" class="form-check-input" class="form-check-input" type="checkbox"
-                value="Intermediate">Intermediate</label>
-            </div>
-            <div class="form-check">
-              <label class="form-check-label">
-                <input id="level" name="level" class="form-check-input" class="form-check-input" type="checkbox"
-                value="Advanced">Advanced</label>
-            </div>
-        </div> -->
-
-        <!-- <div class="form-group">
-          <label for="genre">Genre</label>
-          <fieldset class="form-group">
-            <div class="form-check">
-              <label class="form-check-label">
-                <input id="genre" name="genre" class="form-check-input" type="checkbox" value="Hip Hop">Hip Hop</label>
-            </div>
-            <div class="form-check">
-              <label class="form-check-label">
-                <input id="genre" name="genre" class="form-check-input" class="form-check-input" type="checkbox"
-                  value="Locking">Locking</label>
-            </div>
-            <div class="form-check">
-              <label class="form-check-label">
-                <input id="genre" name="genre" class="form-check-input" class="form-check-input" type="checkbox"
-                  value="Jazz">Jazz</label>
-            </div>
-            <div class="form-check">
-              <label class="form-check-label">
-                <input id="genre" name="genre" class="form-check-input" class="form-check-input" type="checkbox"
-                  value="Breakin">Breakin</label>
-            </div>
-        </div>
-
-        <div class="form-group">
-          <label for="purpose">Purpose</label>
-          <fieldset class="form-group">
-            <div class="form-check">
-              <label class="form-check-label">
-                <input id="purpose" name="purpose" class="form-check-input" type="checkbox"
-                  value="Learning">Learning</label>
-            </div>
-            <div class="form-check">
-              <label class="form-check-label">
-                <input id="purpose" name="purpose" class="form-check-input" class="form-check-input" type="checkbox"
-                  value="Diet">Diet</label>
-            </div>
-            <div class="form-check">
-              <label class="form-check-label">
-                <input id="purpose" name="purpose" class="form-check-input" class="form-check-input" type="checkbox"
-                  value="Health">Health</label>
-            </div>
-            <div class="form-check">
-              <label class="form-check-label">
-                <input id="purpose" name="purpose" class="form-check-input" class="form-check-input" type="checkbox"
-                  value="Entertainment">Entertainment</label>
-            </div>
-        </div>
-
-        <div class="form-group">
-          <label for="mood">Mood</label>
-          <fieldset class="form-group">
-            <div class="form-check">
-              <label class="form-check-label">
-              <input id="mood" name="mood" class="form-check-input" type="checkbox"
-              value="Groovy">Groovy</label>
-            </div>
-            <div class="form-check">
-              <label class="form-check-label">
-              <input id="mood" name="mood" class="form-check-input" class="form-check-input" type="checkbox"
-              value="Funky">Funky</label>
-            </div>
-            <div class="form-check">
-              <label class="form-check-label">
-                <input id="mood" name="mood" class="form-check-input" class="form-check-input" type="checkbox"
-                value="Chill">Chill</label>
-            </div>
-        </div> -->
-
-        <!-- <input type="search" id="search" name="search" placeholder="Search"
-          value="<%= typeof title != 'undefined' ? title : '' %>"> -->
-        <input type="submit" value="Search">
-
+        <!-- <input class="chosen-value" type="text" value="" placeholder="Search"> -->
+        <input class="chosen-value" type="submit">
       </form>
     </div>
   </section>
 
-  <!-- <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/upload">Upload</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">signout</a>
-                </li>
-            </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <select class="custom-select" id="orderOption">
-                    <option value="relevance" selected="">Relevance</option>
-                    <option value="date">Date</option>
-                    <option value="viewCount">View</option>
-                </select>
-                <select class="custom-select" id="durationOption">
-                    <option value="any" selected="">Any</option>
-                    <option value="short">Short</option>
-                    <option value="medium">Medium</option>
-                    <option value="long">Long</option>
-                </select>
-                <input id="userInput" class="form-control mr-sm-2" type="text" placeholder="Search">
-                <button class="btn btn-secondary my-2 my-sm-0" type="submit" onclick="search()">Search</button>
-            </form>
-        </nav>
-    </div> -->
-  <!--
-    <div class="row mt-5">
-        <div class="col-md-10 m-auto">
-            <div class="card card-body text-center">
-                <h1><i class="fab fa-node-js fa-3x"></i></h1>
-                <h1>DansAR</h1>
-                <p>Dance with everyone on the earth</p>
-                <p>Start with a Google Account</p>
-            </div>
-        </div>
-    </div>
-    <div class="card-deck">
-        <div class="card" style="margin:20px;">
-            <img src="" id="thumbnail0"
-                class="card-img-top" alt="Tracker">
-            <div class="card-body">
-                <h4 class="card-title" id="title0"></h4>
-                <p class="card-text" id="channelTitle0"></p>
-                <a id="videoId0" href="https://www.youtube.com/embed/" class="btn btn-primary">Dance now</a>
-            </div>
-        </div> -->
-
   <section id="results" class="results">
-    <%- include ('partials/messages') %>
-
     <div class="container">
-      <p>There are <%= videos.length %> videos in total</p>
+      <h3>Latest videos</h3>
+      <p>We have <%= count %> videos in total!</p>
       <%- include ('partials/messages') %>
       <div class="row">
         <% for(let i=0; i < videos.length; i++) { %>
@@ -300,16 +114,6 @@
         <% } %>
       </div>
     </div>
-
-    <!-- <% if (paginate.hasPreviousPages || paginate.hasNextPages(pageCount)) { %>
-      <ul class="pagination">
-        <% if (paginate.hasPreviousPages) { %>
-          <li><a href="paginate.href(true)"><span>&laquo</span></a></li>
-    <%  } %>
-        <% if (pages) { %>
-
-    <%    }   %>
- <%    }   %> -->
 
   </section><!-- End Why Us Section -->
 
@@ -331,8 +135,8 @@
           <div class="col-lg-2 col-md-6 footer-links">
             <h4>Sitemap</h4>
             <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Home</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">About us</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#hero">Home</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#about">About us</a></li>
               <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
               <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
             </ul>
@@ -347,9 +151,8 @@
           </div>
 
           <div class="social-links text-center text-md-right pt-3 pt-md-0">
-            <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
-            <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
-            <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+            <a href="https://www.facebook.com/Vibin-107436974343750" class="facebook"><i class="bx bxl-facebook"></i></a>
+            <a href="https://www.instagram.com/vibin_dance/" class="instagram"><i class="bx bxl-instagram"></i></a>
           </div>
         </div>
       </div>

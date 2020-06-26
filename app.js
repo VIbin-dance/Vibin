@@ -69,32 +69,10 @@ passport.use(new GoogleStrategy({
 }
 ));
 
-app.get('/auth/google', passport.authenticate('google', {
-    scope: [
-        'https://www.googleapis.com/auth/userinfo.profile',
-        'https://www.googleapis.com/auth/userinfo.email'
-    ]
-}));
-
-// コールバック処理
-app.get(process.env.GOOGLE_CALLBACK_URL,
-    passport.authenticate('google', {
-        failureRedirect: '/error',
-        session: true
-    }),
-    (req, res) => {
-        res.redirect('/');
-    }
-);
-
-app.get('/error', (req, res) => {
-    res.send('ログインエラー');
-});
-
 const db = require('./config/keys').MongoURI;
 
 // Connect to Mongo
-mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
     .then(() => console.log('MongoDB connected...'))
     .catch(err => console.log(err));
 

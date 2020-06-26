@@ -232,49 +232,60 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Search bar */
+/* Search bar */
 #search .search-bar {
   font-size: 15px;
   position: relative;
-  margin:auto;
+  margin:0;
 }
-#search .custom-select {
-  width:20%;
-  border:0;
+#search .form-group {
+  display: inline-block;
 }
+
 
 #search .search-bar form {
-  margin-top: 30px;
-  background: #fff;
-  padding: 6px 10px;
-  border-radius: 50px;
-  text-align: left;
-  border: 1px solid #ff7583;
+  position: relative;
+  text-align: center;
 }
 
-#search .search-bar form input[type="search"] {
-  border: 0;
-  padding: 4px 8px;
-  width: 50%;
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: '';
 }
 
-#search .search-bar form input[type="submit"] {
-  position: absolute;
-  top: -1px;
-  right: -1px;
-  bottom: -1px;
-  border: 0;
-  background: none;
-  font-size: 16px;
-  padding: 0 20px;
-  background: #EB5160;
-  color: #fff;
-  transition: 0.3s;
-  border-radius: 50px;
-  box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+.chosen-value {
+  width:150px;
+  height: 4rem;
+  padding: 1rem;
+  background-color: #e4e4e4;
+  border: 3px solid transparent;
+  transition: 0.3s ease-in-out;
 }
 
-#search .search-bar form input[type="submit"]:hover {
-  background: #ff7583;
+.chosen-value input{
+  width:100px;
+}
+
+.chosen-value::-webkit-input-placeholder {
+  color: #333;
+}
+.chosen-value:hover {
+  background-color: #ff908b;
+  cursor: pointer;
+}
+.chosen-value:hover::-webkit-input-placeholder {
+  color: #333;
+}
+.chosen-value:focus, .chosen-value.open {
+  box-shadow: 0px 5px 8px 0px rgba(0, 0, 0, 0.2);
+  outline: 0;
+  background-color: #ff908b;
+  color: #000;
+}
+.chosen-value:focus::-webkit-input-placeholder, .chosen-value.open::-webkit-input-placeholder {
+  color: #000;
 }
 
 
@@ -1707,7 +1718,8 @@ section {
   padding: 50px 30px;
   box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
   transition: all ease-in-out 0.3s;
-  min-height: 300px;
+  min-height: 500px;
+  max-height: 500px;
 }
 
 .results img {
@@ -1746,6 +1758,12 @@ section {
 .results .box:hover span, .results .box:hover h4, .results .box:hover p {
   color: #fff;
 }
+
+/* user */
+.user{
+  margin: 3%;
+}
+
 
 /* iframe */
 /* .iframe-container {

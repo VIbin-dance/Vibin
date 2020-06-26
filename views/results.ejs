@@ -3,25 +3,23 @@
     <div class="container d-flex align-items-center justify-content-between">
 
       <h1 class="logo"><a href="/">Vibin'</a></h1>
-      <!-- Uncomment below if you prefer to use an image logo -->
-      <!-- <a href="index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 
       <nav class="nav-menu d-none d-lg-block">
         <ul>
-          <li class="active"><a href="/">Home</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#footer">Contact</a></li>
+          <li class="active"><a href="/dashboard">Home</a></li>
+          <li><a href="/logout">Logout</a></li>
         </ul>
 
       </nav><!-- .nav-menu -->
 
       <a href="/upload" class="get-started-btn scrollto">Upload</a>
-
     </div>
   </header><!-- End Header -->
 
   <section id="results" class="results">
     <div class="container">
+      <h2>How's your dance looking, <%= username %>?</h2><br>
+      <h3>Search result</h3>
       <p>There are <%= results.length %> videos</p>
       <%- include ('partials/messages') %>
       <div class="row">
@@ -29,7 +27,7 @@
         <div class="col-lg-4">
           <div class="box">
             <a href="/player">
-            <img src="<%= results[i].thumbnail %>">
+              <img src="<%= results[i].thumbnail %>">
             </a>
             <h4><%= results[i].title %></h4>
             <p><%= results[i].choreographer %></p>
@@ -60,8 +58,8 @@
           <div class="col-lg-2 col-md-6 footer-links">
             <h4>Sitemap</h4>
             <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Home</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">About us</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#hero">Home</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#about">About us</a></li>
               <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
               <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
             </ul>
@@ -76,9 +74,8 @@
           </div>
 
           <div class="social-links text-center text-md-right pt-3 pt-md-0">
-            <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
-            <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
-            <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+            <a href="https://www.facebook.com/Vibin-107436974343750" class="facebook"><i class="bx bxl-facebook"></i></a>
+            <a href="https://www.instagram.com/vibin_dance/" class="instagram"><i class="bx bxl-instagram"></i></a>
           </div>
         </div>
       </div>
