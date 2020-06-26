@@ -1,81 +1,36 @@
 <!DOCTYPE html>
 <style>
-  #player
-{
+  #player {
     transform: rotateY(180deg);
-    -webkit-transform:rotateY(180deg); /* Safari and Chrome */
-    -moz-transform:rotateY(180deg); /* Firefox */
-}
+    -webkit-transform: rotateY(180deg);
+    /* Safari and Chrome */
+    -moz-transform: rotateY(180deg);
+    /* Firefox */
+  }
 </style>
 <html>
-  <body>
-    <!-- <div class="iframe-container">
-      <iframe id="existing-iframe-example"
-      width="640" height="360"
-      src="https://www.youtube.com/embed/QH2-TGUlwu4""
-      frameborder="0"></iframe>
-    </div> -->
 
-    <div class="embed-responsive embed-responsive-16by9">
-      <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0" allowfullscreen></iframe>
-    </div>
+<body>
+  <div class="embed-responsive embed-responsive-16by9">
+    <iframe id="player" class="embed-responsive-item" src="https://www.youtube.com/embed/<%= id %>" allowfullscreen></iframe>
+  </div>
 
+  <button id="speed" onclick="speedUp()" type="button" class="btn btn-primary">Speed Up</button>
+  <button id="slow" onclick="speedDown()" type="button" class="btn btn-primary">Slow Down</button>
 
-    <button id="speed" onclick="speedUp()" type="button" class="btn btn-primary">Speed Up</button>
-    <button id="slow" onclick="speedDown()" type="button" class="btn btn-primary">Slow Down</button>
-    <!-- <script>
-      // 2. This code loads the IFrame Player API code asynchronously.
-      var tag = document.createElement('script');
+  <script>
+    function speedUp() {
+      let rate = player.getPlaybackRate();
+      player.setPlaybackRate(rate + 0.25);
+      console.log(rate);
+    }
 
-      tag.src = "https://www.youtube.com/iframe_api";
-      var firstScriptTag = document.getElementsByTagName('script')[0];
-      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    function speedDown() {
+      let rate = player.getPlaybackRate();
+      player.setPlaybackRate(rate - 0.25);
+      console.log(rate);
+    }
+  </script>
+</body>
 
-      // 3. This function creates an <iframe> (and YouTube player)
-      //    after the API code downloads.
-      var player;
-      function onYouTubeIframeAPIReady() {
-        player = new YT.Player('player', {
-          height: '390',
-          width: '640',
-          videoId: 'M7lc1UVf-VE',
-          events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
-          }
-        });
-      }
-
-      function speedUp() {
-          let rate = player.getPlaybackRate();
-          player.setPlaybackRate(rate + 0.25);
-          console.log(rate);
-        }
-
-      function speedDown() {
-        let rate = player.getPlaybackRate();
-        player.setPlaybackRate(rate - 0.25);
-        console.log(rate);
-      }
-
-      // 4. The API will call this function when the video player is ready.
-      function onPlayerReady(event) {
-        event.target.playVideo();
-      }
-
-      // 5. The API calls this function when the player's state changes.
-      //    The function indicates that when playing a video (state=1),
-      //    the player should play for six seconds and then stop.
-      var done = false;
-      function onPlayerStateChange(event) {
-        if (event.data == YT.PlayerState.PLAYING && !done) {
-          setTimeout(stopVideo, 6000);
-          done = true;
-        }
-      }
-      function stopVideo() {
-        player.stopVideo();
-      }
-    </script> -->
-  </body>
 </html>

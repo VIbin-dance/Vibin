@@ -14,6 +14,10 @@ const VideoSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    id: {
+        type: String,
+        required: true
+    },
     publishedDate: {
         type: Date,
         required: true

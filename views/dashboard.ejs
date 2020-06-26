@@ -8,9 +8,10 @@
 
       <nav class="nav-menu d-none d-lg-block">
         <ul>
-          <li class="active"><a href="/">Home</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#footer">Contact</a></li>
+          <li class="active"><a href="/dashboard">Home</a></li>
+          <li><a href="/upload">Upload</a></li>
+          <li><a href="/logout">Logout</a></li>
+          <li>You are logged in as username</li>
         </ul>
 
       </nav><!-- .nav-menu -->
@@ -24,8 +25,6 @@
   <section id="search" class="search">
     <div class="col-lg-8 col-md-6 search-bar">
       <form action="/dashboard" method="POST">
-        <%- include ('partials/messages') %>
-
 
         <!-- <div class="form-group">
           <label for="choreographer">Choreographer</label>
@@ -281,6 +280,8 @@
         </div> -->
 
   <section id="results" class="results">
+    <%- include ('partials/messages') %>
+
     <div class="container">
       <p>There are <%= videos.length %> videos in total</p>
       <%- include ('partials/messages') %>
@@ -288,7 +289,7 @@
         <% for(let i=0; i < videos.length; i++) { %>
         <div class="col-lg-4">
           <div class="box">
-            <a href="/player/<%= url[i] %>">
+            <a href="/player/<%= id[i] %>">
               <img src="<%= thumbnail[i] %>">
             </a>
             <h4><%= title[i] %></h4>
