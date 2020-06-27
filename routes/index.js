@@ -79,7 +79,7 @@ router.get('/dashboard', (req, res) => {
 router.get('/results', (req, res) => res.render('results'));
 router.get('/upload', (req, res) => res.render('upload', {
   API_key: process.env.API_key,
-  CLIENT_id: process.env.CLIENT_id
+  CLIENT_ID: process.env.CLIENT_ID
 }));
 
 router.get('/player/:id', (req, res) => {
