@@ -15,7 +15,7 @@ const app = express();
 require('dotenv').config();
 
 app.use(helmet());
-app.use(express.static(path.join(__dirname + 'public')));
+app.use(express.static(path.join(__dirname + '/public')));
 app.use(expressLayouts);
 app.set('view engine', 'ejs');
 
@@ -44,7 +44,7 @@ passport.deserializeUser((user, done) => {
 // Oauthログイン
 // データベースに保存
 passport.use(new GoogleStrategy({
-    clientID: process.env.CLIENT_id,
+    clientID: process.env.CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: process.env.GOOGLE_CALLBACK_URL,
 },
