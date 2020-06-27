@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const flash = require('connect-flash');
 const paginate = require('express-paginate');
 const passport = require('passport');
+const helmet = require('helmet');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const User = require('./models/User');
@@ -12,6 +13,7 @@ const User = require('./models/User');
 const app = express();
 require('dotenv').config();
 
+app.use(helmet());
 app.use(express.static(__dirname + '/public'));
 app.use(expressLayouts);
 app.set('view engine', 'ejs');
@@ -21,6 +23,7 @@ app.use(passport.initialize());
 app.use(session({
     secret: process.env.SESSIN_SECRET,
     resave: false,
+    httpOnly: true,
     saveUninitialized: true,
     cookie: {
         maxAge: 30 * 60 * 1000
