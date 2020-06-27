@@ -306,7 +306,7 @@
           function (err) { console.error("Error loading GAPI client for API", err); });
     }
     gapi.load("client:auth2", function () {
-      gapi.auth2.init({ client_id: "<%= CLIENT_id %>" });
+      gapi.auth2.init({ client_id: "<%= CLIENT_ID %>" });
     });
 
     function list() {
