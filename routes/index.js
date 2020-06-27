@@ -27,7 +27,7 @@ router.get('/auth/google', passport.authenticate('google', {
   ]
 }));
 
-// コールバック処理
+// callback function
 router.get(process.env.GOOGLE_CALLBACK_URL,
   passport.authenticate('google', {
       failureRedirect: '/error',
@@ -35,12 +35,12 @@ router.get(process.env.GOOGLE_CALLBACK_URL,
   }),
   (req, res) => {
     req.flash('success_msg', 'You are logged in!')
-    res.redirect('/dashboard');
+    res.redirect('/dashboard?page=1&limit=15');
   }
 );
 
 router.get('/error', (req, res) => {
-  res.send('ログインエラー');
+  res.send('Login error');
 });
 
 router.get('/dashboard', (req, res) => {
@@ -59,9 +59,8 @@ router.get('/dashboard', (req, res) => {
       thumbnail[i] = result.docs[i].thumbnail;
       id[i] = result.docs[i].id;
     }
-    Video.countDocuments({}, (err, count) => {
     res.render('dashboard', {
-      count: count,
+      count: result.total,
       username: req.session.passport.user.displayName,
       videos: result.docs,
       title: title,
@@ -75,7 +74,6 @@ router.get('/dashboard', (req, res) => {
       pages: paginate.getArrayPages(req)(3, result.pages, req.query.page)
     })
     });
-  });
 });
 
 router.get('/results', (req, res) => res.render('results'));
@@ -85,9 +83,14 @@ router.get('/upload', (req, res) => res.render('upload', {
 }));
 
 router.get('/player/:id', (req, res) => {
-  res.render('player', {
-    id: req.params.id
-  });
+  Video.findOne({id: req.params.id}, (err, result) => {
+    res.render('player', {
+      id: req.params.id,
+      title: result.title,
+      choreographer: result.choreographer,
+      level: result.level,
+    });
+  })
 });
 
 router.post('/dashboard', (req, res) => {

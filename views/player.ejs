@@ -1,39 +1,58 @@
-<!DOCTYPE html>
-<!-- <style>
-  #player {
+<div class="videoPlayer">
+  <div id="player"></div>
+  <div class="text">
+  <h4><%= title %></h4>
+    <p><%= choreographer %></p>
+    <p><%= level[0] %></p><br>
+    <button id="speedUp" onclick="speedUp()" type="button" class="chosen-value">&uarr; Speed</button>
+    <button id="speedDown" onclick="speedDown()" type="button" class="chosen-value">&darr; Speed</button>
+    <button id="mirror" onclick="mirrorVideo()" type="button" class="chosen-value">Mirror</button>
+    <button id="unmirror" onclick="unmirrorVideo()" type="button" class="chosen-value">Unmirror</button>
+  </div>
+</div>
+
+<script>
+  var tag = document.createElement('script');
+
+  tag.src = "https://www.youtube.com/iframe_api";
+  var firstScriptTag = document.getElementsByTagName('script')[0];
+  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+  var player;
+  function onYouTubeIframeAPIReady() {
+    player = new YT.Player('player', {
+      videoId: '<%= id %>',
+      playerVars: {
+        rel: 0,
+      }
+    });
+  }
+  function speedUp() {
+    let rate = player.getPlaybackRate();
+    player.setPlaybackRate(rate + 0.25);
+    document.getElementById('speed').innerHTML = rate;
+  }
+
+  function speedDown() {
+    let rate = player.getPlaybackRate();
+    player.setPlaybackRate(rate - 0.25);
+    document.getElementById('speed').innerHTML = rate;
+  }
+
+  function mirrorVideo() {
+    document.getElementById('player').setAttribute("class", "mirror");
+  }
+
+  function unmirrorVideo() {
+    document.getElementById('player').setAttribute("class", "");
+  }
+</script>
+<style>
+  .mirror {
     transform: rotateY(180deg);
     -webkit-transform: rotateY(180deg);
     /* Safari and Chrome */
     -moz-transform: rotateY(180deg);
     /* Firefox */
   }
-</style> -->
-<html>
-
-<body>
-  <!-- <div class="embed-responsive embed-responsive-16by9">
-    <iframe id="player" src="https://www.youtube.com/embed/<%= id %>?fs=0rel=0constrols=0" allowfullscreen></iframe>
-  </div> -->
-  <iframe id="ytplayer" type="text/html" width="640" height="360"
-  src="https://www.youtube.com/embed/<%= id %>?autoplay=1"
-  frameborder="0"></iframe>
-
-  <button id="speed" onclick="speedUp()" type="button" class="btn btn-primary">Speed Up</button>
-  <button id="slow" onclick="speedDown()" type="button" class="btn btn-primary">Slow Down</button>
-
-  <script>
-    function speedUp() {
-      let rate = player.getPlaybackRate();
-      player.setPlaybackRate(rate + 0.25);
-      console.log(rate);
-    }
-
-    function speedDown() {
-      let rate = player.getPlaybackRate();
-      player.setPlaybackRate(rate - 0.25);
-      console.log(rate);
-    }
-  </script>
-</body>
-
-</html>
+</style>

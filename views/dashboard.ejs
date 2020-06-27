@@ -113,9 +113,36 @@
         </div>
         <% } %>
       </div>
+
+      <!-- PAGINATION -->
+      <div class="dashboard-pagination">
+        <div class="pagination">
+          <% if (currentPage == 1 && pageCount > 1)  { %>
+          <a href="/dashboard?page=<%= parseInt(currentPage) + 1 %>&limit=15">
+              Page <%=  parseInt(currentPage) + 1 %>
+              <span class="iconify" data-icon="ion-ios-arrow-forward" data-inline="false"></span>
+          </a>
+          <% } else if (currentPage < pageCount) { %>
+          <a href="/dashboard?page=<%= parseInt(currentPage) - 1 %>&limit=15">
+              <span class="iconify" data-icon="ion-ios-arrow-back" data-inline="false"></span>
+              Page <%= parseInt(currentPage) - 1 %>
+          </a>
+          <a href="/dashboard?page=<%= parseInt(currentPage) + 1 %>&limit=15">
+              Page <%= parseInt(currentPage) + 1 %>
+              <span class="iconify" data-icon="ion-ios-arrow-forward" data-inline="false"></span>
+          </a>
+          <% } else if (currentPage == pageCount && pageCount > 1) { %>
+          <a href="/dashboard?page=<%= parseInt(currentPage) - 1 %>&limit=15">
+              <span class="iconify" data-icon="ion-ios-arrow-back" data-inline="false"></span>
+              Page
+              <%=parseInt(currentPage) - 1 %>
+          </a>
+          <% } %>
+        </div>
+      </div>
     </div>
 
-  </section><!-- End Why Us Section -->
+  </section>
 
   <!-- ======= Footer ======= -->
   <footer id="footer">
@@ -151,7 +178,8 @@
           </div>
 
           <div class="social-links text-center text-md-right pt-3 pt-md-0">
-            <a href="https://www.facebook.com/Vibin-107436974343750" class="facebook"><i class="bx bxl-facebook"></i></a>
+            <a href="https://www.facebook.com/Vibin-107436974343750" class="facebook"><i
+                class="bx bxl-facebook"></i></a>
             <a href="https://www.instagram.com/vibin_dance/" class="instagram"><i class="bx bxl-instagram"></i></a>
           </div>
         </div>
