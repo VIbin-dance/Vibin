@@ -2,6 +2,7 @@ const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const session = require('express-session');
 const mongoose = require('mongoose');
+const path = require('path');
 const flash = require('connect-flash');
 const paginate = require('express-paginate');
 const passport = require('passport');
@@ -14,7 +15,7 @@ const app = express();
 require('dotenv').config();
 
 app.use(helmet());
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(path.join(__dirname + 'public')));
 app.use(expressLayouts);
 app.set('view engine', 'ejs');
 
@@ -99,5 +100,5 @@ app.use('/', require('./routes/index'));
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-    console.log('Server started on ' + port );
+    console.log(`Server started on ${ PORT }`);
 });
