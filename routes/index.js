@@ -122,6 +122,7 @@ router.post('/dashboard', (req, res) => {
       let resultsURL = results.map(results => results.url);
       let resultsLevel = results.map(results => results.level);
       let resultsThumbnail = results.map(results => results.thumbnail);
+      let resultsId = results.map(results => results.id);
       res.render('results', {
         username: req.session.passport.user.displayName,
         title: resultsTitle,
@@ -129,6 +130,7 @@ router.post('/dashboard', (req, res) => {
         url: resultsURL,
         level: resultsLevel,
         thumbnail: resultsThumbnail,
+        id: resultsId,
         results: results
       })
     }
@@ -159,7 +161,7 @@ router.post('/upload', (req, res) => {
           newVideo.save()
             .then(function (video) {
               req.flash('success_msg', 'The dance is now registered');
-              res.redirect('/dashboard');
+              res.redirect('/dashboard?page=1&limit=15');
             })
             .catch(err => console.log(err));
         }
