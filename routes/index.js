@@ -9,7 +9,7 @@ const Video = require('../models/Video');
 router.get('/', (req, res) => {
   if (req.session.passport) {
     req.flash('success_msg', 'You are logged in');
-    res.redirect('/dashboard');
+    res.redirect('/dashboard?page=1&limit=15');
 } else {
     res.render('landing')}
 });
