@@ -6,7 +6,7 @@
 
       <nav class="nav-menu d-none d-lg-block">
         <ul>
-          <li class="active"><a href="/dashboard">Home</a></li>
+          <li class="active"><a href="/dashboard?page=1&limit=15">Home</a></li>
           <li><a href="/logout">Logout</a></li>
         </ul>
 
@@ -26,7 +26,7 @@
         <% for(var i=0; i < results.length; i++) { %>
         <div class="col-lg-4">
           <div class="box">
-            <a href="/player">
+            <a href="/player/<%= id[i] %>">
               <img src="<%= results[i].thumbnail %>">
             </a>
             <h4><%= results[i].title %></h4>
