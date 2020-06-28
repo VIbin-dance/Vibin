@@ -26,7 +26,7 @@
         <% for(var i=0; i < results.length; i++) { %>
         <div class="col-lg-4">
           <div class="box">
-            <a href="/player/<%= id[i] %>">
+            <a href="/player/<%= results[i].id %>">
               <img src="<%= results[i].thumbnail %>">
             </a>
             <h4><%= results[i].title %></h4>
