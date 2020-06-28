@@ -73,7 +73,7 @@ passport.use(new GoogleStrategy({
 }
 ));
 
-const db = require('./config/keys').MongoURI;
+const db = process.env.MongoURI;
 
 // Connect to Mongo
 mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
