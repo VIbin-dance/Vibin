@@ -280,8 +280,9 @@
 
       let url = document.getElementById("urlFill").value
       let id = url.replace('https://www.youtube.com/watch?v=', '');
+      let API_key = '<%= API_key %>'
 
-      const urlList = `https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${id}&key=AIzaSyCVnHpsZxm8BHxDzkmRw1m7PZ3j8VmCDHI`
+      const urlList = `https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${id}&key=${API_key}`
 
       fetch(urlList)
         .then(response => response.json())
