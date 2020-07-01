@@ -18,7 +18,7 @@
 
   <section id="results" class="results">
     <div class="container">
-      <h2>How's your dance looking, <%= username %>?</h2><br>
+      <h2><span id="random"></span></h2><br>
       <h3>Search result</h3>
       <p>There are <%= results.length %> videos</p>
       <%- include ('partials/messages') %>
@@ -90,3 +90,14 @@
       </div>
     </div>
   </footer><!-- End Footer -->
+  <script>
+    var quotes = [
+      "How's your dance looking?",
+      "You've got a nice taste!",
+      "Great choreos!",
+      "That one vibes!"
+    ];
+    let index = Math.floor(Math.random() * (quotes.length));
+
+    document.getElementById("random").innerHTML = quotes[index];
+  </script>

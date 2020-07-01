@@ -22,7 +22,7 @@
   <section id="search" class="search">
     <div class="search-bar">
       <form action="/dashboard" method="POST">
-        <h4 class="user">Welcome <%= username %>! What's your vibes today?</h4>
+        <h2 class="user">Welcome <%= username %>, <span id="random"></span></h2><br>
 
         <div class="form-group">
           <select class="chosen-value" type="length" id="inputState" name="length">
@@ -195,3 +195,14 @@
       </div>
     </div>
   </footer><!-- End Footer -->
+  <script>
+    var quotes = [
+      "What's your vibes today?",
+      "Are you feeling the vibes?",
+      "Let's vibe!",
+      "Get funky!"
+    ];
+    let index = Math.floor(Math.random() * (quotes.length));
+
+    document.getElementById("random").innerHTML = quotes[index];
+  </script>
