@@ -24,10 +24,9 @@
       <div class="fill">
         <div class="form-group">
           <input type="urlFill" id="urlFill" name="urlFill" class="form-control" placeholder="Enter The URL"
-          value="<%= typeof urlFill != 'undefined' ? urlFill : '' %>" />
+            value="<%= typeof urlFill != 'undefined' ? urlFill : '' %>" />
         </div>
         <div class="text-center">
-          <button class="button" onclick="authenticate().then(loadClient)">authorize and load</button>
           <button class="button" onclick="list()">Fill</button>
         </div>
       </div>
@@ -60,8 +59,15 @@
 
         <div class="form-group">
           <label for="publishedDate">Date</label>
-          <input type="publishedDate" id="publishedDate" name="publishedDate" class="form-control" placeholder="Enter The Date"
-            value="<%= typeof publishedDate != 'undefined' ? publishedDate : '' %>" readonly />
+          <input type="publishedDate" id="publishedDate" name="publishedDate" class="form-control"
+            placeholder="Enter The Date" value="<%= typeof publishedDate != 'undefined' ? publishedDate : '' %>"
+            readonly />
+        </div>
+
+        <div class="form-group">
+          <label for="length">Length</label>
+          <input type="length" id="length" name="length" class="form-control" placeholder="Enter The Length"
+            value="<%= typeof length != 'undefined' ? length : '' %>" readonly />
         </div>
 
         <div class="form-group">
@@ -75,31 +81,6 @@
           <input type="choreographer" id="choreographer" name="choreographer" class="form-control"
             placeholder="Enter The Choreographer"
             value="<%= typeof choreographer != 'undefined' ? choreographer : '' %>" />
-        </div>
-
-        <div class="form-group">
-          <label for="length">Length</label>
-          <fieldset class="form-group">
-            <div class="form-check">
-              <label class="form-check-label">
-                <input id="length" name="length" class="form-check-input" type="checkbox" value="5-10">5 to 10
-                minutes</label>
-            </div>
-            <div class="form-check">
-              <label class="form-check-label">
-                <input id="length" name="length" class="form-check-input" class="form-check-input" type="checkbox"
-                  value="10-30">10 to 30 minutes</label>
-            </div>
-            <div class="form-check">
-              <label class="form-check-label">
-                <input id="length" name="length" class="form-check-input" class="form-check-input" type="checkbox"
-                  value="30-60">30 to 60 minutes</label>
-            </div>
-            <div class="form-check">
-              <label class="form-check-label">
-                <input id="length" name="length" class="form-check-input" class="form-check-input" type="checkbox"
-                  value="60<">Over 60 minutes</label>
-            </div>
         </div>
 
         <div class="form-group">
@@ -275,7 +256,8 @@
           </div>
 
           <div class="social-links text-center text-md-right pt-3 pt-md-0">
-            <a href="https://www.facebook.com/Vibin-107436974343750" class="facebook"><i class="bx bxl-facebook"></i></a>
+            <a href="https://www.facebook.com/Vibin-107436974343750" class="facebook"><i
+                class="bx bxl-facebook"></i></a>
             <a href="https://www.instagram.com/vibin_dance/" class="instagram"><i class="bx bxl-instagram"></i></a>
           </div>
         </div>
@@ -293,47 +275,31 @@
   </footer><!-- End Footer -->
 
   <script>
-    function authenticate() {
-      return gapi.auth2.getAuthInstance()
-        .signIn({ scope: "https://www.googleapis.com/auth/youtube.readonly" })
-        .then(function () { console.log("Sign-in successful"); },
-          function (err) { console.error("Error signing in", err); });
-    }
-    function loadClient() {
-      gapi.client.setApiKey("<%= API_key %>");
-      return gapi.client.load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
-        .then(function () { console.log("GAPI client loaded for API"); },
-          function (err) { console.error("Error loading GAPI client for API", err); });
-    }
-    gapi.load("client:auth2", function () {
-      gapi.auth2.init({ client_id: "<%= CLIENT_ID %>" });
-    });
 
     function list() {
+
       let url = document.getElementById("urlFill").value
       let id = url.replace('https://www.youtube.com/watch?v=', '');
+      let API_key = '<%= API_key %>'
 
-      return gapi.client.youtube.videos.list({
-        "part": [
-          "snippet,contentDetails,statistics"
-        ],
-        "id": [
-          id
-        ]
-      })
-        .then(function (response) {
-          document.getElementById("title").value = response.result.items[0].snippet.title;
-          document.getElementById("thumbnail").value = response.result.items[0].snippet.thumbnails.standard.url;
+      const urlList = `https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${id}&key=${API_key}`
+
+      fetch(urlList)
+        .then(response => response.json())
+        .then(data => {
+          console.log(data)
+          let duration = moment.duration(data.items[0].contentDetails.duration);
+          document.getElementById("title").value = data.items[0].snippet.title;
+          document.getElementById("thumbnail").value = data.items[0].snippet.thumbnails.standard.url;
           document.getElementById("url").value = url;
           document.getElementById("id").value = id;
-          document.getElementById("publishedDate").value = response.result.items[0].snippet.publishedAt;
-          document.getElementById("language").value = response.result.items[0].snippet.defaultLanguage;
-          if (response.result.items[0].snippet.defaultLanguage == undefined) {
+          document.getElementById("length").value = duration.format('HH:mm:ss', {trim: false});
+          document.getElementById("publishedDate").value = data.items[0].snippet.publishedAt;
+          document.getElementById("language").value = data.items[0].snippet.defaultLanguage;
+          if (data.items[0].snippet.defaultLanguage == undefined) {
             document.getElementById("language").readOnly = false;
             document.getElementById("language").value = '';
           }
-        },
-          function (err) { console.error("Execute error", err); });
+        })
     }
-
   </script>

@@ -8,7 +8,7 @@ const Video = require('../models/Video');
 
 router.get('/', (req, res) => {
   if (req.session.passport) {
-    req.flash('success_msg', 'You are logged in');
+    req.flash('success_msg', 'You are logged in!');
     res.redirect('/dashboard?page=1&limit=15');
 } else {
     res.render('landing')}
@@ -23,7 +23,8 @@ router.get('/logout', (req, res) => {
 router.get('/auth/google', passport.authenticate('google', {
   scope: [
       'https://www.googleapis.com/auth/userinfo.profile',
-      'https://www.googleapis.com/auth/userinfo.email'
+      'https://www.googleapis.com/auth/userinfo.email',
+      'https://www.googleapis.com/auth/youtube'
   ]
 }));
 
@@ -43,7 +44,7 @@ router.get('/error', (req, res) => {
   res.send('Login error');
 });
 
-router.get('/dashboard', (req, res) => {
+router.get('/dashboard', ensureAuthenticated, (req, res) => {
   Video.paginate({}, {page: req.query.page, limit: req.query.limit}, (err, result) => {
     const title = [];
     const choreographer = [];
@@ -76,13 +77,13 @@ router.get('/dashboard', (req, res) => {
     });
 });
 
-router.get('/results', (req, res) => res.render('results'));
-router.get('/upload', (req, res) => res.render('upload', {
+router.get('/results', ensureAuthenticated, (req, res) => res.render('results'));
+router.get('/upload', ensureAuthenticated, (req, res) => res.render('upload', {
   API_key: process.env.API_key,
   CLIENT_ID: process.env.CLIENT_ID
 }));
 
-router.get('/player/:id', (req, res) => {
+router.get('/player/:id', ensureAuthenticated, (req, res) => {
   Video.findOne({id: req.params.id}, (err, result) => {
     res.render('player', {
       id: req.params.id,
@@ -115,7 +116,7 @@ router.post('/dashboard', (req, res) => {
 
     if (errors.length > 0) {
       req.flash('error_msg', 'There is no such video');
-      res.redirect('/dashboard');
+      res.redirect('/dashboard%page=1&limit=15');
     } else {
       let resultsTitle = results.map(results => results.title);
       let resultsChoreo = results.map(results => results.choreographer);
