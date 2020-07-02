@@ -1,0 +1,138 @@
+<div class="header">
+    <header id="header" class="fixed-top ">
+        <div class="container d-flex align-items-center justify-content-between">
+
+            <h1 class="logo"><a href="/">Vibin'</a></h1>
+
+            <nav class="nav-menu d-none d-lg-block">
+                <ul>
+                    <li><a href="/dashboard?page=1&limit=15">Home</a></li>
+                    <li><a href="/calendar">Calendar</a></li>
+                    <li><a href="/logout">Logout</a></li>
+                </ul>
+
+            </nav><!-- .nav-menu -->
+
+            <a href="/upload" class="get-started-btn scrollto">Upload</a>
+        </div>
+    </header><!-- End Header -->
+    <br>
+    <br>
+    <br>
+    <br>
+    <h1 class="text-center">This is Calendar Page</h1><br>
+
+    <div class="text-center">
+        <button class="button" onclick="makeCal()">Make a New Calendar</button>
+        <button class="button" onclick="list()">Fill</button>
+    </div>
+
+    <section id="results" class="results">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <h4 id="summary0"></h4>
+                    <h4 id="summary1"></h4>
+                    <h4 id="summary2"></h4>
+                    <h4 id="summary3"></h4>
+                    <h4 id="summary4"></h4>
+                </div>
+            </div>
+        </div>
+    </section><!-- End Why Us Section -->
+
+    <!-- ======= Footer ======= -->
+    <footer id="footer">
+
+        <div class="footer-top">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-lg-3 col-md-6 footer-contact">
+                        <h3>Vibin'</h3>
+                        <p>
+                            <strong>Phone:</strong> +81 080 4339 9251<br>
+                            <strong>Email:</strong> info@vibin.tokyo<br>
+                        </p>
+                    </div>
+
+                    <div class="col-lg-2 col-md-6 footer-links">
+                        <h4>Sitemap</h4>
+                        <ul>
+                            <li><i class="bx bx-chevron-right"></i> <a href="#hero">Home</a></li>
+                            <li><i class="bx bx-chevron-right"></i> <a href="#about">About us</a></li>
+                            <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
+                            <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 footer-newsletter">
+                        <h4>Join Our Newsletter</h4>
+                        <p>Tamen quem nulla quae legam multos aute sint culpa legam noster magna</p>
+                        <form action="" method="post">
+                            <input type="email" name="email"><input type="submit" value="Subscribe">
+                        </form>
+                    </div>
+
+                    <div class="social-links text-center text-md-right pt-3 pt-md-0">
+                        <a href="https://www.facebook.com/Vibin-107436974343750" class="facebook"><i
+                                class="bx bxl-facebook"></i></a>
+                        <a href="https://www.instagram.com/vibin_dance/" class="instagram"><i
+                                class="bx bxl-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container d-md-flex py-4">
+
+            <div class="mr-md-auto text-center text-md-left">
+                <div class="copyright">
+                    &copy; Copyright <strong><span>Vibin'</span></strong>. All Rights Reserved
+                </div>
+            </div>
+        </div>
+    </footer><!-- End Footer -->
+    <script>
+
+        function makeCal() {
+            let API_key = '<%= API_key %>'
+            let makeCal = `https://www.googleapis.com/calendar/v3/calendars?key=${API_key}`
+
+            fetch(makeCal, {
+                'summary': "Dance"
+            }).then(response => response.json())
+              .then(data => {
+                  console.log(data);
+              })
+        }
+
+        function list() {
+
+            let API_key = '<%= API_key %>'
+            let CALENDAR_ID = '<%= CALENDAR_ID %>'
+            // const url = `https://www.googleapis.com/calendar/v3/users/me/calendarList?key=${API_key}`
+            // const url = `https://www.googleapis.com/calendar/v3/users/me/calendarList/925shota@gmail.com`
+            // const url = `https://www.googleapis.com/calendar/v3/calendars?key=${API_key}`
+            const url = `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?key=${API_key}`
+
+            fetch(url, {
+                'headers': { 'Authorization': `Bearer ${Accesstoken}`},
+                'end': {
+                    "dateTime": "2020-07-3T09:00:00-07:00"
+                },
+                'start': {
+                    "dateTime": "2020-07-2T09:00:00-07:00"
+                },
+                'summar': "aaa"
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    for (i=0; i<data.items.length; i++) {
+                        document.getElementById("summary"+i).innerHTML = data.items[i].summary;
+                    }
+
+                })
+        }
+    </script>

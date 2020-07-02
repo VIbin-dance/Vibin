@@ -3,15 +3,18 @@ const router = express.Router();
 const paginate = require('express-paginate');
 const passport = require('passport');
 const { ensureAuthenticated } = require('../config/auth');
+const { onlyDevs } = require('../config/dev');
 
 const Video = require('../models/Video');
+const User = require('../models/User');
 
 router.get('/', (req, res) => {
   if (req.session.passport) {
     req.flash('success_msg', 'You are logged in!');
     res.redirect('/dashboard?page=1&limit=15');
-} else {
-    res.render('landing')}
+  } else {
+    res.render('landing')
+  }
 });
 
 router.get('/logout', (req, res) => {
@@ -22,17 +25,18 @@ router.get('/logout', (req, res) => {
 
 router.get('/auth/google', passport.authenticate('google', {
   scope: [
-      'https://www.googleapis.com/auth/userinfo.profile',
-      'https://www.googleapis.com/auth/userinfo.email',
-      'https://www.googleapis.com/auth/youtube'
+    'https://www.googleapis.com/auth/userinfo.profile',
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/youtube',
+    'https://www.googleapis.com/auth/calendar'
   ]
 }));
 
 // callback function
 router.get('/auth/google/callback',
   passport.authenticate('google', {
-      failureRedirect: '/error',
-      session: true
+    failureRedirect: '/error',
+    session: true
   }),
   (req, res) => {
     req.flash('success_msg', 'You are logged in!')
@@ -45,7 +49,7 @@ router.get('/error', (req, res) => {
 });
 
 router.get('/dashboard', ensureAuthenticated, (req, res) => {
-  Video.paginate({}, {page: req.query.page, limit: req.query.limit}, (err, result) => {
+  Video.paginate({}, { page: req.query.page, limit: req.query.limit }, (err, result) => {
     const title = [];
     const choreographer = [];
     const url = [];
@@ -74,17 +78,26 @@ router.get('/dashboard', ensureAuthenticated, (req, res) => {
       pageCount: result.pages,
       pages: paginate.getArrayPages(req)(3, result.pages, req.query.page)
     })
-    });
+  });
 });
 
 router.get('/results', ensureAuthenticated, (req, res) => res.render('results'));
-router.get('/upload', ensureAuthenticated, (req, res) => res.render('upload', {
-  API_key: process.env.API_key,
-  CLIENT_ID: process.env.CLIENT_ID
-}));
+
+router.get('/calendar', ensureAuthenticated, onlyDevs, (req, res) => {
+  res.render('calendar', {
+    API_key: process.env.API_key,
+    CALENDAR_ID: 'hi'
+  });
+});
+
+router.get('/upload', ensureAuthenticated, onlyDevs, (req, res) => {
+  res.render('upload', {
+    API_key: process.env.API_key,
+  });
+})
 
 router.get('/player/:id', ensureAuthenticated, (req, res) => {
-  Video.findOne({id: req.params.id}, (err, result) => {
+  Video.findOne({ id: req.params.id }, (err, result) => {
     res.render('player', {
       id: req.params.id,
       title: result.title,
@@ -96,7 +109,6 @@ router.get('/player/:id', ensureAuthenticated, (req, res) => {
 
 router.post('/dashboard', (req, res) => {
   const { length, language, level, genre, purpose, mood } = req.body;
-  let errors = [];
 
   const query = {
     $and: [
@@ -109,30 +121,39 @@ router.post('/dashboard', (req, res) => {
     ]
   }
 
-  Video.find(query, (err, results) => {
-    if (!results.length) {
-      errors.push({ msg: 'There is no such video!' });
-    }
+  Video.paginate(query, { page: req.query.page, limit: 100 }, (err, result) => {
+    let title = [];
+    let choreographer = [];
+    let url = [];
+    let level = [];
+    let thumbnail = [];
+    let id = [];
 
-    if (errors.length > 0) {
-      req.flash('error_msg', 'There is no such video');
-      res.redirect('/dashboard%page=1&limit=15');
+    if (!result.docs.length) {
+      req.flash('error_msg', "Looks like we don't have that video yet!");
+      res.redirect('/dashboard?page=1&limit=15');
     } else {
-      let resultsTitle = results.map(results => results.title);
-      let resultsChoreo = results.map(results => results.choreographer);
-      let resultsURL = results.map(results => results.url);
-      let resultsLevel = results.map(results => results.level);
-      let resultsThumbnail = results.map(results => results.thumbnail);
-      let resultsId = results.map(results => results.id);
+      for (let i = 0; i < result.docs.length; i++) {
+        title[i] = result.docs[i].title;
+        choreographer[i] = result.docs[i].choreographer;
+        url[i] = result.docs[i].url;
+        level[i] = result.docs[i].level;
+        thumbnail[i] = result.docs[i].thumbnail;
+        id[i] = result.docs[i].id;
+      }
       res.render('results', {
+        count: result.total,
         username: req.session.passport.user.displayName,
-        title: resultsTitle,
-        choreographer: resultsChoreo,
-        url: resultsURL,
-        level: resultsLevel,
-        thumbnail: resultsThumbnail,
-        id: resultsId,
-        results: results
+        videos: result.docs,
+        title: title,
+        choreographer: choreographer,
+        url: url,
+        id: id,
+        level: level,
+        thumbnail: thumbnail,
+        currentPage: result.page,
+        pageCount: result.pages,
+        pages: paginate.getArrayPages(req)(3, result.pages, req.query.page)
       })
     }
   })
@@ -143,7 +164,7 @@ router.post('/upload', (req, res) => {
   let errors = [];
 
   // Check required fields
-  if (title == '' || choreographer == '' || thumbnail == '' || url == '' || id == '' || publishedDate == '' || length == '' ||  language == '' || level == '' || genre == '' || purpose == '' || mood == '') {
+  if (title == '' || choreographer == '' || thumbnail == '' || url == '' || id == '' || publishedDate == '' || length == '' || language == '' || level == '' || genre == '' || purpose == '' || mood == '') {
     errors.push({ msg: 'Please fill in all fields' });
   }
 
@@ -170,15 +191,17 @@ router.post('/upload', (req, res) => {
   }
   Video.updateMany(
     {},
-    { $addToSet: {
-      length: ["any"],
-      language: ["any"],
-      level: ["any"],
-      genre: ["any"],
-      purpose: ["any"],
-      mood: ["any"]
-    } },
-    function(err, result) {
+    {
+      $addToSet: {
+        length: ["any"],
+        language: ["any"],
+        level: ["any"],
+        genre: ["any"],
+        purpose: ["any"],
+        mood: ["any"]
+      }
+    },
+    function (err, result) {
       if (err) {
         console.log(err);
       }

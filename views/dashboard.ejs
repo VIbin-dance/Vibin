@@ -9,6 +9,7 @@
       <nav class="nav-menu d-none d-lg-block">
         <ul>
           <li class="active"><a href="/dashboard?page=1&limit=15">Home</a></li>
+          <li><a href="/calendar">Calendar</a></li>
           <li><a href="/logout">Logout</a></li>
         </ul>
 
@@ -22,7 +23,7 @@
   <section id="search" class="search">
     <div class="search-bar">
       <form action="/dashboard" method="POST">
-        <h4 class="user">Welcome <%= username %>! What's your vibes today?</h4>
+        <h2 class="user">Welcome <%= username %>, <span id="random"></span></h2><br>
 
         <div class="form-group">
           <select class="chosen-value" type="length" id="inputState" name="length">
@@ -94,11 +95,13 @@
     </div>
   </section>
 
+  <h4 class="text-center">We are still in testing phase, sorry for the inconvenience :)</h4>
+
   <section id="results" class="results">
     <div class="container">
+      <%- include ('partials/messages') %>
       <h3>Latest videos</h3>
       <p>We have <%= count %> videos in total!</p>
-      <%- include ('partials/messages') %>
       <div class="row">
         <% for(let i=0; i < videos.length; i++) { %>
         <div class="col-lg-4">
@@ -195,3 +198,14 @@
       </div>
     </div>
   </footer><!-- End Footer -->
+  <script>
+    var quotes = [
+      "What's your vibes today?",
+      "Are you feeling the vibes?",
+      "Let's vibe!",
+      "Get funky!"
+    ];
+    let index = Math.floor(Math.random() * (quotes.length));
+
+    document.getElementById("random").innerHTML = quotes[index];
+  </script>
