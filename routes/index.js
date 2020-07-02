@@ -3,6 +3,7 @@ const router = express.Router();
 const paginate = require('express-paginate');
 const passport = require('passport');
 const { ensureAuthenticated } = require('../config/auth');
+const { onlyDevs } = require('../config/dev');
 
 const Video = require('../models/Video');
 const User = require('../models/User');
@@ -89,16 +90,11 @@ router.get('/calendar', (req, res) => {
   });
 });
 
-router.get('/upload', ensureAuthenticated, (req, res) => {
-  if (req.user.emails[0].value == '925shota@gmail.com' || req.user.emails[0].value == 'so.gorman@vibin.tokyo') {
-    res.render('upload', {
-      API_key: process.env.API_key,
-      CLIENT_ID: process.env.CLIENT_ID
-    });
-  } else {
-    req.flash('error_msg', "Sorry this is not yet available to users!");
-    res.redirect('/dashboard?page=1&limit=15');
-  }
+router.get('/upload', ensureAuthenticated, onlyDevs, (req, res) => {
+  res.render('upload', {
+    API_key: process.env.API_key,
+    CLIENT_ID: process.env.CLIENT_ID
+  });
 })
 
 router.get('/player/:id', ensureAuthenticated, (req, res) => {
