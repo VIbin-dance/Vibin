@@ -83,6 +83,33 @@ router.get('/dashboard', ensureAuthenticated, (req, res) => {
 
 router.get('/results', ensureAuthenticated, (req, res) => res.render('results'));
 
+router.get('/choreographer/:id', ensureAuthenticated, (req, res) => {
+  Video.find({choreographer: req.params.id}, (err, result) => {
+    const title = [];
+    const url = [];
+    const level = [];
+    const thumbnail = [];
+    const id = [];
+    for (let i = 0; i < result.length; i++) {
+      title[i] = result[i].title;
+      url[i] = result[i].url;
+      level[i] = result[i].level;
+      thumbnail[i] = result[i].thumbnail;
+      id[i] = result[i].id;
+    }
+    res.render('choreographer', {
+      count: result.length,
+      choreographer: req.params.id,
+      videos: result,
+      title: title,
+      url: url,
+      level: level,
+      thumbnail: thumbnail,
+      id: id,
+    })
+  })
+})
+
 router.get('/calendar', ensureAuthenticated, onlyDevs, (req, res) => {
   res.render('calendar', {
     API_key: process.env.API_key,
