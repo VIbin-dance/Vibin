@@ -20,18 +20,18 @@
     <div class="container">
       <h2><span id="random"></span></h2><br>
       <h3>Search result</h3>
-      <p>There are <%= results.length %> videos</p>
+      <p>There are <%= count %> videos</p>
       <%- include ('partials/messages') %>
       <div class="row">
-        <% for(var i=0; i < results.length; i++) { %>
+        <% for(var i=0; i < videos.length; i++) { %>
         <div class="col-lg-4">
           <div class="box">
-            <a href="/player/<%= results[i].id %>">
-              <img src="<%= results[i].thumbnail %>">
+            <a href="/player/<%= id[i] %>">
+              <img src="<%= thumbnail[i] %>">
             </a>
-            <h4><%= results[i].title %></h4>
-            <p><%= results[i].choreographer %></p>
-            <p><%= results[i].level[0] %></p>
+            <h4><%= title[i] %></h4>
+            <p><%= choreographer[i] %></p>
+            <p><%= level[i] %></p>
           </div>
         </div>
         <% } %>
@@ -74,7 +74,8 @@
           </div>
 
           <div class="social-links text-center text-md-right pt-3 pt-md-0">
-            <a href="https://www.facebook.com/Vibin-107436974343750" class="facebook"><i class="bx bxl-facebook"></i></a>
+            <a href="https://www.facebook.com/Vibin-107436974343750" class="facebook"><i
+                class="bx bxl-facebook"></i></a>
             <a href="https://www.instagram.com/vibin_dance/" class="instagram"><i class="bx bxl-instagram"></i></a>
           </div>
         </div>
