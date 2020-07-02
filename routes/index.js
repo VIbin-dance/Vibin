@@ -83,17 +83,16 @@ router.get('/dashboard', ensureAuthenticated, (req, res) => {
 
 router.get('/results', ensureAuthenticated, (req, res) => res.render('results'));
 
-router.get('/calendar', (req, res) => {
+router.get('/calendar', ensureAuthenticated, onlyDevs, (req, res) => {
   res.render('calendar', {
     API_key: process.env.API_key,
-    CLIENT_ID: process.env.CLIENT_ID
+    CALENDAR_ID: 'hi'
   });
 });
 
 router.get('/upload', ensureAuthenticated, onlyDevs, (req, res) => {
   res.render('upload', {
     API_key: process.env.API_key,
-    CLIENT_ID: process.env.CLIENT_ID
   });
 })
 
@@ -110,7 +109,6 @@ router.get('/player/:id', ensureAuthenticated, (req, res) => {
 
 router.post('/dashboard', (req, res) => {
   const { length, language, level, genre, purpose, mood } = req.body;
-  let errors = [];
 
   const query = {
     $and: [
@@ -123,19 +121,15 @@ router.post('/dashboard', (req, res) => {
     ]
   }
 
-  Video.paginate(query, { page: req.query.page, limit: req.query.limit }, (err, result) => {
-    const title = [];
-    const choreographer = [];
-    const url = [];
-    const level = [];
-    const thumbnail = [];
-    const id = [];
+  Video.paginate(query, { page: req.query.page, limit: 100 }, (err, result) => {
+    let title = [];
+    let choreographer = [];
+    let url = [];
+    let level = [];
+    let thumbnail = [];
+    let id = [];
 
     if (!result.docs.length) {
-      errors.push({ msg: 'There is no such video!' });
-    }
-
-    if (errors.length > 0) {
       req.flash('error_msg', "Looks like we don't have that video yet!");
       res.redirect('/dashboard?page=1&limit=15');
     } else {
@@ -147,7 +141,7 @@ router.post('/dashboard', (req, res) => {
         thumbnail[i] = result.docs[i].thumbnail;
         id[i] = result.docs[i].id;
       }
-      res.render('../views/results', {
+      res.render('results', {
         count: result.total,
         username: req.session.passport.user.displayName,
         videos: result.docs,

@@ -6,7 +6,8 @@
 
             <nav class="nav-menu d-none d-lg-block">
                 <ul>
-                    <li class="active"><a href="/dashboard?page=1&limit=15">Home</a></li>
+                    <li><a href="/dashboard?page=1&limit=15">Home</a></li>
+                    <li><a href="/calendar">Calendar</a></li>
                     <li><a href="/logout">Logout</a></li>
                 </ul>
 
@@ -109,13 +110,14 @@
         function list() {
 
             let API_key = '<%= API_key %>'
+            let CALENDAR_ID = '<%= CALENDAR_ID %>'
             // const url = `https://www.googleapis.com/calendar/v3/users/me/calendarList?key=${API_key}`
             // const url = `https://www.googleapis.com/calendar/v3/users/me/calendarList/925shota@gmail.com`
             // const url = `https://www.googleapis.com/calendar/v3/calendars?key=${API_key}`
-            const url = `https://www.googleapis.com/calendar/v3/calendars/925shota%40gmail.com/events?key=${API_key}`
+            const url = `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?key=${API_key}`
 
             fetch(url, {
-                'headers': { 'Authorization': 'Bearer ya29.a0AfH6SMAciqQ3hIM9Nn_fJGyqfi2t0-_gIt6NVcNCZn_b1muGYwWp0KHF0_dQ7fwgxG-kaZhibakMtwUzYN7WaObpT5uzRXNC0bq6sYD0KtEZahT0_HvgIQsyUS_aat129D9DqLCfhveAU7KEH74VDGumS91FyfEhiTg' },
+                'headers': { 'Authorization': `Bearer ${Accesstoken}`},
                 'end': {
                     "dateTime": "2020-07-3T09:00:00-07:00"
                 },
