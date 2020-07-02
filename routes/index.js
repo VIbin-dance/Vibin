@@ -90,19 +90,15 @@ router.get('/calendar', (req, res) => {
 });
 
 router.get('/upload', ensureAuthenticated, (req, res) => {
-  User.findOne({ googleId: req.user.id }, (err, result) => {
-    console.log(result)
-    console.log(result.email)
-    if(result.email == '925shota@gmail.com' || result.email == 'so.gorman@vibin.tokyo') {
-      res.render('upload', {
-        API_key: process.env.API_key,
-        CLIENT_ID: process.env.CLIENT_ID
-      });
-    } else {
-      req.flash('error_msg', "Sorry this is not yet available to users!");
-      res.redirect('/dashboard?page=1&limit=15');
-    }
-  })
+  if (req.user.emails[0].value == '925shota@gmail.com' || req.user.emails[0].value == 'so.gorman@vibin.tokyo') {
+    res.render('upload', {
+      API_key: process.env.API_key,
+      CLIENT_ID: process.env.CLIENT_ID
+    });
+  } else {
+    req.flash('error_msg', "Sorry this is not yet available to users!");
+    res.redirect('/dashboard?page=1&limit=15');
+  }
 })
 
 router.get('/player/:id', ensureAuthenticated, (req, res) => {
