@@ -24,7 +24,8 @@ router.get('/auth/google', passport.authenticate('google', {
   scope: [
       'https://www.googleapis.com/auth/userinfo.profile',
       'https://www.googleapis.com/auth/userinfo.email',
-      'https://www.googleapis.com/auth/youtube'
+      'https://www.googleapis.com/auth/youtube',
+      'https://www.googleapis.com/auth/calendar'
   ]
 }));
 
@@ -78,10 +79,20 @@ router.get('/dashboard', ensureAuthenticated, (req, res) => {
 });
 
 router.get('/results', ensureAuthenticated, (req, res) => res.render('results'));
-router.get('/upload', ensureAuthenticated, (req, res) => res.render('upload', {
-  API_key: process.env.API_key,
-  CLIENT_ID: process.env.CLIENT_ID
-}));
+
+router.get('/calendar', (req, res) => {
+  res.render('calendar', {
+    API_key: process.env.API_key,
+    CLIENT_ID: process.env.CLIENT_ID
+  });
+});
+
+router.get('/upload', ensureAuthenticated, (req, res) => {
+  res.render('upload', {
+    API_key: process.env.API_key,
+    CLIENT_ID: process.env.CLIENT_ID
+  });
+})
 
 router.get('/player/:id', ensureAuthenticated, (req, res) => {
   Video.findOne({id: req.params.id}, (err, result) => {
@@ -109,31 +120,44 @@ router.post('/dashboard', (req, res) => {
     ]
   }
 
-  Video.find(query, (err, results) => {
-    if (!results.length) {
+  Video.paginate(query, {page: req.query.page, limit: req.query.limit}, (err, result) => {
+    const title = [];
+    const choreographer = [];
+    const url = [];
+    const level = [];
+    const thumbnail = [];
+    const id = [];
+
+    if (!result.docs.length) {
       errors.push({ msg: 'There is no such video!' });
     }
 
     if (errors.length > 0) {
-      req.flash('error_msg', 'There is no such video');
-      res.redirect('/dashboard%page=1&limit=15');
+      req.flash('error_msg', "Looks like we don't have that video yet!");
+      res.redirect('/dashboard?page=1&limit=15');
     } else {
-      let resultsTitle = results.map(results => results.title);
-      let resultsChoreo = results.map(results => results.choreographer);
-      let resultsURL = results.map(results => results.url);
-      let resultsLevel = results.map(results => results.level);
-      let resultsThumbnail = results.map(results => results.thumbnail);
-      let resultsId = results.map(results => results.id);
-      res.render('results', {
-        username: req.session.passport.user.displayName,
-        title: resultsTitle,
-        choreographer: resultsChoreo,
-        url: resultsURL,
-        level: resultsLevel,
-        thumbnail: resultsThumbnail,
-        id: resultsId,
-        results: results
-      })
+    for (let i = 0; i < result.docs.length; i++) {
+      title[i] = result.docs[i].title;
+      choreographer[i] = result.docs[i].choreographer;
+      url[i] = result.docs[i].url;
+      level[i] = result.docs[i].level;
+      thumbnail[i] = result.docs[i].thumbnail;
+      id[i] = result.docs[i].id;
+    }
+    res.render('../views/results', {
+      count: result.total,
+      username: req.session.passport.user.displayName,
+      videos: result.docs,
+      title: title,
+      choreographer: choreographer,
+      url: url,
+      id: id,
+      level: level,
+      thumbnail: thumbnail,
+      currentPage: result.page,
+      pageCount: result.pages,
+      pages: paginate.getArrayPages(req)(3, result.pages, req.query.page)
+    })
     }
   })
 })
