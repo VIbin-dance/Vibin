@@ -1,3 +1,4 @@
+<body onload="list()">
 <div class="header">
     <header id="header" class="fixed-top ">
         <div class="container d-flex align-items-center justify-content-between">
@@ -23,7 +24,6 @@
     <h1 class="text-center">This is Calendar Page</h1><br>
 
     <div class="text-center">
-        <button class="button" onclick="makeCal()">Make a New Calendar</button>
         <button class="button" onclick="list()">Fill</button>
     </div>
 
@@ -93,24 +93,14 @@
             </div>
         </div>
     </footer><!-- End Footer -->
+</body>
     <script>
 
-        function makeCal() {
-            let API_key = '<%= API_key %>'
-            let makeCal = `https://www.googleapis.com/calendar/v3/calendars?key=${API_key}`
-
-            fetch(makeCal, {
-                'summary': "Dance"
-            }).then(response => response.json())
-              .then(data => {
-                  console.log(data);
-              })
-        }
-
         function list() {
-
             let API_key = '<%= API_key %>'
             let CALENDAR_ID = '<%= CALENDAR_ID %>'
+            let Accesstoken = '<%= accessToken %>'
+
             // const url = `https://www.googleapis.com/calendar/v3/users/me/calendarList?key=${API_key}`
             // const url = `https://www.googleapis.com/calendar/v3/users/me/calendarList/925shota@gmail.com`
             // const url = `https://www.googleapis.com/calendar/v3/calendars?key=${API_key}`
@@ -118,13 +108,6 @@
 
             fetch(url, {
                 'headers': { 'Authorization': `Bearer ${Accesstoken}`},
-                'end': {
-                    "dateTime": "2020-07-3T09:00:00-07:00"
-                },
-                'start': {
-                    "dateTime": "2020-07-2T09:00:00-07:00"
-                },
-                'summar': "aaa"
             })
                 .then(response => response.json())
                 .then(data => {

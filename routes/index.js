@@ -111,10 +111,13 @@ router.get('/choreographer/:id', ensureAuthenticated, (req, res) => {
 })
 
 router.get('/calendar', ensureAuthenticated, onlyDevs, (req, res) => {
-  res.render('calendar', {
-    API_key: process.env.API_key,
-    CALENDAR_ID: 'hi'
-  });
+  User.findOne({email: req.user._json.email}, (err, result) => {
+    res.render('calendar', {
+      API_key: process.env.API_key,
+      CALENDAR_ID: result.email,
+      accessToken: result.accessToken
+    });
+  })
 });
 
 router.get('/upload', ensureAuthenticated, onlyDevs, (req, res) => {
