@@ -60,7 +60,7 @@ router.get('/dashboard', ensureAuthenticated, (req, res) => {
       title[i] = result.docs[i].title;
       choreographer[i] = result.docs[i].choreographer;
       url[i] = result.docs[i].url;
-      level[i] = result.docs[i].level;
+      level[i] = result.docs[i].level[0];
       thumbnail[i] = result.docs[i].thumbnail;
       id[i] = result.docs[i].id;
     }
@@ -84,7 +84,7 @@ router.get('/dashboard', ensureAuthenticated, (req, res) => {
 router.get('/results', ensureAuthenticated, (req, res) => res.render('results'));
 
 router.get('/choreographer/:id', ensureAuthenticated, (req, res) => {
-  Video.find({choreographer: req.params.id}, (err, result) => {
+  Video.find({ choreographer: req.params.id }, (err, result) => {
     const title = [];
     const url = [];
     const level = [];
@@ -111,7 +111,7 @@ router.get('/choreographer/:id', ensureAuthenticated, (req, res) => {
 })
 
 router.get('/calendar', ensureAuthenticated, onlyDevs, (req, res) => {
-  User.findOne({email: req.user._json.email}, (err, result) => {
+  User.findOne({ email: req.user._json.email }, (err, result) => {
     res.render('calendar', {
       API_key: process.env.API_key,
       CALENDAR_ID: result.email,
@@ -128,12 +128,17 @@ router.get('/upload', ensureAuthenticated, onlyDevs, (req, res) => {
 
 router.get('/player/:id', ensureAuthenticated, (req, res) => {
   Video.findOne({ id: req.params.id }, (err, result) => {
-    res.render('player', {
-      id: req.params.id,
-      title: result.title,
-      choreographer: result.choreographer,
-      level: result.level,
-    });
+    User.findOne({ email: req.user._json.email }, (err, user) => {
+      res.render('player', {
+        id: req.params.id,
+        title: result.title,
+        choreographer: result.choreographer,
+        level: result.level,
+        API_key: process.env.API_key,
+        CALENDAR_ID: user.email,
+        accessToken: user.accessToken
+      });
+    })
   })
 });
 
@@ -167,7 +172,7 @@ router.post('/dashboard', (req, res) => {
         title[i] = result.docs[i].title;
         choreographer[i] = result.docs[i].choreographer;
         url[i] = result.docs[i].url;
-        level[i] = result.docs[i].level;
+        level[i] = result.docs[i].level[0];
         thumbnail[i] = result.docs[i].thumbnail;
         id[i] = result.docs[i].id;
       }

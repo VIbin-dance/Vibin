@@ -1765,14 +1765,6 @@ section {
   margin-top: 3%;
 }
 
-.results a {
-  margin: 2%;
-  color: #444444;
-}
-.results a:hover {
-  color:#EB5160;
-}
-
 /* user */
 .user{
   margin: 3%;
@@ -1810,7 +1802,18 @@ section {
   display: inline-block;
 }
 
+.videoPlayer h6 {
+  display: inline-block;
+  padding-left: 0.5%;
+}
+
 .videoPlayer .text {
   padding-left: 10vh;
   margin: 30px 20px;
+}
+
+.videoPlayer input {
+  height: 4rem;
+  max-width: 20vh;
+  display: inline-block;
 }
