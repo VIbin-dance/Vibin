@@ -1,9 +1,10 @@
-<body onload="list()">
 <div class="header">
     <header id="header" class="fixed-top ">
         <div class="container d-flex align-items-center justify-content-between">
 
             <h1 class="logo"><a href="/">Vibin'</a></h1>
+            <!-- Uncomment below if you prefer to use an image logo -->
+            <!-- <a href="index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 
             <nav class="nav-menu d-none d-lg-block">
                 <ul>
@@ -17,29 +18,28 @@
             <a href="/upload" class="get-started-btn scrollto">Upload</a>
         </div>
     </header><!-- End Header -->
-    <br>
-    <br>
-    <br>
-    <br>
-    <h1 class="text-center">This is Calendar Page</h1><br>
-
-    <div class="text-center">
-        <button class="button" onclick="list()">Fill</button>
-    </div>
 
     <section id="results" class="results">
         <div class="container">
+            <%- include ('partials/messages') %>
+            <h3><%= choreographer %>'s videos</h3>
+            <p>We have <%= count %> videos in total!</p>
             <div class="row">
+                <% for(let i=0; i < videos.length; i++) { %>
                 <div class="col-lg-4">
-                    <h4 id="summary0"></h4>
-                    <h4 id="summary1"></h4>
-                    <h4 id="summary2"></h4>
-                    <h4 id="summary3"></h4>
-                    <h4 id="summary4"></h4>
+                    <div class="box">
+                        <a href="/player/<%= id[i] %>">
+                            <img src="<%= thumbnail[i] %>">
+                        </a>
+                        <h4><%= title[i] %></h4>
+                        <p><%= choreographer %></p>
+                        <p><%= level[i] %></p>
+                    </div>
                 </div>
+                <% } %>
             </div>
         </div>
-    </section><!-- End Why Us Section -->
+    </section>
 
     <!-- ======= Footer ======= -->
     <footer id="footer">
@@ -93,29 +93,3 @@
             </div>
         </div>
     </footer><!-- End Footer -->
-</body>
-    <script>
-
-        function list() {
-            let API_key = '<%= API_key %>'
-            let CALENDAR_ID = '<%= CALENDAR_ID %>'
-            let Accesstoken = '<%= accessToken %>'
-
-            // const url = `https://www.googleapis.com/calendar/v3/users/me/calendarList?key=${API_key}`
-            // const url = `https://www.googleapis.com/calendar/v3/users/me/calendarList/925shota@gmail.com`
-            // const url = `https://www.googleapis.com/calendar/v3/calendars?key=${API_key}`
-            const url = `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?key=${API_key}`
-
-            fetch(url, {
-                'headers': { 'Authorization': `Bearer ${Accesstoken}`},
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data)
-                    for (i=0; i<data.items.length; i++) {
-                        document.getElementById("summary"+i).innerHTML = data.items[i].summary;
-                    }
-
-                })
-        }
-    </script>
