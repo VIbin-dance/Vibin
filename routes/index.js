@@ -110,7 +110,7 @@ router.get('/choreographer/:id', ensureAuthenticated, (req, res) => {
   })
 })
 
-router.get('/calendar', ensureAuthenticated, onlyDevs, (req, res) => {
+router.get('/calendar', ensureAuthenticated, (req, res) => {
   User.findOne({ email: req.user._json.email }, (err, result) => {
     res.render('calendar', {
       API_key: process.env.API_key,
@@ -218,7 +218,7 @@ router.post('/upload', (req, res) => {
           newVideo.save()
             .then(function (video) {
               req.flash('success_msg', 'The dance is now registered');
-              res.redirect('/dashboard?page=1&limit=15');
+              res.redirect('/upload');
             })
             .catch(err => console.log(err));
         }
