@@ -60,7 +60,7 @@ router.get('/dashboard', ensureAuthenticated, (req, res) => {
       title[i] = result.docs[i].title;
       choreographer[i] = result.docs[i].choreographer;
       url[i] = result.docs[i].url;
-      level[i] = result.docs[i].level;
+      level[i] = result.docs[i].level[0];
       thumbnail[i] = result.docs[i].thumbnail;
       id[i] = result.docs[i].id;
     }
@@ -84,7 +84,7 @@ router.get('/dashboard', ensureAuthenticated, (req, res) => {
 router.get('/results', ensureAuthenticated, (req, res) => res.render('results'));
 
 router.get('/choreographer/:id', ensureAuthenticated, (req, res) => {
-  Video.find({choreographer: req.params.id}, (err, result) => {
+  Video.find({ choreographer: req.params.id }, (err, result) => {
     const title = [];
     const url = [];
     const level = [];
@@ -110,8 +110,8 @@ router.get('/choreographer/:id', ensureAuthenticated, (req, res) => {
   })
 })
 
-router.get('/calendar', ensureAuthenticated, onlyDevs, (req, res) => {
-  User.findOne({email: req.user._json.email}, (err, result) => {
+router.get('/calendar', ensureAuthenticated, (req, res) => {
+  User.findOne({ email: req.user._json.email }, (err, result) => {
     res.render('calendar', {
       API_key: process.env.API_key,
       CALENDAR_ID: result.email,
@@ -128,21 +128,26 @@ router.get('/upload', ensureAuthenticated, onlyDevs, (req, res) => {
 
 router.get('/player/:id', ensureAuthenticated, (req, res) => {
   Video.findOne({ id: req.params.id }, (err, result) => {
-    res.render('player', {
-      id: req.params.id,
-      title: result.title,
-      choreographer: result.choreographer,
-      level: result.level,
-    });
+    User.findOne({ email: req.user._json.email }, (err, user) => {
+      res.render('player', {
+        id: req.params.id,
+        title: result.title,
+        choreographer: result.choreographer,
+        level: result.level,
+        API_key: process.env.API_key,
+        CALENDAR_ID: user.email,
+        accessToken: user.accessToken
+      });
+    })
   })
 });
 
 router.post('/dashboard', (req, res) => {
-  const { length, language, level, genre, purpose, mood } = req.body;
+  const { lengthCat, language, level, genre, purpose, mood } = req.body;
 
   const query = {
     $and: [
-      { length: length },
+      { lengthCat: lengthCat },
       { language: language },
       { level: level },
       { genre: genre },
@@ -167,7 +172,7 @@ router.post('/dashboard', (req, res) => {
         title[i] = result.docs[i].title;
         choreographer[i] = result.docs[i].choreographer;
         url[i] = result.docs[i].url;
-        level[i] = result.docs[i].level;
+        level[i] = result.docs[i].level[0];
         thumbnail[i] = result.docs[i].thumbnail;
         id[i] = result.docs[i].id;
       }
@@ -190,30 +195,30 @@ router.post('/dashboard', (req, res) => {
 })
 
 router.post('/upload', (req, res) => {
-  const { title, choreographer, thumbnail, url, id, publishedDate, length, language, level, genre, purpose, mood } = req.body;
+  const { title, choreographer, thumbnail, url, id, publishedDate, length, lengthCat, language, level, genre, purpose, mood } = req.body;
   let errors = [];
 
   // Check required fields
-  if (title == '' || choreographer == '' || thumbnail == '' || url == '' || id == '' || publishedDate == '' || length == '' || language == '' || level == '' || genre == '' || purpose == '' || mood == '') {
+  if (title == '' || choreographer == '' || thumbnail == '' || url == '' || id == '' || publishedDate == '' || length == '' || lengthCat == '' || language == '' || level == '' || genre == '' || purpose == '' || mood == '') {
     errors.push({ msg: 'Please fill in all fields' });
   }
 
   if (errors.length > 0) {
-    res.render('upload', { errors, API_key: process.env.API_key, CLIENT_id: process.env.CLIENT_id, title, choreographer, thumbnail, url, id, publishedDate, length, language, level, genre, purpose, mood });
+    res.render('upload', { errors, API_key: process.env.API_key, CLIENT_id: process.env.CLIENT_id, title, choreographer, thumbnail, url, id, publishedDate, length, lengthCat, language, level, genre, purpose, mood });
   } else {
     Video.findOne({ url: url })
       .then(video => {
         if (video) {
           errors.push({ msg: 'The video is already registered!' });
           res.render('upload', {
-            errors
+            errors, API_key: process.env.API_key
           });
         } else {
-          const newVideo = new Video({ title, choreographer, thumbnail, url, id, publishedDate, length, language, level, genre, purpose, mood });
+          const newVideo = new Video({ title, choreographer, thumbnail, url, id, publishedDate, length, lengthCat, language, level, genre, purpose, mood });
           newVideo.save()
             .then(function (video) {
               req.flash('success_msg', 'The dance is now registered');
-              res.redirect('/dashboard?page=1&limit=15');
+              res.redirect('/upload');
             })
             .catch(err => console.log(err));
         }
@@ -226,6 +231,7 @@ router.post('/upload', (req, res) => {
         length: ["any"],
         language: ["any"],
         level: ["any"],
+        lengthCat: ["any"],
         genre: ["any"],
         purpose: ["any"],
         mood: ["any"]

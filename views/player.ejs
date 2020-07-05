@@ -1,15 +1,20 @@
 <div class="videoPlayer">
   <div id="player"></div>
   <div class="text">
-  <h4><%= title %></h4>
+    <h4><%= title %></h4>
     <p><%= choreographer %></p>
     <p><%= level[0] %></p><br>
     <button id="speedUp" onclick="speedUp()" type="button" class="chosen-value">&uarr; Speed</button>
     <button id="speedDown" onclick="speedDown()" type="button" class="chosen-value">&darr; Speed</button>
     <button id="mirror" onclick="mirrorVideo()" type="button" class="chosen-value">Mirror</button>
     <button id="unmirror" onclick="unmirrorVideo()" type="button" class="chosen-value">Unmirror</button>
+    <input type="date" id="date" name="date" class="form-control" placeholder="Enter The Date"
+      value="<%= typeof date != 'undefined' ? date : '' %>" />
+    <input type="time" id="time" name="time" class="form-control" placeholder="Enter The Time"
+      value="<%= typeof time != 'undefined' ? time : '' %>" />
+    <button id="calendar" onclick="addCalendar()" class="chosen-value">Dance later</button>
+    <h6 id="msg">Schedule your vibe session for later</h6>
   </div>
-</div>
 
 <script>
   var tag = document.createElement('script');
@@ -46,6 +51,44 @@
   function unmirrorVideo() {
     document.getElementById('player').setAttribute("class", "");
   }
+
+  function addCalendar() {
+    let API_key = '<%= API_key %>'
+    let CALENDAR_ID = '<%= CALENDAR_ID %>'
+    let Accesstoken = '<%= accessToken %>'
+
+    const url = `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?key=${API_key}`
+
+    fetch(url, {
+      'method': 'POST',
+      'headers': {
+        'Authorization': `Bearer ${Accesstoken}`,
+        'Content-Type': 'application/json'
+      },
+      'body': JSON.stringify({
+        'end': {
+          'dateTime': document.getElementById("date").value + "T" + document.getElementById("time").value + ":00",
+          'timeZone': 'Asia/Tokyo'
+        },
+        'start': {
+          'dateTime': document.getElementById("date").value + "T" + document.getElementById("time").value + ":00",
+          'timeZone': 'Asia/Tokyo'
+        },
+        'summary': "<%= title %> Vibin'",
+        "description": "<%= id %>"
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data)
+        if (data.error) {
+          document.getElementById("msg").innerHTML = "There is an error"
+        } else if (data.kind) {
+          document.getElementById("msg").innerHTML = "<span>This video is added to your <a href = '/calendar'>calendar</a></span>"
+        }
+      })
+  }
+
 </script>
 <style>
   .mirror {

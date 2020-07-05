@@ -72,6 +72,12 @@
         </div>
 
         <div class="form-group">
+          <label for="lengthCat">Length Category</label>
+          <input type="lengthCat" id="lengthCat" name="lengthCat" class="form-control" placeholder="Enter The Length Category"
+            value="<%= typeof lengthCat != 'undefined' ? lengthCat : '' %>" readonly />
+        </div>
+
+        <div class="form-group">
           <label for="language">Language</label>
           <input type="language" id="language" name="language" class="form-control" placeholder="Enter The Language"
             value="<%= typeof language != 'undefined' ? language : '' %>" readonly />
@@ -278,23 +284,36 @@
   <script>
 
     function list() {
-
       let url = document.getElementById("urlFill").value
       let id = url.replace('https://www.youtube.com/watch?v=', '');
       let API_key = '<%= API_key %>'
 
       const urlList = `https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${id}&key=${API_key}`
 
+      if (url.includes('&')) {
+        let output = url.substring(0, url.lastIndexOf('&list'));
+
+        alert('The URL might be from a playlist. You might have meant ' + output)
+      }
+
       fetch(urlList)
         .then(response => response.json())
         .then(data => {
-          console.log(data)
           let duration = moment.duration(data.items[0].contentDetails.duration);
+
+          if (duration._milliseconds > 3600000) {
+            document.getElementById("lengthCat").value = 'long';
+          } else if (duration._milliseconds > 1200000) {
+            document.getElementById("lengthCat").value = 'medium';
+          } else {
+            document.getElementById("lengthCat").value = 'short';
+          }
+
           document.getElementById("title").value = data.items[0].snippet.title;
           document.getElementById("thumbnail").value = data.items[0].snippet.thumbnails.standard.url;
           document.getElementById("url").value = url;
           document.getElementById("id").value = id;
-          document.getElementById("length").value = duration.format('HH:mm:ss', {trim: false});
+          document.getElementById("length").value = duration.format('HH:mm:ss', { trim: false });
           document.getElementById("publishedDate").value = data.items[0].snippet.publishedAt;
           document.getElementById("language").value = data.items[0].snippet.defaultLanguage;
           if (data.items[0].snippet.defaultLanguage == undefined) {
