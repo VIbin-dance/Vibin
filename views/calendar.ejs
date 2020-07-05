@@ -1,4 +1,4 @@
-<body onload="list()">
+<body onload="listEvent()">
     <div class="header">
         <header id="header" class="fixed-top ">
             <div class="container d-flex align-items-center justify-content-between">
@@ -19,8 +19,7 @@
         </header><!-- End Header -->
 
         <section id="results" class="results">
-            <h2 class="text-center">This is your current schedule!</h2><br>
-            <div class="text-center" style="height:82vh">
+            <div class="text-center" style="height:85vh">
                 <!-- <iframe
                     src="https://calendar.google.com/calendar/b/1/embed?height=600&amp;wkst=1&amp;bgcolor=%23eb5680&amp;ctz=Asia%2FTokyo&amp;src=c2hvdGEuaW5vdWVAdmliaW4udG9reW8&amp;src=YWRkcmVzc2Jvb2sjY29udGFjdHNAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&amp;src=ZW4uamFwYW5lc2UjaG9saWRheUBncm91cC52LmNhbGVuZGFyLmdvb2dsZS5jb20&amp;color=%23039BE5&amp;color=%2333B679&amp;color=%230B8043&amp;showTitle=0&amp;showNav=0&amp;showTz=0&amp;showPrint=0&amp;showCalendars=1&amp;showTabs=0&amp;showDate=1"
                     style="border:solid 1px #777" width="800" height="600" frameborder="0" scrolling="no"></iframe> -->
@@ -29,16 +28,18 @@
             </div>
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-8">
+                    <div class="col-lg">
                         <br>
-                        <h3>Your future vibes</h3>
+                        <br>
+                        <h3>Upcoming vibes!</h3>
                         <h5 id="msg"></h5>
+                        <br>
                         <h5 id="summary0"></h5>
                         <p id="time0"></p>
                         <h5 id="summary1"></h5>
                         <p id="time1"></p>
                         <h5 id="summary2"></h5>
-                        <p id="time2"></5>
+                        <p id="time2"></p>
                         <h5 id="summary3"></h5>
                         <p id="time3"></p>
                         <h5 id="summary4"></h5>
@@ -102,27 +103,26 @@
         </footer><!-- End Footer -->
 </body>
 <script>
-
-    function list() {
+    function listEvent() {
+        window.id = [];
         let API_key = '<%= API_key %>'
         let CALENDAR_ID = '<%= CALENDAR_ID %>'
         let Accesstoken = '<%= accessToken %>'
+        let time = encodeURIComponent(moment().format());
 
-        const url = `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?q=vibin&key=${API_key}`
+        const listURL = `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?orderBy=startTime&q=vibin&singleEvents=true&timeMin=${time}&key=${API_key}`
 
-        fetch(url, {
+        fetch(listURL, {
             'headers': { 'Authorization': `Bearer ${Accesstoken}` },
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data)
                 if (data.items.length === 0) {
                     document.getElementById("msg").innerHTML = "<span>Looks like you have no vibes planned! Check <a href = '/dashboard?page=1&limit=15'>more dance</a></span>";
                 } else {
                     for (i = 0; i < data.items.length; i++) {
-                        let duration = moment.duration(data.items[i].start.dateTime);
                         document.getElementById("summary" + i).innerHTML = `<span><a href='/player/${data.items[i].description}'>${data.items[i].summary}</a></span>`;
-                        document.getElementById("time" + i).innerHTML = data.items[i].start.dateTime;
+                        document.getElementById("time" + i).innerHTML = moment(data.items[i].start.dateTime).format('MMMM Do YYYY, h:mm a');
                     }
                 }
             })
