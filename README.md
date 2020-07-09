@@ -1,1 +1,1 @@
-Hi
+Hi, this is the official repository of vibin'
