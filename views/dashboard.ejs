@@ -1,210 +1,222 @@
-<div class="header">
-  <header id="header" class="fixed-top ">
-    <div class="container d-flex align-items-center justify-content-between">
+<body onload="charCut()">
+  <div class="header">
+    <header id="header" class="fixed-top ">
+      <div class="container d-flex align-items-center justify-content-between">
 
-      <h1 class="logo"><a href="/">Vibin'</a></h1>
-      <!-- Uncomment below if you prefer to use an image logo -->
-      <!-- <a href="index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+        <h1 class="logo"><a href="/">Vibin'</a></h1>
+        <!-- Uncomment below if you prefer to use an image logo -->
+        <!-- <a href="index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 
-      <nav class="nav-menu d-none d-lg-block">
-        <ul>
-          <li class="active"><a href="/dashboard?page=1&limit=15">Home</a></li>
-          <li><a href="/calendar">Calendar</a></li>
-          <li><a href="/logout">Logout</a></li>
-        </ul>
+        <nav class="nav-menu d-none d-lg-block">
+          <ul>
+            <li class="active"><a href="/dashboard?page=1&limit=15">Home</a></li>
+            <li><a href="/calendar">Calendar</a></li>
+            <li><a href="/logout">Logout</a></li>
+          </ul>
 
-      </nav><!-- .nav-menu -->
+        </nav><!-- .nav-menu -->
 
-      <a href="/upload" class="get-started-btn scrollto">Upload</a>
-    </div>
-  </header><!-- End Header -->
-
-  <!-- Search bar -->
-  <section id="search" class="search">
-    <div class="search-bar">
-      <form action="/dashboard" method="POST">
-        <h2 class="user">Welcome <%= username %>, <span id="random"></span></h2><br>
-
-        <div class="form-group">
-          <select class="chosen-value" type="length" id="inputState" name="lengthCat">
-            <option selected="null" value="any">Length</option>
-            <option value="short">Short</option>
-            <option value="medium">Medium</option>
-            <option value="long">Long</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <select class="chosen-value" type="language" id="inputState" name="language">
-            <option selected="null" value="any">Language</option>
-            <option value="ja">Japanese</option>
-            <option value="en">English</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <select class="chosen-value" type="level" id="inputState" name="level">
-            <option selected="null" value="any">Level</option>
-            <option value="Beginner">Beginner</option>
-            <option value="Intermediate">Intermediate</option>
-            <option value="Advanced">Advanced</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <select class="chosen-value" type="genre" id="inputState" name="genre">
-            <option selected="null" value="any">Genre</option>
-            <option value="Hip Hop">Hip Hop</option>
-            <option value="Locking">Locking</option>
-            <option value="Jazz">Jazz</option>
-            <option value="Breakin">Breakin</option>
-            <option value="House">House</option>
-            <option value="Popping">Popping</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <select class="chosen-value" type="purpose" id="inputState" name="purpose">
-            <option selected="null" value="any">Purpose</option>
-            <option value="Skill Improvements">Skill Improvements</option>
-            <option value="Health and Exercise">Health and Exercise</option>
-            <option value="Entertainment">Entertainment</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <select class="chosen-value" type="mood" id="inputState" name="mood">
-            <option selected="null" value="any">Mood</option>
-            <option value="Groovy">Groovy</option>
-            <option value="Funky">Funky</option>
-            <option value="Chill">Chill</option>
-            <option value="Romantic">Romantic</option>
-            <option value="Calm">Calm</option>
-            <option value="Angry">Angry</option>
-            <option value="Peaceful">Peaceful</option>
-            <option value="Sad">Sad</option>
-            <option value="Fearful">Fearful</option>
-            <option value="Happy">Happy</option>
-            <option value="Tense">Tense</option>
-          </select>
-        </div>
-        <!-- <input class="chosen-value" type="text" value="" placeholder="Search"> -->
-        <input class="chosen-value" type="submit">
-      </form>
-    </div>
-  </section>
-
-  <h4 class="text-center">We are still in testing phase, sorry for the inconvenience :)</h4>
-
-  <section id="results" class="results">
-    <div class="container">
-      <%- include ('partials/messages') %>
-      <h3>Latest videos</h3>
-      <p>We have <%= count %> videos in total!</p>
-      <div class="row">
-        <% for(let i=0; i < videos.length; i++) { %>
-        <div class="col-lg-4">
-          <div class="box">
-            <a href="/player/<%= id[i] %>">
-              <img src="<%= thumbnail[i] %>">
-            </a>
-            <h4><%= title[i] %></h4>
-            <a href="/choreographer/<%= choreographer[i] %>"><%= choreographer[i] %></a>
-            <p><%= level[i] %></p>
-          </div>
-        </div>
-        <% } %>
+        <a href="/upload" class="get-started-btn scrollto">Upload</a>
       </div>
+    </header><!-- End Header -->
 
-      <!-- PAGINATION -->
-      <div class="dashboard-pagination">
-        <div class="pagination">
-          <% if (currentPage == 1 && pageCount > 1)  { %>
-          <a href="/dashboard?page=<%= parseInt(currentPage) + 1 %>&limit=15">
+    <!-- Search bar -->
+    <section id="search" class="search">
+      <div class="search-bar">
+        <form action="/dashboard" method="POST">
+          <h2 class="user">Welcome <%= username %>, <span id="random"></span></h2><br>
+
+          <div class="form-group">
+            <select class="chosen-value" type="length" id="inputState" name="lengthCat">
+              <option selected="null" value="any">Length</option>
+              <option value="short">Short</option>
+              <option value="medium">Medium</option>
+              <option value="long">Long</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <select class="chosen-value" type="language" id="inputState" name="language">
+              <option selected="null" value="any">Language</option>
+              <option value="ja">Japanese</option>
+              <option value="en">English</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <select class="chosen-value" type="level" id="inputState" name="level">
+              <option selected="null" value="any">Level</option>
+              <option value="Beginner">Beginner</option>
+              <option value="Intermediate">Intermediate</option>
+              <option value="Advanced">Advanced</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <select class="chosen-value" type="genre" id="inputState" name="genre">
+              <option selected="null" value="any">Genre</option>
+              <option value="Hip Hop">Hip Hop</option>
+              <option value="Locking">Locking</option>
+              <option value="Jazz">Jazz</option>
+              <option value="Breakin">Breakin</option>
+              <option value="House">House</option>
+              <option value="Popping">Popping</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <select class="chosen-value" type="purpose" id="inputState" name="purpose">
+              <option selected="null" value="any">Purpose</option>
+              <option value="Skill Improvements">Skill Improvements</option>
+              <option value="Health and Exercise">Health and Exercise</option>
+              <option value="Entertainment">Entertainment</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <select class="chosen-value" type="mood" id="inputState" name="mood">
+              <option selected="null" value="any">Mood</option>
+              <option value="Groovy">Groovy</option>
+              <option value="Funky">Funky</option>
+              <option value="Chill">Chill</option>
+              <option value="Romantic">Romantic</option>
+              <option value="Calm">Calm</option>
+              <option value="Angry">Angry</option>
+              <option value="Peaceful">Peaceful</option>
+              <option value="Sad">Sad</option>
+              <option value="Fearful">Fearful</option>
+              <option value="Happy">Happy</option>
+              <option value="Tense">Tense</option>
+            </select>
+          </div>
+          <!-- <input class="chosen-value" type="text" value="" placeholder="Search"> -->
+          <input class="chosen-value" type="submit">
+        </form>
+      </div>
+    </section>
+
+    <h4 class="text-center">We are still in testing phase, sorry for the inconvenience :)</h4>
+
+    <section id="results" class="results">
+      <div class="container">
+        <%- include ('partials/messages') %>
+        <h3>Latest videos</h3>
+        <p>We have <%= count %> videos in total!</p>
+        <div class="row">
+          <% for(let i=0; i < videos.length; i++) { %>
+          <div class="col-lg-4">
+            <div class="box">
+              <a href="/player/<%= id[i] %>">
+                <img src="<%= thumbnail[i] %>">
+              </a>
+              <h4 id="title<%= i %>"><%= title[i] %></h4>
+              <a href="/choreographer/<%= choreographer[i] %>"><%= choreographer[i] %></a>
+              <p><%= level[i] %></p>
+            </div>
+          </div>
+          <% } %>
+        </div>
+
+        <!-- PAGINATION -->
+        <div class="dashboard-pagination">
+          <div class="pagination">
+            <% if (currentPage == 1 && pageCount > 1)  { %>
+            <a href="/dashboard?page=<%= parseInt(currentPage) + 1 %>&limit=15">
               Page <%=  parseInt(currentPage) + 1 %>
               <span class="iconify" data-icon="ion-ios-arrow-forward" data-inline="false"></span>
-          </a>
-          <% } else if (currentPage < pageCount) { %>
-          <a href="/dashboard?page=<%= parseInt(currentPage) - 1 %>&limit=15">
+            </a>
+            <% } else if (currentPage < pageCount) { %>
+            <a href="/dashboard?page=<%= parseInt(currentPage) - 1 %>&limit=15">
               <span class="iconify" data-icon="ion-ios-arrow-back" data-inline="false"></span>
               Page <%= parseInt(currentPage) - 1 %>
-          </a>
-          <a href="/dashboard?page=<%= parseInt(currentPage) + 1 %>&limit=15">
+            </a>
+            <a href="/dashboard?page=<%= parseInt(currentPage) + 1 %>&limit=15">
               Page <%= parseInt(currentPage) + 1 %>
               <span class="iconify" data-icon="ion-ios-arrow-forward" data-inline="false"></span>
-          </a>
-          <% } else if (currentPage == pageCount && pageCount > 1) { %>
-          <a href="/dashboard?page=<%= parseInt(currentPage) - 1 %>&limit=15">
+            </a>
+            <% } else if (currentPage == pageCount && pageCount > 1) { %>
+            <a href="/dashboard?page=<%= parseInt(currentPage) - 1 %>&limit=15">
               <span class="iconify" data-icon="ion-ios-arrow-back" data-inline="false"></span>
               Page
               <%=parseInt(currentPage) - 1 %>
-          </a>
-          <% } %>
-        </div>
-      </div>
-    </div>
-
-  </section>
-
-  <!-- ======= Footer ======= -->
-  <footer id="footer">
-
-    <div class="footer-top">
-      <div class="container">
-        <div class="row">
-
-          <div class="col-lg-3 col-md-6 footer-contact">
-            <h3>Vibin'</h3>
-            <p>
-              <strong>Phone:</strong> +81 080 4339 9251<br>
-              <strong>Email:</strong> info@vibin.tokyo<br>
-            </p>
-          </div>
-
-          <div class="col-lg-2 col-md-6 footer-links">
-            <h4>Sitemap</h4>
-            <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="#hero">Home</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#about">About us</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
-            </ul>
-          </div>
-
-          <div class="col-lg-4 col-md-6 footer-newsletter">
-            <h4>Join Our Newsletter</h4>
-            <p>Tamen quem nulla quae legam multos aute sint culpa legam noster magna</p>
-            <form action="" method="post">
-              <input type="email" name="email"><input type="submit" value="Subscribe">
-            </form>
-          </div>
-
-          <div class="social-links text-center text-md-right pt-3 pt-md-0">
-            <a href="https://www.facebook.com/Vibin-107436974343750" class="facebook"><i
-                class="bx bxl-facebook"></i></a>
-            <a href="https://www.instagram.com/vibin_dance/" class="instagram"><i class="bx bxl-instagram"></i></a>
+            </a>
+            <% } %>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="container d-md-flex py-4">
+    </section>
 
-      <div class="mr-md-auto text-center text-md-left">
-        <div class="copyright">
-          &copy; Copyright <strong><span>Vibin'</span></strong>. All Rights Reserved
+    <!-- ======= Footer ======= -->
+    <footer id="footer">
+
+      <div class="footer-top">
+        <div class="container">
+          <div class="row">
+
+            <div class="col-lg-3 col-md-6 footer-contact">
+              <h3>Vibin'</h3>
+              <p>
+                <strong>Phone:</strong> +81 080 4339 9251<br>
+                <strong>Email:</strong> info@vibin.tokyo<br>
+              </p>
+            </div>
+
+            <div class="col-lg-2 col-md-6 footer-links">
+              <h4>Sitemap</h4>
+              <ul>
+                <li><i class="bx bx-chevron-right"></i> <a href="#hero">Home</a></li>
+                <li><i class="bx bx-chevron-right"></i> <a href="#about">About us</a></li>
+                <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
+                <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
+              </ul>
+            </div>
+
+            <div class="col-lg-4 col-md-6 footer-newsletter">
+              <h4>Join Our Newsletter</h4>
+              <p>Tamen quem nulla quae legam multos aute sint culpa legam noster magna</p>
+              <form action="" method="post">
+                <input type="email" name="email"><input type="submit" value="Subscribe">
+              </form>
+            </div>
+
+            <div class="social-links text-center text-md-right pt-3 pt-md-0">
+              <a href="https://www.facebook.com/Vibin-107436974343750" class="facebook"><i
+                  class="bx bxl-facebook"></i></a>
+              <a href="https://www.instagram.com/vibin_dance/" class="instagram"><i class="bx bxl-instagram"></i></a>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </footer><!-- End Footer -->
-  <script>
-    var quotes = [
-      "What's your vibes today?",
-      "Are you feeling the vibes?",
-      "Let's vibe!",
-      "Get funky!"
-    ];
-    let index = Math.floor(Math.random() * (quotes.length));
 
-    document.getElementById("random").innerHTML = quotes[index];
-  </script>
+      <div class="container d-md-flex py-4">
+
+        <div class="mr-md-auto text-center text-md-left">
+          <div class="copyright">
+            &copy; Copyright <strong><span>Vibin'</span></strong>. All Rights Reserved
+          </div>
+        </div>
+      </div>
+    </footer><!-- End Footer -->
+</body>
+<script>
+
+  function charCut() {
+    for (let i=0; i < 15; i++) {
+      let title = document.getElementById("title" + i).innerHTML;
+      if (title[70]) {
+        document.getElementById("title"+i).innerHTML = title.substring(0, 70) + "...";
+      }
+    }
+  }
+
+  var quotes = [
+    "What's your vibes today?",
+    "Are you feeling the vibes?",
+    "Let's vibe!",
+    "Get funky!"
+  ];
+  let index = Math.floor(Math.random() * (quotes.length));
+
+  document.getElementById("random").innerHTML = quotes[index];
+</script>
