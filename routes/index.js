@@ -34,7 +34,6 @@ router.get('/auth/google', passport.authenticate('google', {
   ]
 }));
 
-// callback function
 router.get('/auth/google/callback',
   passport.authenticate('google', {
     failureRedirect: '/error',
@@ -82,6 +81,58 @@ router.get('/dashboard', ensureAuthenticated, (req, res) => {
     })
   });
 });
+
+router.post('/dashboard', (req, res) => {
+  const { lengthCat, language, level, genre, purpose, mood } = req.body;
+
+  const query = {
+    $and: [
+      { lengthCat: lengthCat },
+      { language: language },
+      { level: level },
+      { genre: genre },
+      { purpose: purpose },
+      { mood: mood }
+    ]
+  }
+
+  Video.paginate(query, { page: req.query.page, limit: 100 }, (err, result) => {
+    let title = [];
+    let choreographer = [];
+    let url = [];
+    let level = [];
+    let thumbnail = [];
+    let id = [];
+
+    if (!result.docs.length) {
+      req.flash('error_msg', "Looks like we don't have that video yet!");
+      res.redirect('/dashboard?page=1&limit=15');
+    } else {
+      for (let i = 0; i < result.docs.length; i++) {
+        title[i] = result.docs[i].title;
+        choreographer[i] = result.docs[i].choreographer;
+        url[i] = result.docs[i].url;
+        level[i] = result.docs[i].level[0];
+        thumbnail[i] = result.docs[i].thumbnail;
+        id[i] = result.docs[i].id;
+      }
+      res.render('results', {
+        count: result.total,
+        username: req.session.passport.user.displayName,
+        videos: result.docs,
+        title: title,
+        choreographer: choreographer,
+        url: url,
+        id: id,
+        level: level,
+        thumbnail: thumbnail,
+        currentPage: result.page,
+        pageCount: result.pages,
+        pages: paginate.getArrayPages(req)(3, result.pages, req.query.page)
+      })
+    }
+  })
+})
 
 router.get('/results', ensureAuthenticated, (req, res) => res.render('results'));
 
@@ -143,12 +194,6 @@ router.get('/calendar', ensureAuthenticated, (req, res) => {
   })
 });
 
-router.get('/upload', ensureAuthenticated, onlyDevs, (req, res) => {
-  res.render('upload', {
-    API_key: process.env.API_key,
-  });
-})
-
 router.get('/player/:id', ensureAuthenticated, (req, res) => {
   Video.findOne({ id: req.params.id }, (err, result) => {
     User.findOne({ email: req.user._json.email }, (err, user) => {
@@ -196,56 +241,10 @@ router.get('/player/:id', ensureAuthenticated, (req, res) => {
 //     })
 // })
 
-router.post('/dashboard', (req, res) => {
-  const { lengthCat, language, level, genre, purpose, mood } = req.body;
-
-  const query = {
-    $and: [
-      { lengthCat: lengthCat },
-      { language: language },
-      { level: level },
-      { genre: genre },
-      { purpose: purpose },
-      { mood: mood }
-    ]
-  }
-
-  Video.paginate(query, { page: req.query.page, limit: 100 }, (err, result) => {
-    let title = [];
-    let choreographer = [];
-    let url = [];
-    let level = [];
-    let thumbnail = [];
-    let id = [];
-
-    if (!result.docs.length) {
-      req.flash('error_msg', "Looks like we don't have that video yet!");
-      res.redirect('/dashboard?page=1&limit=15');
-    } else {
-      for (let i = 0; i < result.docs.length; i++) {
-        title[i] = result.docs[i].title;
-        choreographer[i] = result.docs[i].choreographer;
-        url[i] = result.docs[i].url;
-        level[i] = result.docs[i].level[0];
-        thumbnail[i] = result.docs[i].thumbnail;
-        id[i] = result.docs[i].id;
-      }
-      res.render('results', {
-        count: result.total,
-        username: req.session.passport.user.displayName,
-        videos: result.docs,
-        title: title,
-        choreographer: choreographer,
-        url: url,
-        id: id,
-        level: level,
-        thumbnail: thumbnail,
-        currentPage: result.page,
-        pageCount: result.pages,
-        pages: paginate.getArrayPages(req)(3, result.pages, req.query.page)
-      })
-    }
-  })
+router.get('/upload', ensureAuthenticated, onlyDevs, (req, res) => {
+  res.render('upload', {
+    API_key: process.env.API_key,
+  });
 })
 
 router.post('/upload', (req, res) => {
