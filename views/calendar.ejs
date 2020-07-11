@@ -18,12 +18,12 @@
             style="border: 0" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>
     </div>
     <div class="container">
-        <%- include ('partials/messages') %>
         <h3>Upcoming vibes!</h3>
         <p>We have <%= count %> sessions ahead!</p>
+        <%- include ('partials/messages') %>
         <div class="row">
             <% for(let i=0; i < count; i++) { %>
-            <div class="col-lg">
+            <div class="col-lg-10">
                 <h5><a href="/player/<%= id[i] %>"><%= summary[i] %></a></h5>
                 <p><%= dateTime[i] %></p>
             </div>

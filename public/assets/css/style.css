@@ -1772,21 +1772,20 @@ section {
 
 
 /* iframe */
-/* #player {
-  position:relative;
-  width: 75%;
-  padding-bottom: 56.25%;
-  height:0;
-  justify-self: center;
-} */
+
+.videoPlayer {
+  min-height: 100vh;
+  margin: 0;
+}
 
 .videoPlayer #player {
   width:100%;
   height:75vh;
 }
-.videoPlayer {
-  min-height: 100vh;
-  margin: 0;
+
+.videoPlayer .text {
+  padding-left: 10vh;
+  margin: 30px 20px;
 }
 
 .videoPlayer h4 {
@@ -1802,18 +1801,8 @@ section {
   display: inline-block;
 }
 
-.videoPlayer h6 {
-  display: inline-block;
-  padding-left: 0.5%;
-}
-
-.videoPlayer .text {
-  padding-left: 10vh;
-  margin: 30px 20px;
-}
-
 .videoPlayer input {
   height: 4rem;
-  max-width: 20vh;
+  max-width: 30vh;
   display: inline-block;
 }

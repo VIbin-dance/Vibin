@@ -196,50 +196,57 @@ router.get('/calendar', ensureAuthenticated, (req, res) => {
 
 router.get('/player/:id', ensureAuthenticated, (req, res) => {
   Video.findOne({ id: req.params.id }, (err, result) => {
-    User.findOne({ email: req.user._json.email }, (err, user) => {
-      res.render('player', {
-        id: req.params.id,
-        title: result.title,
-        choreographer: result.choreographer,
-        level: result.level,
-        API_key: process.env.API_key,
-        CALENDAR_ID: user.email,
-        accessToken: user.accessToken
-      });
-    })
+    res.render('player', {
+      id: req.params.id,
+      title: result.title,
+      choreographer: result.choreographer,
+      level: result.level,
+    });
   })
 });
 
-// router.post('/player/:id', (req, res) => {
-//   fetch(`https://www.googleapis.com/calendar/v3/calendars/${user.email}/events?key=${process.env.API_key}`, {
-//     'method': 'POST',
-//     'headers': {
-//       'Authorization': `Bearer ${user.accessToken}`,
-//       'Content-Type': 'application/json'
-//     },
-//     'body': JSON.stringify({
-//       'end': {
-//         'dateTime': document.getElementById("date").value + "T" + document.getElementById("time").value + ":00",
-//         'timeZone': 'Asia/Tokyo'
-//       },
-//       'start': {
-//         'dateTime': document.getElementById("date").value + "T" + document.getElementById("time").value + ":00",
-//         'timeZone': 'Asia/Tokyo'
-//       },
-//       'summary': "<%= title %> Vibin'",
-//       "description": "<%= id %>"
-//     })
-//   })
-//     .then(response => response.json())
-//     .then(data => {
-//       console.log(data)
-//       if (data.error) {
-//         document.getElementById("msg").innerHTML = "There is an error"
-//       } else if (data.kind) {
-//         document.getElementById("msg").innerHTML = "<span>This video is added to your <a href = '/calendar'>calendar</a></span>"
-//       }
-//     })
-// })
+router.post('/player/:id', (req, res) => {
+  const { id, date, time } = req.body;
+  let errors = [];
+
+  Video.findOne({ id: id }, (err, result) => {
+    User.findOne({ email: req.user._json.email }, (err, user) => {
+      fetch(`https://www.googleapis.com/calendar/v3/calendars/${user.email}/events?key=${process.env.API_key}`, {
+        'method': 'POST',
+        'headers': {
+          'Authorization': `Bearer ${user.accessToken}`,
+          'Content-Type': 'application/json'
+        },
+        'body': JSON.stringify({
+          'end': {
+            'dateTime': date + ":00",
+            'timeZone': 'Asia/Tokyo'
+          },
+          'start': {
+            'dateTime': date + ":00",
+            'timeZone': 'Asia/Tokyo'
+          },
+          'summary': result.title + " Vibin'",
+          "description": id
+        })
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (date == '') {
+            errors.push({ msg: 'Please fill in all fields' });
+          }
+
+          if (errors.length > 0) {
+            res.render('player', { errors, title: result.title , choreographer: result.choreographer , id: id, level: result.level });
+          }
+          else {
+            req.flash('success_msg', 'The dance is now scheduled');
+            res.redirect('/calendar');
+          }
+        })
+    })
+  })
+})
 
 router.get('/upload', ensureAuthenticated, onlyDevs, (req, res) => {
   res.render('upload', {

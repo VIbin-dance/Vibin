@@ -5,14 +5,17 @@
       <h4><%= title %></h4>
       <p><%= choreographer %></p>
       <p><%= level[0] %></p><br>
-      <button id="speedUp" onclick="speedUp()" type="button" class="chosen-value">&uarr; Speed</button>
-      <button id="speedDown" onclick="speedDown()" type="button" class="chosen-value">&darr; Speed</button>
-      <button id="mirror" onclick="mirrorVideo()" type="button" class="chosen-value">Mirror</button>
-      <button id="unmirror" onclick="unmirrorVideo()" type="button" class="chosen-value">Unmirror</button>
-      <input type="date" id="date" name="date" class="form-control" />
-      <input type="time" id="time" name="time" class="form-control" />
-      <button id="calendar" onclick="addCalendar()" class="chosen-value">Dance later</button>
-      <h6 id="msg">Schedule your vibe session for later</h6>
+      <form action="/player/:id" method="POST">
+        <%- include ('partials/messages') %>
+        <button id="speedpu" onclick="speedUp()" type="button" class="chosen-value">&uarr; Speed</button>
+        <button id="speeddown" onclick="speedDown()" type="button" class="chosen-value">&darr; Speed</button>
+        <button id="mirror" onclick="mirrorVideo()" type="button" class="chosen-value">Mirror</button>
+        <button id="unmirror" onclick="unmirrorVideo()" type="button" class="chosen-value">Unmirror</button>
+        <input type="id" id="id" name="id" class="form-control" placeholder="Enter The ID"
+          value="<%= typeof id != 'undefined' ? id : '' %>" hidden />
+        <input type="datetime-local" id="date" name="date" class="form-control" />
+        <button id="calendar" class="chosen-value" type="submit">Dance later</button>
+      </form>
     </div>
 </body>
 
@@ -35,13 +38,11 @@
   function speedUp() {
     let rate = player.getPlaybackRate();
     player.setPlaybackRate(rate + 0.25);
-    document.getElementById('speed').innerHTML = rate;
   }
 
   function speedDown() {
     let rate = player.getPlaybackRate();
     player.setPlaybackRate(rate - 0.25);
-    document.getElementById('speed').innerHTML = rate;
   }
 
   function mirrorVideo() {
@@ -53,45 +54,8 @@
   }
 
   function setTime() {
-    console.log(moment().format('YYYY-MM-DD'));
-    document.getElementById("date").setAttribute("min", moment().format('YYYY-MM-DD'))
-  }
-
-  function addCalendar() {
-    let API_key = '<%= API_key %>'
-    let CALENDAR_ID = '<%= CALENDAR_ID %>'
-    let Accesstoken = '<%= accessToken %>'
-
-    const url = `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?key=${API_key}`
-
-    fetch(url, {
-      'method': 'POST',
-      'headers': {
-        'Authorization': `Bearer ${Accesstoken}`,
-        'Content-Type': 'application/json'
-      },
-      'body': JSON.stringify({
-        'end': {
-          'dateTime': document.getElementById("date").value + "T" + document.getElementById("time").value + ":00",
-          'timeZone': 'Asia/Tokyo'
-        },
-        'start': {
-          'dateTime': document.getElementById("date").value + "T" + document.getElementById("time").value + ":00",
-          'timeZone': 'Asia/Tokyo'
-        },
-        'summary': "<%= title %> Vibin'",
-        "description": "<%= id %>"
-      })
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data)
-        if (data.error) {
-          document.getElementById("msg").innerHTML = "There is an error"
-        } else if (data.kind) {
-          document.getElementById("msg").innerHTML = "<span>This video is added to your <a href = '/calendar'>calendar</a></span>"
-        }
-      })
+    moment().format('YYYY-MM-DDThh:mm');
+    document.getElementById("date").setAttribute("min", moment().format('YYYY-MM-DDThh:mm'))
   }
 
 </script>
