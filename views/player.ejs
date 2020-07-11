@@ -1,20 +1,20 @@
-<div class="videoPlayer">
-  <div id="player"></div>
-  <div class="text">
-    <h4><%= title %></h4>
-    <p><%= choreographer %></p>
-    <p><%= level[0] %></p><br>
-    <button id="speedUp" onclick="speedUp()" type="button" class="chosen-value">&uarr; Speed</button>
-    <button id="speedDown" onclick="speedDown()" type="button" class="chosen-value">&darr; Speed</button>
-    <button id="mirror" onclick="mirrorVideo()" type="button" class="chosen-value">Mirror</button>
-    <button id="unmirror" onclick="unmirrorVideo()" type="button" class="chosen-value">Unmirror</button>
-    <input type="date" id="date" name="date" class="form-control" placeholder="Enter The Date"
-      value="<%= typeof date != 'undefined' ? date : '' %>" />
-    <input type="time" id="time" name="time" class="form-control" placeholder="Enter The Time"
-      value="<%= typeof time != 'undefined' ? time : '' %>" />
-    <button id="calendar" onclick="addCalendar()" class="chosen-value">Dance later</button>
-    <h6 id="msg">Schedule your vibe session for later</h6>
-  </div>
+<body onload="setTime()">
+  <div class="videoPlayer">
+    <div id="player"></div>
+    <div class="text">
+      <h4><%= title %></h4>
+      <p><%= choreographer %></p>
+      <p><%= level[0] %></p><br>
+      <button id="speedUp" onclick="speedUp()" type="button" class="chosen-value">&uarr; Speed</button>
+      <button id="speedDown" onclick="speedDown()" type="button" class="chosen-value">&darr; Speed</button>
+      <button id="mirror" onclick="mirrorVideo()" type="button" class="chosen-value">Mirror</button>
+      <button id="unmirror" onclick="unmirrorVideo()" type="button" class="chosen-value">Unmirror</button>
+      <input type="date" id="date" name="date" class="form-control"/>
+      <input type="time" id="time" name="time" class="form-control"/>
+      <button id="calendar" onclick="addCalendar()" class="chosen-value">Dance later</button>
+      <h6 id="msg">Schedule your vibe session for later</h6>
+    </div>
+</body>
 
 <script>
   var tag = document.createElement('script');
@@ -50,6 +50,11 @@
 
   function unmirrorVideo() {
     document.getElementById('player').setAttribute("class", "");
+  }
+
+  function setTime() {
+    console.log(moment().format('YYYY-MM-DD'));
+    document.getElementById("date").setAttribute("min", moment().format('YYYY-MM-DD'))
   }
 
   function addCalendar() {
