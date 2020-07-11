@@ -227,7 +227,16 @@ router.post('/player/:id', (req, res) => {
             'timeZone': 'Asia/Tokyo'
           },
           'summary': result.title + " Vibin'",
-          "description": id
+          "description": id,
+          "reminders": {
+            "useDefault": false,
+            "overrides": [
+              {
+                "method": "email",
+                "minutes": 30
+              }
+            ]
+          }
         })
       })
         .then(response => response.json())
