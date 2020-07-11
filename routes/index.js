@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const paginate = require('express-paginate');
 const passport = require('passport');
+const fetch = require('node-fetch');
+const moment = require('moment');
 const { ensureAuthenticated } = require('../config/auth');
 const { onlyDevs } = require('../config/dev');
 
@@ -111,12 +113,33 @@ router.get('/choreographer/:id', ensureAuthenticated, (req, res) => {
 })
 
 router.get('/calendar', ensureAuthenticated, (req, res) => {
-  User.findOne({ email: req.user._json.email }, (err, result) => {
-    res.render('calendar', {
-      API_key: process.env.API_key,
-      CALENDAR_ID: result.email,
-      accessToken: result.accessToken
-    });
+  User.findOne({ email: req.user._json.email }, (err, user) => {
+
+    let time = encodeURIComponent(moment().format());
+    let summary = [];
+    let dateTime = [];
+    let id = [];
+
+    fetch(`https://www.googleapis.com/calendar/v3/calendars/${user.email}/events?orderBy=startTime&q=vibin&singleEvents=true&timeMin=${time}&key=${process.env.API_key}`, {
+      'headers': { 'Authorization': `Bearer ${user.accessToken}` },
+    })
+      .then(response => response.json())
+      .then(data => {
+        for (i = 0; i < data.items.length; i++) {
+          summary[i] = data.items[i].summary
+          dateTime[i] = moment(data.items[i].start.dateTime).format('MMMM Do YYYY, h:mm a');
+          id[i] = data.items[i].description
+        }
+        res.render('calendar', {
+          count: data.items.length,
+          API_key: process.env.API_key,
+          CALENDAR_ID: user.email,
+          accessToken: user.accessToken,
+          summary: summary,
+          dateTime: dateTime,
+          id: id
+        });
+      })
   })
 });
 
@@ -141,6 +164,37 @@ router.get('/player/:id', ensureAuthenticated, (req, res) => {
     })
   })
 });
+
+// router.post('/player/:id', (req, res) => {
+//   fetch(`https://www.googleapis.com/calendar/v3/calendars/${user.email}/events?key=${process.env.API_key}`, {
+//     'method': 'POST',
+//     'headers': {
+//       'Authorization': `Bearer ${user.accessToken}`,
+//       'Content-Type': 'application/json'
+//     },
+//     'body': JSON.stringify({
+//       'end': {
+//         'dateTime': document.getElementById("date").value + "T" + document.getElementById("time").value + ":00",
+//         'timeZone': 'Asia/Tokyo'
+//       },
+//       'start': {
+//         'dateTime': document.getElementById("date").value + "T" + document.getElementById("time").value + ":00",
+//         'timeZone': 'Asia/Tokyo'
+//       },
+//       'summary': "<%= title %> Vibin'",
+//       "description": "<%= id %>"
+//     })
+//   })
+//     .then(response => response.json())
+//     .then(data => {
+//       console.log(data)
+//       if (data.error) {
+//         document.getElementById("msg").innerHTML = "There is an error"
+//       } else if (data.kind) {
+//         document.getElementById("msg").innerHTML = "<span>This video is added to your <a href = '/calendar'>calendar</a></span>"
+//       }
+//     })
+// })
 
 router.post('/dashboard', (req, res) => {
   const { lengthCat, language, level, genre, purpose, mood } = req.body;

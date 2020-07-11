@@ -1,130 +1,78 @@
-<body onload="listEvent()">
-    <div class="header">
-        <header id="header" class="fixed-top ">
-            <div class="container d-flex align-items-center justify-content-between">
+<header id="header" class="fixed-top ">
+    <div class="container d-flex align-items-center justify-content-between">
+        <h1 class="logo"><a href="/">Vibin'</a></h1>
+        <nav class="nav-menu d-none d-lg-block">
+            <ul>
+                <li><a href="/dashboard?page=1&limit=15">Home</a></li>
+                <li><a href="/calendar">Calendar</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+        <a href="/upload" class="get-started-btn scrollto">Upload</a>
+    </div>
+</header>
 
-                <h1 class="logo"><a href="/">Vibin'</a></h1>
+<section id="results" class="results">
+    <div class="text-center" style="height:85vh">
+        <iframe src="https://calendar.google.com/calendar/embed?src=<%= CALENDAR_ID %>&ctz=Asia%2FTokyo"
+            style="border: 0" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>
+    </div>
+    <div class="container">
+        <%- include ('partials/messages') %>
+        <h3>Upcoming vibes!</h3>
+        <p>We have <%= count %> sessions ahead!</p>
+        <div class="row">
+            <% for(let i=0; i < count; i++) { %>
+            <div class="col-lg">
+                <h5><a href="/player/<%= id[i] %>"><%= summary[i] %></a></h5>
+                <p><%= dateTime[i] %></p>
+            </div>
+            <% } %>
+        </div>
+    </div>
+</section>
 
-                <nav class="nav-menu d-none d-lg-block">
+<footer id="footer">
+    <div class="footer-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 footer-contact">
+                    <h3>Vibin'</h3>
+                    <p>
+                        <strong>Phone:</strong> +81 080 4339 9251<br>
+                        <strong>Email:</strong> info@vibin.tokyo<br>
+                    </p>
+                </div>
+                <div class="col-lg-2 col-md-6 footer-links">
+                    <h4>Sitemap</h4>
                     <ul>
-                        <li><a href="/dashboard?page=1&limit=15">Home</a></li>
-                        <li><a href="/calendar">Calendar</a></li>
-                        <li><a href="/logout">Logout</a></li>
+                        <li><i class="bx bx-chevron-right"></i> <a href="#hero">Home</a></li>
+                        <li><i class="bx bx-chevron-right"></i> <a href="#about">About us</a></li>
+                        <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
+                        <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
                     </ul>
-
-                </nav><!-- .nav-menu -->
-
-                <a href="/upload" class="get-started-btn scrollto">Upload</a>
-            </div>
-        </header><!-- End Header -->
-
-        <section id="results" class="results">
-            <div class="text-center" style="height:85vh">
-                <!-- <iframe
-                    src="https://calendar.google.com/calendar/b/1/embed?height=600&amp;wkst=1&amp;bgcolor=%23eb5680&amp;ctz=Asia%2FTokyo&amp;src=c2hvdGEuaW5vdWVAdmliaW4udG9reW8&amp;src=YWRkcmVzc2Jvb2sjY29udGFjdHNAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&amp;src=ZW4uamFwYW5lc2UjaG9saWRheUBncm91cC52LmNhbGVuZGFyLmdvb2dsZS5jb20&amp;color=%23039BE5&amp;color=%2333B679&amp;color=%230B8043&amp;showTitle=0&amp;showNav=0&amp;showTz=0&amp;showPrint=0&amp;showCalendars=1&amp;showTabs=0&amp;showDate=1"
-                    style="border:solid 1px #777" width="800" height="600" frameborder="0" scrolling="no"></iframe> -->
-                <iframe src="https://calendar.google.com/calendar/embed?src=<%= CALENDAR_ID %>&ctz=Asia%2FTokyo"
-                    style="border: 0" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg">
-                        <br>
-                        <br>
-                        <h3>Upcoming vibes!</h3>
-                        <h5 id="msg"></h5>
-                        <br>
-                        <h5 id="summary0"></h5>
-                        <p id="time0"></p>
-                        <h5 id="summary1"></h5>
-                        <p id="time1"></p>
-                        <h5 id="summary2"></h5>
-                        <p id="time2"></p>
-                        <h5 id="summary3"></h5>
-                        <p id="time3"></p>
-                        <h5 id="summary4"></h5>
-                        <p id="time4"></p>
-                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 footer-newsletter">
+                    <h4>Join Our Newsletter</h4>
+                    <p>Tamen quem nulla quae legam multos aute sint culpa legam noster magna</p>
+                    <form action="" method="post">
+                        <input type="email" name="email"><input type="submit" value="Subscribe">
+                    </form>
+                </div>
+                <div class="social-links text-center text-md-right pt-3 pt-md-0">
+                    <a href="https://www.facebook.com/Vibin-107436974343750" class="facebook"><i
+                            class="bx bxl-facebook"></i></a>
+                    <a href="https://www.instagram.com/vibin_dance/" class="instagram"><i
+                            class="bx bxl-instagram"></i></a>
                 </div>
             </div>
-        </section><!-- End Why Us Section -->
-
-        <!-- ======= Footer ======= -->
-        <footer id="footer">
-
-            <div class="footer-top">
-                <div class="container">
-                    <div class="row">
-
-                        <div class="col-lg-3 col-md-6 footer-contact">
-                            <h3>Vibin'</h3>
-                            <p>
-                                <strong>Phone:</strong> +81 080 4339 9251<br>
-                                <strong>Email:</strong> info@vibin.tokyo<br>
-                            </p>
-                        </div>
-
-                        <div class="col-lg-2 col-md-6 footer-links">
-                            <h4>Sitemap</h4>
-                            <ul>
-                                <li><i class="bx bx-chevron-right"></i> <a href="#hero">Home</a></li>
-                                <li><i class="bx bx-chevron-right"></i> <a href="#about">About us</a></li>
-                                <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
-                                <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
-                            </ul>
-                        </div>
-
-                        <div class="col-lg-4 col-md-6 footer-newsletter">
-                            <h4>Join Our Newsletter</h4>
-                            <p>Tamen quem nulla quae legam multos aute sint culpa legam noster magna</p>
-                            <form action="" method="post">
-                                <input type="email" name="email"><input type="submit" value="Subscribe">
-                            </form>
-                        </div>
-
-                        <div class="social-links text-center text-md-right pt-3 pt-md-0">
-                            <a href="https://www.facebook.com/Vibin-107436974343750" class="facebook"><i
-                                    class="bx bxl-facebook"></i></a>
-                            <a href="https://www.instagram.com/vibin_dance/" class="instagram"><i
-                                    class="bx bxl-instagram"></i></a>
-                        </div>
-                    </div>
-                </div>
+        </div>
+    </div>
+    <div class="container d-md-flex py-4">
+        <div class="mr-md-auto text-center text-md-left">
+            <div class="copyright">
+                &copy; Copyright <strong><span>Vibin'</span></strong>. All Rights Reserved
             </div>
-
-            <div class="container d-md-flex py-4">
-
-                <div class="mr-md-auto text-center text-md-left">
-                    <div class="copyright">
-                        &copy; Copyright <strong><span>Vibin'</span></strong>. All Rights Reserved
-                    </div>
-                </div>
-            </div>
-        </footer><!-- End Footer -->
-</body>
-<script>
-    function listEvent() {
-        window.id = [];
-        let API_key = '<%= API_key %>'
-        let CALENDAR_ID = '<%= CALENDAR_ID %>'
-        let Accesstoken = '<%= accessToken %>'
-        let time = encodeURIComponent(moment().format());
-
-        const listURL = `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?orderBy=startTime&q=vibin&singleEvents=true&timeMin=${time}&key=${API_key}`
-
-        fetch(listURL, {
-            'headers': { 'Authorization': `Bearer ${Accesstoken}` },
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.items.length === 0) {
-                    document.getElementById("msg").innerHTML = "<span>Looks like you have no vibes planned! Check <a href = '/dashboard?page=1&limit=15'>more dance</a></span>";
-                } else {
-                    for (i = 0; i < data.items.length; i++) {
-                        document.getElementById("summary" + i).innerHTML = `<span><a href='/player/${data.items[i].description}'>${data.items[i].summary}</a></span>`;
-                        document.getElementById("time" + i).innerHTML = moment(data.items[i].start.dateTime).format('MMMM Do YYYY, h:mm a');
-                    }
-                }
-            })
-    }
-</script>
+        </div>
+    </div>
+</footer>
