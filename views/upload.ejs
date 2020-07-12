@@ -71,10 +71,19 @@
           readonly />
       </div>
 
-      <div class="form-group">
+      <div class="form-group" id="languageInput">
         <label for="language">Language</label>
         <input type="language" id="language" name="language" class="form-control" placeholder="Enter The Language"
           value="<%= typeof language != 'undefined' ? language : '' %>" readonly />
+      </div>
+
+      <div class="form-group" id="languageDrop" hidden>
+        <label for="language">Language</label>
+        <select class="form-control" type="language" id="inputState" name="language">
+          <option selected="null" value="any">Language</option>
+          <option value="ja">Japanese</option>
+          <option value="en">English</option>
+        </select>
       </div>
 
       <div class="form-group">
@@ -282,6 +291,7 @@
     fetch(urlList)
       .then(response => response.json())
       .then(data => {
+        console.log(data.items[0].snippet.defaultLanguage);
         let duration = moment.duration(data.items[0].contentDetails.duration);
 
         if (duration._milliseconds > 3600000) {
@@ -298,10 +308,12 @@
         document.getElementById("id").value = id;
         document.getElementById("length").value = duration.format('HH:mm:ss', { trim: false });
         document.getElementById("publishedDate").value = data.items[0].snippet.publishedAt;
-        document.getElementById("language").value = data.items[0].snippet.defaultLanguage;
-        if (data.items[0].snippet.defaultLanguage == undefined) {
-          document.getElementById("language").readOnly = false;
-          document.getElementById("language").value = '';
+        if (data.items[0].snippet.defaultLanguage != undefined) {
+          document.getElementById("language").value = data.items[0].snippet.defaultLanguage;
+          document.getElementById("languageDrop").remove();
+        } else if (data.items[0].snippet.defaultLanguage == undefined) {
+          document.getElementById("languageDrop").hidden = false;
+          document.getElementById("languageInput").remove();
         }
       })
   }
