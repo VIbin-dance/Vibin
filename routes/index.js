@@ -194,7 +194,7 @@ router.get('/calendar', ensureAuthenticated, (req, res) => {
   })
 });
 
-router.get('/player/:id', ensureAuthenticated, (req, res) => {
+router.get('/player/:id', (req, res) => {
   Video.findOne({ id: req.params.id }, (err, result) => {
     res.render('player', {
       id: req.params.id,
