@@ -170,6 +170,7 @@ router.get('/calendar', ensureAuthenticated, (req, res) => {
     let summary = [];
     let dateTime = [];
     let id = [];
+    let idCal = [];
 
     fetch(`https://www.googleapis.com/calendar/v3/calendars/${user.email}/events?orderBy=startTime&q=vibin&singleEvents=true&timeMin=${time}&key=${process.env.API_key}`, {
       'headers': { 'Authorization': `Bearer ${user.accessToken}` },
@@ -180,6 +181,7 @@ router.get('/calendar', ensureAuthenticated, (req, res) => {
           summary[i] = data.items[i].summary
           dateTime[i] = moment(data.items[i].start.dateTime).format('MMMM Do YYYY, h:mm a');
           id[i] = data.items[i].description
+          idCal[i] = data.items[i].id
         }
         res.render('calendar', {
           count: data.items.length,
@@ -188,11 +190,39 @@ router.get('/calendar', ensureAuthenticated, (req, res) => {
           accessToken: user.accessToken,
           summary: summary,
           dateTime: dateTime,
-          id: id
+          id: id,
+          idCal: idCal
         });
       })
   })
 });
+
+router.post('/calendar', (req, res) => {
+  const { idCal } = req.body;
+  let errors = [];
+
+  User.findOne({ email: req.user._json.email }, (err, user) => {
+    fetch(`https://www.googleapis.com/calendar/v3/calendars/${user.email}/events/${idCal}?key=${process.env.API_key}`, {
+      'method': 'DELETE',
+      'headers': JSON.stringify({
+        'Authorization': `Bearer ${user.accessToken}`,
+        'Content-Type': 'application/json'
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        if (errors.length > 0) {
+          res.render('player', { errors, title: result.title, choreographer: result.choreographer, id: id, level: result.level });
+        }
+        else {
+          req.flash('success_msg', 'The dance is now deleted');
+          res.redirect('/calendar');
+        }
+      })
+      .catch(err => console.log(err));
+  })
+})
 
 router.get('/player/:id', ensureAuthenticated, (req, res) => {
   Video.findOne({ id: req.params.id }, (err, result) => {
@@ -246,7 +276,7 @@ router.post('/player/:id', (req, res) => {
           }
 
           if (errors.length > 0) {
-            res.render('player', { errors, title: result.title , choreographer: result.choreographer , id: id, level: result.level });
+            res.render('player', { errors, title: result.title, choreographer: result.choreographer, id: id, level: result.level });
           }
           else {
             req.flash('success_msg', 'The dance is now scheduled');
