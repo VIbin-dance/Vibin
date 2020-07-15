@@ -27,7 +27,7 @@ router.post('/newsletter', (req, res) => {
                     service: 'Gmail',
                     secure: false,
                     auth: {
-                        user: "2020.shota.inoue@uwcisak.jp",
+                        user: "Vibin'",
                         pass: "Shota0130"
                     },
                     tls: {
@@ -38,14 +38,11 @@ router.post('/newsletter', (req, res) => {
                 const mailOptions = {
                     to: user.email,
                     from: '2020.shota.inoue@uwcisak.jp',
-                    subject: "Today's trending",
-                    text: 'Howyadoin',
+                    subject: "Thank you for subscribing!",
                     html: `
                     <h1>Today's highlights</h1><h2>${result[0].title}</h2><a href="https://www.vibin.tokyo/player/${result[0].id}"><img src="${result[0].thumbnail}"></a>
-                    <h1>Today's highlights</h1><h2>${result[1].title}</h2><a href="https://www.vibin.tokyo/player/${result[1].id}"><img src="${result[1].thumbnail}"></a>
-                    <h1>Today's highlights</h1><h2>${result[2].title}</h2><a href="https://www.vibin.tokyo/player/${result[2].id}"><img src="${result[2].thumbnail}"></a>
-                    <h1>Today's highlights</h1><h2>${result[3].title}</h2><a href="https://www.vibin.tokyo/player/${result[3].id}"><img src="${result[3].thumbnail}"></a>
-                    <h1>Today's highlights</h1><h2>${result[4].title}</h2><a href="https://www.vibin.tokyo/player/${result[4].id}"><img src="${result[4].thumbnail}"></a>
+                    <h2>${result[1].title}</h2><a href="https://www.vibin.tokyo/player/${result[1].id}"><img src="${result[1].thumbnail}"></a>
+                    <h2>${result[2].title}</h2><a href="https://www.vibin.tokyo/player/${result[2].id}"><img src="${result[2].thumbnail}"></a>
                     `
                 };
 
@@ -53,11 +50,11 @@ router.post('/newsletter', (req, res) => {
                     if (err) {
                         console.log(err);
                     } else {
-                        req.flash('success_msg', 'An e-mail has been sent');
+                        req.flash('success_msg', `We've sent ${email} an email!`);
                         res.redirect('/dashboard?page=1&limit=15');
                     }
                 });
-            }).limit(5)
+            }).limit(3)
         }
     })
 })
