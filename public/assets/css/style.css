@@ -1772,6 +1772,10 @@ section {
   margin-top: 3%;
 }
 
+.results .pagination p, .results .pagination a {
+  margin: 2%;
+}
+
 /* user */
 .user{
   margin: 3%;

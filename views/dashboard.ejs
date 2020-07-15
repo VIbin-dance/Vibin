@@ -118,6 +118,7 @@
       <div class="dashboard-pagination">
         <div class="pagination">
           <% if (currentPage == 1 && pageCount > 1)  { %>
+          <p>Page <%= currentPage %></p>
           <a href="/dashboard?page=<%= parseInt(currentPage) + 1 %>&limit=15">
             Page <%=  parseInt(currentPage) + 1 %>
             <span class="iconify" data-icon="ion-ios-arrow-forward" data-inline="false"></span>
@@ -127,6 +128,7 @@
             <span class="iconify" data-icon="ion-ios-arrow-back" data-inline="false"></span>
             Page <%= parseInt(currentPage) - 1 %>
           </a>
+          <p>Page <%= currentPage %></p>
           <a href="/dashboard?page=<%= parseInt(currentPage) + 1 %>&limit=15">
             Page <%= parseInt(currentPage) + 1 %>
             <span class="iconify" data-icon="ion-ios-arrow-forward" data-inline="false"></span>
@@ -137,6 +139,7 @@
             Page
             <%=parseInt(currentPage) - 1 %>
           </a>
+          <p>Page <%= currentPage %></p>
           <% } %>
         </div>
       </div>
