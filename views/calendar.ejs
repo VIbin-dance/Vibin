@@ -12,7 +12,7 @@
     </div>
 </header>
 
-<section id="results" class="results">
+<section id="calendar" class="calendar">
     <div class="text-center" style="height:85vh">
         <iframe src="https://calendar.google.com/calendar/embed?src=<%= CALENDAR_ID %>&ctz=Asia%2FTokyo"
             style="border: 0" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>
@@ -25,15 +25,16 @@
         <%- include ('partials/messages') %>
         <div class="row">
             <% for(let i=0; i < count; i++) { %>
-            <div class="col-lg-10">
-                <h5><a href="/player/<%= id[i] %>"><%= summary[i] %></a></h5>
-
+            <div class="col-lg-12">
                 <form action="/calendar" method="POST">
-                    <input type="submit" id="idCal" name="idCal" class="form-control" placeholder="Enter The ID"
-                        value="<%= typeof idCal[i] != 'undefined' ? idCal[i] : '' %>" />
+                    <h5><a href="/player/<%= id[i] %>"><%= summary[i] %></a></h5>
+                    <p><%= dateTime[i] %></p>
+                    <input id="idCal" name="idCal" class="form-control" placeholder="Enter The ID"
+                        value="<%= typeof idCal[i] != 'undefined' ? idCal[i] : '' %>" hidden />
+                    <button class="deleteButton" type="submit">cancel</button>
                 </form>
+                <br>
 
-                <p><%= dateTime[i] %></p>
             </div>
             <% } %>
         </div>

@@ -1806,3 +1806,14 @@ section {
   max-width: 30vh;
   display: inline-block;
 }
+
+#calendar .deleteButton{
+  font-size: 14px;
+  border: 0;
+  background-color: #fff;
+  color: #333;
+}
+
+#calendar .deleteButton:hover{
+  color: #EB5160;
+}

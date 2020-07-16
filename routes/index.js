@@ -9,6 +9,7 @@ const { onlyDevs } = require('../config/dev');
 
 const Video = require('../models/Video');
 const User = require('../models/User');
+const e = require('express');
 
 router.get('/', (req, res) => {
   if (req.session.passport) {
@@ -197,32 +198,27 @@ router.get('/calendar', ensureAuthenticated, (req, res) => {
   })
 });
 
-router.post('/calendar', (req, res) => {
-  const { idCal } = req.body;
-  let errors = [];
-
+router.post('/calendar', ensureAuthenticated, (req, res) => {
   User.findOne({ email: req.user._json.email }, (err, user) => {
-    fetch(`https://www.googleapis.com/calendar/v3/calendars/${user.email}/events/${idCal}?key=${process.env.API_key}`, {
+
+    const { idCal } = req.body;
+
+    let result = fetch(`https://www.googleapis.com/calendar/v3/calendars/${user.email}/events/${idCal}?key=${process.env.API_key}`, {
       'method': 'DELETE',
-      'headers': JSON.stringify({
-        'Authorization': `Bearer ${user.accessToken}`,
-        'Content-Type': 'application/json'
-      })
+      'headers': { 'Authorization': `Bearer ${user.accessToken}`, 'Accept': 'application/json' }
     })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        if (errors.length > 0) {
-          res.render('player', { errors, title: result.title, choreographer: result.choreographer, id: id, level: result.level });
-        }
-        else {
-          req.flash('success_msg', 'The dance is now deleted');
-          res.redirect('/calendar');
-        }
-      })
-      .catch(err => console.log(err));
+
+    result.then(function(result) {
+      if (result.status == 404) {
+        req.flash('error', 'The video does not exist');
+        res.redirect('/calendar');
+      } else if (result.status == 200 || 204) {
+        req.flash('success_msg', 'The dance is now deleted');
+        res.redirect('/calendar');
+      }
+   })
   })
-})
+});
 
 router.get('/player/:id', ensureAuthenticated, (req, res) => {
   Video.findOne({ id: req.params.id }, (err, result) => {
