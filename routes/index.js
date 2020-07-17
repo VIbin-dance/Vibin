@@ -229,14 +229,19 @@ router.post('/calendar', ensureAuthenticated, (req, res) => {
   })
 });
 
-router.get('/player/:id', ensureAuthenticated, (req, res) => {
+router.get('/player/:id', (req, res) => {
   Video.findOne({ id: req.params.id }, (err, result) => {
-    res.render('player', {
-      id: req.params.id,
-      title: result.title,
-      choreographer: result.choreographer,
-      level: result.level,
-    });
+    if (result == null) {
+      req.flash('error_msg', 'The video is either deleted or modified!');
+      res.redirect('/dashboard?page=1&limit=15');
+    } else {
+      res.render('player', {
+        id: req.params.id,
+        title: result.title,
+        choreographer: result.choreographer,
+        level: result.level,
+      });
+    }
   })
 });
 
