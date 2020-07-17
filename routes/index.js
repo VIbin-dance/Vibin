@@ -31,7 +31,7 @@ router.get('/auth/google', passport.authenticate('google', {
     'https://www.googleapis.com/auth/userinfo.profile',
     'https://www.googleapis.com/auth/userinfo.email',
     'https://www.googleapis.com/auth/youtube',
-    'https://www.googleapis.com/auth/calendar'
+    'https://www.googleapis.com/auth/calendar.events'
   ]
 }));
 
@@ -49,6 +49,9 @@ router.get('/auth/google/callback',
 router.get('/error', (req, res) => {
   res.send('Login error');
 });
+
+router.get('/privacy-policy', (req, res) => res.render('privacy-policy'));
+router.get('/terms-of-service', (req, res) => res.render('terms-of-service'));
 
 router.get('/dashboard/:sort', ensureAuthenticated, (req, res) => {
 
