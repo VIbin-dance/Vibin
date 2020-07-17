@@ -21,7 +21,14 @@
     <br>
     <div class="container">
         <h3>Upcoming vibes!</h3>
-        <p>We have <%= count %> sessions ahead!</p>
+        <p>We have <%= count %> sessions ahead!
+            <% if (count == 0)  { %>
+            <a href="/dashboard/-1?page=1&limit=15">
+                Let's plan our sessions!
+            </a>
+            <% } %>
+        </p>
+
         <%- include ('partials/messages') %>
         <div class="row">
             <% for(let i=0; i < count; i++) { %>
