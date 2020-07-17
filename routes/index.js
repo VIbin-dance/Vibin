@@ -14,7 +14,7 @@ const e = require('express');
 router.get('/', (req, res) => {
   if (req.session.passport) {
     req.flash('success_msg', 'You are logged in!');
-    res.redirect('/dashboard?page=1&limit=15');
+    res.redirect('/dashboard/-1?page=1&limit=15');
   } else {
     res.render('landing')
   }
@@ -42,7 +42,7 @@ router.get('/auth/google/callback',
   }),
   (req, res) => {
     req.flash('success_msg', 'You are logged in!')
-    res.redirect('/dashboard?page=1&limit=15');
+    res.redirect('/dashboard/-1?page=1&limit=15');
   }
 );
 
@@ -50,14 +50,22 @@ router.get('/error', (req, res) => {
   res.send('Login error');
 });
 
-router.get('/dashboard', ensureAuthenticated, (req, res) => {
-  Video.paginate({}, { page: req.query.page, limit: req.query.limit }, (err, result) => {
+router.get('/dashboard/:sort', ensureAuthenticated, (req, res) => {
+
+  Video.paginate({}, { page: req.query.page, limit: req.query.limit, sort: { publishedDate: req.params.sort }}, (err, result) => {
     const title = [];
     const choreographer = [];
     const url = [];
     const level = [];
     const thumbnail = [];
     const id = [];
+
+    if (req.params.sort == -1) {
+      let sort = 1;
+    } else if (req.params.sort == 1) {
+      let sort = -1;
+    }
+
     for (let i = 0; i < result.docs.length; i++) {
       title[i] = result.docs[i].title;
       choreographer[i] = result.docs[i].choreographer;
@@ -76,6 +84,7 @@ router.get('/dashboard', ensureAuthenticated, (req, res) => {
       id: id,
       level: level,
       thumbnail: thumbnail,
+      currentSort: req.params.sort,
       currentPage: result.page,
       pageCount: result.pages,
       pages: paginate.getArrayPages(req)(3, result.pages, req.query.page)
@@ -107,7 +116,7 @@ router.post('/dashboard', (req, res) => {
 
     if (!result.docs.length) {
       req.flash('error_msg', "Looks like we don't have that video yet!");
-      res.redirect('/dashboard?page=1&limit=15');
+      res.redirect('/dashboard/-1?page=1&limit=15');
     } else {
       for (let i = 0; i < result.docs.length; i++) {
         title[i] = result.docs[i].title;
@@ -208,7 +217,7 @@ router.post('/calendar', ensureAuthenticated, (req, res) => {
       'headers': { 'Authorization': `Bearer ${user.accessToken}`, 'Accept': 'application/json' }
     })
 
-    result.then(function(result) {
+    result.then(function (result) {
       if (result.status == 404) {
         req.flash('error', 'The video does not exist');
         res.redirect('/calendar');
@@ -216,7 +225,7 @@ router.post('/calendar', ensureAuthenticated, (req, res) => {
         req.flash('success_msg', 'The dance is now deleted');
         res.redirect('/calendar');
       }
-   })
+    })
   })
 });
 

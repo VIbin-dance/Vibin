@@ -4,7 +4,7 @@
       <h1 class="logo"><a href="/">Vibin'</a></h1>
       <nav class="nav-menu d-none d-lg-block">
         <ul>
-          <li class="active"><a href="/dashboard?page=1&limit=15">Home</a></li>
+          <li class="active"><a href="/dashboard/-1?page=1&limit=15">Home</a></li>
           <li><a href="/calendar">Calendar</a></li>
           <li><a href="/logout">Logout</a></li>
         </ul>
@@ -93,6 +93,18 @@
       <%- include ('partials/messages') %>
       <h3>Latest videos</h3>
       <p>We have <%= count %> videos in total!</p>
+      <p>Sort by:
+        <% if (currentSort == -1)  { %>
+        <a href="/dashboard/<%=  parseInt(currentSort) + 2 %>?page=1&limit=15">
+          oldest
+        </a>
+        <% } else if (currentSort == 1) { %>
+        <a href="/dashboard/<%=  parseInt(currentSort) - 2 %>?page=1&limit=15">
+          latest
+        </a>
+        <% } %>
+      </p>
+
       <div class="row">
         <% for(let i=0; i < videos.length; i++) { %>
         <div class="col-lg-4">
@@ -111,21 +123,21 @@
       <div class="dashboard-pagination">
         <div class="pagination">
           <% if (currentPage == 1 && pageCount > 1)  { %>
-          <a href="/dashboard?page=<%= parseInt(currentPage) + 1 %>&limit=15">
+          <a href="/dashboard/<%= currentSort %>?page=<%= parseInt(currentPage) + 1 %>&limit=15">
             Page <%=  parseInt(currentPage) + 1 %>
             <span class="iconify" data-icon="ion-ios-arrow-forward" data-inline="false"></span>
           </a>
           <% } else if (currentPage < pageCount) { %>
-          <a href="/dashboard?page=<%= parseInt(currentPage) - 1 %>&limit=15">
+          <a href="/dashboard/<%= currentSort %>?page=<%= parseInt(currentPage) - 1 %>&limit=15">
             <span class="iconify" data-icon="ion-ios-arrow-back" data-inline="false"></span>
             Page <%= parseInt(currentPage) - 1 %>
           </a>
-          <a href="/dashboard?page=<%= parseInt(currentPage) + 1 %>&limit=15">
+          <a href="/dashboard/<%= currentSort %>?page=<%= parseInt(currentPage) + 1 %>&limit=15">
             Page <%= parseInt(currentPage) + 1 %>
             <span class="iconify" data-icon="ion-ios-arrow-forward" data-inline="false"></span>
           </a>
           <% } else if (currentPage == pageCount && pageCount > 1) { %>
-          <a href="/dashboard?page=<%= parseInt(currentPage) - 1 %>&limit=15">
+          <a href="/dashboard/<%= currentSort %>?page=<%= parseInt(currentPage) - 1 %>&limit=15">
             <span class="iconify" data-icon="ion-ios-arrow-back" data-inline="false"></span>
             Page
             <%=parseInt(currentPage) - 1 %>
