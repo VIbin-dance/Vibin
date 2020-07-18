@@ -134,28 +134,28 @@
           </div>
           <div class="form-check">
             <label class="form-check-label">
-              <input id="genre" name="checkbox" class="form-check-input" class="form-check-input" type="checkbox"
+              <input id="genre" name="genre" class="form-check-input" class="form-check-input" type="checkbox"
                 value="Breakin">Breakin</label>
           </div>
           <div class="form-check">
             <label class="form-check-label">
-              <input id="genre" name="checkbox" class="form-check-input" class="form-check-input" type="checkbox"
+              <input id="genre" name="genre" class="form-check-input" class="form-check-input" type="checkbox"
                 value="House">House</label>
           </div>
           <div class="form-check">
             <label class="form-check-label">
-              <input id="genre" name="checkbox" class="form-check-input" class="form-check-input" type="checkbox"
+              <input id="genre" name="genre" class="form-check-input" class="form-check-input" type="checkbox"
                 value="Popping">Popping</label>
           </div>
           <div class="form-check">
             <label class="form-check-label">
-              <input id="genre" name="checkbox" class="form-check-input" class="form-check-input" type="checkbox"
-                value="Popping">K-POP</label>
+              <input id="genre" name="genre" class="form-check-input" class="form-check-input" type="checkbox"
+                value="K-POP">K-POP</label>
           </div>
           <div class="form-check">
             <label class="form-check-label">
-              <input id="genre" name="checkbox" class="form-check-input" class="form-check-input" type="checkbox"
-                value="Popping">TikTok</label>
+              <input id="genre" name="genre" class="form-check-input" class="form-check-input" type="checkbox"
+                value="TikTok">TikTok</label>
           </div>
       </div>
 
@@ -318,7 +318,7 @@
     fetch(urlList)
       .then(response => response.json())
       .then(data => {
-        console.log(data.items[0].snippet.defaultLanguage);
+        console.log(data)
         let duration = moment.duration(data.items[0].contentDetails.duration);
 
         if (duration._milliseconds > 3600000) {

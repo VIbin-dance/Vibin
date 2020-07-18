@@ -311,7 +311,7 @@ router.post('/upload', (req, res) => {
   let errors = [];
 
   // Check required fields
-  if (title == '' || choreographer == '' || thumbnail == '' || url == '' || id == '' || publishedDate == '' || length == '' || lengthCat == '' || language == '' || level == '' || genre == '' || purpose == '' || mood == '') {
+  if (title == '' || choreographer == '' || thumbnail == '' || url == '' || id == '' || publishedDate == '' || length == '' || lengthCat == '' || language == '' || level == undefined || genre == undefined || purpose == undefined || mood == undefined) {
     errors.push({ msg: 'Please fill in all fields' });
   }
 
