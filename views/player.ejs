@@ -39,16 +39,11 @@
   function speedUp() {
     let rate = player.getPlaybackRate();
     player.setPlaybackRate(rate + 0.25);
-
-    console.log(rate)
-
-    document.getElementById('rate').innerHTML = rate;
   }
 
   function speedDown() {
     let rate = player.getPlaybackRate();
     player.setPlaybackRate(rate - 0.25);
-    document.getElementById('rate').innerHTML = rate;
   }
 
   function mirrorToggle() {
