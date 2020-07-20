@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const nodemailer = require('nodemailer');
 const passport = require('passport');
+const { ensureAuthenticated } = require('../config/auth');
 
 
 const User = require('../models/User');
@@ -51,6 +52,23 @@ router.post('/newsletter', (req, res) => {
                     res.redirect('/dashboard/-1?page=1&limit=15');
                 }
             });
+        }
+    })
+})
+
+router.get('/profile', ensureAuthenticated, (req, res) => {
+    User.findOne({ email: req.user._json.email }, (err, user) => {
+        if (!user) {
+            req.flash('error_msg', 'There is no such user');
+            res.redirect('/dashboard?page=1&limit=15');
+        } else {
+            res.render('profile', {
+                firstName: user.name.givenName,
+                lastName: user.name.familyName,
+                email: user.email,
+                username: user.username,
+                subscription: user.subscription
+            })
         }
     })
 })
