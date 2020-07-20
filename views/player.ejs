@@ -8,9 +8,10 @@
       <form action="/player/:id" method="POST">
         <%- include ('partials/messages') %>
         <button id="speedpu" onclick="speedUp()" type="button" class="chosen-value">&uarr; Speed</button>
+        <p id="rate"></p>
         <button id="speeddown" onclick="speedDown()" type="button" class="chosen-value">&darr; Speed</button>
-        <button id="mirror" onclick="mirrorVideo()" type="button" class="chosen-value">Mirror</button>
-        <button id="unmirror" onclick="unmirrorVideo()" type="button" class="chosen-value">Unmirror</button>
+        <button id="mirror" onclick="mirrorToggle()" type="button" class="chosen-value">Mirror</button>
+        <button id="fullscreen" onclick="fullScreen()" type="button" class="chosen-value">Fullscreen</button>
         <input type="id" id="id" name="id" class="form-control" placeholder="Enter The ID"
           value="<%= typeof id != 'undefined' ? id : '' %>" hidden />
         <input type="datetime-local" id="date" name="date" class="form-control" />
@@ -38,19 +39,37 @@
   function speedUp() {
     let rate = player.getPlaybackRate();
     player.setPlaybackRate(rate + 0.25);
+
+    console.log(rate)
+
+    document.getElementById('rate').innerHTML = rate;
   }
 
   function speedDown() {
     let rate = player.getPlaybackRate();
     player.setPlaybackRate(rate - 0.25);
+    document.getElementById('rate').innerHTML = rate;
   }
 
-  function mirrorVideo() {
-    document.getElementById('player').setAttribute("class", "mirror");
+  function mirrorToggle() {
+    document.getElementById("player").classList.toggle("mirror");
+    if (document.getElementById("mirror").innerHTML === "Mirror") {
+      document.getElementById("mirror").innerHTML = "Unmirror"
+    } else {
+      document.getElementById("mirror").innerHTML = "Mirror"
+    }
   }
 
-  function unmirrorVideo() {
-    document.getElementById('player').setAttribute("class", "");
+  function fullScreen() {
+    if (document.getElementById("player").style.height === "100vh") {
+      console.log(document.getElementById("player").style.height);
+      document.getElementById('player').style.height = '75vh';
+      document.getElementById("fullscreen").innerHTML = "Fullscreen"
+    } else {
+      console.log(document.getElementById("player").style.height);
+      document.getElementById('player').style.height = '100vh';
+      document.getElementById("fullscreen").innerHTML = "TV mode"
+    }
   }
 
   function setTime() {
@@ -64,5 +83,10 @@
     transform: rotateY(180deg);
     -webkit-transform: rotateY(180deg);
     -moz-transform: rotateY(180deg);
+  }
+
+  .fullscreen {
+    width: 100%;
+    height: 100vh;
   }
 </style>
