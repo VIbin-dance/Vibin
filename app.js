@@ -12,6 +12,7 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('./models/User');
 
 const app = express();
+require('newrelic');
 require('dotenv').config();
 
 app.use(helmet());
