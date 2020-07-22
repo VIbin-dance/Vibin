@@ -46,6 +46,10 @@ const VideoSchema = new mongoose.Schema({
         type: Array,
         required: true,
     },
+    lengthCat: {
+        type: Array,
+        required: true,
+    },
     mood: {
         type: Array,
         required: true

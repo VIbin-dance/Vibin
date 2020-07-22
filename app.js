@@ -12,6 +12,7 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('./models/User');
 
 const app = express();
+require('newrelic');
 require('dotenv').config();
 
 app.use(helmet());
@@ -95,6 +96,7 @@ app.use((req, res, next) => {
 app.use(paginate.middleware(10, 50))
 
 app.use('/', require('./routes/index'));
+app.use('/users', require('./routes/users'));
 
 const PORT = process.env.PORT || 5000;
 

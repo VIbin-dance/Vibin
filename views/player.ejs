@@ -1,15 +1,24 @@
-<div class="videoPlayer">
-  <div id="player"></div>
-  <div class="text">
-  <h4><%= title %></h4>
-    <p><%= choreographer %></p>
-    <p><%= level[0] %></p><br>
-    <button id="speedUp" onclick="speedUp()" type="button" class="chosen-value">&uarr; Speed</button>
-    <button id="speedDown" onclick="speedDown()" type="button" class="chosen-value">&darr; Speed</button>
-    <button id="mirror" onclick="mirrorVideo()" type="button" class="chosen-value">Mirror</button>
-    <button id="unmirror" onclick="unmirrorVideo()" type="button" class="chosen-value">Unmirror</button>
-  </div>
-</div>
+<body onload="setTime()">
+  <div class="videoPlayer">
+    <div id="player"></div>
+    <div class="text">
+      <h4><%= title %></h4>
+      <p><%= choreographer %></p>
+      <p><%= level[0] %></p><br>
+      <form action="/player/:id" method="POST">
+        <%- include ('partials/messages') %>
+        <button id="speedpu" onclick="speedUp()" type="button" class="chosen-value">&uarr; Speed</button>
+        <p id="rate"></p>
+        <button id="speeddown" onclick="speedDown()" type="button" class="chosen-value">&darr; Speed</button>
+        <button id="mirror" onclick="mirrorToggle()" type="button" class="chosen-value">Mirror</button>
+        <button id="fullscreen" onclick="fullScreen()" type="button" class="chosen-value">Fullscreen</button>
+        <input type="id" id="id" name="id" class="form-control" placeholder="Enter The ID"
+          value="<%= typeof id != 'undefined' ? id : '' %>" hidden />
+        <input type="datetime-local" id="date" name="date" class="form-control" />
+        <button id="calendar" class="chosen-value" type="submit">Dance later</button>
+      </form>
+    </div>
+</body>
 
 <script>
   var tag = document.createElement('script');
@@ -30,29 +39,49 @@
   function speedUp() {
     let rate = player.getPlaybackRate();
     player.setPlaybackRate(rate + 0.25);
-    document.getElementById('speed').innerHTML = rate;
   }
 
   function speedDown() {
     let rate = player.getPlaybackRate();
     player.setPlaybackRate(rate - 0.25);
-    document.getElementById('speed').innerHTML = rate;
   }
 
-  function mirrorVideo() {
-    document.getElementById('player').setAttribute("class", "mirror");
+  function mirrorToggle() {
+    document.getElementById("player").classList.toggle("mirror");
+    if (document.getElementById("mirror").innerHTML === "Mirror") {
+      document.getElementById("mirror").innerHTML = "Unmirror"
+    } else {
+      document.getElementById("mirror").innerHTML = "Mirror"
+    }
   }
 
-  function unmirrorVideo() {
-    document.getElementById('player').setAttribute("class", "");
+  function fullScreen() {
+    if (document.getElementById("player").style.height === "100vh") {
+      console.log(document.getElementById("player").style.height);
+      document.getElementById('player').style.height = '75vh';
+      document.getElementById("fullscreen").innerHTML = "Fullscreen"
+    } else {
+      console.log(document.getElementById("player").style.height);
+      document.getElementById('player').style.height = '100vh';
+      document.getElementById("fullscreen").innerHTML = "TV mode"
+    }
   }
+
+  function setTime() {
+    moment().format('YYYY-MM-DDThh:mm');
+    document.getElementById("date").setAttribute("min", moment().format('YYYY-MM-DDThh:mm'))
+  }
+
 </script>
 <style>
   .mirror {
     transform: rotateY(180deg);
     -webkit-transform: rotateY(180deg);
-    /* Safari and Chrome */
     -moz-transform: rotateY(180deg);
-    /* Firefox */
+  }
+
+  .fullscreen {
+    width: 100%;
+    height: 100vh;
   }
 </style>

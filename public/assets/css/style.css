@@ -117,7 +117,7 @@ h1, h2, h3, h4, h5, h6 {
 .nav-menu a {
   display: block;
   position: relative;
-  color: #434175;
+  color: #545454;
   transition: 0.3s;
   font-size: 15px;
   font-family: "Open Sans", sans-serif;
@@ -158,7 +158,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 14px;
   font-weight: 500;
   text-transform: none;
-  color: #434175;
+  color: #545454;
 }
 
 .nav-menu .drop-down ul a:hover, .nav-menu .drop-down ul .active > a, .nav-menu .drop-down ul li:hover > a {
@@ -255,6 +255,10 @@ select {
   text-overflow: '';
 }
 
+.chosen-value option {
+  background-color: white;
+}
+
 .chosen-value {
   width:150px;
   height: 4rem;
@@ -264,27 +268,30 @@ select {
   transition: 0.3s ease-in-out;
 }
 
-.chosen-value input{
-  width:100px;
+.search-bar input{
+  width:150px;
+  height: 3.7rem;
+}
+
+.chosen-value:hover {
+  background-color: #ff7583;
+  cursor: pointer;
+}
+.chosen-value:focus {
+  border: 3px solid transparent;
+  box-shadow: 0px 5px 8px 0px rgba(0, 0, 0, 0.2);
+  outline: 0;
+  background-color: #ff7583;
+  color: #333;
 }
 
 .chosen-value::-webkit-input-placeholder {
   color: #333;
 }
-.chosen-value:hover {
-  background-color: #ff908b;
-  cursor: pointer;
-}
 .chosen-value:hover::-webkit-input-placeholder {
   color: #333;
 }
-.chosen-value:focus, .chosen-value.open {
-  box-shadow: 0px 5px 8px 0px rgba(0, 0, 0, 0.2);
-  outline: 0;
-  background-color: #ff908b;
-  color: #000;
-}
-.chosen-value:focus::-webkit-input-placeholder, .chosen-value.open::-webkit-input-placeholder {
+.chosen-value:focus::-webkit-input-placeholder {
   color: #000;
 }
 
@@ -306,7 +313,7 @@ select {
 }
 
 .mobile-nav-toggle i {
-  color: #434175;
+  color: #545454;
 }
 
 .mobile-nav {
@@ -334,7 +341,7 @@ select {
 .mobile-nav a {
   display: block;
   position: relative;
-  color: #434175;
+  color: #545454;
   padding: 10px 20px;
   font-weight: 500;
   outline: none;
@@ -415,7 +422,7 @@ select {
   font-size: 48px;
   font-weight: 400;
   line-height: 56px;
-  color: #434175;
+  color: #545454;
   font-family: "Poppins", sans-serif;
 }
 
@@ -549,7 +556,7 @@ section {
   margin-bottom: 20px;
   padding-bottom: 20px;
   position: relative;
-  color: #434175;
+  color: #545454;
 }
 
 .section-title h2::after {
@@ -575,7 +582,7 @@ section {
   font-size: 44px;
   line-height: 50px;
   margin-bottom: 20px;
-  color: #434175;
+  color: #545454;
 }
 
 .about .content h3 {
@@ -631,7 +638,7 @@ section {
   font-weight: 600;
   padding: 0;
   margin: 20px 0;
-  color: #434175;
+  color: #545454;
 }
 
 .why-us .box p {
@@ -738,7 +745,7 @@ section {
 }
 
 .services .icon-box h4 a {
-  color: #434175;
+  color: #545454;
   transition: ease-in-out 0.3s;
 }
 
@@ -831,7 +838,7 @@ section {
 }
 
 .features .icon-box h3 a {
-  color: #434175;
+  color: #545454;
   transition: ease-in-out 0.3s;
 }
 
@@ -942,12 +949,12 @@ section {
 
 .portfolio .portfolio-wrap .portfolio-info h4 {
   font-size: 20px;
-  color: #434175;
+  color: #545454;
   font-weight: 600;
 }
 
 .portfolio .portfolio-wrap .portfolio-info p {
-  color: #434175;
+  color: #545454;
   font-size: 14px;
   text-transform: uppercase;
   padding: 0;
@@ -1024,7 +1031,7 @@ section {
 
 .team .member .social a {
   transition: color 0.3s;
-  color: #434175;
+  color: #545454;
   margin: 0 10px;
   padding-top: 8px;
   display: inline-block;
@@ -1047,7 +1054,7 @@ section {
   font-weight: 700;
   margin-bottom: 5px;
   font-size: 18px;
-  color: #434175;
+  color: #545454;
 }
 
 .team .member .member-info span {
@@ -1134,7 +1141,7 @@ section {
 }
 
 .pricing .btn-buy {
-  background: #434175;
+  background: #545454;
   display: inline-block;
   padding: 10px 35px;
   border-radius: 50px;
@@ -1394,7 +1401,7 @@ section {
 .breadcrumbs h2 {
   font-size: 28px;
   font-weight: 400;
-  color: #434175;
+  color: #545454;
 }
 
 .breadcrumbs ol {
@@ -1557,7 +1564,7 @@ section {
 #footer .footer-top h4 {
   font-size: 16px;
   font-weight: bold;
-  color: #434175;
+  color: #545454;
   position: relative;
   padding-bottom: 12px;
 }
@@ -1663,7 +1670,7 @@ section {
   font-size: 18px;
   display: inline-block;
   background: #deddec;
-  color: #434175;
+  color: #545454;
   line-height: 1;
   padding: 8px 0;
   margin-right: 4px;
@@ -1716,7 +1723,7 @@ section {
 .results .box {
   margin-top: 35px;
   padding: 50px 30px;
-  box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
   transition: all ease-in-out 0.3s;
   min-height: 500px;
   max-height: 500px;
@@ -1728,16 +1735,23 @@ section {
 }
 
 .results .box h4 {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 600;
   padding: 0;
   margin: 20px 0;
-  color: #434175;
+  color: #545454;
 }
 
 .results .box p {
   color: #aaaaaa;
   font-size: 15px;
+  margin: 0;
+  padding: 0;
+}
+
+.results .box a {
+  color: #686868;
+  font-size: 18px;
   margin: 0;
   padding: 0;
 }
@@ -1748,7 +1762,7 @@ section {
   box-shadow: 10px 15px 30px rgba(0, 0, 0, 0.18);
 }
 
-.results .box:hover span, .results .box:hover h4, .results .box:hover p {
+.results .box:hover span, .results .box:hover h4, .results .box:hover p, .results .box:hover a{
   color: #fff;
 }
 
@@ -1758,12 +1772,8 @@ section {
   margin-top: 3%;
 }
 
-.results a {
+.results .pagination p, .results .pagination a {
   margin: 2%;
-  color: #444444;
-}
-.results a:hover {
-  color:#EB5160;
 }
 
 /* user */
@@ -1773,27 +1783,26 @@ section {
 
 
 /* iframe */
-/* #player {
-  position:relative;
-  width: 75%;
-  padding-bottom: 56.25%;
-  height:0;
-  justify-self: center;
-} */
 
-.videoPlayer #player {
-  width:100%;
-  height:75vh;
-}
 .videoPlayer {
   min-height: 100vh;
   margin: 0;
 }
 
+.videoPlayer #player {
+  width:100%;
+  height:75vh;
+}
+
+.videoPlayer .text {
+  padding-left: 10vh;
+  margin: 30px 20px;
+}
+
 .videoPlayer h4 {
   font-size: 24px;
   font-weight: 600;
-  color: #434175;
+  color: #545454;
 }
 
 .videoPlayer p {
@@ -1803,7 +1812,19 @@ section {
   display: inline-block;
 }
 
-.videoPlayer .text {
-  padding-left: 10vh;
-  margin: 30px 20px;
+.videoPlayer input {
+  height: 4rem;
+  max-width: 30vh;
+  display: inline-block;
+}
+
+#calendar .deleteButton{
+  font-size: 14px;
+  border: 0;
+  background-color: #fff;
+  color: #333;
+}
+
+#calendar .deleteButton:hover{
+  color: #EB5160;
 }
