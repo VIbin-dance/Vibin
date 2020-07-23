@@ -6,8 +6,15 @@
         <ul>
           <li class="active"><a href="/dashboard/-1?page=1&limit=15">Home</a></li>
           <li><a href="/calendar">Calendar</a></li>
-          <li><a href="/users/profile">Profile</a></li>
-          <li><a href="/logout">Logout</a></li>
+
+          <button class="btn btn-default dropdown-toggle" type="button" id="menu" data-toggle="dropdown">
+            <img src="<%= userPhoto %>" height="40" width="40" style="border-radius: 50%;">
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="menu">
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="/users/profile">Profile</a></li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="/logout">Logout</a></li>
+          </ul>
         </ul>
       </nav>
       <a href="/upload" class="get-started-btn scrollto">Upload</a>
@@ -190,7 +197,8 @@
           <div class="social-links text-center text-md-right pt-3 pt-md-0">
             <a href="https://www.facebook.com/Vibin-107436974343750" class="facebook" target="_blank"><i
                 class="bx bxl-facebook"></i></a>
-            <a href="https://www.instagram.com/vibin_dance/" class="instagram" target="_blank"><i class="bx bxl-instagram"></i></a>
+            <a href="https://www.instagram.com/vibin_dance/" class="instagram" target="_blank"><i
+                class="bx bxl-instagram"></i></a>
           </div>
         </div>
       </div>

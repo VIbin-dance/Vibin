@@ -57,6 +57,9 @@ router.post('/newsletter', (req, res) => {
 })
 
 router.get('/profile', ensureAuthenticated, (req, res) => {
+    const { firstname, lastname, username } = req.body;
+    let errors = [];
+
     User.findOne({ email: req.user._json.email }, (err, user) => {
         if (!user) {
             req.flash('error_msg', 'There is no such user');
@@ -65,9 +68,7 @@ router.get('/profile', ensureAuthenticated, (req, res) => {
             res.render('profile', {
                 firstName: user.name.givenName,
                 lastName: user.name.familyName,
-                email: user.email,
-                username: user.username,
-                subscription: user.subscription
+                username: user.username
             })
         }
     })

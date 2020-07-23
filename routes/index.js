@@ -78,6 +78,7 @@ router.get('/dashboard/:sort', ensureAuthenticated, (req, res) => {
       id[i] = result.docs[i].id;
     }
     res.render('dashboard', {
+      userPhoto: req.session.passport.user.photos[0].value,
       count: result.total,
       username: req.session.passport.user.displayName,
       videos: result.docs,
