@@ -96,7 +96,9 @@ router.get('/dashboard/:sort', ensureAuthenticated, (req, res) => {
 });
 
 router.post('/dashboard', (req, res) => {
-  const { lengthCat, language, level, genre, purpose, mood } = req.body;
+  const { lengthCat, language, level, genre, purpose, mood, search } = req.body;
+
+  const searchQuery = new RegExp(escapeRegex(search), 'gi');
 
   const query = {
     $and: [
@@ -106,6 +108,10 @@ router.post('/dashboard', (req, res) => {
       { genre: genre },
       { purpose: purpose },
       { mood: mood }
+    ],
+    $or: [
+      { title: searchQuery },
+      { choreographer: searchQuery }
     ]
   }
 
@@ -356,5 +362,9 @@ router.post('/upload', (req, res) => {
     }
   );
 })
+
+function escapeRegex(text) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
 
 module.exports = router;
