@@ -249,6 +249,7 @@ router.get('/player/:id', (req, res) => {
       res.redirect('/dashboard?page=1&limit=15');
     } else {
       res.render('player', {
+        userPhoto: req.session.passport.user.photos[0].value,
         id: req.params.id,
         title: result.title,
         choreographer: result.choreographer,
@@ -299,7 +300,7 @@ router.post('/player/:id', (req, res) => {
           }
 
           if (errors.length > 0) {
-            res.render('player', { errors, title: result.title, choreographer: result.choreographer, id: id, level: result.level });
+            res.render('player', { errors, userPhoto: req.session.passport.user.photos[0].value, title: result.title, choreographer: result.choreographer, id: id, level: result.level });
           }
           else {
             req.flash('success_msg', 'The dance is now scheduled');

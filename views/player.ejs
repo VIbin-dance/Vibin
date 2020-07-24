@@ -1,14 +1,38 @@
 <body onload="setTime()">
+
+  <header id="header" class="fixed-top ">
+    <div class="container d-flex align-items-center justify-content-between">
+      <h1 class="logo"><a href="/">Vibin'</a></h1>
+      <nav class="nav-menu d-none d-lg-block">
+        <ul>
+          <li><a href="/dashboard/-1?page=1&limit=15">Home</a></li>
+          <li><a href="/calendar">Calendar</a></li>
+          <li><a href="/upload">Upload</a></li>
+        </ul>
+      </nav>
+      <nav class="nav-menu d-none d-lg-block">
+        <ul>
+          <li class="drop-down">
+            <img src="<%= userPhoto %>" height="40" width="40" style="border-radius: 50%;">
+            <ul>
+              <li><a href="/users/profile">Profile</a></li>
+              <li><a href="/logout">Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
   <div class="videoPlayer">
     <div id="player"></div>
     <div class="text">
       <h4><%= title %></h4>
-      <p><%= choreographer %></p>
+      <a href="/choreographer/<%= choreographer %>"><%= choreographer %></a>
       <p><%= level[0] %></p><br>
       <form action="/player/:id" method="POST">
         <%- include ('partials/messages') %>
-        <button id="speedpu" onclick="speedUp()" type="button" class="chosen-value">&uarr; Speed</button>
-        <p id="rate"></p>
+        <button id="speedup" onclick="speedUp()" type="button" class="chosen-value">&uarr; Speed</button>
         <button id="speeddown" onclick="speedDown()" type="button" class="chosen-value">&darr; Speed</button>
         <button id="mirror" onclick="mirrorToggle()" type="button" class="chosen-value">Mirror</button>
         <button id="fullscreen" onclick="fullScreen()" type="button" class="chosen-value">Fullscreen</button>
@@ -57,11 +81,13 @@
 
   function fullScreen() {
     if (document.getElementById("player").style.height === "100vh") {
-      console.log(document.getElementById("player").style.height);
+      document.getElementById('header').style.visibility = 'show';
+      document.getElementById('space').style.visibility = 'show';
       document.getElementById('player').style.height = '75vh';
       document.getElementById("fullscreen").innerHTML = "Fullscreen"
     } else {
-      console.log(document.getElementById("player").style.height);
+      document.getElementById('header').remove();
+      document.getElementById('space').remove();
       document.getElementById('player').style.height = '100vh';
       document.getElementById("fullscreen").innerHTML = "TV mode"
     }
