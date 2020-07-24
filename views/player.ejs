@@ -1,6 +1,6 @@
 <body onload="setTime()">
 
-  <header id="header" class="fixed-top ">
+  <header id="header" class="fixed-top position-absolute">
     <div class="container d-flex align-items-center justify-content-between">
       <h1 class="logo"><a href="/">Vibin'</a></h1>
       <nav class="nav-menu d-none d-lg-block">
@@ -81,13 +81,9 @@
 
   function fullScreen() {
     if (document.getElementById("player").style.height === "100vh") {
-      document.getElementById('header').style.visibility = 'show';
-      document.getElementById('space').style.visibility = 'show';
       document.getElementById('player').style.height = '75vh';
       document.getElementById("fullscreen").innerHTML = "Fullscreen"
     } else {
-      document.getElementById('header').remove();
-      document.getElementById('space').remove();
       document.getElementById('player').style.height = '100vh';
       document.getElementById("fullscreen").innerHTML = "TV mode"
     }
