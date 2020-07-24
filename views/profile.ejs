@@ -5,10 +5,20 @@
             <ul>
                 <li class="active"><a href="/dashboard/-1?page=1&limit=15">Home</a></li>
                 <li><a href="/calendar">Calendar</a></li>
-                <li><a href="/logout">Logout</a></li>
+                <li><a href="/upload">Upload</a></li>
             </ul>
         </nav>
-        <a href="/upload" class="get-started-btn scrollto">Upload</a>
+        <nav class="nav-menu d-none d-lg-block">
+            <ul>
+                <li class="drop-down">
+                    <img src="<%= userPhoto %>" height="40" width="40" style="border-radius: 50%;">
+                    <ul>
+                        <li><a href="/users/profile">Profile</a></li>
+                        <li><a href="/logout">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
     </div>
 </header>
 
@@ -16,27 +26,41 @@
     <div class="col-lg-6 m-auto">
         <h1 class="text-center mb-3"><i class="fas fa-user-plus"></i>Profile</h1>
         <%- include ('partials/messages') %>
-        <form action="/profile" method="POST">
+        <form action="/users/profile" method="POST">
+
+            <div class="form-group">
+                <label for="email">Photo</label><br>
+                <img src="<%= userPhoto %>" height="80" width="80">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="Enter The Email"
+                    value="<%= typeof email != 'undefined' ? email : '' %>" readonly />
+            </div>
 
             <div class="form-group">
                 <label for="firstname">Firstname</label>
-                <input type="firstname" id="firstname" name="firstname" class="form-control" placeholder="Enter The Firstname"
-                    value="<%= typeof firstName != 'undefined' ? firstName : '' %>" />
+                <input type="firstname" id="firstname" name="firstname" class="form-control"
+                    placeholder="Enter The Firstname" value="<%= typeof firstName != 'undefined' ? firstName : '' %>"
+                    readonly />
             </div>
 
             <div class="form-group">
                 <label for="lastname">Lastname</label>
-                <input type="lastname" id="lastname" name="lastname" class="form-control" placeholder="Enter The Lastname"
-                    value="<%= typeof lastName != 'undefined' ? lastName : '' %>" />
+                <input type="lastname" id="lastname" name="lastname" class="form-control"
+                    placeholder="Enter The Lastname" value="<%= typeof lastName != 'undefined' ? lastName : '' %>"
+                    readonly />
             </div>
 
             <div class="form-group">
                 <label for="username">Username</label>
                 <input type="username" id="username" name="username" class="form-control"
-                    placeholder="Enter The Username" value="<%= typeof username != 'undefined' ? username : '' %>" />
+                    placeholder="Enter The Username" value="<%= typeof username != 'undefined' ? username : '' %>"
+                    readonly />
             </div>
 
-            <div class="text-center"><button class="get-started-btn scrollto" type="submit">Update profile</button></div>
+            <!-- <div class="text-center"><button class="get-started-btn scrollto" type="submit">Update profile</button></div> -->
         </form>
     </div>
 </section>

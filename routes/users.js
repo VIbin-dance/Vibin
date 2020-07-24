@@ -57,19 +57,42 @@ router.post('/newsletter', (req, res) => {
 })
 
 router.get('/profile', ensureAuthenticated, (req, res) => {
-    const { firstname, lastname, username } = req.body;
-    let errors = [];
-
     User.findOne({ email: req.user._json.email }, (err, user) => {
         if (!user) {
             req.flash('error_msg', 'There is no such user');
             res.redirect('/dashboard?page=1&limit=15');
         } else {
             res.render('profile', {
+                userPhoto: req.session.passport.user.photos[0].value,
+                email: user.email,
                 firstName: user.name.givenName,
                 lastName: user.name.familyName,
                 username: user.username
             })
+        }
+    })
+})
+
+router.post('/profile', ensureAuthenticated, (req, res) => {
+    const { email, firstname, lastname, username } = req.body;
+    let errors = [];
+
+    User.findOneAndUpdate({ email: req.user._json.email }, { username: req.body.username }, (err, user) => {
+
+        if (!user) {
+            errors.push({ msg: 'There is no such user' });
+        }
+
+        if (email == '' || firstname == '' || lastname == '' || username == '') {
+            errors.push({ msg: 'Please fill in all fields' });
+        }
+
+        if (errors.length > 0) {
+            res.render('profile', { errors, userPhoto: req.session.passport.user.photos[0].value, email, firstname, lastname, username });
+        }
+        else {
+            req.flash('success_msg', 'Your profile has been updated!');
+            res.redirect('/users/profile');
         }
     })
 })
