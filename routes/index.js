@@ -78,6 +78,7 @@ router.get('/dashboard/:sort', ensureAuthenticated, (req, res) => {
       id[i] = result.docs[i].id;
     }
     res.render('dashboard', {
+      userPhoto: req.session.passport.user.photos[0].value,
       count: result.total,
       username: req.session.passport.user.displayName,
       videos: result.docs,
@@ -96,7 +97,9 @@ router.get('/dashboard/:sort', ensureAuthenticated, (req, res) => {
 });
 
 router.post('/dashboard', (req, res) => {
-  const { lengthCat, language, level, genre, purpose, mood } = req.body;
+  const { lengthCat, language, level, genre, purpose, mood, search } = req.body;
+
+  const searchQuery = new RegExp(escapeRegex(search), 'gi');
 
   const query = {
     $and: [
@@ -106,6 +109,10 @@ router.post('/dashboard', (req, res) => {
       { genre: genre },
       { purpose: purpose },
       { mood: mood }
+    ],
+    $or: [
+      { title: searchQuery },
+      { choreographer: searchQuery }
     ]
   }
 
@@ -130,6 +137,7 @@ router.post('/dashboard', (req, res) => {
         id[i] = result.docs[i].id;
       }
       res.render('results', {
+        userPhoto: req.session.passport.user.photos[0].value,
         count: result.total,
         username: req.session.passport.user.displayName,
         videos: result.docs,
@@ -164,6 +172,7 @@ router.get('/choreographer/:id', ensureAuthenticated, (req, res) => {
       id[i] = result[i].id;
     }
     res.render('choreographer', {
+      userPhoto: req.session.passport.user.photos[0].value,
       count: result.length,
       choreographer: req.params.id,
       videos: result,
@@ -197,6 +206,7 @@ router.get('/calendar', ensureAuthenticated, (req, res) => {
           idCal[i] = data.items[i].id
         }
         res.render('calendar', {
+          userPhoto: req.session.passport.user.photos[0].value,
           count: data.items.length,
           API_key: process.env.API_key,
           CALENDAR_ID: user.email,
@@ -239,6 +249,7 @@ router.get('/player/:id', (req, res) => {
       res.redirect('/dashboard?page=1&limit=15');
     } else {
       res.render('player', {
+        userPhoto: req.session.passport.user.photos[0].value,
         id: req.params.id,
         title: result.title,
         choreographer: result.choreographer,
@@ -289,7 +300,7 @@ router.post('/player/:id', (req, res) => {
           }
 
           if (errors.length > 0) {
-            res.render('player', { errors, title: result.title, choreographer: result.choreographer, id: id, level: result.level });
+            res.render('player', { errors, userPhoto: req.session.passport.user.photos[0].value, title: result.title, choreographer: result.choreographer, id: id, level: result.level });
           }
           else {
             req.flash('success_msg', 'The dance is now scheduled');
@@ -302,6 +313,7 @@ router.post('/player/:id', (req, res) => {
 
 router.get('/upload', ensureAuthenticated, onlyDevs, (req, res) => {
   res.render('upload', {
+    userPhoto: req.session.passport.user.photos[0].value,
     API_key: process.env.API_key,
   });
 })
@@ -316,7 +328,7 @@ router.post('/upload', (req, res) => {
   }
 
   if (errors.length > 0) {
-    res.render('upload', { errors, API_key: process.env.API_key, CLIENT_id: process.env.CLIENT_id, title, choreographer, thumbnail, url, id, publishedDate, length, lengthCat, language, level, genre, purpose, mood });
+    res.render('upload', { errors, userPhoto: req.session.passport.user.photos[0].value, API_key: process.env.API_key, CLIENT_id: process.env.CLIENT_id, title, choreographer, thumbnail, url, id, publishedDate, length, lengthCat, language, level, genre, purpose, mood });
   } else {
     Video.findOne({ url: url })
       .then(video => {
@@ -356,5 +368,9 @@ router.post('/upload', (req, res) => {
     }
   );
 })
+
+function escapeRegex(text) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
 
 module.exports = router;

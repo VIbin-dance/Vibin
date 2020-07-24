@@ -4,12 +4,22 @@
       <h1 class="logo"><a href="/">Vibin'</a></h1>
       <nav class="nav-menu d-none d-lg-block">
         <ul>
-          <li><a href="/dashboard/-1?page=1&limit=15">Home</a></li>
+          <li class="active"><a href="/dashboard/-1?page=1&limit=15">Home</a></li>
           <li><a href="/calendar">Calendar</a></li>
-          <li><a href="/logout">Logout</a></li>
+          <li><a href="/upload">Upload</a></li>
         </ul>
       </nav>
-      <a href="/upload" class="get-started-btn scrollto">Upload</a>
+      <nav class="nav-menu d-none d-lg-block">
+        <ul>
+          <li class="drop-down">
+            <img src="<%= userPhoto %>" height="40" width="40" style="border-radius: 50%;">
+            <ul>
+              <li><a href="/users/profile">Profile</a></li>
+              <li><a href="/logout">Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
     </div>
   </header>
 
