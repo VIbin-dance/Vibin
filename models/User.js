@@ -26,6 +26,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         require: true
     },
+    subscription: {
+        type: Boolean,
+        require: false
+    },
 });
 
 const User = mongoose.model('User', UserSchema);

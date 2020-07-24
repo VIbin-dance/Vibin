@@ -1,0 +1,114 @@
+<header id="header" class="fixed-top ">
+    <div class="container d-flex align-items-center justify-content-between">
+        <h1 class="logo"><a href="/">Vibin'</a></h1>
+        <nav class="nav-menu d-none d-lg-block">
+            <ul>
+                <li class="active"><a href="/dashboard/-1?page=1&limit=15">Home</a></li>
+                <li><a href="/calendar">Calendar</a></li>
+                <li><a href="/upload">Upload</a></li>
+            </ul>
+        </nav>
+        <nav class="nav-menu d-none d-lg-block">
+            <ul>
+                <li class="drop-down">
+                    <img src="<%= userPhoto %>" height="40" width="40" style="border-radius: 50%;">
+                    <ul>
+                        <li><a href="/users/profile">Profile</a></li>
+                        <li><a href="/logout">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<section id="upload">
+    <div class="col-lg-6 m-auto">
+        <h1 class="text-center mb-3"><i class="fas fa-user-plus"></i>Profile</h1>
+        <%- include ('partials/messages') %>
+        <form action="/users/profile" method="POST">
+
+            <div class="form-group">
+                <label for="email">Photo</label><br>
+                <img src="<%= userPhoto %>" height="80" width="80">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="Enter The Email"
+                    value="<%= typeof email != 'undefined' ? email : '' %>" readonly />
+            </div>
+
+            <div class="form-group">
+                <label for="firstname">Firstname</label>
+                <input type="firstname" id="firstname" name="firstname" class="form-control"
+                    placeholder="Enter The Firstname" value="<%= typeof firstName != 'undefined' ? firstName : '' %>"
+                    readonly />
+            </div>
+
+            <div class="form-group">
+                <label for="lastname">Lastname</label>
+                <input type="lastname" id="lastname" name="lastname" class="form-control"
+                    placeholder="Enter The Lastname" value="<%= typeof lastName != 'undefined' ? lastName : '' %>"
+                    readonly />
+            </div>
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="username" id="username" name="username" class="form-control"
+                    placeholder="Enter The Username" value="<%= typeof username != 'undefined' ? username : '' %>"
+                    readonly />
+            </div>
+
+            <!-- <div class="text-center"><button class="get-started-btn scrollto" type="submit">Update profile</button></div> -->
+        </form>
+    </div>
+</section>
+
+<footer id="footer">
+    <div class="footer-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 footer-contact">
+                    <h3>Vibin'</h3>
+                    <p>
+                        <strong>Phone:</strong> +81 080 4339 9251<br>
+                        <strong>Email:</strong> info@vibin.tokyo<br>
+                    </p>
+                </div>
+                <div class="col-lg-2 col-md-6 footer-links">
+                    <h4>Sitemap</h4>
+                    <ul>
+                        <li><i class="bx bx-chevron-right"></i> <a href="/dashboard/-1?page=1&limit=15">Home</a>
+                        </li>
+                        <li><i class="bx bx-chevron-right"></i> <a href="/calendar">Calendar</a></li>
+                        <li><i class="bx bx-chevron-right"></i> <a href="/upload">Upload</a></li>
+                        <li><i class="bx bx-chevron-right"></i> <a href="/terms-of-service">Terms of service</a>
+                        </li>
+                        <li><i class="bx bx-chevron-right"></i> <a href="/privacy-policy">Privacy policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-6 footer-newsletter">
+                    <h4>Join Our Newsletter</h4>
+                    <p>Get the latest news from Vibin'!</p>
+                    <form action="" method="post">
+                        <input type="email" name="email"><input type="submit" value="Subscribe">
+                    </form>
+                </div>
+                <div class="social-links text-center text-md-right pt-3 pt-md-0">
+                    <a href="https://www.facebook.com/Vibin-107436974343750" class="facebook" target="_blank"><i
+                            class="bx bxl-facebook"></i></a>
+                    <a href="https://www.instagram.com/vibin_dance/" class="instagram" target="_blank"><i
+                            class="bx bxl-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container d-md-flex py-4">
+        <div class="mr-md-auto text-center text-md-left">
+            <div class="copyright">
+                &copy; Copyright <strong><span>Vibin'</span></strong>. All Rights Reserved
+            </div>
+        </div>
+    </div>
+</footer>
