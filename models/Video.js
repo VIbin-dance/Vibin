@@ -7,7 +7,7 @@ const VideoSchema = new mongoose.Schema({
         required: true
     },
     choreographer: {
-        type: String,
+        type: Array,
         require: true
     },
     url: {

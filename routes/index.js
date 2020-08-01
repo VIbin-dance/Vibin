@@ -334,7 +334,7 @@ router.post('/upload', (req, res) => {
         if (video) {
           errors.push({ msg: 'The video is already registered!' });
           res.render('upload', {
-            errors, API_key: process.env.API_key
+            errors, userPhoto: req.session.passport.user.photos[0].value, API_key: process.env.API_key
           });
         } else {
           const newVideo = new Video({ title, choreographer, thumbnail, url, id, publishedDate, length, lengthCat, language, level, genre, purpose, mood });
