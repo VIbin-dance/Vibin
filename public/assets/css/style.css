@@ -1715,6 +1715,14 @@ section {
   color: #fff;
 }
 
+#log {
+  margin: auto;
+  margin-top:15%;
+  position: relative;
+  width:80%;
+  height: 63vh;
+}
+
 /* Results page */
 .results {
   padding-top:5%;

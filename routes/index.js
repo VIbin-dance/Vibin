@@ -9,7 +9,6 @@ const { onlyDevs } = require('../config/dev');
 
 const Video = require('../models/Video');
 const User = require('../models/User');
-const e = require('express');
 
 router.get('/', (req, res) => {
   if (req.session.passport) {
