@@ -22,6 +22,7 @@
   </div>
 </header>
 
+<div class="top-space"></div>
 <section id="results" class="results">
   <div class="container">
     <%- include ('partials/messages') %>
@@ -29,7 +30,7 @@
     <p>We have <%= count %> videos in total!</p>
     <div class="row">
       <% for(let i=0; i < videos.length; i++) { %>
-      <div class="col-lg-4">
+      <div class="col-lg-4 col-xs-6">
         <div class="box">
           <a href="/player/<%= id[i] %>">
             <img src="<%= thumbnail[i] %>">
@@ -43,6 +44,17 @@
     </div>
   </div>
 </section>
+
+<div class="container">
+  <nav class="fixed-bottom navbar navbar-dark bg-light justify-content-between align-items-center d-flex">
+    <ul>
+      <li class="active"><a href="/dashboard/-1?page=1&limit=15">Home</a></li>
+      <li><a href="/calendar">Calendar</a></li>
+      <li><a href="/upload">Upload</a></li>
+      <li><a href="/users/profile">Profile</a></li>
+    </ul>
+  </nav>
+</div>
 
 <footer id="footer">
   <div class="footer-top">

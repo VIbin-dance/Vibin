@@ -1,5 +1,5 @@
 <body onload="charCut()">
-  <header id="header" class="fixed-top ">
+  <header id="header" class="fixed-top">
     <div class="container d-flex align-items-center justify-content-between">
       <h1 class="logo"><a href="/">Vibin'</a></h1>
       <nav class="nav-menu d-none d-lg-block">
@@ -23,6 +23,7 @@
     </div>
   </header>
 
+  <div class="top-space"></div>
   <section id="results" class="results">
     <div class="container">
       <h2><span id="random"></span></h2><br>
@@ -37,7 +38,7 @@
               <img src="<%= thumbnail[i] %>">
             </a>
             <h4 id="title<%= i %>"><%= title[i] %></h4>
-            <a href="/choreographer/<%= choreographer[i] %>"><%= choreographer[i] %></a>
+            <a class="special" href="/choreographer/<%= choreographer[i] %>"><%= choreographer[i] %></a>
             <p><%= level[i] %></p>
           </div>
         </div>
@@ -45,6 +46,17 @@
       </div>
     </div>
   </section>
+
+  <div class="container">
+    <nav class="fixed-bottom navbar navbar-dark bg-light justify-content-between align-items-center d-flex">
+      <ul>
+        <li class="active"><a href="/dashboard/-1?page=1&limit=15">Home</a></li>
+        <li><a href="/calendar">Calendar</a></li>
+        <li><a href="/upload">Upload</a></li>
+        <li><a href="/users/profile">Profile</a></li>
+      </ul>
+    </nav>
+  </div>
 
   <footer id="footer">
     <div class="footer-top">

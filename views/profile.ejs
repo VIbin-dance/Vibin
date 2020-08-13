@@ -1,4 +1,4 @@
-<header id="header" class="fixed-top ">
+<header id="header" class="fixed-top">
     <div class="container d-flex align-items-center justify-content-between">
         <h1 class="logo"><a href="/">Vibin'</a></h1>
         <nav class="nav-menu d-none d-lg-block">
@@ -13,7 +13,7 @@
                 <li class="drop-down">
                     <img src="<%= userPhoto %>" height="40" width="40" style="border-radius: 50%;">
                     <ul>
-                        <li class="active"><a href="/users/profile">Profile</a></li>
+                        <li><a href="/users/profile">Profile</a></li>
                         <li><a href="/logout">Logout</a></li>
                     </ul>
                 </li>
@@ -22,50 +22,54 @@
     </div>
 </header>
 
-<section id="upload">
-    <div class="col-lg-6 m-auto">
-        <h1 class="text-center mb-3"><i class="fas fa-user-plus"></i>Profile</h1>
-        <%- include ('partials/messages') %>
-        <form action="/users/profile" method="POST">
+<div class="top-space"></div>
+<section id="results">
+    <div class="container">
+        <div class="col-lg-8 col-xs-12 m-auto">
+            <h1 class="text-center mb-3"><i class="fas fa-user-plus"></i>Profile</h1>
+            <%- include ('partials/messages') %>
+            <form action="/users/profile" method="POST">
 
-            <div class="form-group">
-                <label for="email">Photo</label><br>
-                <img src="<%= userPhoto %>" height="80" width="80">
-            </div>
+                <div class="form-group">
+                    <label for="email">Photo</label><br>
+                    <img src="<%= userPhoto %>" height="80" width="80">
+                </div>
 
-            <div class="form-group">
-                <label for="email">Email</label>
-                <h4><%= email %></h4>
-                <!-- <input type="email" id="email" name="email" class="form-control" placeholder="Enter The Email"
-                    value="<%= typeof email != 'undefined' ? email : '' %>" readonly /> -->
-            </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <h4><%= email %></h4>
+                </div>
 
-            <div class="form-group">
-                <label for="firstname">Firstname</label>
-                <h4><%= firstName %></h4>
-                <!-- <input type="firstname" id="firstname" name="firstname" class="form-control"
-                    placeholder="Enter The Firstname" value="<%= typeof firstName != 'undefined' ? firstName : '' %>"
-                    readonly /> -->
-            </div>
+                <div class="form-group">
+                    <label for="firstname">Firstname</label>
+                    <h4><%= firstName %></h4>
+                </div>
 
-            <div class="form-group">
-                <label for="lastname">Lastname</label>
-                <h4><%= lastName %></h4>
-                <!-- <input type="lastname" id="lastname" name="lastname" class="form-control"
-                    placeholder="Enter The Lastname" value="<%= typeof lastName != 'undefined' ? lastName : '' %>"
-                    readonly /> -->
-            </div>
+                <div class="form-group">
+                    <label for="lastname">Lastname</label>
+                    <h4><%= lastName %></h4>
+                </div>
 
-            <div class="form-group">
-                <label for="username">Username</label>
-                <h4><%= username %></h4>
-                <!-- <input type="username" id="username" name="username" class="form-control"
-                    placeholder="Enter The Username" value="<%= typeof username != 'undefined' ? username : '' %>"
-                    readonly /> -->
-            </div>
-        </form>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <h4><%= username %></h4>
+                </div>
+            </form>
+            <a class="btn btn-dark" href="/logout">Logout</a>
+        </div>
     </div>
 </section>
+
+<div class="container">
+    <nav class="fixed-bottom navbar navbar-dark bg-light justify-content-between align-items-center d-flex">
+        <ul>
+            <li class="active"><a href="/dashboard/-1?page=1&limit=15">Home</a></li>
+            <li><a href="/calendar">Calendar</a></li>
+            <li><a href="/upload">Upload</a></li>
+            <li><a href="/users/profile">Profile</a></li>
+        </ul>
+    </nav>
+</div>
 
 <footer id="footer">
     <div class="footer-top">
