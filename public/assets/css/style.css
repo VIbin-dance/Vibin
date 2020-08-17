@@ -1756,7 +1756,7 @@ section {
 }
 
 .videoPlayer .space a {
-  padding: 3vh 3vh 0vh 0vh;
+  padding: 2vh 1vh 0vh 1vh;
 }
 
 .videoPlayer h4 {
@@ -1779,9 +1779,8 @@ section {
   display: inline-block;
 }
 .videoPlayer form {
-  margin-top: 2.5vh;
+  margin-top: 2vh;
   height: 3rem;
-
 }
 
 @media (max-width: 992px) {
@@ -1789,18 +1788,23 @@ section {
     width:100%;
     height:75vh;
   }
-  .videoPlayer .text, .videoPlayer h4, .videoPlayer p, .videoPlayer .text a{
-    padding: 3px 0px 0px 8px;
+  .videoPlayer .text, .videoPlayer .text h4, .videoPlayer .text p, .videoPlayer .text a{
+    padding: 3px 5px 0px 5px;
     font-size: 20px;
     display: inline-block;
   }
-  .videoPlayer p, .videoPlayer .text a {
+  .videoPlayer .text p, .videoPlayer .text a {
     font-size: 14px;
   }
   .videoPlayer form {
     margin-top: 3vh;
     height: 4rem;
   }
+}
+
+.videoPlayer form input[type="submit"] {
+  -webkit-appearance: none;
+  border-radius: 0;
 }
 
 .iframeCal {
