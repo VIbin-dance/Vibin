@@ -4,7 +4,7 @@ module.exports = {
             return next();
           } else {
             req.flash('error_msg', "Sorry this is not yet available to users!");
-            res.redirect('/dashboard?page=1&limit=15');
+            res.redirect('/dashboard/-1?page=1&limit=15');
           }
     }
 }
