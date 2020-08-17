@@ -1,5 +1,5 @@
 <body onload="setTime()">
-  <header id="header" class="fixed-top position-absolute">
+  <header id="header" class="fixed-top position-relative">
     <div class="container d-flex align-items-center justify-content-between">
       <h1 class="logo"><a href="/">Vibin'</a></h1>
       <nav class="nav-menu d-none d-lg-block">
@@ -33,7 +33,7 @@
           <a href="/choreographer/<%= choreographer %>"><%= choreographer %></a>
           <p><%= level[0] %></p>
         </div>
-        <div class="nav-menu space col-lg-3 col-xs-3 d-flex justify-content-center">
+        <div class="nav-menu bg-light space col-lg-3 col-xs-3 d-flex justify-content-center">
           <ul>
             <li><a id="speedup" onclick="speedUp()" type="button">
                 <svg width="2.5em" height="2.5em" viewBox="0 0 16 16" class="bi bi-chevron-double-up"
@@ -79,7 +79,7 @@
         </div>
         <form action="/player/:id" method="POST" class="col-lg-3 col-xs-3 d-flex justify-content-center">
           <input type="id" id="id" name="id" class="form-control" placeholder="Enter The ID"
-          value="<%= typeof id != 'undefined' ? id : '' %>" hidden />
+            value="<%= typeof id != 'undefined' ? id : '' %>" hidden />
           <input type="datetime-local" id="date" name="date" class="form-control" />
           <input type="submit" value="Add">
         </form>
@@ -97,7 +97,7 @@
                 <path fill-rule="evenodd"
                   d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z" />
               </svg>
-            </a></li>
+            </a>Home</li>
           <li><a href="/calendar">
               <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-calendar-plus" fill="currentColor"
                 xmlns="http://www.w3.org/2000/svg">
@@ -109,7 +109,7 @@
                 <path fill-rule="evenodd"
                   d="M3.5 0a.5.5 0 0 1 .5.5V1a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 .5-.5zm9 0a.5.5 0 0 1 .5.5V1a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 .5-.5z" />
               </svg>
-            </a></li>
+            </a>Calendar</li>
           <li><a href="/upload">
               <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-upload" fill="currentColor"
                 xmlns="http://www.w3.org/2000/svg">
@@ -117,7 +117,7 @@
                   d="M.5 8a.5.5 0 0 1 .5.5V12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8.5a.5.5 0 0 1 1 0V12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V8.5A.5.5 0 0 1 .5 8zM5 4.854a.5.5 0 0 0 .707 0L8 2.56l2.293 2.293A.5.5 0 1 0 11 4.146L8.354 1.5a.5.5 0 0 0-.708 0L5 4.146a.5.5 0 0 0 0 .708z" />
                 <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0v-8A.5.5 0 0 1 8 2z" />
               </svg>
-            </a></li>
+            </a>Upload</li>
           <li><a href="/users/profile">
               <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-file-person" fill="currentColor"
                 xmlns="http://www.w3.org/2000/svg">
@@ -126,7 +126,7 @@
                 <path d="M13.784 14c-.497-1.27-1.988-3-5.784-3s-5.287 1.73-5.784 3h11.568z" />
                 <path fill-rule="evenodd" d="M8 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
               </svg>
-            </a></li>
+            </a>User</li>
         </ul>
       </nav>
     </div>
@@ -145,7 +145,9 @@
       videoId: '<%= id %>',
       playerVars: {
         rel: 0,
-        playsinline: 1
+        playsinline: 1,
+        modestbranding: 1,
+        showinfo: 0
       }
     });
   }
@@ -167,11 +169,9 @@
   function fullScreenOn() {
     if (document.getElementById("player").style.height === "100vh") {
       document.getElementById("header").hidden = false;
-      document.getElementById('player').style.marginTop = '7vh';
       document.getElementById('player').style.height = '75vh';
     } else {
       document.getElementById("header").hidden = true;
-      document.getElementById('player').style.marginTop = '0vh';
       document.getElementById('player').style.height = '100vh';
     }
   }
