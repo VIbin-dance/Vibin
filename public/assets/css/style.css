@@ -1802,9 +1802,26 @@ section {
   }
 }
 
+.videoPlayer form input[type="datetime-local"] {
+  border: 0;
+  padding: 4px 8px;
+  width: calc(100% - 100px);
+}
+
 .videoPlayer form input[type="submit"] {
-  -webkit-appearance: none;
-  border-radius: 0;
+  position: relative;
+  top: -1px;
+  right: -1px;
+  bottom: -1px;
+  border: 0;
+  background: none;
+  font-size: 16px;
+  padding: 0 20px;
+  background: #EB5160;
+  color: #fff;
+  transition: 0.3s;
+  border-radius: 50px;
+  box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
 }
 
 .iframeCal {

@@ -80,8 +80,9 @@
         <form action="/player/:id" method="POST" class="col-lg-3 col-xs-3 d-flex justify-content-center">
           <input type="id" id="id" name="id" class="form-control" placeholder="Enter The ID"
             value="<%= typeof id != 'undefined' ? id : '' %>" hidden />
-          <input type="datetime-local" id="date" name="date" class="form-control" />
+          <input type="datetime-local" id="date" name="date" class="form-control">
           <input type="submit" value="Add">
+          <!-- <button class="button" type="submit">Add</button> -->
         </form>
       </div>
     </div>
