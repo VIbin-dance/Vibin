@@ -24,16 +24,18 @@
   </header>
 
   <div class="videoPlayer">
-    <div id="player"></div>
+    <div id="videoContainer">
+      <div id="player"></div>
+    </div>
     <div class="container-fluid">
       <%- include ('partials/messages') %>
       <div class="row">
-        <div class="text col-lg-6 col-xs-6">
+        <div class="text col-sm-6 col-md-6 col-lg-6 col-xl-6">
           <h4><%= title %></h4>
           <a href="/choreographer/<%= choreographer %>"><%= choreographer %></a>
           <p><%= level[0] %></p>
         </div>
-        <div class="nav-menu space col-lg-3 col-xs-3 d-flex justify-content-center">
+        <div class="nav-menu space col-sm-3 col-md-3 col-lg-3 col-xl-3 d-flex justify-content-around">
           <ul>
             <li><a id="speedup" onclick="speedUp()">
                 <svg width="2.5em" height="2.5em" viewBox="0 0 16 16" class="bi bi-chevron-double-up"
@@ -77,12 +79,12 @@
             </li>
           </ul>
         </div>
-        <form action="/player/:id" method="POST" class="col-lg-3 col-xs-3 d-flex justify-content-center">
+        <form action="/player/:id" method="POST" class="col-sm-3 col-md-3 col-lg-3 col-xl-3 d-flex justify-content-center">
           <input type="id" id="id" name="id" class="form-control" placeholder="Enter The ID"
             value="<%= typeof id != 'undefined' ? id : '' %>" hidden />
           <input type="datetime-local" id="date" name="date" class="form-control">
-          <input type="submit" value="Add">
-          <!-- <button class="button" type="submit">Add</button> -->
+          <!-- <input type="submit" value="Add"> -->
+          <button class="button" type="submit">Add</button>
         </form>
       </div>
     </div>
@@ -144,6 +146,8 @@
   function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
       videoId: '<%= id %>',
+      height: '100%',
+      width: '100%',
       playerVars: {
         rel: 0,
         playsinline: 1,
@@ -170,9 +174,11 @@
   function fullScreenOn() {
     if (document.getElementById("player").style.height === "100vh") {
       document.getElementById("header").hidden = false;
+      document.getElementById('videoContainer').style.height = '75vh';
       document.getElementById('player').style.height = '75vh';
     } else {
       document.getElementById("header").hidden = true;
+      document.getElementById('videoContainer').style.height = '100vh';
       document.getElementById('player').style.height = '100vh';
     }
   }

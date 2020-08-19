@@ -1,3 +1,6 @@
+<head>
+  <link rel="canonical" href="https://www.vibin.tokyo/dashboard/-1?page=1&limit=15">
+</head>
 <body onload="charCut()">
   <header id="header" class="fixed-top">
     <div class="container d-flex align-items-center justify-content-between">
@@ -12,7 +15,7 @@
       <nav class="nav-menu d-none d-lg-block">
         <ul>
           <li class="drop-down">
-            <img src="<%= userPhoto %>" height="40" width="40" style="border-radius: 50%;">
+            <img src="<%= userPhoto %>" height="40" width="40" style="border-radius: 50%;" alt="user profile photo">
             <ul>
               <li><a href="/users/profile">Profile</a></li>
               <li><a href="/logout">Logout</a></li>
@@ -127,7 +130,7 @@
         <div class="col-lg-4 col-xs-6">
           <div class="box">
             <a href="/player/<%= id[i] %>">
-              <img src="<%= thumbnail[i] %>">
+              <img src="<%= thumbnail[i] %>" alt="thumbnail">
             </a>
             <h4 id="title<%= i %>"><%= title[i] %></h4>
             <a class="special" href="/choreographer/<%= choreographer[i] %>"><%= choreographer[i] %></a>
