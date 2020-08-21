@@ -251,17 +251,17 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Search bar */
 /* Search bar */
-#search .search-bar {
+#searchBar .search-bar {
   font-size: 15px;
   position: relative;
   margin:0;
 }
-#search .form-group {
+#searchBar .form-group {
   display: inline-block;
 }
 
 
-#search .search-bar form {
+#searchBar .search-bar form {
   position: relative;
   text-align: center;
 }

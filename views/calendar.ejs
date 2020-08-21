@@ -11,7 +11,7 @@
         <nav class="nav-menu d-none d-lg-block">
             <ul>
                 <li class="drop-down">
-                    <img src="<%= userPhoto %>" height="40" width="40" style="border-radius: 50%;">
+                    <img src="<%= userPhoto %>" height="40" width="40" style="border-radius: 50%;" alt="user photo">
                     <ul>
                         <li><a href="/users/profile">Profile</a></li>
                         <li><a href="/logout">Logout</a></li>
@@ -24,7 +24,7 @@
 
 <section id="calendar" class="calendar">
     <div class="text-center iframeCal">
-        <iframe src="https://calendar.google.com/calendar/embed?src=<%= CALENDAR_ID %>&ctz=Asia%2FTokyo"
+        <iframe title="Google Calendar" src="https://calendar.google.com/calendar/embed?src=<%= CALENDAR_ID %>&ctz=Asia%2FTokyo"
             style="border: 0" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>
     </div>
     <br>
