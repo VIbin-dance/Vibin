@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
+    id: mongoose.ObjectId,
     googleId: {
         type: String,
         require: true,
@@ -30,6 +31,11 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         require: false
     },
+    following: {
+        type: Array,
+        require: false,
+        unique: true
+    }
 });
 
 const User = mongoose.model('User', UserSchema);

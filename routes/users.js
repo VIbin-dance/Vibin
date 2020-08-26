@@ -3,7 +3,7 @@ const router = express.Router();
 const nodemailer = require('nodemailer');
 const passport = require('passport');
 const { ensureAuthenticated } = require('../config/auth');
-
+const mongoose = require('mongoose');
 
 const User = require('../models/User');
 const Video = require('../models/Video');
@@ -63,7 +63,7 @@ router.get('/profile', ensureAuthenticated, (req, res) => {
     User.findOne({ email: req.user._json.email }, (err, user) => {
         if (!user) {
             req.flash('error_msg', 'There is no such user');
-            res.redirect('/dashboard?page=1&limit=15');
+            res.redirect('/dashboard/-1?page=1&limit=15');
         } else {
             res.render('profile', {
                 userPhoto: req.session.passport.user.photos[0].value,
@@ -98,6 +98,47 @@ router.post('/profile', ensureAuthenticated, (req, res) => {
             res.redirect('/users/profile');
         }
     })
+})
+
+router.get('/:id', ensureAuthenticated, (req, res) => {
+    User.findOne({ _id: req.params.id }, (err, user) => {
+        if (!user) {
+            req.flash('error_msg', 'There is no such user');
+            res.redirect('/dashboard/-1?page=1&limit=15');
+        } else {
+            res.render('users', {
+                id: req.params.id,
+                userPhoto: req.session.passport.user.photos[0].value,
+                firstName: user.name.givenName,
+                lastName: user.name.familyName,
+                username: user.username
+            });
+        }
+    })
+})
+
+router.post('/:id', ensureAuthenticated, (req, res) => {
+    const { id } = req.body;
+
+    User.findOneAndUpdate({ email: req.user.emails[0].value }, { $push: { following: [id] } }, (err, user) => {
+        if (!user) {
+            req.flash('error_msg', 'There is no such user');
+            res.redirect('/dashboard/-1?page=1&limit=15');
+        } else {
+
+            console.log(user._id);
+            console.log(user);
+        }
+    })
+
+    // User.findOne({ googleId: req.user.id}, (err, user) => {
+    //     if (!user) {
+    //         req.flash('error_msg', 'There is no such user');
+    //         res.redirect('/dashboard/-1?page=1&limit=15');
+    //     } else {
+    //         console.log(user);
+    //     }
+    // })
 })
 
 module.exports = router;
