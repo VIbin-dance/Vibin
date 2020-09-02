@@ -34,7 +34,10 @@ const UserSchema = new mongoose.Schema({
     following: {
         type: Array,
         require: false,
-        unique: true
+    },
+    follower: {
+        type: Array,
+        require: false,
     }
 });
 

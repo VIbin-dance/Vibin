@@ -107,6 +107,8 @@ router.get('/:id', ensureAuthenticated, (req, res) => {
             res.redirect('/dashboard/-1?page=1&limit=15');
         } else {
             res.render('users', {
+                followingCount: user.following.length,
+                followerCount: user.follower.length,
                 id: req.params.id,
                 userPhoto: req.session.passport.user.photos[0].value,
                 firstName: user.name.givenName,

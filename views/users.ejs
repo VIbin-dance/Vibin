@@ -29,23 +29,14 @@
             <h1 class="text-center mb-3"><i class="fas fa-user-plus"></i><%= username %></h1>
             <%- include ('partials/messages') %>
 
-            <div class="form-group">
-                <label for="firstname">Firstname</label>
-                <h4><%= firstName %></h4>
+            <div class="justify-content-between">
+                <p href="#" class="justify-content-between">Follower:<%= followerCount %></p>
+                <p href="#" class="justify-content-between">Following:<%= followingCount %></p>
+                <p href="#" class="justify-content-between">Bio</p>
             </div>
 
-            <div class="form-group">
-                <label for="lastname">Lastname</label>
-                <h4><%= lastName %></h4>
-            </div>
-
-            <div class="form-group">
-                <label for="username">Username</label>
-                <h4><%= username %></h4>
-            </div>
-
-            <form action=":id" method="POST">
-                <input type="id" id="id" name="id" value="<%= typeof id != 'undefined' ? id : '' %>" />
+            <form action=":id" method="POST" class="text-center">
+                <input type="id" id="id" name="id" value="<%= typeof id != 'undefined' ? id : '' %>" hidden/>
                 <input class="chosen-value" type="submit" style="background-color: #ff7583;" value="Follow">
             </form>
 
