@@ -25,19 +25,35 @@
 <br>
 <section id="results">
     <div class="container">
-        <div class="col-lg-8 col-xs-12 m-auto text-center">
+        <div class="col-lg-8 col-xs-12 m-auto">
             <%- include ('partials/messages') %>
-            <img src="<%= userPhoto %>" height="70" width="70" style="border-radius: 50%;" alt="user photo">
-            <h2 class="text-center mb-3"><i class="fas fa-user-plus"></i><%= username %></h2>
+            <h1 class="text-center mb-3"><i class="fas fa-user-plus"></i><%= username %></h1>
+            <form action="/users/profile/edit" method="POST">
 
-            <div class="text-center">
-                <p href="#" class="justify-content-between">Follower:<%= followerCount %></p>
-                <p href="#" class="justify-content-between">Following:<%= followingCount %></p>
-                <a href="/users/profile/edit" class="chosen-value" type="button">Edit profile</a>
-                <p href="#" class="text-center"><%= bio %></p>
-            </div>
+                <div class="form-group">
+                    <label for="email">Photo</label><br>
+                    <img src="<%= userPhoto %>" height="80" width="80" alt="user photo">
+                </div>
 
-            <a class="btn btn-dark" href="/logout">Logout</a>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="Enter The Email"
+                      value="<%= typeof email != 'undefined' ? email : '' %>" readonly/>
+                  </div>
+
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="username" id="username" name="username" class="form-control" placeholder="Enter The Username"
+                      value="<%= typeof username != 'undefined' ? username : '' %>" />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="bio">Bio</label>
+                    <input type="bio" id="bio" name="bio" class="form-control" placeholder="Enter Your Bio"
+                      value="<%= typeof bio != 'undefined' ? bio : '' %>" />
+                  </div>
+                  <div class="text-center"><button class="button" type="submit">Update</button></div>
+            </form>
         </div>
     </div>
 </section>

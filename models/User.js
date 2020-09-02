@@ -38,6 +38,10 @@ const UserSchema = new mongoose.Schema({
     follower: {
         type: Array,
         require: false,
+    },
+    bio: {
+        type: String,
+        require: false,
     }
 });
 
