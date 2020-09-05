@@ -103,8 +103,6 @@ router.post('/profile/edit', ensureAuthenticated, (req, res) => {
     const { email, username, bio } = req.body;
     let errors = [];
 
-    console.log(req.body);
-
     const query = {
         $set: {
             username: username,
@@ -181,6 +179,80 @@ router.post('/:id', ensureAuthenticated, (req, res) => {
     } catch (err) {
         console.log(err);
     }
+})
+
+router.get('/:type/:id', ensureAuthenticated, (req, res) => {
+    User.findOne({ _id: req.params.id }, async (err, user) => {
+        if (!user) {
+            req.flash('error_msg', 'There is no such user');
+            res.redirect('/dashboard/-1?page=1&limit=15');
+        }
+
+        if (req.params.type == 'following') {
+            const followUsername = [];
+            const followID = [];
+
+            for (let i = 0; i < user.following.length; i++) {
+
+                // followUsername[i] = await User.findOne({ _id: user.following[i] }, 'username').exec();
+                // followID[i] = await User.findOne({ _id: user.following[i] }, '_id').exec();
+
+                User.findById(user.following[i], (err, following) => {
+                    // followUsername = following.username
+                    console.log(following.username);
+                })
+
+                // following[i] = await User.findById(user.following[i], 'username').exec();
+                // followingID[i] = await User.findById(user.following[i], '_id').exec();
+                // console.log(following[i]);
+                // console.log(followingID[i]);
+
+                // following[i] = User.findById(user.following[i]);
+                // User.findOne({ _id: user.following[i] }, (err, following) => {
+                //     following[i] = following.username
+                //     console.log(following[i]);
+
+                //     res.render('follow', {
+                //         follow: following,
+                //         type: req.params.type,
+                //         followCount: user.following.length,
+                //         userPhoto: req.session.passport.user.photos[0].value,
+                //         username: user.username
+                //     });
+                // })
+            }
+            res.render('follow', {
+                follow: following,
+                followUsername: followUsername,
+                followID: followID,
+                type: req.params.type,
+                followCount: user.following.length,
+                userPhoto: req.session.passport.user.photos[0].value,
+                username: user.username
+            });
+        }
+
+        if (req.params.type == 'follower') {
+            const follower = [];
+
+            for (let i = 0; i < user.follower.length; i++) {
+                User.findOne({ _id: user.follower[i] }, (err, follower) => {
+                    follower[i] = follower[i];
+                })
+            }
+            res.render('follow', {
+                follow: follower,
+                type: req.params.type,
+
+                followCount: user.follower.length,
+
+                userPhoto: req.session.passport.user.photos[0].value,
+                username: user.username
+            });
+        } else if (err) {
+            console.log(err);
+        }
+    })
 })
 
 module.exports = router;
