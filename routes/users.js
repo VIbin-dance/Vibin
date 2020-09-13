@@ -89,7 +89,7 @@ router.get('/profile/edit', ensureAuthenticated, (req, res) => {
                 followingCount: user.following.length,
                 followerCount: user.follower.length,
                 bio: user.bio,
-                userPhoto: req.session.passport.user.photos[0].value,
+                userPhoto: user.userPhoto,
                 email: user.email,
                 firstName: user.name.givenName,
                 lastName: user.name.familyName,
@@ -146,6 +146,7 @@ router.get('/:id', ensureAuthenticated, (req, res) => {
                     following: user._id,
                     follower: currentUser._id,
                     userPhoto: req.session.passport.user.photos[0].value,
+                    proPhoto: user.userPhoto,
                     firstName: user.name.givenName,
                     lastName: user.name.familyName,
                     username: user.username
@@ -198,6 +199,7 @@ router.get('/:type/:id', ensureAuthenticated, (req, res) => {
             res.render('follow', {
                 follow: following,
                 type: req.params.type,
+                proPhoto: user.userPhoto,
                 followCount: user.following.length,
                 userPhoto: req.session.passport.user.photos[0].value,
                 username: user.username
@@ -216,6 +218,7 @@ router.get('/:type/:id', ensureAuthenticated, (req, res) => {
             res.render('follow', {
                 follow: follower,
                 type: req.params.type,
+                proPhoto: user.userPhoto,
                 followCount: user.follower.length,
                 userPhoto: req.session.passport.user.photos[0].value,
                 username: user.username

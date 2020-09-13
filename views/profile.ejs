@@ -27,17 +27,14 @@
     <div class="container">
         <div class="col-lg-8 col-xs-12 m-auto text-center">
             <%- include ('partials/messages') %>
-            <img src="<%= userPhoto %>" height="70" width="70" style="border-radius: 50%;" alt="user photo">
-            <h2 class="text-center mb-3"><i class="fas fa-user-plus"></i><%= username %></h2>
-
-            <div class="text-center">
-                <p href="#" class="justify-content-between">Follower:<%= followerCount %></p>
-                <p href="#" class="justify-content-between">Following:<%= followingCount %></p>
-                <a href="/users/profile/edit" class="chosen-value" type="button">Edit profile</a>
-                <p href="#" class="text-center"><%= bio %></p>
-            </div>
-
+            <img src="<%= userPhoto %>" height="100" width="100" style="border-radius: 50%; margin: 20px;" alt="user photo">
+            <a class="btn btn-danger" href="/users/profile/edit">Edit profile</a>
+            <h2 class="mb-3"><i class="fas fa-user-plus"></i><%= username %></h2>
+            <p><%= followerCount %> followers</p>
+            <p><%= followingCount %> following</p>
+            <p><%= bio %></p>
             <a class="btn btn-dark" href="/logout">Logout</a>
+
         </div>
     </div>
 </section>

@@ -11,6 +11,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         require: true
     },
+    userPhoto: {
+        type: String,
+        require: true
+    },
     name: {
         familyName: {
             type: String,

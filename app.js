@@ -56,6 +56,7 @@ passport.use(new GoogleStrategy({
             username:  profile.displayName,
             email:  profile.emails[0].value,
             name: { familyName: profile.name.familyName, givenName: profile.name.givenName },
+            userPhoto: profile.photos[0].value,
             googleId: profile.id,
             accessToken: accessToken
         }, {upsert: true, new: true, setDefaultsOnInsert: true }, (err, user)  => {
