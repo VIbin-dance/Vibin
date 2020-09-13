@@ -27,34 +27,22 @@
     <div class="container">
         <div class="col-lg-8 col-xs-12 m-auto text-center">
             <%- include ('partials/messages') %>
-            <img src="<%= proPhoto %>"
-                height="70" width="70" style="border-radius: 50%;" alt="user photo">
-            <h2 class="text-center mb-3"><i class="fas fa-user-plus"></i><%= username %></h2>
-
-            <div class="text-center">
-                <a href="/users/follower/<%= following %>" class="justify-content-between">Follower:<%= followerCount %></a>
-                <a href="/users/following/<%= following %>" class="justify-content-between">Following:<%= followingCount %></a>
-
-                <% if (following.toString() == follower.toString()) { %>
-                <a href="/users/profile/edit" class="chosen-value" type="button">Edit profile</a><br>
+            <img src="<%= proPhoto %>" height="100" width="100" style="border-radius: 50%; margin: 20px;" alt="user photo">
+            <% if (following.toString() == follower.toString()) { %>
+                <a class="btn btn-danger" href="/users/profile/edit">Edit profile</a>
                 <% } else if (following.toString() != follower.toString()) { %>
-
-                <form action=":id" method="POST" class="text-center">
+                <form action=":id" method="POST">
                     <% const action = currentUser.following.includes(user._id) ? 'unfollow' : 'follow'; %>
-                    <input type="following" id="following" name="following"
-                        value="<%= typeof following != 'undefined' ? following : '' %>" hidden />
-                    <input type="follower" id="follower" name="follower"
-                        value="<%= typeof follower != 'undefined' ? follower : '' %>" hidden />
-                    <input type="action" id="action" name="action"
-                        value="<%= typeof action != 'undefined' ? action : '' %>" hidden />
-                    <input class="chosen-value" type="submit" value="<%= action %>">
+                    <input type="following" id="following" name="following" value="<%= typeof following != 'undefined' ? following : '' %>" hidden />
+                    <input type="follower" id="follower" name="follower" value="<%= typeof follower != 'undefined' ? follower : '' %>" hidden />
+                    <input type="action" id="action" name="action" value="<%= typeof action != 'undefined' ? action : '' %>" hidden />
+                    <input class="btn btn-danger" type="submit" value="<%= action %>">
                 </form>
                 <% } %>
-
-                <br>
-                <p href="#" class="text-center"><%= bio %></p>
-            </div>
-
+            <h2 class="mb-3"><i class="fas fa-user-plus"></i><%= username %></h2>
+            <a href="/users/follower/<%= following %>"><%= followerCount %> followers</a>
+            <a href="/users/following/<%= following %>"><%= followingCount %> following</a>
+            <p><%= bio %></p>
         </div>
     </div>
 </section>
