@@ -189,63 +189,34 @@ router.get('/:type/:id', ensureAuthenticated, (req, res) => {
         }
 
         if (req.params.type == 'following') {
-            const followUsername = [];
-            const followID = [];
+            const following = [];
 
             for (let i = 0; i < user.following.length; i++) {
-
-                // followUsername[i] = await User.findOne({ _id: user.following[i] }, 'username').exec();
-                // followID[i] = await User.findOne({ _id: user.following[i] }, '_id').exec();
-
-                User.findById(user.following[i], (err, following) => {
-                    // followUsername = following.username
-                    console.log(following.username);
-                })
-
-                // following[i] = await User.findById(user.following[i], 'username').exec();
-                // followingID[i] = await User.findById(user.following[i], '_id').exec();
-                // console.log(following[i]);
-                // console.log(followingID[i]);
-
-                // following[i] = User.findById(user.following[i]);
-                // User.findOne({ _id: user.following[i] }, (err, following) => {
-                //     following[i] = following.username
-                //     console.log(following[i]);
-
-                //     res.render('follow', {
-                //         follow: following,
-                //         type: req.params.type,
-                //         followCount: user.following.length,
-                //         userPhoto: req.session.passport.user.photos[0].value,
-                //         username: user.username
-                //     });
-                // })
+                following[i] = await User.findById(user.following[i], 'username').exec();
             }
+
             res.render('follow', {
                 follow: following,
-                followUsername: followUsername,
-                followID: followID,
                 type: req.params.type,
                 followCount: user.following.length,
                 userPhoto: req.session.passport.user.photos[0].value,
                 username: user.username
             });
+        } else if (err) {
+            console.log(err);
         }
 
         if (req.params.type == 'follower') {
             const follower = [];
 
             for (let i = 0; i < user.follower.length; i++) {
-                User.findOne({ _id: user.follower[i] }, (err, follower) => {
-                    follower[i] = follower[i];
-                })
+                follower[i] = await User.findById(user.follower[i], 'username').exec();
             }
+
             res.render('follow', {
                 follow: follower,
                 type: req.params.type,
-
                 followCount: user.follower.length,
-
                 userPhoto: req.session.passport.user.photos[0].value,
                 username: user.username
             });
