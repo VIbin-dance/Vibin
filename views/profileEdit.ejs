@@ -11,7 +11,14 @@
         <nav class="nav-menu d-none d-lg-block">
             <ul>
                 <li class="drop-down">
+
+                    <% if (typeof userPhotoDef.data != "undefined") { %>
+                    <img src="data:image/<%=userPhotoDef.contentType%>;base64, <%=userPhotoDef.data.toString('base64')%>"
+                        height="40" width="40" style="border-radius: 50%;" alt="user photo">
+                    <% } else { %>
                     <img src="<%= userPhoto %>" height="40" width="40" style="border-radius: 50%;" alt="user photo">
+                    <% } %>
+
                     <ul>
                         <li><a href="/users/profile">Profile</a></li>
                         <li><a href="/logout">Logout</a></li>
@@ -28,31 +35,40 @@
         <div class="col-lg-8 col-xs-12 m-auto">
             <%- include ('partials/messages') %>
             <h1 class="text-center mb-3"><i class="fas fa-user-plus"></i><%= username %></h1>
-            <form action="/users/profile/edit" method="POST">
+            <form action="/users/profile/edit" method="POST" enctype="multipart/form-data">
 
                 <div class="form-group">
                     <label for="email">Photo</label><br>
+
+                    <% if (typeof userPhotoDef.data != "undefined") { %>
+                    <img src="data:image/<%=userPhotoDef.contentType%>;base64, <%=userPhotoDef.data.toString('base64')%>"
+                        height="80" width="80" alt="user photo">
+                    <% } else { %>
                     <img src="<%= userPhoto %>" height="80" width="80" alt="user photo">
+                    <% } %>
+                    <input type="file" id="userPhotoDef" name="userPhotoDef" />
                 </div>
 
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" class="form-control" placeholder="Enter The Email"
-                      value="<%= typeof email != 'undefined' ? email : '' %>" readonly/>
-                  </div>
+                        value="<%= typeof email != 'undefined' ? email : '' %>" readonly />
+                </div>
 
                 <div class="form-group">
                     <label for="username">Username</label>
-                    <input type="username" id="username" name="username" class="form-control" placeholder="Enter The Username"
-                      value="<%= typeof username != 'undefined' ? username : '' %>" />
-                  </div>
+                    <input type="username" id="username" name="username" class="form-control"
+                        placeholder="Enter The Username"
+                        value="<%= typeof username != 'undefined' ? username : '' %>" />
+                </div>
 
-                  <div class="form-group">
+                <div class="form-group">
                     <label for="bio">Bio</label>
                     <input type="bio" id="bio" name="bio" class="form-control" placeholder="Enter Your Bio"
-                      value="<%= typeof bio != 'undefined' ? bio : '' %>" />
-                  </div>
-                  <div class="text-center"><input class="chosen-value" type="submit" style="background-color: #ff7583;" value="Update"></div>
+                        value="<%= typeof bio != 'undefined' ? bio : '' %>" />
+                </div>
+                <div class="text-center"><input class="chosen-value" type="submit" style="background-color: #ff7583;"
+                        value="Update"></div>
             </form>
         </div>
     </div>

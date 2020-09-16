@@ -4,6 +4,11 @@ const nodemailer = require('nodemailer');
 const passport = require('passport');
 const { ensureAuthenticated } = require('../config/auth');
 const mongoose = require('mongoose');
+const multer = require('multer');
+
+const storage = multer.memoryStorage()
+
+const upload = multer({ storage: storage });
 
 const User = require('../models/User');
 const Video = require('../models/Video');
@@ -66,10 +71,12 @@ router.get('/profile', ensureAuthenticated, (req, res) => {
             res.redirect('/dashboard/-1?page=1&limit=15');
         } else {
             res.render('profile', {
+                user: user,
                 followingCount: user.following.length,
                 followerCount: user.follower.length,
                 bio: user.bio,
-                userPhoto: req.session.passport.user.photos[0].value,
+                userPhoto: user.userPhoto,
+                userPhotoDef: user.userPhotoDef,
                 email: user.email,
                 firstName: user.name.givenName,
                 lastName: user.name.familyName,
@@ -86,10 +93,12 @@ router.get('/profile/edit', ensureAuthenticated, (req, res) => {
             res.redirect('/dashboard/-1?page=1&limit=15');
         } else {
             res.render('profileEdit', {
+                user: user,
                 followingCount: user.following.length,
                 followerCount: user.follower.length,
                 bio: user.bio,
                 userPhoto: user.userPhoto,
+                userPhotoDef: user.userPhotoDef,
                 email: user.email,
                 firstName: user.name.givenName,
                 lastName: user.name.familyName,
@@ -99,14 +108,32 @@ router.get('/profile/edit', ensureAuthenticated, (req, res) => {
     })
 })
 
-router.post('/profile/edit', ensureAuthenticated, (req, res) => {
-    const { email, username, bio } = req.body;
+router.post('/profile/edit', ensureAuthenticated, upload.single('userPhotoDef'), (req, res) => {
+    const { username, bio } = req.body;
+    let userPhotoDef = {};
+    let query = {};
     let errors = [];
 
-    const query = {
-        $set: {
-            username: username,
-            bio: bio
+    if (req.file != undefined) {
+        userPhotoDef = {
+            data: req.file.buffer,
+            originalname: req.file.originalname,
+            contentType: req.file.mimetype
+        };
+
+        query = {
+            $set: {
+                userPhotoDef: userPhotoDef,
+                username: username,
+                bio: bio
+            }
+        }
+    } else if (req.file == undefined) {
+        query = {
+            $set: {
+                username: username,
+                bio: bio
+            }
         }
     }
 
@@ -121,7 +148,9 @@ router.post('/profile/edit', ensureAuthenticated, (req, res) => {
         }
 
         if (errors.length > 0) {
-            res.render('profile', { errors, userPhoto: req.session.passport.user.photos[0].value, email, username, bio });
+            res.render('profile', {
+                errors, userPhoto, userPhotoDef, email, username, bio
+            });
         }
         else {
             req.flash('success_msg', 'Your profile has been updated!');
@@ -145,8 +174,10 @@ router.get('/:id', ensureAuthenticated, (req, res) => {
                     bio: user.bio,
                     following: user._id,
                     follower: currentUser._id,
-                    userPhoto: req.session.passport.user.photos[0].value,
+                    userPhoto: currentUser.userPhoto,
+                    userPhotoDef: currentUser.userPhotoDef,
                     proPhoto: user.userPhoto,
+                    proPhotoDef: user.userPhotoDef,
                     firstName: user.name.givenName,
                     lastName: user.name.familyName,
                     username: user.username
@@ -184,49 +215,56 @@ router.post('/:id', ensureAuthenticated, (req, res) => {
 
 router.get('/:type/:id', ensureAuthenticated, (req, res) => {
     User.findOne({ _id: req.params.id }, async (err, user) => {
-        if (!user) {
-            req.flash('error_msg', 'There is no such user');
-            res.redirect('/dashboard/-1?page=1&limit=15');
-        }
 
-        if (req.params.type == 'following') {
-            const following = [];
+            const currentUser = await User.findOne({ email: req.user._json.email }).exec();
+            console.log(currentUser.userPhotoDef.data);
+            console.log(typeof currentUser.userPhotoDef.data);
 
-            for (let i = 0; i < user.following.length; i++) {
-                following[i] = await User.findById(user.following[i], 'username').exec();
+            if (!user) {
+                req.flash('error_msg', 'There is no such user');
+                res.redirect('/dashboard/-1?page=1&limit=15');
             }
 
-            res.render('follow', {
-                follow: following,
-                type: req.params.type,
-                proPhoto: user.userPhoto,
-                followCount: user.following.length,
-                userPhoto: req.session.passport.user.photos[0].value,
-                username: user.username
-            });
-        } else if (err) {
-            console.log(err);
-        }
+            if (req.params.type == 'following') {
+                const following = [];
 
-        if (req.params.type == 'follower') {
-            const follower = [];
+                for (let i = 0; i < user.following.length; i++) {
+                    following[i] = await User.findById(user.following[i], 'username').exec();
+                }
 
-            for (let i = 0; i < user.follower.length; i++) {
-                follower[i] = await User.findById(user.follower[i], 'username').exec();
+                const currentUser = await User.findOne({ email: req.user._json.email }).exec();
+
+                res.render('follow', {
+                    follow: following,
+                    type: req.params.type,
+                    userPhoto: currentUser.userPhoto,
+                    userPhotoDef: currentUser.userPhotoDef,
+                    followCount: user.following.length,
+                    username: user.username
+                });
+            } else if (err) {
+                console.log(err);
             }
 
-            res.render('follow', {
-                follow: follower,
-                type: req.params.type,
-                proPhoto: user.userPhoto,
-                followCount: user.follower.length,
-                userPhoto: req.session.passport.user.photos[0].value,
-                username: user.username
-            });
-        } else if (err) {
-            console.log(err);
-        }
-    })
+            if (req.params.type == 'follower') {
+                const follower = [];
+
+                for (let i = 0; i < user.follower.length; i++) {
+                    follower[i] = await User.findById(user.follower[i], 'username').exec();
+                }
+
+                res.render('follow', {
+                    follow: follower,
+                    type: req.params.type,
+                    proPhoto: user.userPhoto,
+                    followCount: user.follower.length,
+                    userPhoto: req.session.passport.user.photos[0].value,
+                    username: user.username
+                });
+            } else if (err) {
+                console.log(err);
+            }
+        })
 })
 
 module.exports = router;

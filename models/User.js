@@ -11,6 +11,11 @@ const UserSchema = new mongoose.Schema({
         type: String,
         require: true
     },
+    userPhotoDef: {
+        data: Buffer,
+        originalname: String,
+        contentType: String
+    },
     userPhoto: {
         type: String,
         require: true
@@ -18,11 +23,13 @@ const UserSchema = new mongoose.Schema({
     name: {
         familyName: {
             type: String,
-            require: true },
+            require: true
+        },
         givenName: {
             type: String,
-            require: true }
-        },
+            require: true
+        }
+    },
     accessToken: {
         type: String,
         require: false
