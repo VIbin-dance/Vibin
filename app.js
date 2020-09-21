@@ -51,28 +51,10 @@ passport.use(new GoogleStrategy({
     (accessToken, refreshToken, profile, done) => {
         if (profile) {
             User.findOne({ googleId: profile.id }, async (err, user) => {
-
-                const loginNumber = user.loginCount + 1;
-
-                if (user.loginCount > 0) {
-                    await User.updateOne({ googleId: profile.id }, {
+                if (user == null || user.loginCount == null || user.loginCount == 0) {
+                    User.findOneAndUpdate({ googleId: profile.id }, {
                         $set: {
-                            googleId: profile.id,
-                            accessToken: accessToken,
-                            loginCount: loginNumber,
-                        }
-                    })
-                    if (err) {
-                        return done(err, false, {
-                            message: err
-                        });
-                    } else {
-                        return done(null, profile);
-                    }
-                } else if (user.loginCount == 0) {
-                    await User.updateOne({ googleId: profile.id }, {
-                        $set: {
-                            loginCount: loginNumber,
+                            loginCount: 1,
                             username: profile.displayName,
                             email: profile.emails[0].value,
                             name: { familyName: profile.name.familyName, givenName: profile.name.givenName },
@@ -80,42 +62,59 @@ passport.use(new GoogleStrategy({
                             googleId: profile.id,
                             accessToken: accessToken
                         }
+                    }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, user) => {
+                        if (err) {
+                            return done(err, false, {
+                                message: err
+                            });
+                        } else {
+                            return done(null, profile);
+                        }
                     })
-
-                    if (err) {
-                        return done(err, false, {
-                            message: err
-                        });
-                    } else {
-                        return done(null, profile);
-                    }
+                } else if (user.loginCount > 0) {
+                    User.findOneAndUpdate({ googleId: profile.id }, {
+                        $set: {
+                            googleId: profile.id,
+                            accessToken: accessToken,
+                            loginCount: user.loginCount + 1,
+                        }
+                    }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, user) => {
+                        console.log(user.loginCount);
+                        if (err) {
+                            return done(err, false, {
+                                message: err
+                            });
+                        } else {
+                            return done(null, profile);
+                        }
+                    })
+                }
+                // User.findOneAndUpdate({
+                //     googleId: profile.id
+                // }, {
+                //     loginCount: loginCount + 1,
+                //     username:  profile.displayName,
+                //     email:  profile.emails[0].value,
+                //     name: { familyName: profile.name.familyName, givenName: profile.name.givenName },
+                //     userPhoto: profile.photos[0].value,
+                //     googleId: profile.id,
+                //     accessToken: accessToken
+                // }, {upsert: true, new: true, setDefaultsOnInsert: true }, (err, user)  => {
+                //     console.log(user)
+                //     if (err) {
+                //         return done(err, false, {
+                //             message: err
+                //         });
+                //     } else {
+                //         return done(null, profile);
+                //     }
+                // });
+                else {
+                    return done(null, false);
                 }
             })
-            // User.findOneAndUpdate({
-            //     googleId: profile.id
-            // }, {
-            //     loginCount: loginCount + 1,
-            //     username:  profile.displayName,
-            //     email:  profile.emails[0].value,
-            //     name: { familyName: profile.name.familyName, givenName: profile.name.givenName },
-            //     userPhoto: profile.photos[0].value,
-            //     googleId: profile.id,
-            //     accessToken: accessToken
-            // }, {upsert: true, new: true, setDefaultsOnInsert: true }, (err, user)  => {
-            //     console.log(user)
-            //     if (err) {
-            //         return done(err, false, {
-            //             message: err
-            //         });
-            //     } else {
-            //         return done(null, profile);
-            //     }
-            // });
-        } else {
-            return done(null, false);
         }
-    }
-));
+    }));
 
 const db = process.env.MongoURI;
 

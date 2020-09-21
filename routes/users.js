@@ -15,6 +15,7 @@ const Video = require('../models/Video');
 
 router.get('/register', (req, res) => res.render('register'));
 router.get('/login', (req, res) => res.render('login'));
+router.get('/preference', (req, res) => res.render('preference'));
 
 router.get('/newsletter', (req, res) => {
     res.render('newsletter', {

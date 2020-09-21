@@ -39,9 +39,15 @@ router.get('/auth/google/callback',
     failureRedirect: '/error',
     session: true
   }),
-  (req, res) => {
-    req.flash('success_msg', 'You are logged in!')
-    res.redirect('/dashboard/-1?page=1&limit=15');
+  async (req, res) => {
+    const user = await User.findOne({ email: req.user._json.email }).exec();
+    if (user.loginCount == 1) {
+      req.flash('success_msg', 'Welcome! Tell us a little bit about you!')
+      res.redirect('/users/preference');
+    } else {
+      req.flash('success_msg', 'You are logged in!')
+      res.redirect('/dashboard/-1?page=1&limit=15');
+    }
   }
 );
 
