@@ -137,26 +137,31 @@ router.post('/profile/edit', ensureAuthenticated, upload.single('userPhotoDef'),
         }
     }
 
-    User.findOneAndUpdate({ email: req.user._json.email }, query, (err, user) => {
+    if (req.file != undefined && req.file.size > 307200) {
+        req.flash('error_msg', 'The photo needs to be smaller than 3MB');
+        res.redirect('/users/profile/edit');
+    } else {
+        User.findOneAndUpdate({ email: req.user._json.email }, query, (err, user) => {
 
-        if (!user) {
-            errors.push({ msg: 'There is no such user' });
-        }
+            if (!user) {
+                errors.push({ msg: 'There is no such user' });
+            }
 
-        if (username == '') {
-            errors.push({ msg: 'Please fill in username' });
-        }
+            if (username == '') {
+                errors.push({ msg: 'Please fill in username' });
+            }
 
-        if (errors.length > 0) {
-            res.render('profile', {
-                errors, userPhoto, userPhotoDef, email, username, bio
-            });
-        }
-        else {
-            req.flash('success_msg', 'Your profile has been updated!');
-            res.redirect('/users/profile');
-        }
-    })
+            if (errors.length > 0) {
+                res.render('profile', {
+                    errors, userPhoto, userPhotoDef, email, username, bio
+                });
+            }
+            else {
+                req.flash('success_msg', 'Your profile has been updated!');
+                res.redirect('/users/profile');
+            }
+        })
+    }
 })
 
 router.get('/:id', ensureAuthenticated, (req, res) => {
@@ -216,55 +221,53 @@ router.post('/:id', ensureAuthenticated, (req, res) => {
 router.get('/:type/:id', ensureAuthenticated, (req, res) => {
     User.findOne({ _id: req.params.id }, async (err, user) => {
 
+        const currentUser = await User.findOne({ email: req.user._json.email }).exec();
+
+        if (!user) {
+            req.flash('error_msg', 'There is no such user');
+            res.redirect('/dashboard/-1?page=1&limit=15');
+        }
+
+        if (req.params.type == 'following') {
+            const following = [];
+
+            for (let i = 0; i < user.following.length; i++) {
+                following[i] = await User.findById(user.following[i], 'username').exec();
+            }
+
             const currentUser = await User.findOne({ email: req.user._json.email }).exec();
-            console.log(currentUser.userPhotoDef.data);
-            console.log(typeof currentUser.userPhotoDef.data);
 
-            if (!user) {
-                req.flash('error_msg', 'There is no such user');
-                res.redirect('/dashboard/-1?page=1&limit=15');
+            res.render('follow', {
+                follow: following,
+                type: req.params.type,
+                userPhoto: currentUser.userPhoto,
+                userPhotoDef: currentUser.userPhotoDef,
+                followCount: user.following.length,
+                username: user.username
+            });
+        } else if (err) {
+            console.log(err);
+        }
+
+        if (req.params.type == 'follower') {
+            const follower = [];
+
+            for (let i = 0; i < user.follower.length; i++) {
+                follower[i] = await User.findById(user.follower[i], 'username').exec();
             }
 
-            if (req.params.type == 'following') {
-                const following = [];
-
-                for (let i = 0; i < user.following.length; i++) {
-                    following[i] = await User.findById(user.following[i], 'username').exec();
-                }
-
-                const currentUser = await User.findOne({ email: req.user._json.email }).exec();
-
-                res.render('follow', {
-                    follow: following,
-                    type: req.params.type,
-                    userPhoto: currentUser.userPhoto,
-                    userPhotoDef: currentUser.userPhotoDef,
-                    followCount: user.following.length,
-                    username: user.username
-                });
-            } else if (err) {
-                console.log(err);
-            }
-
-            if (req.params.type == 'follower') {
-                const follower = [];
-
-                for (let i = 0; i < user.follower.length; i++) {
-                    follower[i] = await User.findById(user.follower[i], 'username').exec();
-                }
-
-                res.render('follow', {
-                    follow: follower,
-                    type: req.params.type,
-                    proPhoto: user.userPhoto,
-                    followCount: user.follower.length,
-                    userPhoto: req.session.passport.user.photos[0].value,
-                    username: user.username
-                });
-            } else if (err) {
-                console.log(err);
-            }
-        })
+            res.render('follow', {
+                follow: follower,
+                type: req.params.type,
+                userPhoto: currentUser.userPhoto,
+                userPhotoDef: currentUser.userPhotoDef,
+                followCount: user.follower.length,
+                username: user.username
+            });
+        } else if (err) {
+            console.log(err);
+        }
+    })
 })
 
 module.exports = router;

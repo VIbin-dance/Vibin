@@ -48,30 +48,73 @@ passport.use(new GoogleStrategy({
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: process.env.GOOGLE_CALLBACK_URL,
 },
-(accessToken, refreshToken, profile, done) => {
-    if (profile) {
-        User.findOneAndUpdate({
-            googleId: profile.id
-        }, {
-            username:  profile.displayName,
-            email:  profile.emails[0].value,
-            name: { familyName: profile.name.familyName, givenName: profile.name.givenName },
-            userPhoto: profile.photos[0].value,
-            googleId: profile.id,
-            accessToken: accessToken
-        }, {upsert: true, new: true, setDefaultsOnInsert: true }, (err, user)  => {
-            if (err) {
-                return done(err, false, {
-                    message: err
-                });
-            } else {
-                return done(null, profile);
-            }
-        });
-    } else {
-        return done(null, false);
+    (accessToken, refreshToken, profile, done) => {
+        if (profile) {
+            User.findOne({ googleId: profile.id }, async (err, user) => {
+
+                const loginNumber = user.loginCount + 1;
+
+                if (user.loginCount > 0) {
+                    await User.updateOne({ googleId: profile.id }, {
+                        $set: {
+                            googleId: profile.id,
+                            accessToken: accessToken,
+                            loginCount: loginNumber,
+                        }
+                    })
+                    if (err) {
+                        return done(err, false, {
+                            message: err
+                        });
+                    } else {
+                        return done(null, profile);
+                    }
+                } else if (user.loginCount == 0) {
+                    await User.updateOne({ googleId: profile.id }, {
+                        $set: {
+                            loginCount: loginNumber,
+                            username: profile.displayName,
+                            email: profile.emails[0].value,
+                            name: { familyName: profile.name.familyName, givenName: profile.name.givenName },
+                            userPhoto: profile.photos[0].value,
+                            googleId: profile.id,
+                            accessToken: accessToken
+                        }
+                    })
+
+                    if (err) {
+                        return done(err, false, {
+                            message: err
+                        });
+                    } else {
+                        return done(null, profile);
+                    }
+                }
+            })
+            // User.findOneAndUpdate({
+            //     googleId: profile.id
+            // }, {
+            //     loginCount: loginCount + 1,
+            //     username:  profile.displayName,
+            //     email:  profile.emails[0].value,
+            //     name: { familyName: profile.name.familyName, givenName: profile.name.givenName },
+            //     userPhoto: profile.photos[0].value,
+            //     googleId: profile.id,
+            //     accessToken: accessToken
+            // }, {upsert: true, new: true, setDefaultsOnInsert: true }, (err, user)  => {
+            //     console.log(user)
+            //     if (err) {
+            //         return done(err, false, {
+            //             message: err
+            //         });
+            //     } else {
+            //         return done(null, profile);
+            //     }
+            // });
+        } else {
+            return done(null, false);
+        }
     }
-}
 ));
 
 const db = process.env.MongoURI;
@@ -102,5 +145,5 @@ app.use('/users', require('./routes/users'));
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-    console.log(`Server started on ${ PORT }`);
+    console.log(`Server started on ${PORT}`);
 });

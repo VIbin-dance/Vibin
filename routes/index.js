@@ -53,8 +53,8 @@ router.get('/privacy-policy', (req, res) => res.render('privacy-policy'));
 router.get('/terms-of-service', (req, res) => res.render('terms-of-service'));
 
 router.get('/dashboard/:sort', ensureAuthenticated, (req, res) => {
-
-  Video.paginate({}, { page: req.query.page, limit: req.query.limit, sort: { publishedDate: req.params.sort }}, (err, result) => {
+  Video.paginate({}, { page: req.query.page, limit: req.query.limit, sort: { publishedDate: req.params.sort } }, async (err, result) => {
+    const user = await User.findOne({ email: req.user._json.email }).exec();
     const title = [];
     const choreographer = [];
     const url = [];
@@ -77,9 +77,10 @@ router.get('/dashboard/:sort', ensureAuthenticated, (req, res) => {
       id[i] = result.docs[i].id;
     }
     res.render('dashboard', {
-      userPhoto: req.session.passport.user.photos[0].value,
+      userPhoto: user.userPhoto,
+      userPhotoDef: user.userPhotoDef,
       count: result.total,
-      username: req.session.passport.user.displayName,
+      username: user.username,
       videos: result.docs,
       title: title,
       choreographer: choreographer,
@@ -115,7 +116,8 @@ router.post('/dashboard', (req, res) => {
     ]
   }
 
-  Video.paginate(query, { page: req.query.page, limit: 100 }, (err, result) => {
+  Video.paginate(query, { page: req.query.page, limit: 100 }, async (err, result) => {
+    const user = await User.findOne({ email: req.user._json.email }).exec();
     let title = [];
     let choreographer = [];
     let url = [];
@@ -136,7 +138,8 @@ router.post('/dashboard', (req, res) => {
         id[i] = result.docs[i].id;
       }
       res.render('results', {
-        userPhoto: req.session.passport.user.photos[0].value,
+        userPhoto: user.userPhoto,
+        userPhotoDef: user.userPhotoDef,
         count: result.total,
         username: req.session.passport.user.displayName,
         videos: result.docs,
@@ -157,7 +160,8 @@ router.post('/dashboard', (req, res) => {
 router.get('/results', ensureAuthenticated, (req, res) => res.render('results'));
 
 router.get('/choreographer/:id', ensureAuthenticated, (req, res) => {
-  Video.find({ choreographer: req.params.id }, (err, result) => {
+  Video.find({ choreographer: req.params.id }, async (err, result) => {
+    const user = await User.findOne({ email: req.user._json.email }).exec();
     const title = [];
     const url = [];
     const level = [];
@@ -171,7 +175,8 @@ router.get('/choreographer/:id', ensureAuthenticated, (req, res) => {
       id[i] = result[i].id;
     }
     res.render('choreographer', {
-      userPhoto: req.session.passport.user.photos[0].value,
+      userPhoto: user.userPhoto,
+      userPhotoDef: user.userPhotoDef,
       count: result.length,
       choreographer: req.params.id,
       videos: result,
@@ -205,7 +210,8 @@ router.get('/calendar', ensureAuthenticated, (req, res) => {
           idCal[i] = data.items[i].id
         }
         res.render('calendar', {
-          userPhoto: req.session.passport.user.photos[0].value,
+          userPhoto: user.userPhoto,
+          userPhotoDef: user.userPhotoDef,
           count: data.items.length,
           API_key: process.env.API_key,
           CALENDAR_ID: user.email,
@@ -242,13 +248,15 @@ router.post('/calendar', ensureAuthenticated, (req, res) => {
 });
 
 router.get('/player/:id', (req, res) => {
-  Video.findOne({ id: req.params.id }, (err, result) => {
+  Video.findOne({ id: req.params.id }, async (err, result) => {
+    const user = await User.findOne({ email: req.user._json.email }).exec();
     if (result == null) {
       req.flash('error_msg', 'The video is either deleted or modified!');
       res.redirect('/dashboard?page=1&limit=15');
     } else {
       res.render('player', {
-        userPhoto: req.session.passport.user.photos[0].value,
+        userPhoto: user.userPhoto,
+        userPhotoDef: user.userPhotoDef,
         id: req.params.id,
         title: result.title,
         choreographer: result.choreographer,
@@ -310,9 +318,11 @@ router.post('/player/:id', (req, res) => {
   })
 })
 
-router.get('/upload', ensureAuthenticated, onlyDevs, (req, res) => {
+router.get('/upload', ensureAuthenticated, onlyDevs, async (req, res) => {
+  const user = await User.findOne({ email: req.user._json.email }).exec();
   res.render('upload', {
-    userPhoto: req.session.passport.user.photos[0].value,
+    userPhoto: user.userPhoto,
+    userPhotoDef: user.userPhotoDef,
     API_key: process.env.API_key,
   });
 })

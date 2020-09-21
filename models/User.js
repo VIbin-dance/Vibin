@@ -16,6 +16,11 @@ const UserSchema = new mongoose.Schema({
         originalname: String,
         contentType: String
     },
+    loginCount: {
+        type: Number,
+        require: true,
+        default: 0
+    },
     userPhoto: {
         type: String,
         require: true

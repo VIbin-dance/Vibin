@@ -1,6 +1,7 @@
 <head>
   <link rel="canonical" href="https://www.vibin.tokyo/dashboard/-1?page=1&limit=15">
 </head>
+
 <body onload="charCut()">
   <header id="header" class="fixed-top">
     <div class="container d-flex align-items-center justify-content-between">
@@ -15,7 +16,12 @@
       <nav class="nav-menu d-none d-lg-block">
         <ul>
           <li class="drop-down">
-            <img src="<%= userPhoto %>" height="40" width="40" style="border-radius: 50%;" alt="user profile photo">
+            <% if (typeof userPhotoDef.data != "undefined") { %>
+            <img src="data:image/<%=userPhotoDef.contentType%>;base64, <%=userPhotoDef.data.toString('base64')%>"
+              height="40" width="40" style="border-radius: 50%;" alt="user photo">
+            <% } else { %>
+            <img src="<%= userPhoto %>" height="40" width="40" style="border-radius: 50%;" alt="user photo">
+            <% } %>
             <ul>
               <li><a href="/users/profile">Profile</a></li>
               <li><a href="/logout">Logout</a></li>

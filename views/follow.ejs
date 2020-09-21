@@ -11,8 +11,6 @@
         <nav class="nav-menu d-none d-lg-block">
             <ul>
                 <li class="drop-down">
-
-                    <p><%= userPhotoDef %></p>
                     <% if (typeof userPhotoDef.data != undefined) { %>
                     <img src="data:image/<%=userPhotoDef.contentType%>;base64, <%=userPhotoDef.data.toString('base64')%>"
                         height="40" width="40" style="border-radius: 50%;" alt="user photo">
