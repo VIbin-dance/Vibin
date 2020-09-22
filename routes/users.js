@@ -1,9 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const nodemailer = require('nodemailer');
-const passport = require('passport');
 const { ensureAuthenticated } = require('../config/auth');
-const mongoose = require('mongoose');
 const multer = require('multer');
 
 const storage = multer.memoryStorage()
@@ -11,11 +9,9 @@ const storage = multer.memoryStorage()
 const upload = multer({ storage: storage });
 
 const User = require('../models/User');
-const Video = require('../models/Video');
 
 router.get('/register', (req, res) => res.render('register'));
 router.get('/login', (req, res) => res.render('login'));
-router.get('/preference', (req, res) => res.render('preference'));
 
 router.get('/newsletter', (req, res) => {
     res.render('newsletter', {
@@ -64,6 +60,15 @@ router.post('/newsletter', (req, res) => {
         }
     })
 })
+
+router.get('/preference', ensureAuthenticated, (req, res) => {
+    User.findOne({ email: req.user._json.email }, (err, user) => {
+        res.render('preference', {
+            userPhoto: user.userPhoto,
+            userPhotoDef: user.userPhotoDef,
+        })
+    })
+});
 
 router.get('/profile', ensureAuthenticated, (req, res) => {
     User.findOne({ email: req.user._json.email }, (err, user) => {

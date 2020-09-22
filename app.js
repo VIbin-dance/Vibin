@@ -79,7 +79,6 @@ passport.use(new GoogleStrategy({
                             loginCount: user.loginCount + 1,
                         }
                     }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, user) => {
-                        console.log(user.loginCount);
                         if (err) {
                             return done(err, false, {
                                 message: err
