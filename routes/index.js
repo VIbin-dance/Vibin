@@ -9,6 +9,7 @@ const { onlyDevs } = require('../config/dev');
 
 const Video = require('../models/Video');
 const User = require('../models/User');
+const { count } = require('../models/Video');
 
 router.get('/', (req, res) => {
   if (req.session.passport) {
@@ -59,47 +60,144 @@ router.get('/privacy-policy', (req, res) => res.render('privacy-policy'));
 router.get('/terms-of-service', (req, res) => res.render('terms-of-service'));
 
 router.get('/dashboard/:sort', ensureAuthenticated, (req, res) => {
-  Video.paginate({}, { page: req.query.page, limit: req.query.limit, sort: { publishedDate: req.params.sort } }, async (err, result) => {
-    const user = await User.findOne({ email: req.user._json.email }).exec();
-    const title = [];
-    const choreographer = [];
-    const url = [];
-    const level = [];
-    const thumbnail = [];
-    const id = [];
+  User.findOne({ email: req.user._json.email }, async (err, user) => {
+    const limit = 9
 
-    if (req.params.sort == -1) {
-      let sort = 1;
-    } else if (req.params.sort == 1) {
-      let sort = -1;
+    let query = {
+      $and: [
+        { level: user.tags.level },
+        { genre: user.tags.genre[0] },
+        { purpose: user.tags.purpose }
+      ]
     }
 
-    for (let i = 0; i < result.docs.length; i++) {
-      title[i] = result.docs[i].title;
-      choreographer[i] = result.docs[i].choreographer;
-      url[i] = result.docs[i].url;
-      level[i] = result.docs[i].level[0];
-      thumbnail[i] = result.docs[i].thumbnail;
-      id[i] = result.docs[i].id;
+    let countRec = await Video.find(query).exec();
+
+    if (countRec.length < 6) {
+      query = {
+        $or: [
+          { level: user.tags.level },
+          { genre: user.tags.genre[0] },
+          { purpose: user.tags.purpose }
+        ]
+      }
+
+      countRec = await Video.find(query).exec();
     }
-    res.render('dashboard', {
-      userPhoto: user.userPhoto,
-      userPhotoDef: user.userPhotoDef,
-      count: result.total,
-      username: user.username,
-      videos: result.docs,
-      title: title,
-      choreographer: choreographer,
-      url: url,
-      id: id,
-      level: level,
-      thumbnail: thumbnail,
-      currentSort: req.params.sort,
-      currentPage: result.page,
-      pageCount: result.pages,
-      pages: paginate.getArrayPages(req)(3, result.pages, req.query.page)
+
+    Video.paginate({}, { page: req.query.page, limit: req.query.limit, sort: { publishedDate: req.params.sort } }, async (err, result) => {
+
+      const max = countRec.length - limit;
+      const skip = Math.floor(Math.random() * max);
+
+      const options = {
+        sort: { publishedDate: -1 },
+        limit: limit,
+        skip: skip
+      };
+
+      Video.find(query, null, options, (err, resultRec) => {
+        const titleRec = [];
+        const choreographerRec = [];
+        const urlRec = [];
+        const levelRec = [];
+        const thumbnailRec = [];
+        const idRec = [];
+
+        for (let i = 0; i < resultRec.length; i++) {
+          titleRec[i] = resultRec[i].title;
+          choreographerRec[i] = resultRec[i].choreographer;
+          urlRec[i] = resultRec[i].url;
+          levelRec[i] = resultRec[i].level;
+          thumbnailRec[i] = resultRec[i].thumbnail;
+          idRec[i] = resultRec[i].id;
+        }
+
+        const title = [];
+        const choreographer = [];
+        const url = [];
+        const level = [];
+        const thumbnail = [];
+        const id = [];
+
+        for (let i = 0; i < result.docs.length; i++) {
+          title[i] = result.docs[i].title;
+          choreographer[i] = result.docs[i].choreographer;
+          url[i] = result.docs[i].url;
+          level[i] = result.docs[i].level[0];
+          thumbnail[i] = result.docs[i].thumbnail;
+          id[i] = result.docs[i].id;
+        }
+        res.render('dashboard', {
+          userPhoto: user.userPhoto,
+          userPhotoDef: user.userPhotoDef,
+          count: result.total,
+          username: user.username,
+          videos: result.docs,
+          videosRec: resultRec,
+          title: title,
+          titleRec: titleRec,
+          choreographer: choreographer,
+          choreographerRec: choreographerRec,
+          url: url,
+          urlRec: urlRec,
+          id: id,
+          idRec: idRec,
+          level: level,
+          levelRec: levelRec,
+          thumbnail: thumbnail,
+          thumbnailRec: thumbnailRec,
+          currentSort: req.params.sort,
+          currentPage: result.page,
+          pageCount: result.pages,
+          pages: paginate.getArrayPages(req)(3, result.pages, req.query.page)
+        })
+      });
     })
-  });
+  })
+
+  // yeet
+  // Video.paginate({}, { page: req.query.page, limit: req.query.limit, sort: { publishedDate: req.params.sort } }, async (err, result) => {
+  //   const user = await User.findOne({ email: req.user._json.email }).exec();
+  //   const title = [];
+  //   const choreographer = [];
+  //   const url = [];
+  //   const level = [];
+  //   const thumbnail = [];
+  //   const id = [];
+
+  //   if (req.params.sort == -1) {
+  //     let sort = 1;
+  //   } else if (req.params.sort == 1) {
+  //     let sort = -1;
+  //   }
+
+  //   for (let i = 0; i < result.docs.length; i++) {
+  //     title[i] = result.docs[i].title;
+  //     choreographer[i] = result.docs[i].choreographer;
+  //     url[i] = result.docs[i].url;
+  //     level[i] = result.docs[i].level[0];
+  //     thumbnail[i] = result.docs[i].thumbnail;
+  //     id[i] = result.docs[i].id;
+  //   }
+  //   res.render('dashboard', {
+  //     userPhoto: user.userPhoto,
+  //     userPhotoDef: user.userPhotoDef,
+  //     count: result.total,
+  //     username: user.username,
+  //     videos: result.docs,
+  //     title: title,
+  //     choreographer: choreographer,
+  //     url: url,
+  //     id: id,
+  //     level: level,
+  //     thumbnail: thumbnail,
+  //     currentSort: req.params.sort,
+  //     currentPage: result.page,
+  //     pageCount: result.pages,
+  //     pages: paginate.getArrayPages(req)(3, result.pages, req.query.page)
+  //   })
+  // });
 });
 
 router.post('/dashboard', (req, res) => {
