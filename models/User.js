@@ -55,6 +55,20 @@ const UserSchema = new mongoose.Schema({
         type: Array,
         require: false,
     },
+    tags: {
+        level: {
+            type: String,
+            require: false
+        },
+        purpose: {
+            type: String,
+            require: false
+        },
+        genre: {
+            type: Array,
+            require: false
+        }
+    },
     bio: {
         type: String,
         require: false,

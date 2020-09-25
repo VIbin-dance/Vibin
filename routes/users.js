@@ -9,6 +9,7 @@ const storage = multer.memoryStorage()
 const upload = multer({ storage: storage });
 
 const User = require('../models/User');
+const { query } = require('express');
 
 router.get('/register', (req, res) => res.render('register'));
 router.get('/login', (req, res) => res.render('login'));
@@ -69,6 +70,36 @@ router.get('/preference', ensureAuthenticated, (req, res) => {
         })
     })
 });
+
+router.post('/preference', ensureAuthenticated, async (req, res) => {
+    const { level, purpose, genre } = req.body;
+    let errors = [];
+
+    const query = {
+        tags: {
+            level: level,
+            purpose: purpose,
+            genre: genre
+        }
+    }
+
+    User.findOneAndUpdate({ email: req.user._json.email }, query, (err, user) => {
+
+        if (!user) {
+            errors.push({ msg: 'There is no such user' });
+        }
+
+        if (errors.length > 0) {
+            res.render('preference', {
+                errors, userPhoto: user.userPhoto, userPhotoDef: user.userPhotoDef, level, purpose
+            });
+        }
+        else {
+            req.flash('success_msg', 'Your added your tags!');
+            res.redirect('/dashboard/-1?page=1&limit=15');
+        }
+    })
+})
 
 router.get('/profile', ensureAuthenticated, (req, res) => {
     User.findOne({ email: req.user._json.email }, (err, user) => {
