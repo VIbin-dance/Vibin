@@ -61,7 +61,9 @@ router.get('/terms-of-service', (req, res) => res.render('terms-of-service'));
 
 router.get('/dashboard/:sort', ensureAuthenticated, (req, res) => {
   User.findOne({ email: req.user._json.email }, async (err, user) => {
-    const limit = 9
+    const limit = 12;
+
+    // if (user.tag.level == undefined || user.tag.level == undefined || user.tag.level == undefined)
 
     let query = {
       $and: [
@@ -71,14 +73,39 @@ router.get('/dashboard/:sort', ensureAuthenticated, (req, res) => {
       ]
     }
 
+    if (user.tags.level == undefined) {
+      const level = ["Beginner", "Intermediate", "Advanced"]
+      const randomLevel = level[Math.floor(Math.random() * level.length)]
+
+      query.$and[0].level = randomLevel;
+    }
+
+    if (user.tags.genre[0] == undefined) {
+      const genre = ["Hip Hop", "Locking", "Jazz", "Breakin", "House", "Popping", "K-POP", "Tiktok"]
+      const randomGenre = genre[Math.floor(Math.random() * genre.length)]
+
+      query.$and[1].genre = randomGenre;
+    }
+
+    if (user.tags.purpose == undefined) {
+      const purpose = ["Skill Improvements", "Health and Exercise", "Entertainment"]
+      const randomPurpose = purpose[Math.floor(Math.random() * purpose.length)]
+
+      query.$and[2].purpose = randomPurpose;
+    }
+
+    console.log(query);
+
     let countRec = await Video.find(query).exec();
 
-    if (countRec.length < 6) {
+    console.log(countRec.length);
+
+    if (countRec.length < 12) {
       query = {
         $or: [
-          { level: user.tags.level },
-          { genre: user.tags.genre[0] },
-          { purpose: user.tags.purpose }
+          { level: query.$and[0].level },
+          { genre: query.$and[1].genre },
+          { purpose: query.$and[2].purpose }
         ]
       }
 
