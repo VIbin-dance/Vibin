@@ -11,7 +11,14 @@
         <nav class="nav-menu d-none d-lg-block">
             <ul>
                 <li class="drop-down">
+
+                    <% if (typeof userPhotoDef.data != "undefined") { %>
+                    <img src="data:image/<%=userPhotoDef.contentType%>;base64, <%=userPhotoDef.data.toString('base64')%>"
+                        height="40" width="40" style="border-radius: 50%;" alt="user photo">
+                    <% } else { %>
                     <img src="<%= userPhoto %>" height="40" width="40" style="border-radius: 50%;" alt="user photo">
+                    <% } %>
+
                     <ul>
                         <li><a href="/users/profile">Profile</a></li>
                         <li><a href="/logout">Logout</a></li>
@@ -25,36 +32,22 @@
 <br>
 <section id="results">
     <div class="container">
-        <div class="col-lg-8 col-xs-12 m-auto">
-            <h1 class="text-center mb-3"><i class="fas fa-user-plus"></i>Profile</h1>
+        <div class="col-lg-8 col-xs-12 m-auto text-center">
             <%- include ('partials/messages') %>
-            <form action="/users/profile" method="POST">
 
-                <div class="form-group">
-                    <label for="email">Photo</label><br>
-                    <img src="<%= userPhoto %>" height="80" width="80" alt="user photo">
-                </div>
+            <% if (typeof userPhotoDef.data != "undefined") { %>
+            <img src="data:image/<%=userPhotoDef.contentType%>;base64, <%=userPhotoDef.data.toString('base64')%>"
+                height="100" width="100" style="border-radius: 50%; margin: 20px;" alt="user photo">
+            <% } else { %>
+            <img src="<%= userPhoto %>" height="100" width="100" style="border-radius: 50%; margin: 20px;"
+                alt="user photo">
+            <% } %>
 
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <h4><%= email %></h4>
-                </div>
-
-                <div class="form-group">
-                    <label for="firstname">Firstname</label>
-                    <h4><%= firstName %></h4>
-                </div>
-
-                <div class="form-group">
-                    <label for="lastname">Lastname</label>
-                    <h4><%= lastName %></h4>
-                </div>
-
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <h4><%= username %></h4>
-                </div>
-            </form>
+            <a class="btn btn-danger" href="/users/profile/edit">Edit profile</a>
+            <h2 class="mb-3"><i class="fas fa-user-plus"></i><%= username %></h2>
+            <p><%= followerCount %> followers</p>
+            <p><%= followingCount %> following</p>
+            <p><%= bio %></p>
             <a class="btn btn-dark" href="/logout">Logout</a>
         </div>
     </div>

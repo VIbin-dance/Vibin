@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
+    id: mongoose.ObjectId,
     googleId: {
         type: String,
         require: true,
@@ -10,14 +11,30 @@ const UserSchema = new mongoose.Schema({
         type: String,
         require: true
     },
+    userPhotoDef: {
+        data: Buffer,
+        originalname: String,
+        contentType: String
+    },
+    loginCount: {
+        type: Number,
+        require: true,
+        default: 0
+    },
+    userPhoto: {
+        type: String,
+        require: true
+    },
     name: {
         familyName: {
             type: String,
-            require: true },
+            require: true
+        },
         givenName: {
             type: String,
-            require: true }
-        },
+            require: true
+        }
+    },
     accessToken: {
         type: String,
         require: false
@@ -30,6 +47,32 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         require: false
     },
+    following: {
+        type: Array,
+        require: false,
+    },
+    follower: {
+        type: Array,
+        require: false,
+    },
+    tags: {
+        level: {
+            type: String,
+            require: false
+        },
+        purpose: {
+            type: String,
+            require: false
+        },
+        genre: {
+            type: Array,
+            require: false
+        }
+    },
+    bio: {
+        type: String,
+        require: false,
+    }
 });
 
 const User = mongoose.model('User', UserSchema);

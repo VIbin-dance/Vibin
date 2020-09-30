@@ -1,3 +1,7 @@
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.0/moment.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-duration-format/2.2.2/moment-duration-format.js"></script>
+</head>
 <header id="header" class="fixed-top ">
   <div class="container d-flex align-items-center justify-content-between">
     <h1 class="logo"><a href="/">Vibin'</a></h1>
@@ -11,7 +15,12 @@
     <nav class="nav-menu d-none d-lg-block">
       <ul>
         <li class="drop-down">
+          <% if (typeof userPhotoDef.data != "undefined") { %>
+          <img src="data:image/<%=userPhotoDef.contentType%>;base64, <%=userPhotoDef.data.toString('base64')%>"
+            height="40" width="40" style="border-radius: 50%;" alt="user photo">
+          <% } else { %>
           <img src="<%= userPhoto %>" height="40" width="40" style="border-radius: 50%;" alt="user photo">
+          <% } %>
           <ul>
             <li><a href="/users/profile">Profile</a></li>
             <li><a href="/logout">Logout</a></li>
@@ -166,6 +175,11 @@
             <label class="form-check-label">
               <input id="genre" name="genre" class="form-check-input" class="form-check-input" type="checkbox"
                 value="TikTok">TikTok</label>
+          </div>
+          <div class="form-check">
+            <label class="form-check-label">
+              <input id="genre" name="genre" class="form-check-input" class="form-check-input" type="checkbox"
+                value="Bollywood">Bollywood</label>
           </div>
       </div>
 

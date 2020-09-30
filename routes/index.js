@@ -9,6 +9,7 @@ const { onlyDevs } = require('../config/dev');
 
 const Video = require('../models/Video');
 const User = require('../models/User');
+const { count } = require('../models/Video');
 
 router.get('/', (req, res) => {
   if (req.session.passport) {
@@ -39,9 +40,15 @@ router.get('/auth/google/callback',
     failureRedirect: '/error',
     session: true
   }),
-  (req, res) => {
-    req.flash('success_msg', 'You are logged in!')
-    res.redirect('/dashboard/-1?page=1&limit=15');
+  async (req, res) => {
+    const user = await User.findOne({ email: req.user._json.email }).exec();
+    if (user.loginCount == 1) {
+      req.flash('success_msg', 'Welcome! Tell us a little bit about you!')
+      res.redirect('/users/preference');
+    } else {
+      req.flash('success_msg', 'You are logged in!')
+      res.redirect('/dashboard/-1?page=1&limit=15');
+    }
   }
 );
 
@@ -53,46 +60,171 @@ router.get('/privacy-policy', (req, res) => res.render('privacy-policy'));
 router.get('/terms-of-service', (req, res) => res.render('terms-of-service'));
 
 router.get('/dashboard/:sort', ensureAuthenticated, (req, res) => {
+  User.findOne({ email: req.user._json.email }, async (err, user) => {
+    const limit = 12;
 
-  Video.paginate({}, { page: req.query.page, limit: req.query.limit, sort: { publishedDate: req.params.sort }}, (err, result) => {
-    const title = [];
-    const choreographer = [];
-    const url = [];
-    const level = [];
-    const thumbnail = [];
-    const id = [];
+    // if (user.tag.level == undefined || user.tag.level == undefined || user.tag.level == undefined)
 
-    if (req.params.sort == -1) {
-      let sort = 1;
-    } else if (req.params.sort == 1) {
-      let sort = -1;
+    let query = {
+      $and: [
+        { level: user.tags.level },
+        { genre: user.tags.genre[0] },
+        { purpose: user.tags.purpose }
+      ]
     }
 
-    for (let i = 0; i < result.docs.length; i++) {
-      title[i] = result.docs[i].title;
-      choreographer[i] = result.docs[i].choreographer;
-      url[i] = result.docs[i].url;
-      level[i] = result.docs[i].level[0];
-      thumbnail[i] = result.docs[i].thumbnail;
-      id[i] = result.docs[i].id;
+    if (user.tags.level == undefined) {
+      const level = ["Beginner", "Intermediate", "Advanced"]
+      const randomLevel = level[Math.floor(Math.random() * level.length)]
+
+      query.$and[0].level = randomLevel;
     }
-    res.render('dashboard', {
-      userPhoto: req.session.passport.user.photos[0].value,
-      count: result.total,
-      username: req.session.passport.user.displayName,
-      videos: result.docs,
-      title: title,
-      choreographer: choreographer,
-      url: url,
-      id: id,
-      level: level,
-      thumbnail: thumbnail,
-      currentSort: req.params.sort,
-      currentPage: result.page,
-      pageCount: result.pages,
-      pages: paginate.getArrayPages(req)(3, result.pages, req.query.page)
+
+    if (user.tags.genre[0] == undefined) {
+      const genre = ["Hip Hop", "Locking", "Jazz", "Breakin", "House", "Popping", "K-POP", "Tiktok"]
+      const randomGenre = genre[Math.floor(Math.random() * genre.length)]
+
+      query.$and[1].genre = randomGenre;
+    }
+
+    if (user.tags.purpose == undefined) {
+      const purpose = ["Skill Improvements", "Health and Exercise", "Entertainment"]
+      const randomPurpose = purpose[Math.floor(Math.random() * purpose.length)]
+
+      query.$and[2].purpose = randomPurpose;
+    }
+
+    console.log(query);
+
+    let countRec = await Video.find(query).exec();
+
+    console.log(countRec.length);
+
+    if (countRec.length < 12) {
+      query = {
+        $or: [
+          { level: query.$and[0].level },
+          { genre: query.$and[1].genre },
+          { purpose: query.$and[2].purpose }
+        ]
+      }
+
+      countRec = await Video.find(query).exec();
+    }
+
+    Video.paginate({}, { page: req.query.page, limit: req.query.limit, sort: { publishedDate: req.params.sort } }, async (err, result) => {
+
+      const max = countRec.length - limit;
+      const skip = Math.floor(Math.random() * max);
+
+      const options = {
+        sort: { publishedDate: -1 },
+        limit: limit,
+        skip: skip
+      };
+
+      Video.find(query, null, options, (err, resultRec) => {
+        const titleRec = [];
+        const choreographerRec = [];
+        const urlRec = [];
+        const levelRec = [];
+        const thumbnailRec = [];
+        const idRec = [];
+
+        for (let i = 0; i < resultRec.length; i++) {
+          titleRec[i] = resultRec[i].title;
+          choreographerRec[i] = resultRec[i].choreographer;
+          urlRec[i] = resultRec[i].url;
+          levelRec[i] = resultRec[i].level;
+          thumbnailRec[i] = resultRec[i].thumbnail;
+          idRec[i] = resultRec[i].id;
+        }
+
+        const title = [];
+        const choreographer = [];
+        const url = [];
+        const level = [];
+        const thumbnail = [];
+        const id = [];
+
+        for (let i = 0; i < result.docs.length; i++) {
+          title[i] = result.docs[i].title;
+          choreographer[i] = result.docs[i].choreographer;
+          url[i] = result.docs[i].url;
+          level[i] = result.docs[i].level[0];
+          thumbnail[i] = result.docs[i].thumbnail;
+          id[i] = result.docs[i].id;
+        }
+        res.render('dashboard', {
+          userPhoto: user.userPhoto,
+          userPhotoDef: user.userPhotoDef,
+          count: result.total,
+          username: user.username,
+          videos: result.docs,
+          videosRec: resultRec,
+          title: title,
+          titleRec: titleRec,
+          choreographer: choreographer,
+          choreographerRec: choreographerRec,
+          url: url,
+          urlRec: urlRec,
+          id: id,
+          idRec: idRec,
+          level: level,
+          levelRec: levelRec,
+          thumbnail: thumbnail,
+          thumbnailRec: thumbnailRec,
+          currentSort: req.params.sort,
+          currentPage: result.page,
+          pageCount: result.pages,
+          pages: paginate.getArrayPages(req)(3, result.pages, req.query.page)
+        })
+      });
     })
-  });
+  })
+
+  // yeet
+  // Video.paginate({}, { page: req.query.page, limit: req.query.limit, sort: { publishedDate: req.params.sort } }, async (err, result) => {
+  //   const user = await User.findOne({ email: req.user._json.email }).exec();
+  //   const title = [];
+  //   const choreographer = [];
+  //   const url = [];
+  //   const level = [];
+  //   const thumbnail = [];
+  //   const id = [];
+
+  //   if (req.params.sort == -1) {
+  //     let sort = 1;
+  //   } else if (req.params.sort == 1) {
+  //     let sort = -1;
+  //   }
+
+  //   for (let i = 0; i < result.docs.length; i++) {
+  //     title[i] = result.docs[i].title;
+  //     choreographer[i] = result.docs[i].choreographer;
+  //     url[i] = result.docs[i].url;
+  //     level[i] = result.docs[i].level[0];
+  //     thumbnail[i] = result.docs[i].thumbnail;
+  //     id[i] = result.docs[i].id;
+  //   }
+  //   res.render('dashboard', {
+  //     userPhoto: user.userPhoto,
+  //     userPhotoDef: user.userPhotoDef,
+  //     count: result.total,
+  //     username: user.username,
+  //     videos: result.docs,
+  //     title: title,
+  //     choreographer: choreographer,
+  //     url: url,
+  //     id: id,
+  //     level: level,
+  //     thumbnail: thumbnail,
+  //     currentSort: req.params.sort,
+  //     currentPage: result.page,
+  //     pageCount: result.pages,
+  //     pages: paginate.getArrayPages(req)(3, result.pages, req.query.page)
+  //   })
+  // });
 });
 
 router.post('/dashboard', (req, res) => {
@@ -115,7 +247,8 @@ router.post('/dashboard', (req, res) => {
     ]
   }
 
-  Video.paginate(query, { page: req.query.page, limit: 100 }, (err, result) => {
+  Video.paginate(query, { page: req.query.page, limit: 100 }, async (err, result) => {
+    const user = await User.findOne({ email: req.user._json.email }).exec();
     let title = [];
     let choreographer = [];
     let url = [];
@@ -136,7 +269,8 @@ router.post('/dashboard', (req, res) => {
         id[i] = result.docs[i].id;
       }
       res.render('results', {
-        userPhoto: req.session.passport.user.photos[0].value,
+        userPhoto: user.userPhoto,
+        userPhotoDef: user.userPhotoDef,
         count: result.total,
         username: req.session.passport.user.displayName,
         videos: result.docs,
@@ -157,7 +291,8 @@ router.post('/dashboard', (req, res) => {
 router.get('/results', ensureAuthenticated, (req, res) => res.render('results'));
 
 router.get('/choreographer/:id', ensureAuthenticated, (req, res) => {
-  Video.find({ choreographer: req.params.id }, (err, result) => {
+  Video.find({ choreographer: req.params.id }, async (err, result) => {
+    const user = await User.findOne({ email: req.user._json.email }).exec();
     const title = [];
     const url = [];
     const level = [];
@@ -171,7 +306,8 @@ router.get('/choreographer/:id', ensureAuthenticated, (req, res) => {
       id[i] = result[i].id;
     }
     res.render('choreographer', {
-      userPhoto: req.session.passport.user.photos[0].value,
+      userPhoto: user.userPhoto,
+      userPhotoDef: user.userPhotoDef,
       count: result.length,
       choreographer: req.params.id,
       videos: result,
@@ -205,7 +341,8 @@ router.get('/calendar', ensureAuthenticated, (req, res) => {
           idCal[i] = data.items[i].id
         }
         res.render('calendar', {
-          userPhoto: req.session.passport.user.photos[0].value,
+          userPhoto: user.userPhoto,
+          userPhotoDef: user.userPhotoDef,
           count: data.items.length,
           API_key: process.env.API_key,
           CALENDAR_ID: user.email,
@@ -241,14 +378,16 @@ router.post('/calendar', ensureAuthenticated, (req, res) => {
   })
 });
 
-router.get('/player/:id', ensureAuthenticated, (req, res) => {
-  Video.findOne({ id: req.params.id }, (err, result) => {
+router.get('/player/:id', (req, res) => {
+  Video.findOne({ id: req.params.id }, async (err, result) => {
+    const user = await User.findOne({ email: req.user._json.email }).exec();
     if (result == null) {
       req.flash('error_msg', 'The video is either deleted or modified!');
       res.redirect('/dashboard?page=1&limit=15');
     } else {
       res.render('player', {
-        userPhoto: req.session.passport.user.photos[0].value,
+        userPhoto: user.userPhoto,
+        userPhotoDef: user.userPhotoDef,
         id: req.params.id,
         title: result.title,
         choreographer: result.choreographer,
@@ -310,9 +449,11 @@ router.post('/player/:id', ensureAuthenticated, (req, res) => {
   })
 })
 
-router.get('/upload', ensureAuthenticated, onlyDevs, (req, res) => {
+router.get('/upload', ensureAuthenticated, onlyDevs, async (req, res) => {
+  const user = await User.findOne({ email: req.user._json.email }).exec();
   res.render('upload', {
-    userPhoto: req.session.passport.user.photos[0].value,
+    userPhoto: user.userPhoto,
+    userPhotoDef: user.userPhotoDef,
     API_key: process.env.API_key,
   });
 })
