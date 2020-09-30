@@ -72,29 +72,83 @@
 
                 <div class="form-group" id="levelDrop">
                     <label for="level">Level</label>
-                    <select class="form-control" type="level" id="inputState" name="level">
-                        <option selected="null" value="<%= user.tags.level %>"><%= user.tags.level %></option>
-                        <option value="ja">Japanese</option>
-                        <option value="en">English</option>
-                        <option value="ko">Korean</option>
-                        <option value="es">Spanish</option>
+                    <select class="form-control" type="level" id="level" name="level">
+                        <option selected value="<%= user.tags.level %>"><%= user.tags.level %></option>
+                        <option value="Beginner">Beginner</option>
+                        <option value="Intermediate">Intermediate</option>
+                        <option value="Advanced">Advanced</option>
                     </select>
                 </div>
 
                 <div class="form-group" id="purposeDrop">
                     <label for="purpose">Purpose</label>
-                    <select class="form-control" type="purpose" id="inputState" name="purpose">
-                        <option selected="null" value="<%= user.tags.purpose %>"><%= user.tags.purpose %></option>
-                        <option value="ja">Japanese</option>
-                        <option value="en">English</option>
-                        <option value="ko">Korean</option>
-                        <option value="es">Spanish</option>
+                    <select class="form-control" type="purpose" id="purpose" name="purpose">
+                        <option selected value="<%= user.tags.purpose %>"><%= user.tags.purpose %></option>
+                        <option value="Skill Improvements">Skill Improvements</option>
+                        <option value="Health and Exercise">Health and Exercise</option>
+                        <option value="Entertainment">Entertainment</option>
                     </select>
                 </div>
 
-                <% for (i = 0; i < user.tags.genre.length; i++) { %>
-                <p><%= user.tags.genre[i] %></p>
-                <% } %>
+                <div class="form-group">
+                    <label for="genre">Genre</label>
+                    <% for (i = 0; i < user.tags.genre.length; i++) { %>
+                    <% } %>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input id="genre" name="genre" class="form-check-input" type="checkbox"
+                                <%= user.tags.genre.includes("Hip Hop") ? "checked" : "" %> value="Hip Hop">Hip
+                            Hop</label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input id="genre" name="genre" class="form-check-input" class="form-check-input"
+                                type="checkbox" <%= user.tags.genre.includes("Locking") ? "checked" : "" %>
+                                value="Locking">Locking</label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input id="genre" name="genre" class="form-check-input" class="form-check-input"
+                                type="checkbox" <%= user.tags.genre.includes("Jazz") ? "checked" : "" %>
+                                value="Jazz">Jazz</label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input id="genre" name="genre" class="form-check-input" class="form-check-input"
+                                type="checkbox" <%= user.tags.genre.includes("Breakin") ? "checked" : "" %>
+                                value="Breakin">Breakin</label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input id="genre" name="genre" class="form-check-input" class="form-check-input"
+                                type="checkbox" <%= user.tags.genre.includes("House") ? "checked" : "" %>
+                                value="House">House</label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input id="genre" name="genre" class="form-check-input" class="form-check-input"
+                                type="checkbox" <%= user.tags.genre.includes("Popping") ? "checked" : "" %>
+                                value="Popping">Popping</label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input id="genre" name="genre" class="form-check-input" class="form-check-input"
+                                type="checkbox" <%= user.tags.genre.includes("K-POP") ? "checked" : "" %>
+                                value="K-POP">K-POP</label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input id="genre" name="genre" class="form-check-input" class="form-check-input"
+                                type="checkbox" <%= user.tags.genre.includes("TikTok") ? "checked" : "" %>
+                                value="TikTok">TikTok</label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input id="genre" name="genre" class="form-check-input" class="form-check-input"
+                                type="checkbox" <%= user.tags.genre.includes("Bollywood") ? "checked" : "" %>
+                                value="Bollywood">Bollywood</label>
+                    </div>
+                </div>
 
                 <div class="text-center"><input class="chosen-value" type="submit" style="background-color: #ff7583;"
                         value="Update"></div>

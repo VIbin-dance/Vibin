@@ -146,7 +146,7 @@ router.get('/profile/edit', ensureAuthenticated, (req, res) => {
 })
 
 router.post('/profile/edit', ensureAuthenticated, upload.single('userPhotoDef'), (req, res) => {
-    const { username, bio } = req.body;
+    const { username, bio, level, purpose, genre } = req.body;
     let userPhotoDef = {};
     let query = {};
     let errors = [];
@@ -162,17 +162,21 @@ router.post('/profile/edit', ensureAuthenticated, upload.single('userPhotoDef'),
             $set: {
                 userPhotoDef: userPhotoDef,
                 username: username,
-                bio: bio
+                bio: bio,
+                tags: { level: level, purpose: purpose, genre: genre },
             }
         }
     } else if (req.file == undefined) {
         query = {
             $set: {
                 username: username,
-                bio: bio
+                bio: bio,
+                tags: { level: level, purpose: purpose, genre: genre },
             }
         }
     }
+
+    console.log(query)
 
     if (req.file != undefined && req.file.size > 307200) {
         req.flash('error_msg', 'The photo needs to be smaller than 3MB');
@@ -190,7 +194,7 @@ router.post('/profile/edit', ensureAuthenticated, upload.single('userPhotoDef'),
 
             if (errors.length > 0) {
                 res.render('profile', {
-                    errors, userPhoto, userPhotoDef, email, username, bio
+                    errors, userPhoto, userPhotoDef, email, username, bio, level, purpose, genre
                 });
             }
             else {
