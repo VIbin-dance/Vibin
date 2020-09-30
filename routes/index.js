@@ -241,7 +241,7 @@ router.post('/calendar', ensureAuthenticated, (req, res) => {
   })
 });
 
-router.get('/player/:id', (req, res) => {
+router.get('/player/:id', ensureAuthenticated, (req, res) => {
   Video.findOne({ id: req.params.id }, (err, result) => {
     if (result == null) {
       req.flash('error_msg', 'The video is either deleted or modified!');
@@ -258,7 +258,7 @@ router.get('/player/:id', (req, res) => {
   })
 });
 
-router.post('/player/:id', (req, res) => {
+router.post('/player/:id', ensureAuthenticated, (req, res) => {
   const { id, date, time } = req.body;
   let errors = [];
 
