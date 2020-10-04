@@ -116,6 +116,37 @@
 
   <section id="results" class="results">
     <div class="container">
+      <h3>Users who share the same interest</h3>
+      <div class="row">
+        <% for(let i=0; i < recUser.length; i++) { %>
+        <% if (recUser[i].email != user.email) { %>
+
+        <div class="col-lg-4 col-md-4 mt-4 mt-md-0">
+          <div class="icon-box">
+            <a href="/users/<%= recUser[i]._id %>">
+              <% if (typeof recUser[i].userPhotoDef.data != "undefined") { %>
+              <img
+                src="data:image/<%=recUser[i].userPhotoDef.contentType%>;base64, <%=recUser[i].userPhotoDef.data.toString('base64')%>"
+                height="40" width="40" style="border-radius: 50%;" alt="user photo">
+              <% } else { %>
+              <img src="<%= recUser[i].userPhoto %>" height="40" width="40" style="border-radius: 50%;"
+                alt="user photo">
+              <% } %>
+              <h5><%= recUser[i].username %></h5>
+            </a>
+            <p><%= recUser[i].bio %></p>
+
+          </div>
+        </div>
+        <% } %>
+        <% } %>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="results" class="results">
+    <div class="container">
       <%- include ('partials/messages') %>
       <h3>Recommended videos</h3>
       <div class="row">

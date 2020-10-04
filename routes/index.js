@@ -112,6 +112,8 @@ router.get('/dashboard/:sort', ensureAuthenticated, (req, res) => {
       countRec = await Video.find(query).exec();
     }
 
+    const recUser = await User.find({ "tags.genre" : user.tags.genre[0] }, null, { limit: 3 }).exec();
+
     Video.paginate({}, { page: req.query.page, limit: req.query.limit, sort: { publishedDate: req.params.sort } }, async (err, result) => {
 
       const max = countRec.length - limit;
@@ -156,6 +158,8 @@ router.get('/dashboard/:sort', ensureAuthenticated, (req, res) => {
           id[i] = result.docs[i].id;
         }
         res.render('dashboard', {
+          recUser: recUser,
+          user: user,
           userPhoto: user.userPhoto,
           userPhotoDef: user.userPhotoDef,
           count: result.total,

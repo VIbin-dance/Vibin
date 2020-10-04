@@ -1680,7 +1680,14 @@ section {
   max-height: 500px;
 }
 
-.results img {
+.results .icon-box {
+  width:100%;
+  padding: 20px;
+  transition: all ease-in-out 0.3s;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.results .box img {
   max-width: 100%;
   max-height: 50%;
 }
@@ -1750,8 +1757,18 @@ section {
 
 .videoPlayer #videoContainer {
   position: relative;
-  width: 100%;
+  width: 80%;
   padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  display: inline-block;
+}
+
+.videoPlayer #commentInput {
+  height:1000px;
+  width: 20%;
+  /* padding-top: 36%; 16:9 Aspect Ratio */
+  background-color: red;
+  float: right;
+  display: inline-block;
 }
 
 .videoPlayer #videoContainer #player {
