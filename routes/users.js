@@ -3,6 +3,7 @@ const router = express.Router();
 const nodemailer = require('nodemailer');
 const { ensureAuthenticated } = require('../config/auth');
 const multer = require('multer');
+const sharp = require('sharp');
 
 const storage = multer.memoryStorage()
 
@@ -145,15 +146,19 @@ router.get('/profile/edit', ensureAuthenticated, (req, res) => {
     })
 })
 
-router.post('/profile/edit', ensureAuthenticated, upload.single('userPhotoDef'), (req, res) => {
+router.post('/profile/edit', ensureAuthenticated, upload.single('userPhotoDef'), async (req, res) => {
     const { username, bio, level, purpose, genre } = req.body;
     let userPhotoDef = {};
     let query = {};
     let errors = [];
 
+    const buffer = await sharp(req.file.buffer).resize(320, 320)
+
+    // console.log(buffer.options.input.buffer);
+
     if (req.file != undefined) {
         userPhotoDef = {
-            data: req.file.buffer,
+            data: buffer.options.input.buffer,
             originalname: req.file.originalname,
             contentType: req.file.mimetype
         };
@@ -194,7 +199,7 @@ router.post('/profile/edit', ensureAuthenticated, upload.single('userPhotoDef'),
 
             if (errors.length > 0) {
                 res.render('profile', {
-                    errors, userPhoto, userPhotoDef, email, username, bio, level, purpose, genre
+                    errors, userPhoto: user.userPhoto, userPhotoDef: user.userPhotoDef, email, username, bio, level, purpose, genre
                 });
             }
             else {

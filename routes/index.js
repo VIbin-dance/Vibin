@@ -231,7 +231,7 @@ router.get('/dashboard/:sort', ensureAuthenticated, (req, res) => {
   // });
 });
 
-router.post('/dashboard', (req, res) => {
+router.post('/dashboard', ensureAuthenticated, (req, res) => {
   const { lengthCat, language, level, genre, purpose, mood, search } = req.body;
 
   const searchQuery = new RegExp(escapeRegex(search), 'gi');

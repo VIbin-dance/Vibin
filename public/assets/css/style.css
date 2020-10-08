@@ -1757,7 +1757,7 @@ section {
 
 .videoPlayer #videoContainer {
   position: relative;
-  width: 80%;
+  width: 100%;
   padding-top: 56.25%; /* 16:9 Aspect Ratio */
   display: inline-block;
 }
