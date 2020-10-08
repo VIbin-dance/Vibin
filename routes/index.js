@@ -9,7 +9,6 @@ const { onlyDevs } = require('../config/dev');
 
 const Video = require('../models/Video');
 const User = require('../models/User');
-const { count } = require('../models/Video');
 
 router.get('/', (req, res) => {
   if (req.session.passport) {
@@ -62,8 +61,6 @@ router.get('/terms-of-service', (req, res) => res.render('terms-of-service'));
 router.get('/dashboard/:sort', ensureAuthenticated, (req, res) => {
   User.findOne({ email: req.user._json.email }, async (err, user) => {
     const limit = 12;
-
-    // if (user.tag.level == undefined || user.tag.level == undefined || user.tag.level == undefined)
 
     let query = {
       $and: [
@@ -186,49 +183,6 @@ router.get('/dashboard/:sort', ensureAuthenticated, (req, res) => {
       });
     })
   })
-
-  // yeet
-  // Video.paginate({}, { page: req.query.page, limit: req.query.limit, sort: { publishedDate: req.params.sort } }, async (err, result) => {
-  //   const user = await User.findOne({ email: req.user._json.email }).exec();
-  //   const title = [];
-  //   const choreographer = [];
-  //   const url = [];
-  //   const level = [];
-  //   const thumbnail = [];
-  //   const id = [];
-
-  //   if (req.params.sort == -1) {
-  //     let sort = 1;
-  //   } else if (req.params.sort == 1) {
-  //     let sort = -1;
-  //   }
-
-  //   for (let i = 0; i < result.docs.length; i++) {
-  //     title[i] = result.docs[i].title;
-  //     choreographer[i] = result.docs[i].choreographer;
-  //     url[i] = result.docs[i].url;
-  //     level[i] = result.docs[i].level[0];
-  //     thumbnail[i] = result.docs[i].thumbnail;
-  //     id[i] = result.docs[i].id;
-  //   }
-  //   res.render('dashboard', {
-  //     userPhoto: user.userPhoto,
-  //     userPhotoDef: user.userPhotoDef,
-  //     count: result.total,
-  //     username: user.username,
-  //     videos: result.docs,
-  //     title: title,
-  //     choreographer: choreographer,
-  //     url: url,
-  //     id: id,
-  //     level: level,
-  //     thumbnail: thumbnail,
-  //     currentSort: req.params.sort,
-  //     currentPage: result.page,
-  //     pageCount: result.pages,
-  //     pages: paginate.getArrayPages(req)(3, result.pages, req.query.page)
-  //   })
-  // });
 });
 
 router.post('/dashboard', ensureAuthenticated, (req, res) => {

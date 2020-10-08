@@ -12,7 +12,6 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('./models/User');
 
 const app = express();
-// require('newrelic');
 require('dotenv').config();
 
 app.use(helmet());
@@ -26,7 +25,7 @@ app.use(session({
     httpOnly: true,
     saveUninitialized: true,
     cookie: {
-        maxAge: 30 * 60 * 1000
+        maxAge: null
     }
 }));
 
@@ -88,26 +87,6 @@ passport.use(new GoogleStrategy({
                         }
                     })
                 }
-                // User.findOneAndUpdate({
-                //     googleId: profile.id
-                // }, {
-                //     loginCount: loginCount + 1,
-                //     username:  profile.displayName,
-                //     email:  profile.emails[0].value,
-                //     name: { familyName: profile.name.familyName, givenName: profile.name.givenName },
-                //     userPhoto: profile.photos[0].value,
-                //     googleId: profile.id,
-                //     accessToken: accessToken
-                // }, {upsert: true, new: true, setDefaultsOnInsert: true }, (err, user)  => {
-                //     console.log(user)
-                //     if (err) {
-                //         return done(err, false, {
-                //             message: err
-                //         });
-                //     } else {
-                //         return done(null, profile);
-                //     }
-                // });
                 else {
                     return done(null, false);
                 }
