@@ -38,7 +38,7 @@
             <form action="/users/profile/edit" method="POST" enctype="multipart/form-data">
 
                 <div class="form-group">
-                    <label for="Photo">Photo<p><small>choose a photo that is less than 3MB, preferably a square</small>
+                    <label for="Photo">Photo<p><small>choose a photo that is less than 3MB. Your photo will be cropped square.</small>
                         </p></label><br>
                     <% if (typeof userPhotoDef.data != "undefined") { %>
                     <img id="output"
