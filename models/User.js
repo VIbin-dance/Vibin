@@ -72,6 +72,10 @@ const UserSchema = new mongoose.Schema({
     bio: {
         type: String,
         require: false,
+    },
+    like: {
+        type: Array,
+        require: false
     }
 });
 

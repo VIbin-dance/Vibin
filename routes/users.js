@@ -11,6 +11,7 @@ const upload = multer({ storage: storage });
 
 const User = require('../models/User');
 const { query } = require('express');
+const Video = require('../models/Video');
 
 router.get('/register', (req, res) => res.render('register'));
 router.get('/login', (req, res) => res.render('login'));
@@ -103,12 +104,16 @@ router.post('/preference', ensureAuthenticated, async (req, res) => {
 })
 
 router.get('/profile', ensureAuthenticated, (req, res) => {
-    User.findOne({ email: req.user._json.email }, (err, user) => {
+    User.findOne({ email: req.user._json.email }, async (err, user) => {
+
+        const likedVid = await Video.find({ like : user._id.toString() }).exec()
+
         if (!user) {
             req.flash('error_msg', 'There is no such user');
             res.redirect('/dashboard/-1?page=1&limit=15');
         } else {
             res.render('profile', {
+                likedVid: likedVid,
                 user: user,
                 followingCount: user.following.length,
                 followerCount: user.follower.length,
@@ -181,8 +186,6 @@ router.post('/profile/edit', ensureAuthenticated, upload.single('userPhotoDef'),
         }
     }
 
-    console.log(query)
-
     if (req.file != undefined && req.file.size > 307200) {
         req.flash('error_msg', 'The photo needs to be smaller than 3MB');
         res.redirect('/users/profile/edit');
@@ -212,12 +215,16 @@ router.post('/profile/edit', ensureAuthenticated, upload.single('userPhotoDef'),
 
 router.get('/:id', ensureAuthenticated, (req, res) => {
     User.findOne({ _id: req.params.id }, (err, user) => {
-        User.findOne({ email: req.user._json.email }, (err, currentUser) => {
+        User.findOne({ email: req.user._json.email }, async (err, currentUser) => {
+
+            const likedVid = await Video.find({ like : user._id.toString() }).exec()
+
             if (!user) {
                 req.flash('error_msg', 'There is no such user');
                 res.redirect('/dashboard/-1?page=1&limit=15');
             } else {
                 res.render('users', {
+                    likedVid: likedVid,
                     user: user,
                     currentUser: currentUser,
                     followingCount: user.following.length,
