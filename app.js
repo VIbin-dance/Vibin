@@ -97,6 +97,7 @@ app.use(paginate.middleware(10, 50))
 
 app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
+app.use('/company', require('./routes/company'));
 
 const PORT = process.env.PORT || 5000;
 
