@@ -310,6 +310,36 @@ router.get('/calendar', ensureAuthenticated, (req, res) => {
   })
 });
 
+router.get('/follow', ensureAuthenticated, async (req, res) => {
+  const currentUser = await User.findOne({ email: req.user._json.email }, 'following userPhoto userPhotoDef').exec();
+
+  User.find({ _id: currentUser.following }, async (err, user) => {
+
+    let allUser = new Array();
+    // let likedVid = [];
+
+
+    for (j = 0; j < user.length; j++) {
+      allUser[j] = new Array();
+    }
+
+    for (j = 0; j < user.length; j++) {
+      for (i = 0; i < user[j].like.length; i++) {
+        allUser[j][i] = await Video.find({ _id: user[j].like[i] }).exec();
+        console.log(allUser[j][i][0].title);
+      }
+    }
+
+    res.render('following', {
+      user: user,
+      count: user.length,
+      allUser: allUser,
+      userPhoto: currentUser.userPhoto,
+      userPhotoDef: currentUser.userPhotoDef,
+    });
+  })
+});
+
 router.post('/calendar', ensureAuthenticated, (req, res) => {
   User.findOne({ email: req.user._json.email }, (err, user) => {
 
@@ -359,32 +389,32 @@ router.post('/player/:id', ensureAuthenticated, async (req, res) => {
   const videoID = await Video.findOne({ id: id }, '_id').exec();
   console.log(videoID.toObject()._id);
 
-    User.findOne({ email: req.user._json.email }, (err, user) => {
+  User.findOne({ email: req.user._json.email }, (err, user) => {
 
-      const userID = user._id;
+    const userID = user._id;
 
-      try {
-        if (action == 'like') {
-          Video.findByIdAndUpdate(videoID._id, { $push: { like: [user._id.toString()] } }).exec();
-          User.findByIdAndUpdate(userID, { $push: { like: [videoID._id.toString()] } }).exec()
-            .then(function (user) {
-              req.flash('success_msg', 'Liked');
-              res.redirect(`/player/${id}`)
-            })
-            .catch(err => console.log(err));
-        } else if (action == 'unlike') {
-          Video.findByIdAndUpdate(videoID._id, { $pull: { like: user._id.toString()} }).exec();
-          User.findByIdAndUpdate(userID, { $pull: { like: videoID._id.toString() } }).exec()
-            .then(function (user) {
-              req.flash('success_msg', 'Unliked');
-              res.redirect(`/player/${id}`)
-            })
-            .catch(err => console.log(err));
-        }
-      } catch (err) {
-        console.log(err);
+    try {
+      if (action == 'like') {
+        Video.findByIdAndUpdate(videoID._id, { $push: { like: [user._id.toString()] } }).exec();
+        User.findByIdAndUpdate(userID, { $push: { like: [videoID._id.toString()] } }).exec()
+          .then(function (user) {
+            req.flash('success_msg', 'Liked');
+            res.redirect(`/player/${id}`)
+          })
+          .catch(err => console.log(err));
+      } else if (action == 'unlike') {
+        Video.findByIdAndUpdate(videoID._id, { $pull: { like: user._id.toString() } }).exec();
+        User.findByIdAndUpdate(userID, { $pull: { like: videoID._id.toString() } }).exec()
+          .then(function (user) {
+            req.flash('success_msg', 'Unliked');
+            res.redirect(`/player/${id}`)
+          })
+          .catch(err => console.log(err));
       }
-    })
+    } catch (err) {
+      console.log(err);
+    }
+  })
 });
 
 router.post('/player/:id/calendar', ensureAuthenticated, (req, res) => {
