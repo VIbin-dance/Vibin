@@ -48,9 +48,17 @@
           <ul>
 
             <form action="/player/:id" method="POST">
-              <% const action = like.includes(ObjID) ? 'unlike' : 'like'; %>
-              <input type="id" id="id" name="id"
-                value="<%= typeof id != 'undefined' ? id : '' %>" hidden />
+              <% let action = '' %>
+              <% for (i = 0; i < like.length; i++) { %>
+              <% let id = like[i].id %>
+              <% if (id.includes(ObjID)) { %>
+              <% action = 'unlike' %>
+              <% break; %>
+              <% } else { %>
+              <% action = 'like' %>
+              <% } %>
+              <% } %>
+              <input type="id" id="id" name="id" value="<%= typeof id != 'undefined' ? id : '' %>" hidden />
               <input type="action" id="action" name="action" value="<%= typeof action != 'undefined' ? action : '' %>"
                 hidden />
               <input class="btn btn-danger" type="submit" value="<%= action %>">

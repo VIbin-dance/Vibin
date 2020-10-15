@@ -73,10 +73,16 @@ const UserSchema = new mongoose.Schema({
         type: String,
         require: false,
     },
-    like: {
-        type: Array,
-        require: false
-    }
+    like: [{
+        id: {
+            type: String,
+            require: false
+        },
+        date: {
+            type: String,
+            require: false
+        }
+    }]
 });
 
 const User = mongoose.model('User', UserSchema);

@@ -392,21 +392,39 @@ router.post('/player/:id', ensureAuthenticated, async (req, res) => {
   User.findOne({ email: req.user._json.email }, (err, user) => {
 
     const userID = user._id;
+    let time = encodeURIComponent(moment().format('MMMM Do YYYY, h:mm a'));
+    console.log(time);
 
     try {
       if (action == 'like') {
         Video.findByIdAndUpdate(videoID._id, { $push: { like: [user._id.toString()] } }).exec();
-        User.findByIdAndUpdate(userID, { $push: { like: [videoID._id.toString()] } }).exec()
+        User.findByIdAndUpdate(userID, {
+          $push: {
+            like: [
+              {
+                id: user._id,
+                date: time
+              }
+            ]
+          }
+        }).exec()
           .then(function (user) {
-            req.flash('success_msg', 'Liked');
             res.redirect(`/player/${id}`)
           })
           .catch(err => console.log(err));
       } else if (action == 'unlike') {
         Video.findByIdAndUpdate(videoID._id, { $pull: { like: user._id.toString() } }).exec();
-        User.findByIdAndUpdate(userID, { $pull: { like: videoID._id.toString() } }).exec()
+        User.findByIdAndUpdate(userID, {
+          $pull: {
+            like: [
+              {
+                id: user._id,
+                date: time
+              }
+            ]
+          }
+        }).exec()
           .then(function (user) {
-            req.flash('success_msg', 'Unliked');
             res.redirect(`/player/${id}`)
           })
           .catch(err => console.log(err));
