@@ -79,9 +79,9 @@ const UserSchema = new mongoose.Schema({
             require: false
         },
         date: {
-            type: String,
-            require: false
-        }
+            type: Date,
+            default: Date.now
+        },
     }]
 });
 

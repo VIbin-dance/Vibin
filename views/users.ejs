@@ -68,6 +68,10 @@
 <section id="results" class="results">
     <div class="container">
         <h3>Liked videos</h3>
+        <hr>
+        <% if(likedVid.length === 0) { %>
+        <p class="text-center">This user has not liked any videos yet</p>
+        <% } %>
         <div class="row">
             <% for(let i=0; i < likedVid.length; i++) { %>
             <div class="col-lg-4 col-xs-6">

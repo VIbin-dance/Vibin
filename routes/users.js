@@ -106,7 +106,7 @@ router.post('/preference', ensureAuthenticated, async (req, res) => {
 router.get('/profile', ensureAuthenticated, (req, res) => {
     User.findOne({ email: req.user._json.email }, async (err, user) => {
 
-        const likedVid = await Video.find({ like : user._id.toString() }).exec()
+    const likedVid = await Video.find({ 'like.id' : user._id.toString() }).exec()
 
         if (!user) {
             req.flash('error_msg', 'There is no such user');
@@ -157,11 +157,9 @@ router.post('/profile/edit', ensureAuthenticated, upload.single('userPhotoDef'),
     let query = {};
     let errors = [];
 
-    const buffer = await sharp(req.file.buffer).resize(500, 500).toBuffer()
-
-    console.log(buffer);
 
     if (req.file != undefined) {
+        const buffer = await sharp(req.file.buffer).resize(500, 500).toBuffer()
         userPhotoDef = {
             data: buffer,
             originalname: req.file.originalname,
@@ -217,7 +215,7 @@ router.get('/:id', ensureAuthenticated, (req, res) => {
     User.findOne({ _id: req.params.id }, (err, user) => {
         User.findOne({ email: req.user._json.email }, async (err, currentUser) => {
 
-            const likedVid = await Video.find({ like : user._id.toString() }).exec()
+            const likedVid = await Video.find({ 'like.id' : user._id.toString() }).exec()
 
             if (!user) {
                 req.flash('error_msg', 'There is no such user');

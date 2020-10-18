@@ -105,8 +105,6 @@ router.get('/dashboard/:sort', ensureAuthenticated, (req, res) => {
       countRec = await Video.find(query).exec();
     }
 
-    const recUser = await User.find({ "tags.genre": user.tags.genre[0] }, null, { limit: 3 }).exec();
-
     Video.paginate({}, { page: req.query.page, limit: req.query.limit, sort: { publishedDate: req.params.sort } }, async (err, result) => {
 
       const max = countRec.length - limit;
@@ -151,7 +149,6 @@ router.get('/dashboard/:sort', ensureAuthenticated, (req, res) => {
           id[i] = result.docs[i].id;
         }
         res.render('dashboard', {
-          recUser: recUser,
           user: user,
           userPhoto: user.userPhoto,
           userPhotoDef: user.userPhotoDef,
@@ -311,29 +308,33 @@ router.get('/calendar', ensureAuthenticated, (req, res) => {
 });
 
 router.get('/follow', ensureAuthenticated, async (req, res) => {
-  const currentUser = await User.findOne({ email: req.user._json.email }, 'following userPhoto userPhotoDef').exec();
+  const currentUser = await User.findOne({ email: req.user._json.email }, 'following userPhoto userPhotoDef tags email').exec();
+  const recUser = await User.find({ "tags.genre": currentUser.tags.genre[0] }, null, { limit: 3 }).exec();
 
   User.find({ _id: currentUser.following }, async (err, user) => {
 
     let allUser = new Array();
-    // let likedVid = [];
-
+    let time = new Array();
 
     for (j = 0; j < user.length; j++) {
       allUser[j] = new Array();
+      time[j] = new Array();
     }
 
     for (j = 0; j < user.length; j++) {
       for (i = 0; i < user[j].like.length; i++) {
-        allUser[j][i] = await Video.find({ _id: user[j].like[i] }).exec();
-        console.log(allUser[j][i][0].title);
+        allUser[j][i] = await Video.find({ _id: user[j].like[i].id }, null, { sort: { 'like.date': -1 }}).exec();
+        time[j][i] = moment(allUser[j][i][0].like[0].date).fromNow();
       }
     }
 
     res.render('following', {
+      currentUser: currentUser,
+      recUser: recUser,
       user: user,
       count: user.length,
       allUser: allUser,
+      time: time,
       userPhoto: currentUser.userPhoto,
       userPhotoDef: currentUser.userPhotoDef,
     });
@@ -392,18 +393,23 @@ router.post('/player/:id', ensureAuthenticated, async (req, res) => {
   User.findOne({ email: req.user._json.email }, (err, user) => {
 
     const userID = user._id;
-    let time = encodeURIComponent(moment().format('MMMM Do YYYY, h:mm a'));
-    console.log(time);
 
     try {
       if (action == 'like') {
-        Video.findByIdAndUpdate(videoID._id, { $push: { like: [user._id.toString()] } }).exec();
+        Video.findByIdAndUpdate(videoID._id, {
+          $push: {
+            like: [
+              {
+                id: userID.toString()
+              }
+            ]
+          }
+        }).exec();
         User.findByIdAndUpdate(userID, {
           $push: {
             like: [
               {
-                id: user._id,
-                date: time
+                id: videoID.toObject()._id,
               }
             ]
           }
@@ -413,15 +419,20 @@ router.post('/player/:id', ensureAuthenticated, async (req, res) => {
           })
           .catch(err => console.log(err));
       } else if (action == 'unlike') {
-        Video.findByIdAndUpdate(videoID._id, { $pull: { like: user._id.toString() } }).exec();
+        console.log('unliked');
+        Video.findByIdAndUpdate(videoID._id, {
+          $pull: {
+            like: {
+              id: user._id.toString()
+            }
+          }
+        }).exec();
         User.findByIdAndUpdate(userID, {
           $pull: {
-            like: [
-              {
-                id: user._id,
-                date: time
-              }
-            ]
+            like:
+            {
+              id: videoID.toObject()._id,
+            }
           }
         }).exec()
           .then(function (user) {

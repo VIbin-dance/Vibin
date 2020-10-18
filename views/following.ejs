@@ -30,14 +30,45 @@
 <div class="top-space"></div>
 <section id="results" class="results">
     <div class="container">
+        <h3>Users who share the same interest</h3>
+        <hr>
+        <div class="row">
+            <% for(let i=0; i < recUser.length; i++) { %>
+            <% if (recUser[i].email != currentUser.email) { %>
+
+            <div class="col-lg-4 col-md-4 mt-4 mt-md-0">
+                <div class="icon-box">
+                    <a href="/users/<%= recUser[i]._id %>">
+                        <% if (typeof recUser[i].userPhotoDef.data != "undefined") { %>
+                        <img src="data:image/<%=recUser[i].userPhotoDef.contentType%>;base64, <%=recUser[i].userPhotoDef.data.toString('base64')%>"
+                            height="40" width="40" style="border-radius: 50%;" alt="user photo">
+                        <% } else { %>
+                        <img src="<%= recUser[i].userPhoto %>" height="40" width="40" style="border-radius: 50%;"
+                            alt="user photo">
+                        <% } %>
+                        <h5><%= recUser[i].username %></h5>
+                    </a>
+                    <p><%= recUser[i].bio %></p>
+
+                </div>
+            </div>
+            <% } %>
+            <% } %>
+        </div>
+    </div>
+</section>
+
+<section id="results" class="results">
+    <div class="container">
         <h2 class="user text-center"><span id="random"></span></h2><br>
-        <h4>Following</h4>
+        <h3>Following</h3>
+        <hr>
         <%- include ('partials/messages') %>
         <div class="row">
             <% for(j=0; j < allUser.length; j++) { %>
             <% for(i=0; i < allUser[j].length; i++) { %>
             <div class="col-lg-4">
-                <p><%= user[j].username %> liked this video</p>
+                <p><%= user[j].username %> liked this video | <%= time[j][i] %></p>
                 <div class="box">
                     <a href="/player/<%= allUser[j][i][0].id %>">
                         <img src="<%= allUser[j][i][0].thumbnail %>" alt="thumbnail">
@@ -45,7 +76,7 @@
                     <h4 id="allUser[j][i][0].title<%= i %>"><%= allUser[j][i][0].title %></h4>
                     <a class="special"
                         href="/choreographer/<%= allUser[j][i][0].choreographer %>"><%= allUser[j][i][0].choreographer %></a>
-                    <p><%= allUser[j][i][0].level %></p>
+                    <p><%= allUser[j][i][0].level[0] %></p>
                 </div>
             </div>
             <% } %>

@@ -35,6 +35,8 @@
   <div class="videoPlayer">
     <div id="videoContainer">
       <div id="player"></div>
+      <!-- <iframe id="player" src="https://player.vimeo.com/video/469217852" frameborder="0" allow="autoplay; fullscreen"
+        allowfullscreen style="position:absolute;top:0;left:0;bottom: 0;right: 0;width:100%;height:100%;"></iframe> -->
     </div>
     <div class="container-fluid">
       <%- include ('partials/messages') %>
@@ -48,14 +50,12 @@
           <ul>
 
             <form action="/player/:id" method="POST">
-              <% let action = '' %>
+              <% let action = 'like' %>
               <% for (i = 0; i < like.length; i++) { %>
-              <% let id = like[i].id %>
-              <% if (id.includes(ObjID)) { %>
+              <% let likeid = like[i].id %>
+              <% if (likeid.includes(ObjID)) { %>
               <% action = 'unlike' %>
               <% break; %>
-              <% } else { %>
-              <% action = 'like' %>
               <% } %>
               <% } %>
               <input type="id" id="id" name="id" value="<%= typeof id != 'undefined' ? id : '' %>" hidden />

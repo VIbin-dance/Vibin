@@ -58,10 +58,16 @@ const VideoSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    like: {
-        type: Array,
-        required: false
-    }
+    like: [{
+        id: {
+            type: String,
+            require: false
+        },
+        date: {
+            type: Date,
+            default: Date.now
+        },
+    }]
 });
 
 VideoSchema.plugin(mongoosePaginate);
