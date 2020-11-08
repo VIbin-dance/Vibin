@@ -4,6 +4,8 @@ const paginate = require('express-paginate');
 const passport = require('passport');
 const fetch = require('node-fetch');
 const moment = require('moment');
+const request = require("request");
+const stripe = require('stripe')('sk_test_51Hfnh4BHyna8CK9qjfFDuXjt1pmBPnPMoGflpvhPIet1ytDmqDZD3sayrbLnHbIQXnLBIZ8UWxSe62EaNZuw2oDO00b2zFDdno');
 const { ensureAuthenticated } = require('../config/auth');
 const { onlyDevs } = require('../config/dev');
 
@@ -323,7 +325,7 @@ router.get('/follow', ensureAuthenticated, async (req, res) => {
 
     for (j = 0; j < user.length; j++) {
       for (i = 0; i < user[j].like.length; i++) {
-        allUser[j][i] = await Video.find({ _id: user[j].like[i].id }, null, { sort: { 'like.date': -1 }}).exec();
+        allUser[j][i] = await Video.find({ _id: user[j].like[i].id }, null, { sort: { 'like.date': -1 } }).exec();
         time[j][i] = moment(allUser[j][i][0].like[0].date).fromNow();
       }
     }
@@ -556,6 +558,89 @@ router.post('/upload', (req, res) => {
       }
     }
   );
+})
+
+router.get('/reservation', ensureAuthenticated, async (req, res) => {
+  const user = await User.findOne({ email: req.user._json.email }, 'userPhoto userPhotoDef').exec();
+
+  res.render('reservation', {
+    userPhoto: user.userPhoto,
+    userPhotoDef: user.userPhotoDef,
+  });
+})
+
+router.get('/success', ensureAuthenticated, async (req, res) => {
+  const user = await User.findOne({ email: req.user._json.email }, 'userPhoto userPhotoDef').exec();
+
+  res.render('success', {
+    userPhoto: user.userPhoto,
+    userPhotoDef: user.userPhotoDef,
+  });
+})
+
+router.get('/cancel', ensureAuthenticated, async (req, res) => {
+  const user = await User.findOne({ email: req.user._json.email }, 'userPhoto userPhotoDef').exec();
+
+  res.render('cancel', {
+    userPhoto: user.userPhoto,
+    userPhotoDef: user.userPhotoDef,
+  });
+})
+
+router.post('/create-session', async (req, res) => {
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ['card'],
+    customer_email: req.user._json.email,
+    submit_type: 'pay',
+    line_items: [
+      {
+        price_data: {
+          currency: 'jpy',
+          product_data: {
+            name: 'Stubborn Attachments',
+            images: ['https://i.imgur.com/EHyR2nP.png'],
+          },
+          unit_amount: 2000,
+        },
+        quantity: 1,
+      },
+    ],
+    mode: 'payment',
+    success_url: 'http://localhost:5000/success',
+    cancel_url: 'http://localhost:5000/cancel',
+  });
+  res.json({ id: session.id });
+});
+
+router.get('/create', ensureAuthenticated, async (req, res) => {
+  const user = await User.findOne({ email: req.user._json.email }, 'userPhoto userPhotoDef username').exec();
+
+  // const options = {
+  //   method: 'POST',
+  //   url: 'https://zoom.us/oauth/token',
+  //   qs: {
+  //     grant_type: 'authorization_code',
+  //     //The code below is a sample authorization code. Replace it with your actual authorization code while making requests.
+  //     code: 'B1234558uQ',
+  //     redirect_uri: 'http://localhost:5000/upload'
+  //   },
+  //   headers: {
+  //     Authorization: 'Basic ' + Buffer.from(process.env.ZOOM_CLIENT_ID + ':' + process.env.ZOOM_CLIENT_SECRET).toString('base64')
+  //   }
+  // };
+
+  // request(options, function (error, response, body) {
+  //   if (error) throw new Error(error);
+
+  //   console.log(body);
+  // });
+
+  res.render('create', {
+    choreographer: user.username,
+    userPhoto: user.userPhoto,
+    userPhotoDef: user.userPhotoDef,
+    CLIENT_id: process.env.ZOOM_CLIENT_ID
+  });
 })
 
 function escapeRegex(text) {

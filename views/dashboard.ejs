@@ -118,7 +118,7 @@
   <section id="results" class="results">
     <div class="container">
       <%- include ('partials/messages') %>
-      <h3>Recommended videos</h3>
+      <h3>Future vibes&#10024;</h3>
       <div class="row">
         <% for(let i=0; i < videosRec.length; i++) { %>
         <div class="col-lg-4 col-xs-6">
@@ -136,6 +136,25 @@
     </div>
   </section>
 
+  <section id="results" class="results">
+    <div class="container">
+      <h3>Recommended videos</h3>
+      <div class="row">
+        <% for(let i=0; i < videosRec.length; i++) { %>
+        <div class="col-lg-4 col-xs-6">
+          <div class="box">
+            <a href="/player/<%= idRec[i] %>">
+              <img src="<%= thumbnailRec[i] %>" alt="thumbnail">
+            </a>
+            <h4 id="title<%= i %>"><%= titleRec[i] %></h4>
+            <a class="special" href="/choreographer/<%= choreographerRec[i] %>"><%= choreographerRec[i] %></a>
+            <p><%= levelRec[i][0] %></p>
+          </div>
+        </div>
+        <% } %>
+      </div>
+    </div>
+  </section>
 
   <section id="results" class="results">
     <div class="container">
