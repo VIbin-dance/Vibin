@@ -151,6 +151,7 @@ router.get('/dashboard/:sort', ensureAuthenticated, (req, res) => {
           id[i] = result.docs[i].id;
         }
         res.render('dashboard', {
+          CLIENT_id: process.env.ZOOM_CLIENT_ID,
           user: user,
           userPhoto: user.userPhoto,
           userPhotoDef: user.userPhotoDef,
@@ -641,6 +642,57 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
     userPhotoDef: user.userPhotoDef,
     CLIENT_id: process.env.ZOOM_CLIENT_ID
   });
+})
+
+router.post('/create', (req, res) => {
+  const { title, choreographer, thumbnail, url, id, publishedDate, length, lengthCat, language, level, genre, purpose, mood } = req.body;
+  let errors = [];
+
+  // Check required fields
+  if (title == '' || choreographer == '' || thumbnail == '' || url == '' || id == '' || publishedDate == '' || length == '' || lengthCat == '' || language == '' || level == undefined || genre == undefined || purpose == undefined || mood == undefined) {
+    errors.push({ msg: 'Please fill in all fields' });
+  }
+
+  if (errors.length > 0) {
+    res.render('create', { errors, userPhoto: req.session.passport.user.photos[0].value, API_key: process.env.API_key, CLIENT_id: process.env.CLIENT_id, title, choreographer, thumbnail, url, id, publishedDate, length, lengthCat, language, level, genre, purpose, mood });
+  } else {
+    Video.findOne({ url: url })
+      .then(video => {
+        if (video) {
+          errors.push({ msg: 'The video is already registered!' });
+          res.render('create', {
+            errors, userPhoto: req.session.passport.user.photos[0].value, API_key: process.env.API_key
+          });
+        } else {
+          const newVideo = new Video({ title, choreographer, thumbnail, url, id, publishedDate, length, lengthCat, language, level, genre, purpose, mood });
+          newVideo.save()
+            .then(function (video) {
+              req.flash('success_msg', 'The dance is now registered');
+              res.redirect('/dashboard/-1?page=1&limit=15');
+            })
+            .catch(err => console.log(err));
+        }
+      })
+  }
+  Video.updateMany(
+    {},
+    {
+      $addToSet: {
+        length: ["any"],
+        language: ["any"],
+        level: ["any"],
+        lengthCat: ["any"],
+        genre: ["any"],
+        purpose: ["any"],
+        mood: ["any"]
+      }
+    },
+    function (err, result) {
+      if (err) {
+        console.log(err);
+      }
+    }
+  );
 })
 
 function escapeRegex(text) {
