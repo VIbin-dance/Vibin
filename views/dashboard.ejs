@@ -8,10 +8,12 @@
       <h1 class="logo"><a href="/">Vibin'</a></h1>
       <nav class="nav-menu d-none d-lg-block">
         <ul>
-          <li class="active"><a href="/dashboard/-1?page=1&limit=15">Home</a></li>
-          <li><a href="/follow">Following</a></li>
-          <li><a href="/calendar">Calendar</a></li>
-          <li><a href="https://zoom.us/oauth/authorize?response_type=code&client_id=<%= CLIENT_id %>&redirect_uri=http://localhost:5000/create">Create</a></li>
+          <li class="active"><a href="/dashboard/-1?page=1&limit=15"><%= __('header.Home') %></a></li>
+          <li><a href="/follow"><%= __('header.Following') %></a></li>
+          <li><a href="/calendar"><%= __('header.Calendar') %></a></li>
+          <li><a href="/create"><%= __('header.Create') %></a>
+            <!-- https://zoom.us/oauth/authorize?response_type=code&client_id=<%= CLIENT_id %>&redirect_uri=http://localhost:5000/create -->
+          </li>
         </ul>
       </nav>
       <nav class="nav-menu d-none d-lg-block">
@@ -24,8 +26,8 @@
             <img src="<%= userPhoto %>" height="40" width="40" style="border-radius: 50%;" alt="user photo">
             <% } %>
             <ul>
-              <li><a href="/users/profile">Profile</a></li>
-              <li><a href="/logout">Logout</a></li>
+              <li><a href="/users/profile"><%= __('header.Profile') %></a></li>
+              <li><a href="/logout"><%= __('header.Logout') %></a></li>
             </ul>
           </li>
         </ul>
@@ -36,76 +38,76 @@
   <section id="searchBar" class="searchBar">
     <div class="search-bar">
       <form action="/dashboard" method="POST">
-        <h2 class="user">Welcome <%= username %>, <span id="random"></span></h2><br>
+        <h2 class="user"><%= __('dashboard.welcome.welcome') %> <%= username %>, <span id="random"></span></h2><br>
 
         <div class="form-group">
           <select class="form-control chosen-value" type="length" id="length" name="lengthCat">
-            <option selected="null" value="any">Length</option>
-            <option value="short">Short</option>
-            <option value="medium">Medium</option>
-            <option value="long">Long</option>
+            <option selected="null" value="any"><%= __('dashboard.search.length.top') %></option>
+            <option value="short"><%= __('dashboard.search.length.short') %></option>
+            <option value="medium"><%= __('dashboard.search.length.medium') %></option>
+            <option value="long"><%= __('dashboard.search.length.long') %></option>
           </select>
         </div>
 
         <div class="form-group">
           <select class="form-control chosen-value" type="language" id="language" name="language">
-            <option selected="null" value="any">Language</option>
-            <option value="ja">Japanese</option>
-            <option value="en">English</option>
-            <option value="ko">Korean</option>
-            <option value="es">Spanish</option>
+            <option selected="null" value="any"><%= __('dashboard.search.language.top') %></option>
+            <option value="ja"><%= __('dashboard.search.language.Japanese') %></option>
+            <option value="en"><%= __('dashboard.search.language.English') %></option>
+            <option value="ko"><%= __('dashboard.search.language.Korean') %></option>
+            <option value="es"><%= __('dashboard.search.language.Spanish') %></option>
           </select>
         </div>
 
         <div class="form-group">
           <select class="form-control chosen-value" type="level" id="level" name="level">
-            <option selected="null" value="any">Level</option>
-            <option value="Beginner">Beginner</option>
-            <option value="Intermediate">Intermediate</option>
-            <option value="Advanced">Advanced</option>
+            <option selected="null" value="any"><%= __('dashboard.search.level.top') %></option>
+            <option value="Beginner"><%= __('dashboard.search.level.Beginner') %></option>
+            <option value="Intermediate"><%= __('dashboard.search.level.Intermediate') %></option>
+            <option value="Advanced"><%= __('dashboard.search.level.Advanced') %></option>
           </select>
         </div>
 
         <div class="form-group">
           <select class="form-control chosen-value" type="genre" id="genre" name="genre">
-            <option selected="null" value="any">Genre</option>
-            <option value="Hip Hop">Hip Hop</option>
-            <option value="Locking">Locking</option>
-            <option value="Jazz">Jazz</option>
-            <option value="Breakin">Breakin</option>
-            <option value="House">House</option>
-            <option value="Popping">Popping</option>
-            <option value="K-POP">K-POP</option>
-            <option value="TikTok">TikTok</option>
+            <option selected="null" value="any"><%= __('dashboard.search.genre.top') %></option>
+            <option value="Hip Hop"><%= __('dashboard.search.genre.Hip Hop') %></option>
+            <option value="Locking"><%= __('dashboard.search.genre.Locking') %></option>
+            <option value="Jazz"><%= __('dashboard.search.genre.Jazz') %></option>
+            <option value="Breakin"><%= __('dashboard.search.genre.Breakin') %></option>
+            <option value="House"><%= __('dashboard.search.genre.House') %></option>
+            <option value="Popping"><%= __('dashboard.search.genre.Popping') %></option>
+            <option value="K-POP"><%= __('dashboard.search.genre.K-POP') %></option>
+            <option value="TikTok"><%= __('dashboard.search.genre.TikTok') %></option>
           </select>
         </div>
 
         <div class="form-group">
           <select class="form-control chosen-value" type="purpose" id="purpose" name="purpose">
-            <option selected="null" value="any">Purpose</option>
-            <option value="Skill Improvements">Skill Improvements</option>
-            <option value="Health and Exercise">Health and Exercise</option>
-            <option value="Entertainment">Entertainment</option>
+            <option selected="null" value="any"><%= __('dashboard.search.purpose.top') %></option>
+            <option value="Skill Improvements"><%= __('dashboard.search.purpose.Skill Improvements') %></option>
+            <option value="Health and Exercise"><%= __('dashboard.search.purpose.Health and Exercise') %></option>
+            <option value="Entertainment"><%= __('dashboard.search.purpose.Entertainment') %></option>
           </select>
         </div>
 
         <div class="form-group">
           <select class="form-control chosen-value" type="mood" id="mood" name="mood">
-            <option selected="null" value="any">Mood</option>
-            <option value="Groovy">Groovy</option>
-            <option value="Funky">Funky</option>
-            <option value="Chill">Chill</option>
-            <option value="Romantic">Romantic</option>
-            <option value="Sexy">Sexy</option>
-            <option value="Calm">Calm</option>
-            <option value="Angry">Angry</option>
-            <option value="Peaceful">Peaceful</option>
-            <option value="Sad">Sad</option>
-            <option value="Fearful">Fearful</option>
-            <option value="Happy">Happy</option>
-            <option value="Tense">Tense</option>
-            <option value="Sassy">Sassy</option>
-            <option value="Savage">Savage</option>
+            <option selected="null" value="any"><%= __('dashboard.search.mood.top') %></option>
+            <option value="Groovy"><%= __('dashboard.search.mood.Groovy') %></option>
+            <option value="Funky"><%= __('dashboard.search.mood.Funky') %></option>
+            <option value="Chill"><%= __('dashboard.search.mood.Chill') %></option>
+            <option value="Romantic"><%= __('dashboard.search.mood.Romantic') %></option>
+            <option value="Sexy"><%= __('dashboard.search.mood.Sexy') %></option>
+            <option value="Calm"><%= __('dashboard.search.mood.Calm') %></option>
+            <option value="Angry"><%= __('dashboard.search.mood.Angry') %></option>
+            <option value="Peaceful"><%= __('dashboard.search.mood.Peaceful') %></option>
+            <option value="Sad"><%= __('dashboard.search.mood.Sad') %></option>
+            <option value="Fearful"><%= __('dashboard.search.mood.Fearful') %></option>
+            <option value="Happy"><%= __('dashboard.search.mood.Happy') %></option>
+            <option value="Tense"><%= __('dashboard.search.mood.Tense') %></option>
+            <option value="Sassy"><%= __('dashboard.search.mood.Sassy') %></option>
+            <option value="Savage"><%= __('dashboard.search.mood.Savage') %></option>
           </select>
         </div>
         <input type="search" id="search" name="search" class="chosen-value" placeholder="Search"
@@ -118,7 +120,27 @@
   <section id="results" class="results">
     <div class="container">
       <%- include ('partials/messages') %>
-      <h3>Future vibes&#10024;</h3>
+      <h3><%= __('dashboard.Future vibes') %>&#10024;</h3>
+      <div class="row">
+        <% for(let i=0; i < lesson.length; i++) { %>
+        <div class="col-lg-4 col-xs-6">
+          <div class="box">
+            <a href="/reservation/<%= idLesson[i] %>">
+              <img src="<%= thumbnailLesson[i] %>" alt="thumbnail">
+            </a>
+            <h4 id="titleLesson<%= i %>"><%= titleLesson[i] %></h4>
+            <a class="special" href="/choreographer/<%= choreographerLesson[i] %>"><%= choreographerLesson[i] %></a>
+            <p><%= levelLesson[i] %></p>
+          </div>
+        </div>
+        <% } %>
+      </div>
+    </div>
+  </section>
+
+  <section id="results" class="results">
+    <div class="container">
+      <h3><%= __('dashboard.Recommended videos') %></h3>
       <div class="row">
         <% for(let i=0; i < videosRec.length; i++) { %>
         <div class="col-lg-4 col-xs-6">
@@ -138,29 +160,9 @@
 
   <section id="results" class="results">
     <div class="container">
-      <h3>Recommended videos</h3>
-      <div class="row">
-        <% for(let i=0; i < videosRec.length; i++) { %>
-        <div class="col-lg-4 col-xs-6">
-          <div class="box">
-            <a href="/player/<%= idRec[i] %>">
-              <img src="<%= thumbnailRec[i] %>" alt="thumbnail">
-            </a>
-            <h4 id="title<%= i %>"><%= titleRec[i] %></h4>
-            <a class="special" href="/choreographer/<%= choreographerRec[i] %>"><%= choreographerRec[i] %></a>
-            <p><%= levelRec[i][0] %></p>
-          </div>
-        </div>
-        <% } %>
-      </div>
-    </div>
-  </section>
-
-  <section id="results" class="results">
-    <div class="container">
-      <h3>Latest videos</h3>
-      <p>We have <%= count %> videos in total!</p>
-      <p>Sort by:
+      <h3><%= __('dashboard.Latest videos') %></h3>
+      <p><%= __('dashboard.sub1') %> <%= count %> <%= __('dashboard.sub2') %></p>
+      <p><%= __('dashboard.Sort') %>
         <% if (currentSort == -1)  { %>
         <a href="/dashboard/<%=  parseInt(currentSort) + 2 %>?page=1&limit=15">
           oldest
@@ -270,25 +272,27 @@
           <div class="col-lg-3 col-md-6 footer-contact">
             <h3>Vibin'</h3>
             <p>
-              <strong>Phone:</strong> +81 080 4339 9251<br>
-              <strong>Email:</strong> info@vibin.tokyo<br>
+              <strong><%= __('footer.Phone') %>:</strong> +81 080 4339 9251<br>
+              <strong><%= __('footer.E-Mail') %>:</strong> info@vibin.tokyo<br>
             </p>
           </div>
           <div class="col-lg-2 col-md-6 footer-links">
-            <h4>Sitemap</h4>
+            <h4><%= __('footer.Sitemap') %></h4>
             <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="/dashboard/-1?page=1&limit=15">Home</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="/calendar">Calendar</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="/upload">Upload</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="/terms-of-service">Terms of service</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="/privacy-policy">Privacy policy</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#about"><%= __('footer.Aboutus') %></a></li>
+              <li><i class="bx bx-chevron-right"></i> <a
+                  href="/dashboard/-1?page=1&limit=15"><%= __('footer.Home') %></a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="/calendar"><%= __('footer.Calendar') %></a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="/upload"><%= __('footer.Upload') %></a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="/terms-of-service"><%= __('footer.TOS') %></a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="/privacy-policy"><%= __('footer.PP') %></a></li>
             </ul>
           </div>
           <div class="col-lg-4 col-md-6 footer-newsletter">
-            <h4>Join Our Newsletter</h4>
-            <p>Get the latest news from Vibin'!</p>
+            <h4><%= __('footer.News1') %></h4>
+            <p><%= __('footer.News2') %></p>
             <form action="" method="post">
-              <input type="email" name="email"><input type="submit" value="Subscribe">
+              <input type="email" name="email"><input type="submit" value="<%= __('footer.Subscribe') %>">
             </form>
           </div>
           <div class="social-links text-center text-md-right pt-3 pt-md-0">

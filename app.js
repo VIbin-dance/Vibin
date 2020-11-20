@@ -7,6 +7,7 @@ const flash = require('connect-flash');
 const paginate = require('express-paginate');
 const passport = require('passport');
 const helmet = require('helmet');
+const { I18n } = require('i18n');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const User = require('./models/User');
@@ -40,8 +41,6 @@ passport.deserializeUser((user, done) => {
     done(null, user);
 });
 
-// Oauthログイン
-// データベースに保存
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -96,17 +95,14 @@ passport.use(new GoogleStrategy({
 
 const db = process.env.MongoURI;
 
-// Connect to Mongo
 mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
     .then(() => console.log('MongoDB connected...'))
     .catch(err => console.log(err));
 
 app.use(express.urlencoded({ extended: false }));
 
-// Connect flash
 app.use(flash());
 
-// Global vars
 app.use((req, res, next) => {
     res.locals.success_msg = req.flash('success_msg');
     res.locals.error_msg = req.flash('error_msg');
@@ -115,6 +111,21 @@ app.use((req, res, next) => {
 });
 
 app.use(paginate.middleware(10, 50))
+
+const i18n = new I18n({
+    locales: ['en', 'ja'],
+    directory: path.join(__dirname, '/locales'),
+    objectNotation: true
+})
+
+app.use(i18n.init);
+
+// app.use(function (req, res, next) {
+//     if (req.session.locale) {
+//         i18n.setLocale(req, req.session.locale);
+//     }
+//     next();
+// });
 
 app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));

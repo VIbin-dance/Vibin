@@ -4,13 +4,14 @@ const paginate = require('express-paginate');
 const passport = require('passport');
 const fetch = require('node-fetch');
 const moment = require('moment');
-const request = require("request");
+const i18n = require('i18n');
 const stripe = require('stripe')('sk_test_51Hfnh4BHyna8CK9qjfFDuXjt1pmBPnPMoGflpvhPIet1ytDmqDZD3sayrbLnHbIQXnLBIZ8UWxSe62EaNZuw2oDO00b2zFDdno');
 const { ensureAuthenticated } = require('../config/auth');
 const { onlyDevs } = require('../config/dev');
 
 const Video = require('../models/Video');
 const User = require('../models/User');
+const Lesson = require('../models/Lesson');
 
 router.get('/', (req, res) => {
   if (req.session.passport) {
@@ -118,7 +119,7 @@ router.get('/dashboard/:sort', ensureAuthenticated, (req, res) => {
         skip: skip
       };
 
-      Video.find(query, null, options, (err, resultRec) => {
+      Video.find(query, null, options, async (err, resultRec) => {
         const titleRec = [];
         const choreographerRec = [];
         const urlRec = [];
@@ -150,6 +151,23 @@ router.get('/dashboard/:sort', ensureAuthenticated, (req, res) => {
           thumbnail[i] = result.docs[i].thumbnail;
           id[i] = result.docs[i].id;
         }
+
+        const lesson = await Lesson.find({}).exec();
+
+        const idLesson = [];
+        const titleLesson = [];
+        const choreographerLesson = [];
+        const levelLesson = [];
+        const thumbnailLesson = [];
+
+        for (let i = 0; i < lesson.length; i++) {
+          idLesson[i] = lesson[i]._id;
+          titleLesson[i] = lesson[i].title;
+          choreographerLesson[i] = lesson[i].choreographer;
+          levelLesson[i] = lesson[i].level[0];
+          thumbnailLesson[i] = lesson[i].thumbnail;
+        }
+
         res.render('dashboard', {
           CLIENT_id: process.env.ZOOM_CLIENT_ID,
           user: user,
@@ -171,6 +189,12 @@ router.get('/dashboard/:sort', ensureAuthenticated, (req, res) => {
           levelRec: levelRec,
           thumbnail: thumbnail,
           thumbnailRec: thumbnailRec,
+          lesson: lesson,
+          idLesson: idLesson,
+          titleLesson: titleLesson,
+          choreographerLesson: choreographerLesson,
+          levelLesson: levelLesson,
+          thumbnailLesson: thumbnailLesson,
           currentSort: req.params.sort,
           currentPage: result.page,
           pageCount: result.pages,
@@ -371,7 +395,7 @@ router.get('/player/:id', ensureAuthenticated, (req, res) => {
     const user = await User.findOne({ email: req.user._json.email }).exec();
     if (result == null) {
       req.flash('error_msg', 'The video is either deleted or modified!');
-      res.redirect('/dashboard?page=1&limit=15');
+      res.redirect('/dashboard/-1?page=1&limit=15');
     } else {
       res.render('player', {
         like: user.like,
@@ -391,7 +415,6 @@ router.post('/player/:id', ensureAuthenticated, async (req, res) => {
   const { id, action } = req.body;
 
   const videoID = await Video.findOne({ id: id }, '_id').exec();
-  console.log(videoID.toObject()._id);
 
   User.findOne({ email: req.user._json.email }, (err, user) => {
 
@@ -422,7 +445,6 @@ router.post('/player/:id', ensureAuthenticated, async (req, res) => {
           })
           .catch(err => console.log(err));
       } else if (action == 'unlike') {
-        console.log('unliked');
         Video.findByIdAndUpdate(videoID._id, {
           $pull: {
             like: {
@@ -561,10 +583,12 @@ router.post('/upload', (req, res) => {
   );
 })
 
-router.get('/reservation', ensureAuthenticated, async (req, res) => {
+router.get('/reservation/:id', ensureAuthenticated, async (req, res) => {
   const user = await User.findOne({ email: req.user._json.email }, 'userPhoto userPhotoDef').exec();
+  const lesson = await Lesson.findOne({ _id: req.params.id }).exec();
 
   res.render('reservation', {
+    lesson: lesson,
     userPhoto: user.userPhoto,
     userPhotoDef: user.userPhotoDef,
   });
@@ -644,44 +668,80 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
   });
 })
 
-router.post('/create', (req, res) => {
-  const { title, choreographer, thumbnail, url, id, publishedDate, length, lengthCat, language, level, genre, purpose, mood } = req.body;
+router.post('/create', async (req, res) => {
+
+  // fetch(`https://www.googleapis.com/calendar/v3/calendars/${user.email}/events?key=${process.env.API_key}`, {
+  //   'method': 'POST',
+  //   'headers': {
+  //     'Authorization': `Bearer ${user.accessToken}`,
+  //     'Content-Type': 'application/json'
+  //   },
+  // })
+  //   .then(response => response.json())
+  //   .then(data => {
+  //     if (date == '') {
+  //       errors.push({ msg: 'Please fill in all fields' });
+  //     }
+
+  //     if (errors.length > 0) {
+  //       res.render('player', { errors, userPhoto: req.session.passport.user.photos[0].value, title: result.title, choreographer: result.choreographer, id: id, level: result.level });
+  //     }
+  //     else {
+  //       req.flash('success_msg', 'The dance is now scheduled');
+  //       res.redirect('/calendar');
+  //     }
+  //   })
+
+  const { title, thumbnail, language, choreographer, price, level, genre, purpose, mood } = req.body;
   let errors = [];
 
-  // Check required fields
-  if (title == '' || choreographer == '' || thumbnail == '' || url == '' || id == '' || publishedDate == '' || length == '' || lengthCat == '' || language == '' || level == undefined || genre == undefined || purpose == undefined || mood == undefined) {
+  if (title == '' || thumbnail == '' || language == '' || choreographer == '' || price == '' || level == undefined || genre == undefined || purpose == undefined || mood == undefined) {
     errors.push({ msg: 'Please fill in all fields' });
   }
 
   if (errors.length > 0) {
-    res.render('create', { errors, userPhoto: req.session.passport.user.photos[0].value, API_key: process.env.API_key, CLIENT_id: process.env.CLIENT_id, title, choreographer, thumbnail, url, id, publishedDate, length, lengthCat, language, level, genre, purpose, mood });
+    res.render('create', { errors, userPhoto: req.session.passport.user.photos[0].value, API_key: process.env.API_key, CLIENT_id: process.env.CLIENT_id, title, thumbnail, language, choreographer, price, level, genre, purpose, mood });
   } else {
-    Video.findOne({ url: url })
-      .then(video => {
-        if (video) {
-          errors.push({ msg: 'The video is already registered!' });
+    Lesson.findOne({ title: title })
+      .then(lesson => {
+        if (lesson) {
+          errors.push({ msg: 'The lesson is already registered!' });
           res.render('create', {
             errors, userPhoto: req.session.passport.user.photos[0].value, API_key: process.env.API_key
           });
         } else {
-          const newVideo = new Video({ title, choreographer, thumbnail, url, id, publishedDate, length, lengthCat, language, level, genre, purpose, mood });
-          newVideo.save()
-            .then(function (video) {
-              req.flash('success_msg', 'The dance is now registered');
-              res.redirect('/dashboard/-1?page=1&limit=15');
+          const newLesson = new Lesson({ title, thumbnail, language, choreographer, price, level, genre, purpose, mood });
+          newLesson.save()
+            .then(async function (lesson) {
+
+              try {
+                const account = await stripe.accounts.create({ type: "express" });
+                const accountLink = await stripe.accountLinks.create({
+                  account: account.id,
+                  refresh_url: 'https://vibin.tokyo/create',
+                  return_url: 'http://localhost:5000/create',
+                  type: 'account_onboarding',
+                });q
+
+                req.flash('success_msg', 'The lesson is now created');
+                res.redirect(accountLink.url);
+              } catch (err) {
+                res.status(500).send({
+                  error: err.message
+                });
+              }
+
             })
             .catch(err => console.log(err));
         }
       })
   }
-  Video.updateMany(
+  Lesson.updateMany(
     {},
     {
       $addToSet: {
-        length: ["any"],
         language: ["any"],
         level: ["any"],
-        lengthCat: ["any"],
         genre: ["any"],
         purpose: ["any"],
         mood: ["any"]

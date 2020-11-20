@@ -1,0 +1,150 @@
+{
+    "landing": {
+        "hero": {
+            "top": "Say Hello to the New Way of Dancing.",
+            "reason1": "Completely free",
+            "reason2": "Efficient searching system",
+            "reason3": "Simple user interface",
+            "Get started": "Get started"
+        },
+        "about": {
+            "top": "What is Vibin'?",
+            "sub": "Vibin is a platform where anyone can meet the dance they truly want.",
+            "desc": "When we listen to music our bodies naturally move and vibe. However, when we don’t know how to dance or when we feel anxious about our dancing skills, we tend to force ourselves to stop our bodies from moving and vibing. That’s why we created a place where anyone can learn how to dance.",
+            "prob": "Are you having trouble because...?",
+            "prob1": "Dance lessons are expensive.",
+            "prob2": "It's too scary to go back to dance studios due to the COVID-19",
+            "prob3": "It's difficult to find the dance you love",
+            "prob4": "It’s difficult to stay committed to learning how to dance",
+            "concl": "Then vibin is for YOU."
+        },
+        "whyus": {
+            "top": "WHY VIBIN'?",
+            "why1": "Quality Videos",
+            "desc1": "Access the video you are looking for with just one search",
+            "why2": "Free Forever",
+            "desc2": "Use it as much as you want without caring about your wallet",
+            "why3": "Keep Track",
+            "desc3": "Schedule your time to learn the dream dance moves"
+        },
+        "features": {
+            "top": "FIND YOUR VIBES FROM VARIETY OF CHOICES",
+            "sub": "Search the one dance you really want from total of 4032 combinations",
+            "level": "Levels",
+            "genre": "Genre",
+            "purpose": "Purpose",
+            "mood": "Mood",
+            "length": "Length",
+            "language": "Language"
+        }
+    },
+    "dashboard": {
+        "welcome": {
+            "welcome": "Welcome"
+        },
+        "search": {
+            "length": {
+                "top": "Length",
+                "short": "Short",
+                "medium": "Medium",
+                "long": "Long"
+            },
+            "language": {
+                "top": "Language",
+                "Japanese": "Japanese",
+                "English": "English",
+                "Korean": "Korean",
+                "Spanish": "Spanish"
+            },
+            "level": {
+                "top": "Level",
+                "Beginner": "Beginner",
+                "Intermediate": "Intermediate",
+                "Advanced": "Advanced"
+            },
+            "genre": {
+                "top": "Genre",
+                "Hip Hop": "Hip Hop",
+                "Locking": "Locking",
+                "Jazz": "Jazz",
+                "Breakin": "Breakin",
+                "House": "House",
+                "Popping": "Popping",
+                "K-POP": "K-POP",
+                "TikTok": "TikTok",
+                "Bollywood": "Bollywood"
+            },
+            "purpose": {
+                "top": "Purpose",
+                "Skill Improvements": "Skill Improvements",
+                "Health and Exercise": "Health and Exercise",
+                "Entertainment": "Entertainment"
+            },
+            "mood": {
+                "top": "Mood",
+                "Groovy": "Groovy",
+                "Funky": "Funky",
+                "Chill": "Chill",
+                "Romantic": "Romantic",
+                "Sexy": "Sexy",
+                "Calm": "Calm",
+                "Angry": "Angry",
+                "Peaceful": "Peaceful",
+                "Sad": "Sad",
+                "Fearful": "Fearful",
+                "Happy": "Happy",
+                "Tense": "Tense",
+                "Sassy": "Sassy",
+                "Savage": "Savage"
+            },
+            "search": "Search"
+        },
+        "Future vibes": "Future vibes",
+        "Recommended videos": "Recommended videos",
+        "Latest videos": "Latest videos",
+        "sub1": "We have",
+        "sub2": "videos in total!",
+        "Sort": "Sort by: ",
+        "Page": "Page "
+    },
+    "profile": {
+        "follower": "followers",
+        "following": "following",
+        "liked videos": "liked videos",
+        "edit profile": "Edit profile",
+        "logout": "Logout",
+        "photo": "Photo",
+        "choose photo": "choose a photo that is less than 3MB. Your photo will be cropped square.",
+        "email": "Email",
+        "username": "Username",
+        "bio": "Bio",
+        "update": "Update"
+    },
+    "header": {
+        "Home": "Home",
+        "About": "About",
+        "Contact": "Contact",
+        "Register": "Register",
+        "Login": "Login",
+        "Following": "Following",
+        "Calendar": "Calendar",
+        "Create": "Create",
+        "Profile": "Profile",
+        "Logout": "Logout"
+    },
+    "footer": {
+        "Phone": "Phone",
+        "E-Mail": "E-Mail",
+        "Sitemap": "Sitemap",
+        "Aboutus": "About us",
+        "Home": "Home",
+        "Calendar": "Calendar",
+        "Upload": "Upload",
+        "TOS": "Terms of Service",
+        "PP": "Privacy Policy",
+        "News1": "Join Our Newsletter",
+        "News2": "Get the latest news from Vibin'!",
+        "Subscribe": "Subscribe"
+    },
+    "top": "top"
+}

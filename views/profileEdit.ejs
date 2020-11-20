@@ -3,25 +3,24 @@
         <h1 class="logo"><a href="/">Vibin'</a></h1>
         <nav class="nav-menu d-none d-lg-block">
             <ul>
-                <li><a href="/dashboard/-1?page=1&limit=15">Home</a></li>
-                <li><a href="/calendar">Calendar</a></li>
-                <li><a href="/upload">Upload</a></li>
+                <li class="active"><a href="/dashboard/-1?page=1&limit=15"><%= __('header.Home') %></a></li>
+                <li><a href="/follow"><%= __('header.Following') %></a></li>
+                <li><a href="/calendar"><%= __('header.Calendar') %></a></li>
+                <li><a href="/create"><%= __('header.Create') %></a></li>
             </ul>
         </nav>
         <nav class="nav-menu d-none d-lg-block">
             <ul>
                 <li class="drop-down">
-
                     <% if (typeof userPhotoDef.data != "undefined") { %>
                     <img src="data:image/<%=userPhotoDef.contentType%>;base64, <%=userPhotoDef.data.toString('base64')%>"
                         height="40" width="40" style="border-radius: 50%;" alt="user photo">
                     <% } else { %>
                     <img src="<%= userPhoto %>" height="40" width="40" style="border-radius: 50%;" alt="user photo">
                     <% } %>
-
                     <ul>
-                        <li><a href="/users/profile">Profile</a></li>
-                        <li><a href="/logout">Logout</a></li>
+                        <li><a href="/users/profile"><%= __('header.Profile') %></a></li>
+                        <li><a href="/logout"><%= __('header.Logout') %></a></li>
                     </ul>
                 </li>
             </ul>
@@ -38,7 +37,7 @@
             <form action="/users/profile/edit" method="POST" enctype="multipart/form-data">
 
                 <div class="form-group">
-                    <label for="Photo">Photo<p><small>choose a photo that is less than 3MB. Your photo will be cropped square.</small>
+                    <label for="Photo"><%= __('profile.photo') %><p><small><%= __('profile.choose photo') %></small>
                         </p></label><br>
                     <% if (typeof userPhotoDef.data != "undefined") { %>
                     <img id="output"
@@ -52,155 +51,153 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="email">Email</label>
+                    <label for="email"><%= __('profile.email') %></label>
                     <input type="email" id="email" name="email" class="form-control" placeholder="Enter The Email"
                         value="<%= typeof email != 'undefined' ? email : '' %>" readonly />
                 </div>
 
                 <div class="form-group">
-                    <label for="username">Username</label>
+                    <label for="username"><%= __('profile.username') %></label>
                     <input type="username" id="username" name="username" class="form-control"
                         placeholder="Enter The Username"
                         value="<%= typeof username != 'undefined' ? username : '' %>" />
                 </div>
 
                 <div class="form-group">
-                    <label for="bio">Bio</label>
+                    <label for="bio"><%= __('profile.bio') %></label>
                     <input type="bio" id="bio" name="bio" class="form-control" placeholder="Enter Your Bio"
                         value="<%= typeof bio != 'undefined' ? bio : '' %>" />
                 </div>
 
                 <div class="form-group" id="levelDrop">
-                    <label for="level">Level</label>
+                    <label for="level"><%= __('dashboard.search.level.top') %></label>
                     <select class="form-control" type="level" id="level" name="level">
                         <option selected value="<%= user.tags.level %>"><%= user.tags.level %></option>
-                        <option value="Beginner">Beginner</option>
-                        <option value="Intermediate">Intermediate</option>
-                        <option value="Advanced">Advanced</option>
+                        <option value="Beginner"><%= __('dashboard.search.level.Beginner') %></option>
+                        <option value="Intermediate"><%= __('dashboard.search.level.Intermediate') %></option>
+                        <option value="Advanced"><%= __('dashboard.search.level.Advanced') %></option>
                     </select>
                 </div>
 
                 <div class="form-group" id="purposeDrop">
-                    <label for="purpose">Purpose</label>
+                    <label for="purpose"><%= __('dashboard.search.purpose.top') %></label>
                     <select class="form-control" type="purpose" id="purpose" name="purpose">
                         <option selected value="<%= user.tags.purpose %>"><%= user.tags.purpose %></option>
-                        <option value="Skill Improvements">Skill Improvements</option>
-                        <option value="Health and Exercise">Health and Exercise</option>
-                        <option value="Entertainment">Entertainment</option>
+                        <option value="Skill Improvements"><%= __('dashboard.search.purpose.Skill Improvements') %></option>
+                        <option value="Health and Exercise"><%= __('dashboard.search.purpose.Health and Exercise') %></option>
+                        <option value="Entertainment"><%= __('dashboard.search.purpose.Entertainment') %></option>
                     </select>
                 </div>
 
                 <% if (!user.tags.genre) { %>
                 <div class="form-group">
-                    <label for="genre">Genre</label>
+                    <label for="genre"><%= __('dashboard.search.genre.top') %></label>
                     <div class="form-check">
                         <label class="form-check-label">
-                            <input id="genre" name="genre" class="form-check-input" type="checkbox" value="Hip Hop">Hip
-                            Hop</label>
+                            <input id="genre" name="genre" class="form-check-input" type="checkbox" value="Hip Hop"><%= __('dashboard.search.genre.Hip Hop') %></label>
                     </div>
                     <div class="form-check">
                         <label class="form-check-label">
                             <input id="genre" name="genre" class="form-check-input" class="form-check-input"
-                                type="checkbox" value="Locking">Locking</label>
+                                type="checkbox" value="Locking"><%= __('dashboard.search.genre.Locking') %></label>
                     </div>
                     <div class="form-check">
                         <label class="form-check-label">
                             <input id="genre" name="genre" class="form-check-input" class="form-check-input"
-                                type="checkbox" value="Jazz">Jazz</label>
+                                type="checkbox" value="Jazz"><%= __('dashboard.search.genre.Jazz') %></label>
                     </div>
                     <div class="form-check">
                         <label class="form-check-label">
                             <input id="genre" name="genre" class="form-check-input" class="form-check-input"
-                                type="checkbox" value="Breakin">Breakin</label>
+                                type="checkbox" value="Breakin"><%= __('dashboard.search.genre.Breakin') %></label>
                     </div>
                     <div class="form-check">
                         <label class="form-check-label">
                             <input id="genre" name="genre" class="form-check-input" class="form-check-input"
-                                type="checkbox" value="House">House</label>
+                                type="checkbox" value="House"><%= __('dashboard.search.genre.House') %></label>
                     </div>
                     <div class="form-check">
                         <label class="form-check-label">
                             <input id="genre" name="genre" class="form-check-input" class="form-check-input"
-                                type="checkbox" value="Popping">Popping</label>
+                                type="checkbox" value="Popping"><%= __('dashboard.search.genre.Popping') %></label>
                     </div>
                     <div class="form-check">
                         <label class="form-check-label">
                             <input id="genre" name="genre" class="form-check-input" class="form-check-input"
-                                type="checkbox" value="K-POP">K-POP</label>
+                                type="checkbox" value="K-POP"><%= __('dashboard.search.genre.K-POP') %></label>
                     </div>
                     <div class="form-check">
                         <label class="form-check-label">
                             <input id="genre" name="genre" class="form-check-input" class="form-check-input"
-                                type="checkbox" value="TikTok">TikTok</label>
+                                type="checkbox" value="TikTok"><%= __('dashboard.search.genre.TikTok') %></label>
                     </div>
                     <div class="form-check">
                         <label class="form-check-label">
                             <input id="genre" name="genre" class="form-check-input" class="form-check-input"
-                                type="checkbox" value="Bollywood">Bollywood</label>
+                                type="checkbox" value="Bollywood"><%= __('dashboard.search.genre.Bollywood') %></label>
                     </div>
                 </div>
                 <% } else { %>
                 <div class="form-group">
-                    <label for="genre">Genre</label>
+                    <label for="genre"><%= __('dashboard.search.genre.top') %></label>
                     <div class="form-check">
                         <label class="form-check-label">
                             <input id="genre" name="genre" class="form-check-input" type="checkbox"
-                                <%= user.tags.genre.includes("Hip Hop") ? "checked" : "" %> value="Hip Hop">Hip
-                            Hop</label>
+                                <%= user.tags.genre.includes("Hip Hop") ? "checked" : "" %> value="Hip Hop"><%= __('dashboard.search.genre.Hip Hop') %></label>
                     </div>
                     <div class="form-check">
                         <label class="form-check-label">
                             <input id="genre" name="genre" class="form-check-input" class="form-check-input"
                                 type="checkbox" <%= user.tags.genre.includes("Locking") ? "checked" : "" %>
-                                value="Locking">Locking</label>
+                                value="Locking"><%= __('dashboard.search.genre.Locking') %></label>
                     </div>
                     <div class="form-check">
                         <label class="form-check-label">
                             <input id="genre" name="genre" class="form-check-input" class="form-check-input"
                                 type="checkbox" <%= user.tags.genre.includes("Jazz") ? "checked" : "" %>
-                                value="Jazz">Jazz</label>
+                                value="Jazz"><%= __('dashboard.search.genre.Jazz') %></label>
                     </div>
                     <div class="form-check">
                         <label class="form-check-label">
                             <input id="genre" name="genre" class="form-check-input" class="form-check-input"
                                 type="checkbox" <%= user.tags.genre.includes("Breakin") ? "checked" : "" %>
-                                value="Breakin">Breakin</label>
+                                value="Breakin"><%= __('dashboard.search.genre.Breakin') %></label>
                     </div>
                     <div class="form-check">
                         <label class="form-check-label">
                             <input id="genre" name="genre" class="form-check-input" class="form-check-input"
                                 type="checkbox" <%= user.tags.genre.includes("House") ? "checked" : "" %>
-                                value="House">House</label>
+                                value="House"><%= __('dashboard.search.genre.House') %></label>
                     </div>
                     <div class="form-check">
                         <label class="form-check-label">
                             <input id="genre" name="genre" class="form-check-input" class="form-check-input"
                                 type="checkbox" <%= user.tags.genre.includes("Popping") ? "checked" : "" %>
-                                value="Popping">Popping</label>
+                                value="Popping"><%= __('dashboard.search.genre.Popping') %></label>
                     </div>
                     <div class="form-check">
                         <label class="form-check-label">
                             <input id="genre" name="genre" class="form-check-input" class="form-check-input"
                                 type="checkbox" <%= user.tags.genre.includes("K-POP") ? "checked" : "" %>
-                                value="K-POP">K-POP</label>
+                                value="K-POP"><%= __('dashboard.search.genre.K-POP') %></label>
                     </div>
                     <div class="form-check">
                         <label class="form-check-label">
                             <input id="genre" name="genre" class="form-check-input" class="form-check-input"
                                 type="checkbox" <%= user.tags.genre.includes("TikTok") ? "checked" : "" %>
-                                value="TikTok">TikTok</label>
+                                value="TikTok"><%= __('dashboard.search.genre.TikTok') %></label>
                     </div>
                     <div class="form-check">
                         <label class="form-check-label">
                             <input id="genre" name="genre" class="form-check-input" class="form-check-input"
                                 type="checkbox" <%= user.tags.genre.includes("Bollywood") ? "checked" : "" %>
-                                value="Bollywood">Bollywood</label>
+                                value="Bollywood"><%= __('dashboard.search.genre.Bollywood') %></label>
                     </div>
                 </div>
                 <% } %>
 
                 <div class="text-center"><input class="chosen-value" type="submit" style="background-color: #ff7583;"
-                        value="Update"></div>
+                        value="<%= __('profile.update') %>"></div>
 
 
             </form>
@@ -261,27 +258,30 @@
                 <div class="col-lg-3 col-md-6 footer-contact">
                     <h3>Vibin'</h3>
                     <p>
-                        <strong>Phone:</strong> +81 080 4339 9251<br>
-                        <strong>Email:</strong> info@vibin.tokyo<br>
+                        <strong><%= __('footer.Phone') %>:</strong> +81 080 4339 9251<br>
+                        <strong><%= __('footer.E-Mail') %>:</strong> info@vibin.tokyo<br>
                     </p>
                 </div>
                 <div class="col-lg-2 col-md-6 footer-links">
-                    <h4>Sitemap</h4>
+                    <h4><%= __('footer.Sitemap') %></h4>
                     <ul>
-                        <li><i class="bx bx-chevron-right"></i> <a href="/dashboard/-1?page=1&limit=15">Home</a>
+                        <li><i class="bx bx-chevron-right"></i> <a href="#about"><%= __('footer.Aboutus') %></a></li>
+                        <li><i class="bx bx-chevron-right"></i> <a
+                                href="/dashboard/-1?page=1&limit=15"><%= __('footer.Home') %></a></li>
+                        <li><i class="bx bx-chevron-right"></i> <a href="/calendar"><%= __('footer.Calendar') %></a>
                         </li>
-                        <li><i class="bx bx-chevron-right"></i> <a href="/calendar">Calendar</a></li>
-                        <li><i class="bx bx-chevron-right"></i> <a href="/upload">Upload</a></li>
-                        <li><i class="bx bx-chevron-right"></i> <a href="/terms-of-service">Terms of service</a>
+                        <li><i class="bx bx-chevron-right"></i> <a href="/upload"><%= __('footer.Upload') %></a></li>
+                        <li><i class="bx bx-chevron-right"></i> <a href="/terms-of-service"><%= __('footer.TOS') %></a>
                         </li>
-                        <li><i class="bx bx-chevron-right"></i> <a href="/privacy-policy">Privacy policy</a></li>
+                        <li><i class="bx bx-chevron-right"></i> <a href="/privacy-policy"><%= __('footer.PP') %></a>
+                        </li>
                     </ul>
                 </div>
                 <div class="col-lg-4 col-md-6 footer-newsletter">
-                    <h4>Join Our Newsletter</h4>
-                    <p>Get the latest news from Vibin'!</p>
+                    <h4><%= __('footer.News1') %></h4>
+                    <p><%= __('footer.News2') %></p>
                     <form action="" method="post">
-                        <input type="email" name="email"><input type="submit" value="Subscribe">
+                        <input type="email" name="email"><input type="submit" value="<%= __('footer.Subscribe') %>">
                     </form>
                 </div>
                 <div class="social-links text-center text-md-right pt-3 pt-md-0">

@@ -30,10 +30,11 @@
 
 <section>
     <div class="product">
-        <img src="https://i.imgur.com/EHyR2nP.png" alt="The cover of Stubborn Attachments" />
+        <img src="<%= lesson.thumbnail %>" alt="thumbnail of the lesson"/>
         <div class="description">
-            <h3>Sample</h3>
-            <h5>2000</h5>
+            <h3><%= lesson.title %> by <%= lesson.choreographer %></h3>
+            <h5><%= lesson.level %> | <%= lesson.genre %> | <%= lesson.purpose %> | <%= lesson.mood %></h5>
+            <h5><%= lesson.price %></h5>
         </div>
     </div>
     <button id="checkout-button">Checkout</button>

@@ -27,6 +27,7 @@
     "express-paginate": "^1.0.0",
     "express-session": "^1.17.1",
     "helmet": "^3.23.3",
+    "i18n": "^0.13.2",
     "moment": "^2.27.0",
     "mongoose": "^5.9.18",
     "mongoose-paginate": "^5.0.3",
