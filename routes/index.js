@@ -22,6 +22,10 @@ router.get('/', (req, res) => {
   }
 });
 
+router.get('/error', (req, res) => { res.send('Login error')});
+router.get('/privacy-policy', (req, res) => res.render('privacy-policy'));
+router.get('/terms-of-service', (req, res) => res.render('terms-of-service'));
+
 router.get('/logout', (req, res) => {
   req.logout();
   req.session.destroy();
@@ -53,13 +57,6 @@ router.get('/auth/google/callback',
     }
   }
 );
-
-router.get('/error', (req, res) => {
-  res.send('Login error');
-});
-
-router.get('/privacy-policy', (req, res) => res.render('privacy-policy'));
-router.get('/terms-of-service', (req, res) => res.render('terms-of-service'));
 
 router.get('/dashboard/:sort', ensureAuthenticated, (req, res) => {
   User.findOne({ email: req.user._json.email }, async (err, user) => {
@@ -422,44 +419,15 @@ router.post('/player/:id', ensureAuthenticated, async (req, res) => {
 
     try {
       if (action == 'like') {
-        Video.findByIdAndUpdate(videoID._id, {
-          $push: {
-            like: [
-              {
-                id: userID.toString()
-              }
-            ]
-          }
-        }).exec();
-        User.findByIdAndUpdate(userID, {
-          $push: {
-            like: [
-              {
-                id: videoID.toObject()._id,
-              }
-            ]
-          }
-        }).exec()
+        Video.findByIdAndUpdate(videoID._id, { $push: { like: [{ id: userID.toString() }] } }).exec();
+        User.findByIdAndUpdate(userID, { $push: { like: [{ id: videoID.toObject()._id }] } }).exec()
           .then(function (user) {
             res.redirect(`/player/${id}`)
           })
           .catch(err => console.log(err));
       } else if (action == 'unlike') {
-        Video.findByIdAndUpdate(videoID._id, {
-          $pull: {
-            like: {
-              id: user._id.toString()
-            }
-          }
-        }).exec();
-        User.findByIdAndUpdate(userID, {
-          $pull: {
-            like:
-            {
-              id: videoID.toObject()._id,
-            }
-          }
-        }).exec()
+        Video.findByIdAndUpdate(videoID._id, { $pull: { like: { id: user._id.toString() } } }).exec();
+        User.findByIdAndUpdate(userID, { $pull: { like: { id: videoID.toObject()._id } } }).exec()
           .then(function (user) {
             res.redirect(`/player/${id}`)
           })
@@ -528,7 +496,7 @@ router.get('/upload', ensureAuthenticated, onlyDevs, async (req, res) => {
   res.render('upload', {
     userPhoto: user.userPhoto,
     userPhotoDef: user.userPhotoDef,
-    API_key: process.env.API_key,
+    API_key: process.env.API_key
   });
 })
 
@@ -562,19 +530,17 @@ router.post('/upload', (req, res) => {
         }
       })
   }
-  Video.updateMany(
-    {},
-    {
-      $addToSet: {
-        length: ["any"],
-        language: ["any"],
-        level: ["any"],
-        lengthCat: ["any"],
-        genre: ["any"],
-        purpose: ["any"],
-        mood: ["any"]
-      }
-    },
+  Video.updateMany({}, {
+    $addToSet: {
+      length: ["any"],
+      language: ["any"],
+      level: ["any"],
+      lengthCat: ["any"],
+      genre: ["any"],
+      purpose: ["any"],
+      mood: ["any"]
+    }
+  },
     function (err, result) {
       if (err) {
         console.log(err);
@@ -721,7 +687,7 @@ router.post('/create', async (req, res) => {
                   refresh_url: 'https://vibin.tokyo/create',
                   return_url: 'http://localhost:5000/create',
                   type: 'account_onboarding',
-                });q
+                });
 
                 req.flash('success_msg', 'The lesson is now created');
                 res.redirect(accountLink.url);
@@ -736,17 +702,15 @@ router.post('/create', async (req, res) => {
         }
       })
   }
-  Lesson.updateMany(
-    {},
-    {
-      $addToSet: {
-        language: ["any"],
-        level: ["any"],
-        genre: ["any"],
-        purpose: ["any"],
-        mood: ["any"]
-      }
-    },
+  Lesson.updateMany({}, {
+    $addToSet: {
+      language: ["any"],
+      level: ["any"],
+      genre: ["any"],
+      purpose: ["any"],
+      mood: ["any"]
+    }
+  },
     function (err, result) {
       if (err) {
         console.log(err);
