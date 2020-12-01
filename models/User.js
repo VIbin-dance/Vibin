@@ -73,6 +73,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         require: false,
     },
+    stripeID: {
+        type: String,
+        require: false,
+    },
     like: [{
         id: {
             type: String,

@@ -38,7 +38,7 @@
   <section id="searchBar" class="searchBar">
     <div class="search-bar">
       <form action="/dashboard" method="POST">
-        <h2 class="user"><%= __('dashboard.welcome.welcome') %> <%= username %>, <span id="random"></span></h2><br>
+        <h2 class="user"><%= __('dashboard.welcome.welcome') %> <%= username %><%= __('dashboard.Quote.top') %> <span id="random"></span></h2><br>
 
         <div class="form-group">
           <select class="form-control chosen-value" type="length" id="length" name="lengthCat">
@@ -110,7 +110,7 @@
             <option value="Savage"><%= __('dashboard.search.mood.Savage') %></option>
           </select>
         </div>
-        <input type="search" id="search" name="search" class="chosen-value" placeholder="Search"
+        <input type="search" id="search" name="search" class="chosen-value" placeholder="<%= __('dashboard.search.search') %>"
           value="<%= typeof search != 'undefined' ? search : '' %>" />
         <input class="chosen-value" type="submit" style="background-color: #ff7583;">
       </form>
@@ -162,14 +162,14 @@
     <div class="container">
       <h3><%= __('dashboard.Latest videos') %></h3>
       <p><%= __('dashboard.sub1') %> <%= count %> <%= __('dashboard.sub2') %></p>
-      <p><%= __('dashboard.Sort') %>
+      <p><%= __('dashboard.Sort.top') %>
         <% if (currentSort == -1)  { %>
         <a href="/dashboard/<%=  parseInt(currentSort) + 2 %>?page=1&limit=15">
-          oldest
+          <%= __('dashboard.Sort.oldest') %>
         </a>
         <% } else if (currentSort == 1) { %>
         <a href="/dashboard/<%=  parseInt(currentSort) - 2 %>?page=1&limit=15">
-          latest
+          <%= __('dashboard.Sort.latest') %>
         </a>
         <% } %>
       </p>
@@ -192,28 +192,28 @@
       <div class="dashboard-pagination">
         <div class="pagination">
           <% if (currentPage == 1 && pageCount > 1)  { %>
-          <p>Page <%= currentPage %></p>
+          <p><%= __('dashboard.Page') %> <%= currentPage %></p>
           <a href="/dashboard/<%= currentSort %>?page=<%= parseInt(currentPage) + 1 %>&limit=15">
-            Page <%=  parseInt(currentPage) + 1 %>
+            <%= __('dashboard.Page') %> <%=  parseInt(currentPage) + 1 %>
             <span class="iconify" data-icon="ion-ios-arrow-forward" data-inline="false"></span>
           </a>
           <% } else if (currentPage < pageCount) { %>
           <a href="/dashboard/<%= currentSort %>?page=<%= parseInt(currentPage) - 1 %>&limit=15">
             <span class="iconify" data-icon="ion-ios-arrow-back" data-inline="false"></span>
-            Page <%= parseInt(currentPage) - 1 %>
+            <%= __('dashboard.Page') %> <%= parseInt(currentPage) - 1 %>
           </a>
-          <p>Page <%= currentPage %></p>
+          <p><%= __('dashboard.Page') %> <%= currentPage %></p>
           <a href="/dashboard/<%= currentSort %>?page=<%= parseInt(currentPage) + 1 %>&limit=15">
-            Page <%= parseInt(currentPage) + 1 %>
+            <%= __('dashboard.Page') %> <%= parseInt(currentPage) + 1 %>
             <span class="iconify" data-icon="ion-ios-arrow-forward" data-inline="false"></span>
           </a>
           <% } else if (currentPage == pageCount && pageCount > 1) { %>
           <a href="/dashboard/<%= currentSort %>?page=<%= parseInt(currentPage) - 1 %>&limit=15">
             <span class="iconify" data-icon="ion-ios-arrow-back" data-inline="false"></span>
-            Page
+            <%= __('dashboard.Page') %>
             <%=parseInt(currentPage) - 1 %>
           </a>
-          <p>Page <%= currentPage %></p>
+          <p><%= __('dashboard.Page') %> <%= currentPage %></p>
           <% } %>
         </div>
       </div>
@@ -224,16 +224,33 @@
     <nav class="navbar fixed-bottom navbar-dark bg-light justify-content-center">
       <ul>
         <li class="active"><a href="/dashboard/-1?page=1&limit=15">
-            <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-house" fill="currentColor"
+            <svg width="2.0em" height="2.0em" viewBox="0 0 16 16" class="bi bi-house" fill="currentColor"
               xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd"
                 d="M2 13.5V7h1v6.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V7h1v6.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5zm11-11V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z" />
               <path fill-rule="evenodd"
                 d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z" />
             </svg>
-          </a>Home</li>
+          </a></li>
+        <li><a href="/follow">
+            <svg width="2.0em" height="2.0em" viewBox="0 0 16 16" class="bi bi-file-person" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4 1h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H4z" />
+              <path d="M13.784 14c-.497-1.27-1.988-3-5.784-3s-5.287 1.73-5.784 3h11.568z" />
+              <path fill-rule="evenodd" d="M8 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+            </svg>
+          </a></li>
+        <li><a href="/create">
+            <svg width="2.0em" height="2.0em" viewBox="0 0 16 16" class="bi bi-upload" fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M.5 8a.5.5 0 0 1 .5.5V12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8.5a.5.5 0 0 1 1 0V12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V8.5A.5.5 0 0 1 .5 8zM5 4.854a.5.5 0 0 0 .707 0L8 2.56l2.293 2.293A.5.5 0 1 0 11 4.146L8.354 1.5a.5.5 0 0 0-.708 0L5 4.146a.5.5 0 0 0 0 .708z" />
+              <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0v-8A.5.5 0 0 1 8 2z" />
+            </svg>
+          </a></li>
         <li><a href="/calendar">
-            <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-calendar-plus" fill="currentColor"
+            <svg width="2.0em" height="2.0em" viewBox="0 0 16 16" class="bi bi-calendar-plus" fill="currentColor"
               xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd"
                 d="M8 7a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7z" />
@@ -243,24 +260,15 @@
               <path fill-rule="evenodd"
                 d="M3.5 0a.5.5 0 0 1 .5.5V1a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 .5-.5zm9 0a.5.5 0 0 1 .5.5V1a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 .5-.5z" />
             </svg>
-          </a>Calendar</li>
-        <li><a href="/upload">
-            <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-upload" fill="currentColor"
-              xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd"
-                d="M.5 8a.5.5 0 0 1 .5.5V12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8.5a.5.5 0 0 1 1 0V12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V8.5A.5.5 0 0 1 .5 8zM5 4.854a.5.5 0 0 0 .707 0L8 2.56l2.293 2.293A.5.5 0 1 0 11 4.146L8.354 1.5a.5.5 0 0 0-.708 0L5 4.146a.5.5 0 0 0 0 .708z" />
-              <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0v-8A.5.5 0 0 1 8 2z" />
-            </svg>
-          </a>Upload</li>
+          </a></li>
         <li><a href="/users/profile">
-            <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-file-person" fill="currentColor"
-              xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd"
-                d="M4 1h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H4z" />
-              <path d="M13.784 14c-.497-1.27-1.988-3-5.784-3s-5.287 1.73-5.784 3h11.568z" />
-              <path fill-rule="evenodd" d="M8 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
-            </svg>
-          </a>User</li>
+            <% if (typeof userPhotoDef.data != "undefined") { %>
+            <img src="data:image/<%=userPhotoDef.contentType%>;base64, <%=userPhotoDef.data.toString('base64')%>"
+              height="27" width="27" style="border-radius: 50%;" alt="user photo">
+            <% } else { %>
+            <img src="<%= userPhoto %>" height="20" width="20" style="border-radius: 50%;" alt="user photo">
+            <% } %>
+          </a></li>
       </ul>
     </nav>
   </div>
@@ -325,10 +333,10 @@
   }
 
   var quotes = [
-    "What's your vibes today?",
-    "Are you feeling the vibes?",
-    "Let's vibe!",
-    "Get funky!"
+    "<%= __('dashboard.Quote.1') %>",
+    "<%= __('dashboard.Quote.2') %>",
+    "<%= __('dashboard.Quote.3') %>",
+    "<%= __('dashboard.Quote.4') %>"
   ];
   let index = Math.floor(Math.random() * (quotes.length));
 

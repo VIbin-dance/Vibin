@@ -40,6 +40,9 @@
     },
     "dashboard": {
         "welcome": {
+            "2": "dashboard.welcome.2",
+            "3": "dashboard.welcome.3",
+            "4": "dashboard.welcome.4",
             "welcome": "Welcome"
         },
         "search": {
@@ -104,8 +107,19 @@
         "Latest videos": "Latest videos",
         "sub1": "We have",
         "sub2": "videos in total!",
-        "Sort": "Sort by: ",
-        "Page": "Page "
+        "Sort": {
+            "top":"Sort by: ",
+            "oldest": "oldest",
+            "latest": "latest"
+        },
+		"Page": "Page ",
+        "Quote": {
+            "top": ",",
+            "1": "What's your vibes today?",
+            "2": "Are you feeling the vibes?",
+            "3": "Let's vibe!",
+            "4": "Get funky!"
+        }
     },
     "profile": {
         "follower": "followers",

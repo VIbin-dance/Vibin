@@ -1906,7 +1906,7 @@ section {
 .navbar > ul > li {
   position: relative;
   white-space: nowrap;
-  padding: 2px 25px 2px 25px;
+  padding: 8px 20px 8px 20px;
 }
 
 .navbar a {
@@ -1914,7 +1914,7 @@ section {
   position: relative;
   color: #545454;
   transition: 0.3s;
-  font-size: 15px;
+  font-size: 12px;
   font-family: "Open Sans", sans-serif;
 }
 

@@ -22,7 +22,7 @@ router.get('/', (req, res) => {
   }
 });
 
-router.get('/error', (req, res) => { res.send('Login error')});
+router.get('/error', (req, res) => { res.send('Login error') });
 router.get('/privacy-policy', (req, res) => res.render('privacy-policy'));
 router.get('/terms-of-service', (req, res) => res.render('terms-of-service'));
 
@@ -552,8 +552,22 @@ router.post('/upload', (req, res) => {
 router.get('/reservation/:id', ensureAuthenticated, async (req, res) => {
   const user = await User.findOne({ email: req.user._json.email }, 'userPhoto userPhotoDef').exec();
   const lesson = await Lesson.findOne({ _id: req.params.id }).exec();
+  const choreographer = await User.findOne({ _id: lesson.choreographerID }).exec();
+  const account = await stripe.accounts.retrieve(choreographer.stripeID);
+  console.log(account)
+
+  const intent = await stripe.paymentIntents.create({
+    payment_method_types: ['card'],
+    amount: lesson.price,
+    currency: 'jpy',
+    application_fee_amount: lesson.price * 0.4,
+    transfer_data: {
+      destination: account.id,
+    },
+  });
 
   res.render('reservation', {
+    client_secret: intent.clinet_secret,
     lesson: lesson,
     userPhoto: user.userPhoto,
     userPhotoDef: user.userPhotoDef,
@@ -578,85 +592,73 @@ router.get('/cancel', ensureAuthenticated, async (req, res) => {
   });
 })
 
-router.post('/create-session', async (req, res) => {
-  const session = await stripe.checkout.sessions.create({
-    payment_method_types: ['card'],
-    customer_email: req.user._json.email,
-    submit_type: 'pay',
-    line_items: [
-      {
-        price_data: {
-          currency: 'jpy',
-          product_data: {
-            name: 'Stubborn Attachments',
-            images: ['https://i.imgur.com/EHyR2nP.png'],
-          },
-          unit_amount: 2000,
-        },
-        quantity: 1,
-      },
-    ],
-    mode: 'payment',
-    success_url: 'http://localhost:5000/success',
-    cancel_url: 'http://localhost:5000/cancel',
-  });
-  res.json({ id: session.id });
-});
+// router.post('/create-session', async (req, res) => {
+//   const session = await stripe.checkout.sessions.create({
+//     payment_method_types: ['card'],
+//     customer_email: req.user._json.email,
+//     submit_type: 'pay',
+//     line_items: [
+//       {
+//         price_data: {
+//           currency: 'jpy',
+//           product_data: {
+//             name: 'Stubborn Attachments',
+//             images: ['https://i.imgur.com/EHyR2nP.png'],
+//           },
+//           unit_amount: 2000,
+//         },
+//         quantity: 1,
+//       },
+//     ],
+//     mode: 'payment',
+//     success_url: 'http://localhost:5000/success',
+//     cancel_url: 'http://localhost:5000/cancel',
+//   });
+//   res.json({ id: session.id });
+// });
+
+// router.get('/checkout', async (req, res) => {
+//   const intent = await stripe.paymentIntents.create({
+//     payment_method_types: ['card'],
+//     amount: 1000,
+//     currency: 'jpy',
+//     application_fee_amount: 123,
+//     transfer_data: {
+//       destination: '{{CONNECTED_STRIPE_ACCOUNT_ID}}',
+//     },
+//   });
+
+//   res.render('checkout', { client_secret: intent.client_secret });
+// });
 
 router.get('/create', ensureAuthenticated, async (req, res) => {
-  const user = await User.findOne({ email: req.user._json.email }, 'userPhoto userPhotoDef username').exec();
+  const user = await User.findOne({ email: req.user._json.email }, 'userPhoto userPhotoDef username stripeID').exec();
 
-  // const options = {
-  //   method: 'POST',
-  //   url: 'https://zoom.us/oauth/token',
-  //   qs: {
-  //     grant_type: 'authorization_code',
-  //     //The code below is a sample authorization code. Replace it with your actual authorization code while making requests.
-  //     code: 'B1234558uQ',
-  //     redirect_uri: 'http://localhost:5000/upload'
-  //   },
-  //   headers: {
-  //     Authorization: 'Basic ' + Buffer.from(process.env.ZOOM_CLIENT_ID + ':' + process.env.ZOOM_CLIENT_SECRET).toString('base64')
-  //   }
-  // };
+  if (user.stripeID) {
+    const account = await stripe.accounts.retrieve(user.stripeID);
+    const loginLink = await stripe.accounts.createLoginLink(user.stripeID);
 
-  // request(options, function (error, response, body) {
-  //   if (error) throw new Error(error);
-
-  //   console.log(body);
-  // });
-
-  res.render('create', {
-    choreographer: user.username,
-    userPhoto: user.userPhoto,
-    userPhotoDef: user.userPhotoDef,
-    CLIENT_id: process.env.ZOOM_CLIENT_ID
-  });
+    res.render('create', {
+      account: account,
+      loginLink: loginLink.url,
+      choreographer: user.username,
+      userPhoto: user.userPhoto,
+      userPhotoDef: user.userPhotoDef,
+      CLIENT_id: process.env.ZOOM_CLIENT_ID
+    });
+  } else {
+    res.render('create', {
+      userPhoto: user.userPhoto,
+      userPhotoDef: user.userPhotoDef,
+      CLIENT_id: process.env.ZOOM_CLIENT_ID
+    });
+  }
 })
 
 router.post('/create', async (req, res) => {
-
-  // fetch(`https://www.googleapis.com/calendar/v3/calendars/${user.email}/events?key=${process.env.API_key}`, {
-  //   'method': 'POST',
-  //   'headers': {
-  //     'Authorization': `Bearer ${user.accessToken}`,
-  //     'Content-Type': 'application/json'
-  //   },
-  // })
-  //   .then(response => response.json())
-  //   .then(data => {
-  //     if (date == '') {
-  //       errors.push({ msg: 'Please fill in all fields' });
-  //     }
-
-  //     if (errors.length > 0) {
-  //       res.render('player', { errors, userPhoto: req.session.passport.user.photos[0].value, title: result.title, choreographer: result.choreographer, id: id, level: result.level });
-  //     }
-  //     else {
-  //       req.flash('success_msg', 'The dance is now scheduled');
-  //       res.redirect('/calendar');
-  //     }
-  //   })
+  const user = await User.findOne({ email: req.user._json.email }).exec();
+  const account = await stripe.accounts.retrieve(user.stripeID);
+  const choreographerID = user._id;
 
   const { title, thumbnail, language, choreographer, price, level, genre, purpose, mood } = req.body;
   let errors = [];
@@ -676,27 +678,39 @@ router.post('/create', async (req, res) => {
             errors, userPhoto: req.session.passport.user.photos[0].value, API_key: process.env.API_key
           });
         } else {
-          const newLesson = new Lesson({ title, thumbnail, language, choreographer, price, level, genre, purpose, mood });
+          const newLesson = new Lesson({ title, thumbnail, language, choreographer, choreographerID, price, level, genre, purpose, mood });
           newLesson.save()
             .then(async function (lesson) {
 
-              try {
-                const account = await stripe.accounts.create({ type: "express" });
-                const accountLink = await stripe.accountLinks.create({
-                  account: account.id,
-                  refresh_url: 'https://vibin.tokyo/create',
-                  return_url: 'http://localhost:5000/create',
-                  type: 'account_onboarding',
-                });
-
+              if (account.details_submitted == true) {
                 req.flash('success_msg', 'The lesson is now created');
-                res.redirect(accountLink.url);
-              } catch (err) {
-                res.status(500).send({
-                  error: err.message
-                });
-              }
+                res.redirect('/create');
+              } else if (!account.details_submitted == true) {
+                try {
+                  const account = await stripe.accounts.create({ type: "express" });
+                  const accountLink = await stripe.accountLinks.create({
+                    account: account.id,
+                    refresh_url: 'https://vibin.tokyo/create',
+                    return_url: 'http://localhost:5000/create',
+                    type: 'account_onboarding',
+                  });
 
+                  if (account) {
+                    User.findOneAndUpdate({ email: req.user._json.email }, { stripeID: account.id }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, user) => {
+                      if (err) {
+                        console.log(err);
+                      }
+                    })
+                  }
+
+                  req.flash('success_msg', 'The lesson is now created');
+                  res.redirect(accountLink.url);
+                } catch (err) {
+                  res.status(500).send({
+                    error: err.message
+                  });
+                }
+              }
             })
             .catch(err => console.log(err));
         }

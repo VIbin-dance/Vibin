@@ -17,6 +17,10 @@ const LessonSchema = new mongoose.Schema({
         type: Array,
         require: true
     },
+    choreographerID: {
+        type: String,
+        require: true
+    },
     price: {
         type: Number,
         require: true,
