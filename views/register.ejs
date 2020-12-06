@@ -8,10 +8,10 @@
 <section id="log">
     <div class="col-lg-6 m-auto">
         <div class="card card-body">
-            <h1 class="text-center mb-3"><i class="fas fa-user-plus"></i>REGISTER</h1>
+            <h1 class="text-center mb-3"><i class="fas fa-user-plus"></i><%= __('register.top') %></h1>
             <%- include ('partials/messages') %>
-            <p>By registering you are agreeing with our <a href="/privacy-policy">privacy policy</a> and <a
-                    href="/terms-of-service">terms of service</a></p>
+            <p><%= __('register.sub1') %> <a href="/privacy-policy"><%= __('register.sub2') %></a> <%= __('register.sub3') %> <a
+                    href="/terms-of-service"><%= __('register.sub4') %></a> <%= __('register.sub5') %></p>
             <div class="text-center"><a href="/auth/google" class="get-started-btn scrollto">
                     <svg width="18" height="18" viewBox="0 0 256 262" xmlns="http://www.w3.org/2000/svg"
                         style="margin:2px 24px 2px 0px;" preserveAspectRatio="xMidYMid">
@@ -27,8 +27,8 @@
                         <path
                             d="M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0 79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251"
                             fill="#EB4335" /></svg>
-                    Register with Google</a></div>
-            <p class="mt-4">Already Have An Account? <a href="/users/login">Login</a></p>
+                            <%= __('register.google') %></a></div>
+            <p class="mt-4"><%= __('register.switch') %> <a href="/users/login"><%= __('register.login') %></a></p>
         </div>
     </div>
 </section>

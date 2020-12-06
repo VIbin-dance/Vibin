@@ -4,7 +4,6 @@ const paginate = require('express-paginate');
 const passport = require('passport');
 const fetch = require('node-fetch');
 const moment = require('moment');
-const i18n = require('i18n');
 const stripe = require('stripe')('sk_test_51Hfnh4BHyna8CK9qjfFDuXjt1pmBPnPMoGflpvhPIet1ytDmqDZD3sayrbLnHbIQXnLBIZ8UWxSe62EaNZuw2oDO00b2zFDdno');
 const { ensureAuthenticated } = require('../config/auth');
 const { onlyDevs } = require('../config/dev');
@@ -14,12 +13,12 @@ const User = require('../models/User');
 const Lesson = require('../models/Lesson');
 
 router.get('/', (req, res) => {
-  if (req.session.passport) {
-    req.flash('success_msg', 'You are logged in!');
-    res.redirect('/dashboard/-1?page=1&limit=15');
-  } else {
-    res.render('landing')
-  }
+  // if (req.session.passport) {
+  //   req.flash('success_msg', res.__('msg.success.login'));
+  //   res.redirect('/dashboard/-1?page=1&limit=15');
+  // } else {
+  res.render('landing')
+  // }
 });
 
 router.get('/error', (req, res) => { res.send('Login error') });
@@ -49,10 +48,10 @@ router.get('/auth/google/callback',
   async (req, res) => {
     const user = await User.findOne({ email: req.user._json.email }).exec();
     if (user.loginCount == 1) {
-      req.flash('success_msg', 'Welcome! Tell us a little bit about you!')
+      req.flash('success_msg', res.__('msg.success.preference'))
       res.redirect('/users/preference');
     } else {
-      req.flash('success_msg', 'You are logged in!')
+      req.flash('success_msg', res.__('msg.success.login'))
       res.redirect('/dashboard/-1?page=1&limit=15');
     }
   }
@@ -232,7 +231,7 @@ router.post('/dashboard', ensureAuthenticated, (req, res) => {
     let id = [];
 
     if (!result.docs.length) {
-      req.flash('error_msg', "Looks like we don't have that video yet!");
+      req.flash('error_msg', res.__('msg.error.video'));
       res.redirect('/dashboard/-1?page=1&limit=15');
     } else {
       for (let i = 0; i < result.docs.length; i++) {
@@ -309,24 +308,29 @@ router.get('/calendar', ensureAuthenticated, (req, res) => {
     })
       .then(response => response.json())
       .then(data => {
-        for (i = 0; i < data.items.length; i++) {
-          summary[i] = data.items[i].summary
-          dateTime[i] = moment(data.items[i].start.dateTime).format('MMMM Do YYYY, h:mm a');
-          id[i] = data.items[i].description
-          idCal[i] = data.items[i].id
+        if (data.items == undefined) {
+          req.flash('error_msg', res.__('msg.error.auth'));
+          res.redirect('/');
+        } else {
+          for (i = 0; i < data.items.length; i++) {
+            summary[i] = data.items[i].summary
+            dateTime[i] = moment(data.items[i].start.dateTime).format('MMMM Do YYYY, h:mm a');
+            id[i] = data.items[i].description
+            idCal[i] = data.items[i].id
+          }
+          res.render('calendar', {
+            userPhoto: user.userPhoto,
+            userPhotoDef: user.userPhotoDef,
+            count: data.items.length,
+            API_key: process.env.API_key,
+            CALENDAR_ID: user.email,
+            accessToken: user.accessToken,
+            summary: summary,
+            dateTime: dateTime,
+            id: id,
+            idCal: idCal
+          });
         }
-        res.render('calendar', {
-          userPhoto: user.userPhoto,
-          userPhotoDef: user.userPhotoDef,
-          count: data.items.length,
-          API_key: process.env.API_key,
-          CALENDAR_ID: user.email,
-          accessToken: user.accessToken,
-          summary: summary,
-          dateTime: dateTime,
-          id: id,
-          idCal: idCal
-        });
       })
   })
 });
@@ -377,10 +381,10 @@ router.post('/calendar', ensureAuthenticated, (req, res) => {
 
     result.then(function (result) {
       if (result.status == 404) {
-        req.flash('error', 'The video does not exist');
+        req.flash('error', res.__('msg.error.video'));
         res.redirect('/calendar');
       } else if (result.status == 200 || 204) {
-        req.flash('success_msg', 'The dance is now deleted');
+        req.flash('success_msg', res.__('msg.success.dance_del'));
         res.redirect('/calendar');
       }
     })
@@ -391,7 +395,7 @@ router.get('/player/:id', ensureAuthenticated, (req, res) => {
   Video.findOne({ id: req.params.id }, async (err, result) => {
     const user = await User.findOne({ email: req.user._json.email }).exec();
     if (result == null) {
-      req.flash('error_msg', 'The video is either deleted or modified!');
+      req.flash('error_msg', res.__('msg.error.video_del'));
       res.redirect('/dashboard/-1?page=1&limit=15');
     } else {
       res.render('player', {
@@ -476,14 +480,14 @@ router.post('/player/:id/calendar', ensureAuthenticated, (req, res) => {
         .then(response => response.json())
         .then(data => {
           if (date == '') {
-            errors.push({ msg: 'Please fill in all fields' });
+            errors.push({ msg: res.__('msg.error.fill') });
           }
 
           if (errors.length > 0) {
             res.render('player', { errors, userPhoto: req.session.passport.user.photos[0].value, title: result.title, choreographer: result.choreographer, id: id, level: result.level });
           }
           else {
-            req.flash('success_msg', 'The dance is now scheduled');
+            req.flash('success_msg', res.__('msg.success.schedule'));
             res.redirect('/calendar');
           }
         })
@@ -506,7 +510,7 @@ router.post('/upload', (req, res) => {
 
   // Check required fields
   if (title == '' || choreographer == '' || thumbnail == '' || url == '' || id == '' || publishedDate == '' || length == '' || lengthCat == '' || language == '' || level == undefined || genre == undefined || purpose == undefined || mood == undefined) {
-    errors.push({ msg: 'Please fill in all fields' });
+    errors.push({ msg: res.__('msg.error.fill') });
   }
 
   if (errors.length > 0) {
@@ -515,7 +519,7 @@ router.post('/upload', (req, res) => {
     Video.findOne({ url: url })
       .then(video => {
         if (video) {
-          errors.push({ msg: 'The video is already registered!' });
+          errors.push({ msg: res.__('msg.error.dupl') });
           res.render('upload', {
             errors, userPhoto: req.session.passport.user.photos[0].value, API_key: process.env.API_key
           });
@@ -523,7 +527,7 @@ router.post('/upload', (req, res) => {
           const newVideo = new Video({ title, choreographer, thumbnail, url, id, publishedDate, length, lengthCat, language, level, genre, purpose, mood });
           newVideo.save()
             .then(function (video) {
-              req.flash('success_msg', 'The dance is now registered');
+              req.flash('success_msg', res.__('msg.success.upload'));
               res.redirect('/upload');
             })
             .catch(err => console.log(err));
@@ -554,27 +558,52 @@ router.get('/reservation/:id', ensureAuthenticated, async (req, res) => {
   const lesson = await Lesson.findOne({ _id: req.params.id }).exec();
   const choreographer = await User.findOne({ _id: lesson.choreographerID }).exec();
   const account = await stripe.accounts.retrieve(choreographer.stripeID);
-  console.log(account)
 
-  const intent = await stripe.paymentIntents.create({
+  // const intent = await stripe.paymentIntents.create({
+  //   payment_method_types: ['card'],
+  //   amount: lesson.price,
+  //   currency: 'jpy',
+  //   application_fee_amount: lesson.price * 0.4,
+  //   transfer_data: {
+  //     destination: account.id,
+  //   },
+  // });
+
+  const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
-    amount: lesson.price,
-    currency: 'jpy',
-    application_fee_amount: lesson.price * 0.4,
-    transfer_data: {
-      destination: account.id,
+    line_items: [{
+      name: lesson.title,
+      images: [lesson.thumbnail],
+      amount: lesson.price,
+      currency: 'jpy',
+      quantity: 1,
+    }],
+    payment_intent_data: {
+      application_fee_amount: lesson.price * 0.4,
+      transfer_data: {
+        destination: account.id,
+      },
     },
+    success_url: 'http://localhost:5000/success',
+    cancel_url: `http://localhost:5000/reservation/${req.params.id}`,
   });
 
+  console.log(session);
+
   res.render('reservation', {
-    client_secret: intent.clinet_secret,
+    // client_secret: intent.clinet_secret,
+    id: session.id,
     lesson: lesson,
     userPhoto: user.userPhoto,
     userPhotoDef: user.userPhotoDef,
   });
 })
 
+
+
 router.get('/success', ensureAuthenticated, async (req, res) => {
+  req.flash('success_msg', res.__('msg.success.login'));
+
   const user = await User.findOne({ email: req.user._json.email }, 'userPhoto userPhotoDef').exec();
 
   res.render('success', {
@@ -583,14 +612,16 @@ router.get('/success', ensureAuthenticated, async (req, res) => {
   });
 })
 
-router.get('/cancel', ensureAuthenticated, async (req, res) => {
-  const user = await User.findOne({ email: req.user._json.email }, 'userPhoto userPhotoDef').exec();
+// router.get('/cancel', ensureAuthenticated, async (req, res) => {
+//   req.flash('success_msg', res.__('msg.success.login'));
+//   res.redirect('/reservation/-1?page=1&limit=15');
+//   // const user = await User.findOne({ email: req.user._json.email }, 'userPhoto userPhotoDef').exec();
 
-  res.render('cancel', {
-    userPhoto: user.userPhoto,
-    userPhotoDef: user.userPhotoDef,
-  });
-})
+//   // res.render('cancel', {
+//   //   userPhoto: user.userPhoto,
+//   //   userPhotoDef: user.userPhotoDef,
+//   // });
+// })
 
 // router.post('/create-session', async (req, res) => {
 //   const session = await stripe.checkout.sessions.create({
@@ -664,7 +695,7 @@ router.post('/create', async (req, res) => {
   let errors = [];
 
   if (title == '' || thumbnail == '' || language == '' || choreographer == '' || price == '' || level == undefined || genre == undefined || purpose == undefined || mood == undefined) {
-    errors.push({ msg: 'Please fill in all fields' });
+    errors.push({ msg: res.__('msg.error.fill') });
   }
 
   if (errors.length > 0) {
@@ -673,7 +704,7 @@ router.post('/create', async (req, res) => {
     Lesson.findOne({ title: title })
       .then(lesson => {
         if (lesson) {
-          errors.push({ msg: 'The lesson is already registered!' });
+          errors.push({ msg: res.__('msg.error.fill') });
           res.render('create', {
             errors, userPhoto: req.session.passport.user.photos[0].value, API_key: process.env.API_key
           });
@@ -683,7 +714,7 @@ router.post('/create', async (req, res) => {
             .then(async function (lesson) {
 
               if (account.details_submitted == true) {
-                req.flash('success_msg', 'The lesson is now created');
+                req.flash('success_msg', res.__('msg.success.create'));
                 res.redirect('/create');
               } else if (!account.details_submitted == true) {
                 try {
@@ -703,7 +734,7 @@ router.post('/create', async (req, res) => {
                     })
                   }
 
-                  req.flash('success_msg', 'The lesson is now created');
+                  req.flash('success_msg', res.__('msg.success.create'));
                   res.redirect(accountLink.url);
                 } catch (err) {
                   res.status(500).send({
@@ -732,6 +763,37 @@ router.post('/create', async (req, res) => {
     }
   );
 })
+
+// Match the raw body to content type application/json
+router.post('/webhook', (req, res) => {
+  let event;
+
+  try {
+    event = JSON.parse(req.body);
+  } catch (err) {
+    response.status(400).send(`Webhook Error: ${err.message}`);
+  }
+
+  // Handle the event
+  switch (event.type) {
+    case 'payment_intent.succeeded':
+      const paymentIntent = event.data.object;
+      // Then define and call a method to handle the successful payment intent.
+      // handlePaymentIntentSucceeded(paymentIntent);
+      break;
+    case 'payment_method.attached':
+      const paymentMethod = event.data.object;
+      // Then define and call a method to handle the successful attachment of a PaymentMethod.
+      // handlePaymentMethodAttached(paymentMethod);
+      break;
+    // ... handle other event types
+    default:
+      console.log(`Unhandled event type ${event.type}`);
+  }
+
+  // Return a response to acknowledge receipt of the event
+  res.json({ received: true });
+});
 
 function escapeRegex(text) {
   return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");

@@ -87,7 +87,7 @@ router.post('/preference', ensureAuthenticated, async (req, res) => {
     User.findOneAndUpdate({ email: req.user._json.email }, query, (err, user) => {
 
         if (!user) {
-            errors.push({ msg: 'There is no such user' });
+            errors.push({ msg: res.__('msg.error.noUser') });
         }
 
         if (errors.length > 0) {
@@ -96,7 +96,7 @@ router.post('/preference', ensureAuthenticated, async (req, res) => {
             });
         }
         else {
-            req.flash('success_msg', 'Your added your tags!');
+            req.flash('success_msg', res.__('msg.success.tags'));
             res.redirect('/dashboard/-1?page=1&limit=15');
         }
     })
@@ -105,10 +105,10 @@ router.post('/preference', ensureAuthenticated, async (req, res) => {
 router.get('/profile', ensureAuthenticated, (req, res) => {
     User.findOne({ email: req.user._json.email }, async (err, user) => {
 
-    const likedVid = await Video.find({ 'like.id' : user._id.toString() }).exec()
+        const likedVid = await Video.find({ 'like.id': user._id.toString() }).exec()
 
         if (!user) {
-            req.flash('error_msg', 'There is no such user');
+            req.flash('error_msg', res.__('msg.error.noUser'));
             res.redirect('/dashboard/-1?page=1&limit=15');
         } else {
             res.render('profile', {
@@ -131,7 +131,7 @@ router.get('/profile', ensureAuthenticated, (req, res) => {
 router.get('/profile/edit', ensureAuthenticated, (req, res) => {
     User.findOne({ email: req.user._json.email }, (err, user) => {
         if (!user) {
-            req.flash('error_msg', 'There is no such user');
+            req.flash('error_msg', res.__('msg.error.noUser'));
             res.redirect('/dashboard/-1?page=1&limit=15');
         } else {
             res.render('profileEdit', {
@@ -151,6 +151,8 @@ router.get('/profile/edit', ensureAuthenticated, (req, res) => {
 })
 
 router.post('/profile/edit', ensureAuthenticated, upload.single('userPhotoDef'), async (req, res) => {
+    const user = await User.findOne({ email: req.user._json.email }).exec();
+
     const { username, bio, level, purpose, genre } = req.body;
     let userPhotoDef = {};
     let query = {};
@@ -184,40 +186,38 @@ router.post('/profile/edit', ensureAuthenticated, upload.single('userPhotoDef'),
     }
 
     if (req.file != undefined && req.file.size > 307200) {
-        req.flash('error_msg', 'The photo needs to be smaller than 3MB');
-        res.redirect('/users/profile/edit');
+        errors.push({ msg: res.__('msg.error.size') });
+    }
+
+    if (!user) {
+        errors.push({ msg: res.__('msg.error.noUser') });
+    }
+
+    if (username == '') {
+        errors.push({ msg: res.__('msg.error.username') });
+    }
+
+    if (errors.length > 0) {
+        res.render('profileEdit', {
+            errors, userPhoto: user.userPhoto, userPhotoDef: user.userPhotoDef, email: user.email, user, username, bio, level, purpose, genre
+        });
     } else {
         User.findOneAndUpdate({ email: req.user._json.email }, query, (err, user) => {
-
-            if (!user) {
-                errors.push({ msg: 'There is no such user' });
-            }
-
-            if (username == '') {
-                errors.push({ msg: 'Please fill in username' });
-            }
-
-            if (errors.length > 0) {
-                res.render('profile', {
-                    errors, userPhoto: user.userPhoto, userPhotoDef: user.userPhotoDef, email, username, bio, level, purpose, genre
-                });
-            }
-            else {
-                req.flash('success_msg', 'Your profile has been updated!');
-                res.redirect('/users/profile');
-            }
+            req.flash('success_msg', res.__('msg.success.profile'));
+            res.redirect('/users/profile');
         })
     }
+
 })
 
 router.get('/:id', ensureAuthenticated, (req, res) => {
     User.findOne({ _id: req.params.id }, (err, user) => {
         User.findOne({ email: req.user._json.email }, async (err, currentUser) => {
 
-            const likedVid = await Video.find({ 'like.id' : user._id.toString() }).exec()
+            const likedVid = await Video.find({ 'like.id': user._id.toString() }).exec()
 
             if (!user) {
-                req.flash('error_msg', 'There is no such user');
+                req.flash('error_msg', res.__('msg.error.noUser'));
                 res.redirect('/dashboard/-1?page=1&limit=15');
             } else {
                 res.render('users', {
@@ -250,7 +250,7 @@ router.post('/:id', ensureAuthenticated, (req, res) => {
             User.findByIdAndUpdate(follower, { $push: { following: [following] } }).exec();
             User.findByIdAndUpdate(following, { $push: { follower: [follower] } }).exec()
                 .then(function (user) {
-                    req.flash('success_msg', 'Followed');
+                    req.flash('success_msg', res.__('msg.success.followed'));
                     res.redirect(`/users/${user._id}`);
                 })
                 .catch(err => console.log(err));
@@ -258,7 +258,7 @@ router.post('/:id', ensureAuthenticated, (req, res) => {
             User.findByIdAndUpdate(follower, { $pull: { following: following } }).exec();
             User.findByIdAndUpdate(following, { $pull: { follower: follower } }).exec()
                 .then(function (user) {
-                    req.flash('success_msg', 'Unfollowed');
+                    req.flash('success_msg', res.__('msg.success.unfollowed'));
                     res.redirect(`/users/${user._id}`);
                 })
                 .catch(err => console.log(err));
@@ -274,7 +274,7 @@ router.get('/:type/:id', ensureAuthenticated, (req, res) => {
         const currentUser = await User.findOne({ email: req.user._json.email }).exec();
 
         if (!user) {
-            req.flash('error_msg', 'There is no such user');
+            req.flash('error_msg', res.__('msg.error.noUser'));
             res.redirect('/dashboard/-1?page=1&limit=15');
         }
 

@@ -5,7 +5,7 @@
 <body onload="charCut()">
   <header id="header" class="fixed-top">
     <div class="container d-flex align-items-center justify-content-between">
-      <h1 class="logo"><a href="/">Vibin'</a></h1>
+      <h1 class="logo"><a href="/dashboard/-1?page=1&limit=15">Vibin'</a></h1>
       <nav class="nav-menu d-none d-lg-block">
         <ul>
           <li class="active"><a href="/dashboard/-1?page=1&limit=15"><%= __('header.Home') %></a></li>
@@ -130,7 +130,7 @@
             </a>
             <h4 id="titleLesson<%= i %>"><%= titleLesson[i] %></h4>
             <a class="special" href="/choreographer/<%= choreographerLesson[i] %>"><%= choreographerLesson[i] %></a>
-            <p><%= levelLesson[i] %></p>
+            <p><%= __(`dashboard.search.level.${levelLesson[i]}`) %></p>
           </div>
         </div>
         <% } %>
@@ -150,7 +150,7 @@
             </a>
             <h4 id="title<%= i %>"><%= titleRec[i] %></h4>
             <a class="special" href="/choreographer/<%= choreographerRec[i] %>"><%= choreographerRec[i] %></a>
-            <p><%= levelRec[i][0] %></p>
+            <p><%= __(`dashboard.search.level.${levelRec[i][0]}`) %></p>
           </div>
         </div>
         <% } %>
@@ -183,7 +183,7 @@
             </a>
             <h4 id="title<%= i %>"><%= title[i] %></h4>
             <a class="special" href="/choreographer/<%= choreographer[i] %>"><%= choreographer[i] %></a>
-            <p><%= level[i] %></p>
+            <p><%= __(`dashboard.search.level.${level[i]}`) %></p>
           </div>
         </div>
         <% } %>

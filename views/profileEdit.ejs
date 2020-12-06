@@ -1,6 +1,6 @@
 <header id="header" class="fixed-top">
     <div class="container d-flex align-items-center justify-content-between">
-        <h1 class="logo"><a href="/">Vibin'</a></h1>
+        <h1 class="logo"><a href="/dashboard/-1?page=1&limit=15">Vibin'</a></h1>
         <nav class="nav-menu d-none d-lg-block">
             <ul>
                 <li class="active"><a href="/dashboard/-1?page=1&limit=15"><%= __('header.Home') %></a></li>
@@ -38,16 +38,18 @@
 
                 <div class="form-group">
                     <label for="Photo"><%= __('profile.photo') %><p><small><%= __('profile.choose photo') %></small>
-                        </p></label><br>
-                    <% if (typeof userPhotoDef.data != "undefined") { %>
-                    <img id="output"
-                        src="data:image/<%=userPhotoDef.contentType%>;base64, <%=userPhotoDef.data.toString('base64')%>"
-                        style="border-radius: 50%;" height="80" width="80" alt="user photo">
-                    <% } else { %>
-                    <img id="output" src="<%= userPhoto %>" height="80" width="80" style="border-radius: 50%;"
-                        alt="user photo">
-                    <% } %>
-                    <input type="file" id="userPhotoDef" name="userPhotoDef" onchange="loadFile(event)" />
+                        </p></label>
+                    <div class="text-center">
+                        <% if (typeof userPhotoDef.data != "undefined") { %>
+                        <img id="output"
+                            src="data:image/<%=userPhotoDef.contentType%>;base64, <%=userPhotoDef.data.toString('base64')%>"
+                            style="border-radius: 50%;" height="80" width="80" alt="user photo">
+                        <% } else { %>
+                        <img id="output" src="<%= userPhoto %>" height="80" width="80" style="border-radius: 50%;"
+                            alt="user photo">
+                        <% } %>
+                        <br><br><input type="file" id="userPhotoDef" name="userPhotoDef" accept="image/*" onchange="loadFile(event)" />
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -72,7 +74,7 @@
                 <div class="form-group" id="levelDrop">
                     <label for="level"><%= __('dashboard.search.level.top') %></label>
                     <select class="form-control" type="level" id="level" name="level">
-                        <option selected value="<%= user.tags.level %>"><%= user.tags.level %></option>
+                        <option selected value="<%= user.tags.level %>"><%= __(`dashboard.search.level.${user.tags.level}`) %></option>
                         <option value="Beginner"><%= __('dashboard.search.level.Beginner') %></option>
                         <option value="Intermediate"><%= __('dashboard.search.level.Intermediate') %></option>
                         <option value="Advanced"><%= __('dashboard.search.level.Advanced') %></option>
@@ -82,7 +84,7 @@
                 <div class="form-group" id="purposeDrop">
                     <label for="purpose"><%= __('dashboard.search.purpose.top') %></label>
                     <select class="form-control" type="purpose" id="purpose" name="purpose">
-                        <option selected value="<%= user.tags.purpose %>"><%= user.tags.purpose %></option>
+                        <option selected value="<%= user.tags.purpose %>"><%= __(`dashboard.search.purpose.${user.tags.purpose}`) %></option>
                         <option value="Skill Improvements"><%= __('dashboard.search.purpose.Skill Improvements') %>
                         </option>
                         <option value="Health and Exercise"><%= __('dashboard.search.purpose.Health and Exercise') %>

@@ -1,160 +1,209 @@
 {
-    "landing": {
-        "hero": {
-            "top": "新しいダンスの体験を",
-            "reason1": "Completely free",
-            "reason2": "踊りたいダンスを簡単に",
-            "reason3": "Simple user interface",
-            "Get started": "始める"
-        },
-        "about": {
-            "top": "Vibin'とは?",
-            "sub": "Vibin is a platform where anyone can meet the dance they truly want.",
-            "desc": "When we listen to music our bodies naturally move and vibe. However, when we don’t know how to dance or when we feel anxious about our dancing skills, we tend to force ourselves to stop our bodies from moving and vibing. That’s why we created a place where anyone can learn how to dance.",
-            "prob": "Are you having trouble because...?",
-            "prob1": "Dance lessons are expensive.",
-            "prob2": "It's too scary to go back to dance studios due to the COVID-19",
-            "prob3": "It's difficult to find the dance you love",
-            "prob4": "It’s difficult to stay committed to learning how to dance",
-            "concl": "Then vibin is for YOU."
-        },
-        "whyus": {
-            "top": "なぜVIBIN'?",
-            "why1": "Quality Videos",
-            "desc1": "Access the video you are looking for with just one search",
-            "why2": "Free Forever",
-            "desc2": "Use it as much as you want without caring about your wallet",
-            "why3": "Keep Track",
-            "desc3": "Schedule your time to learn the dream dance moves"
-        },
-        "features": {
-            "top": "自分のバイブスを沢山の選択肢から見つけて",
-            "sub": "あなたが踊りたいダンスを4032通りの組み合わせから",
-            "level": "つの難易度",
-            "genre": "つのジャンル",
-            "purpose": "つの目的",
-            "mood": "つのムード・特徴",
-            "length": "つの時間",
-            "language": "カ国語"
-        }
-    },
-    "dashboard": {
-        "welcome": {
-            "welcome": "ようこそ"
-        },
-        "search": {
-            "length": {
-                "top": "長さ",
-                "short": "短",
-                "medium": "中",
-                "long": "長"
-            },
-            "language": {
-                "top": "言語",
-                "Japanese": "日本語",
-                "English": "英語",
-                "Korean": "韓国語",
-                "Spanish": "スペイン語"
-            },
-            "level": {
-                "top": "難易度",
-                "Beginner": "初心者",
-                "Intermediate": "中級者",
-                "Advanced": "上級者"
-            },
-            "genre": {
-                "top": "ジャンル",
-                "Hip Hop": "ヒップホップ",
-                "Locking": "ロッキング",
-                "Jazz": "ジャズ",
-                "Breakin": "ブレイク",
-                "House": "ハウス",
-                "Popping": "ポップ",
-                "K-POP": "K-POP",
-                "TikTok": "TikTok",
-                "Bollywood": "ボリウッド"
-            },
-            "purpose": {
-                "top": "目的",
-                "Skill Improvements": "上達",
-                "Health and Exercise": "健康",
-                "Entertainment": "鑑賞"
-            },
-            "mood": {
-                "top": "ムード・特徴",
-                "Groovy": "ムード・特徴",
-                "Funky": "ムード・特徴",
-                "Chill": "ムード・特徴",
-                "Romantic": "ムード・特徴",
-                "Sexy": "ムード・特徴",
-                "Calm": "ムード・特徴",
-                "Angry": "ムード・特徴",
-                "Peaceful": "ムード・特徴",
-                "Sad": "ムード・特徴",
-                "Fearful": "ムード・特徴",
-                "Happy": "ムード・特徴",
-                "Tense": "ムード・特徴",
-                "Sassy": "ムード・特徴",
-                "Savage": "ムード・特徴"
-            },
-            "search": "検索"
-        },
-        "Future vibes": "これからのバイブス",
-        "Recommended videos": "おすすめ",
-        "Latest videos": "最新",
-        "sub1": "",
-        "sub2": "個の動画があります",
-        "Sort": {
-            "top": "並び替え: ",
-            "oldest": "投稿日順",
-            "latest": "新着順"
-        },
-        "Page": "ページ ",
-        "Quote": {
-            "top": " さん、",
-            "1": "今日はどんな感じ？",
-            "2": "バイブス感じてる？",
-            "3": "チルしてもいいかも！",
-            "4": "ファンキーな気分？"
-        }
-    },
-    "profile": {
-        "follower": "フォロワー",
-        "following": "フォロー中",
-        "liked videos": "お気に入りの動画",
-        "edit profile": "プロフィールを編集",
-        "logout": "ログアウト",
-        "photo": "プロフィール写真",
-        "choose photo": "3MB以下の写真を選択してください。写真は自動的に切り取られます。",
-        "email": "メールアドレス",
-        "username": "ユーザーネーム",
-        "bio": "自己紹介",
-        "update": "更新する"
-    },
-    "header": {
-        "Home": "ホーム",
-        "About": "Vibin'とは",
-        "Contact": "コンタクト",
-        "Register": "会員登録",
-        "Login": "ログイン",
-        "Following": "フォロー中",
-        "Calendar": "カレンダー",
-        "Create": "作る",
-        "Profile": "プロフィール",
-        "Logout": "ログアウト"
-    },
-    "footer": {
-        "Phone": "電話番号",
-        "E-Mail": "E-Mail",
-        "Sitemap": "サイトマップ",
-        "Aboutus": "Vibin'とは",
-        "Home": "ホーム",
-        "Calendar": "カレンダー",
-        "Upload": "アップロード",
-        "TOS": "サービス利用規約",
-        "PP": "プライバシーポリシー",
-        "News1": "ニュースレターを受け取る",
-        "News2": "Vibin'の最新のニュースをお届けします!",
-        "Subscribe": "登録"
-    }
+	"msg": {
+		"success": {
+			"login": "ログインしてます",
+			"dance_del": "ダンスを消去しました",
+			"schedule": "スケジュールを立てました、楽しみですね",
+			"upload": "ダンスをアップロードしました",
+			"create": "レッスンの準備が完了しました",
+			"preference": "ようこそ！少しだけあなたの好みを教えてください",
+			"tags": "お気に入りの登録をしました！",
+			"profile": "プロフィールを更新しました",
+			"followed": "フォローしました",
+			"unfollowed": "アンフォローしました"
+		},
+		"error": {
+			"auth": "ログインが必要です",
+			"dev": "現在開発中の機能です",
+			"video": "なにも見つかりませんでした",
+			"video_del": "動画は消された可能性があります",
+			"fill": "全ての欄を入力してください",
+			"dupl": "このレッスンは登録済みです",
+			"noUser": "このユーザーは存在しません",
+			"size": "写真のサイズが大きすぎます。3MB以下のみアップロード可能です",
+			"username": "ユーザーネームを入力してください"
+		}
+	},
+	"login": {
+		"top": "ログイン",
+		"google": "GOOGLEでログイン",
+		"switch": "アカウントをお持ちでないですか？",
+		"register": "登録する"
+	},
+	"register": {
+		"top": "新規登録",
+		"sub1": "登録することによって",
+		"sub2": "プライバシーポリシー",
+		"sub3": "と",
+		"sub4": "利用規約",
+		"sub5": "に同意することとなります",
+		"google": "GOOGLEで登録",
+		"switch": "アカウントをお持ちですか？",
+		"login": "ログインする"
+	},
+	"landing": {
+		"hero": {
+			"top": "新しいダンスの体験を",
+			"reason1": "Completely free",
+			"reason2": "踊りたいダンスを簡単に",
+			"reason3": "Simple user interface",
+			"Get started": "始める"
+		},
+		"about": {
+			"top": "Vibin'とは?",
+			"sub": "Vibin is a platform where anyone can meet the dance they truly want.",
+			"desc": "When we listen to music our bodies naturally move and vibe. However, when we don’t know how to dance or when we feel anxious about our dancing skills, we tend to force ourselves to stop our bodies from moving and vibing. That’s why we created a place where anyone can learn how to dance.",
+			"prob": "Are you having trouble because...?",
+			"prob1": "Dance lessons are expensive.",
+			"prob2": "It's too scary to go back to dance studios due to the COVID-19",
+			"prob3": "It's difficult to find the dance you love",
+			"prob4": "It’s difficult to stay committed to learning how to dance",
+			"concl": "Then vibin is for YOU."
+		},
+		"whyus": {
+			"top": "なぜVIBIN'?",
+			"why1": "Quality Videos",
+			"desc1": "Access the video you are looking for with just one search",
+			"why2": "Free Forever",
+			"desc2": "Use it as much as you want without caring about your wallet",
+			"why3": "Keep Track",
+			"desc3": "Schedule your time to learn the dream dance moves"
+		},
+		"features": {
+			"top": "自分のバイブスを沢山の選択肢から見つけて",
+			"sub": "あなたが踊りたいダンスを4032通りの組み合わせから",
+			"level": "つの難易度",
+			"genre": "つのジャンル",
+			"purpose": "つの目的",
+			"mood": "つのムード・特徴",
+			"length": "つの時間",
+			"language": "カ国語"
+		}
+	},
+	"dashboard": {
+		"welcome": {
+			"welcome": "ようこそ"
+		},
+		"search": {
+			"length": {
+				"top": "長さ",
+				"short": "短",
+				"medium": "中",
+				"long": "長"
+			},
+			"language": {
+				"top": "言語",
+				"Japanese": "日本語",
+				"English": "英語",
+				"Korean": "韓国語",
+				"Spanish": "スペイン語"
+			},
+			"level": {
+				"top": "難易度",
+				"Beginner": "初心者",
+				"Intermediate": "中級者",
+				"Advanced": "上級者",
+				"Skill Improvements": "dashboard.search.level.Skill Improvements"
+			},
+			"genre": {
+				"top": "ジャンル",
+				"Hip Hop": "ヒップホップ",
+				"Locking": "ロッキング",
+				"Jazz": "ジャズ",
+				"Breakin": "ブレイク",
+				"House": "ハウス",
+				"Popping": "ポップ",
+				"K-POP": "K-POP",
+				"TikTok": "TikTok",
+				"Bollywood": "ボリウッド"
+			},
+			"purpose": {
+				"top": "目的",
+				"Skill Improvements": "上達",
+				"Health and Exercise": "健康",
+				"Entertainment": "鑑賞"
+			},
+			"mood": {
+				"top": "ムード・特徴",
+				"Groovy": "グルーヴィ――",
+				"Funky": "ファンキー",
+				"Chill": "チル",
+				"Romantic": "ロマンティック",
+				"Sexy": "セクシー",
+				"Calm": "ゆったり",
+				"Angry": "怒り",
+				"Peaceful": "平和",
+				"Sad": "悲しみ",
+				"Fearful": "恐れ",
+				"Happy": "ハッピー",
+				"Tense": "緊張",
+				"Sassy": "強気",
+				"Savage": "イケイケ"
+			},
+			"search": "検索"
+		},
+		"Future vibes": "これからのバイブス",
+		"Recommended videos": "おすすめ",
+		"Latest videos": "最新",
+		"sub1": "",
+		"sub2": "個の動画があります",
+		"Sort": {
+			"top": "並び替え: ",
+			"oldest": "投稿日順",
+			"latest": "新着順"
+		},
+		"Page": "ページ ",
+		"Quote": {
+			"1": "今日はどんな感じ？",
+			"2": "バイブス感じてる？",
+			"3": "チルしてもいいかも！",
+			"4": "ファンキーな気分？",
+			"top": " さん、"
+		}
+	},
+	"calendar": {
+		"top": "これからの予定",
+		"sub1": "",
+		"sub2": "セッションが予定されてます",
+		"plan": "今後のレッスンを予約しましょう！"
+	},
+	"profile": {
+		"follower": "フォロワー",
+		"following": "フォロー中",
+		"liked videos": "お気に入りの動画",
+		"edit profile": "プロフィールを編集",
+		"logout": "ログアウト",
+		"photo": "プロフィール写真",
+		"choose photo": "3MB以下の写真を選択してください。写真は自動的に切り取られます。",
+		"email": "メールアドレス",
+		"username": "ユーザーネーム",
+		"bio": "自己紹介",
+		"update": "更新する"
+	},
+	"header": {
+		"Home": "ホーム",
+		"About": "Vibin'とは",
+		"Contact": "コンタクト",
+		"Register": "会員登録",
+		"Login": "ログイン",
+		"Following": "フォロー中",
+		"Calendar": "カレンダー",
+		"Create": "作る",
+		"Profile": "プロフィール",
+		"Logout": "ログアウト"
+	},
+	"footer": {
+		"Phone": "電話番号",
+		"E-Mail": "E-Mail",
+		"Sitemap": "サイトマップ",
+		"Aboutus": "Vibin'とは",
+		"Home": "ホーム",
+		"Calendar": "カレンダー",
+		"Upload": "アップロード",
+		"TOS": "サービス利用規約",
+		"PP": "プライバシーポリシー",
+		"News1": "ニュースレターを受け取る",
+		"News2": "Vibin'の最新のニュースをお届けします!",
+		"Subscribe": "登録"
+	}
 }
