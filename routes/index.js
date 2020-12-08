@@ -766,7 +766,7 @@ router.post('/create', async (req, res) => {
 })
 
 router.get('/zoom', (req, res) => {
-  fetch(`https://zoom.us/oauth/token?grant_type=authorization_code&code=${req.query.code}`, {
+  fetch(`https://zoom.us/oauth/token?grant_type=authorization_code&code=${req.query.code}&redirect_uri=https://fathomless-crag-65791.herokuapp.com/create`, {
     'method': 'POST',
     'headers': {
       'Authorization': 'Basic X29fcFhRTFlSSGUzTUxqeVNOcmZWUTpnNndmOFI3UERIc0QwVVRodkcxZ0VlY0RidjlqZ1BGag==',
