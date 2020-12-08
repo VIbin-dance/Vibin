@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const nodemailer = require('nodemailer');
 const { ensureAuthenticated } = require('../config/auth');
 const multer = require('multer');
 const sharp = require('sharp');
