@@ -11,6 +11,7 @@ const { onlyDevs } = require('../config/dev');
 const Video = require('../models/Video');
 const User = require('../models/User');
 const Lesson = require('../models/Lesson');
+const { response } = require('express');
 
 router.get('/', (req, res) => {
   // if (req.session.passport) {
@@ -762,6 +763,26 @@ router.post('/create', async (req, res) => {
       }
     }
   );
+})
+
+router.get('/zoom', (req, res) => {
+  fetch(`https://zoom.us/oauth/token?grant_type=authorization_code&code=${req.query.code}`, {
+    'method': 'POST',
+    'headers': {
+      'Authorization': 'Basic X29fcFhRTFlSSGUzTUxqeVNOcmZWUTpnNndmOFI3UERIc0QwVVRodkcxZ0VlY0RidjlqZ1BGag==',
+    }
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      if (data.error) {
+        req.flash('error_msg', res.__('msg.error.auth'));
+        res.redirect('/');
+      } else {
+        req.flash('success_msg', res.__('msg.success.login'));
+        res.redirect('/create');
+      }
+    })
 })
 
 // Match the raw body to content type application/json

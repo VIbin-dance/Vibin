@@ -1670,7 +1670,7 @@ section {
   padding-top:0%;
 }
 
-.results .box {
+.results .box, .follow .box {
   width:100%;
   margin-top: 20px;
   padding: 0px;
@@ -1678,6 +1678,10 @@ section {
   transition: all ease-in-out 0.3s;
   min-height: 500px;
   max-height: 500px;
+}
+
+.follow .box {
+  padding: 2px;
 }
 
 .results .icon-box {
@@ -1692,7 +1696,14 @@ section {
   max-height: 50%;
 }
 
-.results .box h4 {
+.follow .box img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 70%;
+}
+
+.results .box h4, .follow .box h4 {
   font-size: 22px;
   font-weight: 600;
   padding: 0;
@@ -1700,14 +1711,14 @@ section {
   color: #545454;
 }
 
-.results .box p {
+.results .box p, .follow .box p {
   color: #aaaaaa;
   font-size: 15px;
   margin: 20px;
   padding: 0;
 }
 
-.results .box .special {
+.results .box .special, .follow .box .special {
   color: #686868;
   font-size: 18px;
   margin: 20px;
