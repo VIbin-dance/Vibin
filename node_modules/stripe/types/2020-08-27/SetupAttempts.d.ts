@@ -28,7 +28,7 @@ declare module 'stripe' {
       /**
        * The value of [customer](https://stripe.com/docs/api/setup_intents/object#setup_intent_object-customer) on the SetupIntent at the time of this confirmation.
        */
-      customer: string | Stripe.Customer | Stripe.DeletedCustomer | null;
+      customer: string | Stripe.Customer | DeletedCustomer | null;
 
       /**
        * Has the value `true` if the object exists in live mode or the value `false` if the object exists in test mode.
@@ -356,6 +356,11 @@ declare module 'stripe' {
         payment_method?: Stripe.PaymentMethod;
 
         /**
+         * If the error is specific to the type of payment method, the payment method type that had a problem. This field is only populated for invoice-related errors.
+         */
+        payment_method_type?: string;
+
+        /**
          * A SetupIntent guides you through the process of setting up and saving a customer's payment credentials for future payments.
          * For example, you could use a SetupIntent to set up and save your customer's card without immediately collecting a payment.
          * Later, you can use [PaymentIntents](https://stripe.com/docs/api#payment_intents) to drive the payment flow.
@@ -381,7 +386,7 @@ declare module 'stripe' {
          */
         setup_intent?: Stripe.SetupIntent;
 
-        source?: CustomerSource;
+        source?: Stripe.CustomerSource;
 
         /**
          * The type of error returned. One of `api_connection_error`, `api_error`, `authentication_error`, `card_error`, `idempotency_error`, `invalid_request_error`, or `rate_limit_error`
@@ -413,7 +418,7 @@ declare module 'stripe' {
        * can be a string with an integer Unix timestamp, or it can be a
        * dictionary with a number of different query options.
        */
-      created?: RangeQueryParam | number;
+      created?: Stripe.RangeQueryParam | number;
 
       /**
        * Specifies which fields in the response should be expanded.

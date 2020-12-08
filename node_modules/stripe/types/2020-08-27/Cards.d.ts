@@ -83,7 +83,7 @@ declare module 'stripe' {
       /**
        * The customer that this card belongs to. This attribute will not be in the card object if the card belongs to an account or recipient instead.
        */
-      customer?: string | Stripe.Customer | Stripe.DeletedCustomer | null;
+      customer?: string | Stripe.Customer | DeletedCustomer | null;
 
       /**
        * If a CVC was provided, results of the check: `pass`, `fail`, `unavailable`, or `unchecked`. A result of unchecked indicates that CVC was provided but hasn't been checked yet. Checks are typically performed when attaching a card to a Customer object, or when creating a charge. For more details, see [Check if a card is valid without a charge](https://support.stripe.com/questions/check-if-a-card-is-valid-without-a-charge).
@@ -98,7 +98,7 @@ declare module 'stripe' {
       deleted?: void;
 
       /**
-       * Card description. (For internal use only and not typically available in standard API requests.)
+       * A high-level description of the type of cards issued in this range. (For internal use only and not typically available in standard API requests.)
        */
       description?: string;
 
@@ -133,7 +133,7 @@ declare module 'stripe' {
       iin?: string;
 
       /**
-       * Issuer bank name of the card. (For internal use only and not typically available in standard API requests.)
+       * The name of the card's issuing bank. (For internal use only and not typically available in standard API requests.)
        */
       issuer?: string;
 
@@ -145,7 +145,7 @@ declare module 'stripe' {
       /**
        * Set of [key-value pairs](https://stripe.com/docs/api/metadata) that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
        */
-      metadata: Metadata | null;
+      metadata: Stripe.Metadata | null;
 
       /**
        * Cardholder name.
