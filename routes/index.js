@@ -681,8 +681,20 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
           req.flash('error_msg', data.reason);
           res.redirect('/create');
         } else {
-          req.flash('success_msg', res.__('msg.success.login'));
-          res.redirect('/create');
+          fetch(`https://api.zoom.us/v2/users`, {
+            'headers': {
+              'Authorization': `Bearer ${data.access_token}`,
+            }
+          })
+            .then(response => response.json())
+            .then(user => {
+              console.log(user);
+              zoom_id = user.users[0].id
+              zoom_first_name = user.users[0].first_name
+              zoom_last_name = user.users[0].last_name
+              req.flash('success_msg', res.__('msg.success.login'));
+              res.redirect('/create');
+            })
         }
       })
   }
@@ -697,13 +709,19 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
       choreographer: user.username,
       userPhoto: user.userPhoto,
       userPhotoDef: user.userPhotoDef,
-      CLIENT_id: process.env.ZOOM_CLIENT_ID
+      CLIENT_id: process.env.ZOOM_CLIENT_ID,
+      zoom_id: zoom_id,
+      zoom_first_name: zoom_first_name,
+      zoom_last_name: zoom_last_name
     });
   } else {
     res.render('create', {
       userPhoto: user.userPhoto,
       userPhotoDef: user.userPhotoDef,
-      CLIENT_id: process.env.ZOOM_CLIENT_ID
+      CLIENT_id: process.env.ZOOM_CLIENT_ID,
+      zoom_id: zoom_id,
+      zoom_first_name: zoom_first_name,
+      zoom_last_name: zoom_last_name
     });
   }
 })
