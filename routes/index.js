@@ -692,8 +692,32 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
               zoom_id = user.users[0].id
               zoom_first_name = user.users[0].first_name
               zoom_last_name = user.users[0].last_name
-              req.flash('success_msg', res.__('msg.success.login'));
-              res.redirect('/create');
+
+              if (user.stripeID) {
+                const account = await stripe.accounts.retrieve(user.stripeID);
+                const loginLink = await stripe.accounts.createLoginLink(user.stripeID);
+
+                res.render('create', {
+                  account: account,
+                  loginLink: loginLink.url,
+                  choreographer: user.username,
+                  userPhoto: user.userPhoto,
+                  userPhotoDef: user.userPhotoDef,
+                  CLIENT_id: process.env.ZOOM_CLIENT_ID,
+                  zoom_id: zoom_id,
+                  zoom_first_name: zoom_first_name,
+                  zoom_last_name: zoom_last_name
+                });
+              } else {
+                res.render('create', {
+                  userPhoto: user.userPhoto,
+                  userPhotoDef: user.userPhotoDef,
+                  CLIENT_id: process.env.ZOOM_CLIENT_ID,
+                  zoom_id: zoom_id,
+                  zoom_first_name: zoom_first_name,
+                  zoom_last_name: zoom_last_name
+                });
+              }
             })
         }
       })
@@ -710,18 +734,12 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
       userPhoto: user.userPhoto,
       userPhotoDef: user.userPhotoDef,
       CLIENT_id: process.env.ZOOM_CLIENT_ID,
-      zoom_id: zoom_id,
-      zoom_first_name: zoom_first_name,
-      zoom_last_name: zoom_last_name
     });
   } else {
     res.render('create', {
       userPhoto: user.userPhoto,
       userPhotoDef: user.userPhotoDef,
       CLIENT_id: process.env.ZOOM_CLIENT_ID,
-      zoom_id: zoom_id,
-      zoom_first_name: zoom_first_name,
-      zoom_last_name: zoom_last_name
     });
   }
 })
