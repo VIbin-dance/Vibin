@@ -687,11 +687,11 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
             }
           })
             .then(response => response.json())
-            .then(async user => {
-              console.log(user);
-              zoom_id = user.users[0].id
-              zoom_first_name = user.users[0].first_name
-              zoom_last_name = user.users[0].last_name
+            .then(async zoom => {
+              console.log(zoom);
+              zoom_id = zoom.users[0].id
+              zoom_first_name = zoom.users[0].first_name
+              zoom_last_name = zoom.users[0].last_name
 
               if (user.stripeID) {
                 const account = await stripe.accounts.retrieve(user.stripeID);
