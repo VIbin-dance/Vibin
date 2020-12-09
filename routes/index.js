@@ -664,7 +664,28 @@ router.get('/success', ensureAuthenticated, async (req, res) => {
 // });
 
 router.get('/create', ensureAuthenticated, async (req, res) => {
+
   const user = await User.findOne({ email: req.user._json.email }, 'userPhoto userPhotoDef username stripeID').exec();
+
+  if (req.query.code) {
+    fetch(`https://zoom.us/oauth/token?grant_type=authorization_code&code=${req.query.code}&redirect_uri=https://fathomless-crag-65791.herokuapp.com/create`, {
+      'method': 'POST',
+      'headers': {
+        'Authorization': 'Basic c3RPRXpJVExROXlVd1pWSm1IaHdDUTpNNWpkREU0d1l3VERIandwdnJtQ0kzSGdoOUQ0M0ZvWQ==',
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        if (data.error) {
+          req.flash('error_msg', data.reason);
+          res.redirect('/create');
+        } else {
+          req.flash('success_msg', res.__('msg.success.login'));
+          res.redirect('/create');
+        }
+      })
+  }
 
   if (user.stripeID) {
     const account = await stripe.accounts.retrieve(user.stripeID);
@@ -776,7 +797,7 @@ router.get('/zoom', (req, res) => {
     .then(data => {
       console.log(data);
       if (data.error) {
-        req.flash('error_msg', 'error');
+        req.flash('error_msg', data.reason);
         res.redirect('/create');
       } else {
         req.flash('success_msg', res.__('msg.success.login'));
