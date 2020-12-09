@@ -769,15 +769,15 @@ router.get('/zoom', (req, res) => {
   fetch(`https://zoom.us/oauth/token?grant_type=authorization_code&code=${req.query.code}&redirect_uri=https://fathomless-crag-65791.herokuapp.com/create`, {
     'method': 'POST',
     'headers': {
-      'Authorization': 'Basic X29fcFhRTFlSSGUzTUxqeVNOcmZWUTpnNndmOFI3UERIc0QwVVRodkcxZ0VlY0RidjlqZ1BGag==',
+      'Authorization': 'Basic c3RPRXpJVExROXlVd1pWSm1IaHdDUTpNNWpkREU0d1l3VERIandwdnJtQ0kzSGdoOUQ0M0ZvWQ==',
     }
   })
     .then(response => response.json())
     .then(data => {
       console.log(data);
       if (data.error) {
-        req.flash('error_msg', res.__('msg.error.auth'));
-        res.redirect('/');
+        req.flash('error_msg', 'error');
+        res.redirect('/create');
       } else {
         req.flash('success_msg', res.__('msg.success.login'));
         res.redirect('/create');
