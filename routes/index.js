@@ -687,7 +687,7 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
             }
           })
             .then(response => response.json())
-            .then(user => {
+            .then(async user => {
               console.log(user);
               zoom_id = user.users[0].id
               zoom_first_name = user.users[0].first_name
