@@ -681,19 +681,6 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
           req.flash('error_msg', data.reason);
           res.redirect('/create');
         } else {
-          //user update
-          User.findOneAndUpdate({ email: req.user._json.email }, {
-            zoom : {
-              id: data.users[0].id,
-              accessToken: data.access_token,
-              refreshToken: data.refresh_token,
-            }
-           }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, user) => {
-            if (err) {
-              console.log(err);
-            }
-          })
-
           fetch(`https://api.zoom.us/v2/users`, {
             'headers': {
               'Authorization': `Bearer ${data.access_token}`,
@@ -702,6 +689,19 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
             .then(response => response.json())
             .then(async zoom => {
               console.log(zoom);
+
+              //user update
+              User.findOneAndUpdate({ email: req.user._json.email }, {
+                zoom: {
+                  id: data.users[0].id,
+                  accessToken: data.access_token,
+                  refreshToken: data.refresh_token,
+                }
+              }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, user) => {
+                if (err) {
+                  console.log(err);
+                }
+              })
 
               if (user.stripeID) {
                 const account = await stripe.accounts.retrieve(user.stripeID);
