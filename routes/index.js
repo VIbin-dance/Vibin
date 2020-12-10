@@ -693,7 +693,7 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
               //user update
               User.findOneAndUpdate({ email: req.user._json.email }, {
                 zoom: {
-                  id: data.users[0].id,
+                  id: zoom.users[0].id,
                   accessToken: data.access_token,
                   refreshToken: data.refresh_token,
                 }
