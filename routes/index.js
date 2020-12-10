@@ -703,27 +703,27 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
                 }
               })
 
-              if (user.stripeID) {
-                const account = await stripe.accounts.retrieve(user.stripeID);
-                const loginLink = await stripe.accounts.createLoginLink(user.stripeID);
+              // if (user.stripeID) {
+              //   const account = await stripe.accounts.retrieve(user.stripeID);
+              //   const loginLink = await stripe.accounts.createLoginLink(user.stripeID);
 
-                res.render('create', {
-                  account: account,
-                  loginLink: loginLink.url,
-                  choreographer: user.username,
-                  userPhoto: user.userPhoto,
-                  userPhotoDef: user.userPhotoDef,
-                  CLIENT_id: process.env.ZOOM_CLIENT_ID,
-                  zoom: zoom
-                });
-              } else {
-                res.render('create', {
-                  userPhoto: user.userPhoto,
-                  userPhotoDef: user.userPhotoDef,
-                  CLIENT_id: process.env.ZOOM_CLIENT_ID,
-                  zoom: zoom
-                });
-              }
+              //   res.render('create', {
+              //     account: account,
+              //     loginLink: loginLink.url,
+              //     choreographer: user.username,
+              //     userPhoto: user.userPhoto,
+              //     userPhotoDef: user.userPhotoDef,
+              //     CLIENT_id: process.env.ZOOM_CLIENT_ID,
+              //     zoom: zoom
+              //   });
+              // } else {
+              //   res.render('create', {
+              //     userPhoto: user.userPhoto,
+              //     userPhotoDef: user.userPhotoDef,
+              //     CLIENT_id: process.env.ZOOM_CLIENT_ID,
+              //     zoom: zoom
+              //   });
+              // }
             })
         }
       })
@@ -794,10 +794,10 @@ router.post('/create', async (req, res) => {
   // const account = await stripe.accounts.retrieve(user.stripeID);
   const choreographerID = user._id;
 
-  const { title, thumbnail, language, choreographer, price, level, genre, purpose, mood } = req.body;
+  const { title, thumbnail, language, choreographer, time, price, level, genre, purpose, mood } = req.body;
   let errors = [];
 
-  if (title == '' || thumbnail == '' || language == '' || choreographer == '' || price == '' || level == undefined || genre == undefined || purpose == undefined || mood == undefined) {
+  if (title == '' || thumbnail == '' || language == '' || choreographer == '' || time == '' || price == '' || level == undefined || genre == undefined || purpose == undefined || mood == undefined) {
     errors.push({ msg: res.__('msg.error.fill') });
   }
 
@@ -817,11 +817,48 @@ router.post('/create', async (req, res) => {
             errors, userPhoto: req.session.passport.user.photos[0].value, API_key: process.env.API_key
           });
         } else {
-          const newLesson = new Lesson({ title, thumbnail, language, choreographer, choreographerID, price, level, genre, purpose, mood });
+          const newLesson = new Lesson({ title, thumbnail, language, choreographer, choreographerID, time, price, level, genre, purpose, mood });
           newLesson.save()
             .then(async function (lesson) {
-              req.flash('success_msg', res.__('msg.success.create'));
-              res.redirect('/create');
+              console.log(lesson);
+
+              // create meeting
+              fetch(`https://api.zoom.us/v2/users/${user.zoom.id}/meetings`, {
+                'headers': {
+                  'method': 'POST',
+                  'Authorization': `Bearer ${user.zoom.accessToken}`,
+                },
+                // moment(data.items[i].start.dateTime).format('MMMM Do YYYY, h:mm a');
+                'body': JSON.stringify({
+                  "topic": `${lesson.title}`,
+                  "type": 2,
+                  "start_time": "string [date-time]",
+                  "duration": 40,
+                  "timezone": "Asia/Tokyo",
+                  // "password": "string",
+                  "agenda": `${lesson.level} ${lesson.genre} lesson for ${lesson.purpose}! Let's dance`,
+                  "settings": {
+                    "contact_email": `${user.email}`,
+                    "contact_name": `${lesson.choreographer}`,
+                    "use_pmi": true,
+                    "auto_recording": "cloud",
+                    "registrants_email_notification": true,
+                    "meeting_authentication": true,
+                  }
+                })
+              })
+                .then(response => response.json())
+                .then(async zoom => {
+                  res.render('create', {
+                    account: account,
+                    loginLink: loginLink.url,
+                    choreographer: user.username,
+                    userPhoto: user.userPhoto,
+                    userPhotoDef: user.userPhotoDef,
+                    CLIENT_id: process.env.ZOOM_CLIENT_ID,
+                    zoom: zoom
+                  });
+                })
 
               if (account.details_submitted == true) {
                 req.flash('success_msg', res.__('msg.success.create'));

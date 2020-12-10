@@ -55,23 +55,21 @@
         <div class="card">
             <div class="card-body">
                 <h2 class="card-title">Your Zoom Account</h2>
-                <p><%= zoom %></p>
-                <p><%= account.external_accounts.data[0].bank_name %></p>
-                <p><%= account.external_accounts.data[0].account_holder_name %></p>
-                <p>**** **** <%= account.external_accounts.data[0].last4 %></p>
-                <a class="button" href="<%= loginLink %>" target="_blank" role="button">Go to your stripe dashboard</a>
+                <p><%= zoom.id %></p>
+                <p><%= zoom.users[0].email %></p>
+                <p><%= zoom.users[0].first_name %> <%= zoom.users[0].last_name %></p>
             </div>
         </div>
         <% } %>
 
-        <form action="/create" method="POST">
+        <% if (typeof zoom = "undefined") { %>
+        <a class="button"
+            href="https://zoom.us/oauth/authorize?response_type=code&client_id=<%= CLIENT_id %>&redirect_uri=https://fathomless-crag-65791.herokuapp.com/create"
+            target="_blank" role="button">Login
+            with Zoom</a>
+        <% } %>
 
-            <!-- <a
-                href="https://zoom.us/oauth/authorize?response_type=code&client_id=<%= CLIENT_id %>&redirect_uri=http://localhost:5000/create">Login
-                with Zoom</a> -->
-            <a href="https://zoom.us/oauth/authorize?response_type=code&client_id=<%= CLIENT_id %>&redirect_uri=https://fathomless-crag-65791.herokuapp.com/create"
-                target="blank">Login
-                with Zoom</a>
+        <form action="/create" method="POST">
 
             <div class="form-group">
                 <label for="title">Title</label>
@@ -101,6 +99,11 @@
                 <input type="choreographer" id="choreographer" name="choreographer" class="form-control"
                     placeholder="Enter The Choreographer"
                     value="<%= typeof choreographer != 'undefined' ? choreographer : '' %>" />
+            </div>
+
+            <div class="form-group">
+                <label for="time">Time</label>
+                <input type="datetime-local" id="date" name="date" class="form-control" value="<%= typeof time != 'undefined' ? time : '' %>">
             </div>
 
             <div class="form-group">
