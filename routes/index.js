@@ -665,7 +665,7 @@ router.get('/success', ensureAuthenticated, async (req, res) => {
 
 router.get('/create', ensureAuthenticated, async (req, res) => {
 
-  const user = await User.findOne({ email: req.user._json.email }, 'userPhoto userPhotoDef username stripeID').exec();
+  const user = await User.findOne({ email: req.user._json.email }).exec();
 
   if (req.query.code) {
     fetch(`https://zoom.us/oauth/token?grant_type=authorization_code&code=${req.query.code}&redirect_uri=https://fathomless-crag-65791.herokuapp.com/create`, {
@@ -681,6 +681,19 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
           req.flash('error_msg', data.reason);
           res.redirect('/create');
         } else {
+          //user update
+          User.findOneAndUpdate({ email: req.user._json.email }, {
+            zoom : {
+              id: data.users[0].id,
+              accessToken: data.access_token,
+              refreshToken: data.refresh_token,
+            }
+           }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, user) => {
+            if (err) {
+              console.log(err);
+            }
+          })
+
           fetch(`https://api.zoom.us/v2/users`, {
             'headers': {
               'Authorization': `Bearer ${data.access_token}`,
@@ -689,9 +702,6 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
             .then(response => response.json())
             .then(async zoom => {
               console.log(zoom);
-              zoom_id = zoom.users[0].id
-              zoom_first_name = zoom.users[0].first_name
-              zoom_last_name = zoom.users[0].last_name
 
               if (user.stripeID) {
                 const account = await stripe.accounts.retrieve(user.stripeID);
@@ -704,18 +714,14 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
                   userPhoto: user.userPhoto,
                   userPhotoDef: user.userPhotoDef,
                   CLIENT_id: process.env.ZOOM_CLIENT_ID,
-                  zoom_id: zoom_id,
-                  zoom_first_name: zoom_first_name,
-                  zoom_last_name: zoom_last_name
+                  zoom: zoom
                 });
               } else {
                 res.render('create', {
                   userPhoto: user.userPhoto,
                   userPhotoDef: user.userPhotoDef,
                   CLIENT_id: process.env.ZOOM_CLIENT_ID,
-                  zoom_id: zoom_id,
-                  zoom_first_name: zoom_first_name,
-                  zoom_last_name: zoom_last_name
+                  zoom: zoom
                 });
               }
             })
@@ -723,7 +729,28 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
       })
   }
 
-  if (user.stripeID) {
+  if (user.stripeID && user.zoom.id) {
+    const account = await stripe.accounts.retrieve(user.stripeID);
+    const loginLink = await stripe.accounts.createLoginLink(user.stripeID);
+
+    fetch(`https://api.zoom.us/v2/users`, {
+      'headers': {
+        'Authorization': `Bearer ${user.zoom.accessToken}`,
+      }
+    })
+      .then(response => response.json())
+      .then(async zoom => {
+        res.render('create', {
+          account: account,
+          loginLink: loginLink.url,
+          choreographer: user.username,
+          userPhoto: user.userPhoto,
+          userPhotoDef: user.userPhotoDef,
+          CLIENT_id: process.env.ZOOM_CLIENT_ID,
+          zoom: zoom
+        });
+      })
+  } else if (user.stripeID) {
     const account = await stripe.accounts.retrieve(user.stripeID);
     const loginLink = await stripe.accounts.createLoginLink(user.stripeID);
 
@@ -735,6 +762,24 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
       userPhotoDef: user.userPhotoDef,
       CLIENT_id: process.env.ZOOM_CLIENT_ID,
     });
+  } else if (user.zoomID) {
+    fetch(`https://api.zoom.us/v2/users`, {
+      'headers': {
+        'Authorization': `Bearer ${user.zoom.accessToken}`,
+      }
+    })
+      .then(response => response.json())
+      .then(async zoom => {
+        res.render('create', {
+          account: account,
+          loginLink: loginLink.url,
+          choreographer: user.username,
+          userPhoto: user.userPhoto,
+          userPhotoDef: user.userPhotoDef,
+          CLIENT_id: process.env.ZOOM_CLIENT_ID,
+          zoom: zoom
+        });
+      })
   } else {
     res.render('create', {
       userPhoto: user.userPhoto,
@@ -746,7 +791,7 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
 
 router.post('/create', async (req, res) => {
   const user = await User.findOne({ email: req.user._json.email }).exec();
-  const account = await stripe.accounts.retrieve(user.stripeID);
+  // const account = await stripe.accounts.retrieve(user.stripeID);
   const choreographerID = user._id;
 
   const { title, thumbnail, language, choreographer, price, level, genre, purpose, mood } = req.body;
@@ -754,6 +799,11 @@ router.post('/create', async (req, res) => {
 
   if (title == '' || thumbnail == '' || language == '' || choreographer == '' || price == '' || level == undefined || genre == undefined || purpose == undefined || mood == undefined) {
     errors.push({ msg: res.__('msg.error.fill') });
+  }
+
+  if (!user.zoom) {
+    errors.push({ msg: 'no zoom' });
+    // res.__('msg.error.fill')
   }
 
   if (errors.length > 0) {
@@ -770,11 +820,13 @@ router.post('/create', async (req, res) => {
           const newLesson = new Lesson({ title, thumbnail, language, choreographer, choreographerID, price, level, genre, purpose, mood });
           newLesson.save()
             .then(async function (lesson) {
+              req.flash('success_msg', res.__('msg.success.create'));
+              res.redirect('/create');
 
               if (account.details_submitted == true) {
                 req.flash('success_msg', res.__('msg.success.create'));
                 res.redirect('/create');
-              } else if (!account.details_submitted == true) {
+              } else {
                 try {
                   const account = await stripe.accounts.create({ type: "express" });
                   const accountLink = await stripe.accountLinks.create({
@@ -822,25 +874,25 @@ router.post('/create', async (req, res) => {
   );
 })
 
-router.get('/zoom', (req, res) => {
-  fetch(`https://zoom.us/oauth/token?grant_type=authorization_code&code=${req.query.code}&redirect_uri=https://fathomless-crag-65791.herokuapp.com/create`, {
-    'method': 'POST',
-    'headers': {
-      'Authorization': 'Basic c3RPRXpJVExROXlVd1pWSm1IaHdDUTpNNWpkREU0d1l3VERIandwdnJtQ0kzSGdoOUQ0M0ZvWQ==',
-    }
-  })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-      if (data.error) {
-        req.flash('error_msg', data.reason);
-        res.redirect('/create');
-      } else {
-        req.flash('success_msg', res.__('msg.success.login'));
-        res.redirect('/create');
-      }
-    })
-})
+// router.get('/zoom', (req, res) => {
+//   fetch(`https://zoom.us/oauth/token?grant_type=authorization_code&code=${req.query.code}&redirect_uri=https://fathomless-crag-65791.herokuapp.com/create`, {
+//     'method': 'POST',
+//     'headers': {
+//       'Authorization': 'Basic c3RPRXpJVExROXlVd1pWSm1IaHdDUTpNNWpkREU0d1l3VERIandwdnJtQ0kzSGdoOUQ0M0ZvWQ==',
+//     }
+//   })
+//     .then(response => response.json())
+//     .then(data => {
+//       console.log(data);
+//       if (data.error) {
+//         req.flash('error_msg', data.reason);
+//         res.redirect('/create');
+//       } else {
+//         req.flash('success_msg', res.__('msg.success.login'));
+//         res.redirect('/create');
+//       }
+//     })
+// })
 
 // Match the raw body to content type application/json
 router.post('/webhook', (req, res) => {

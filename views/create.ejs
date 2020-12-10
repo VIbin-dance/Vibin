@@ -17,7 +17,13 @@
         <nav class="nav-menu d-none d-lg-block">
             <ul>
                 <li class="drop-down">
-
+                    <% if (typeof userPhotoDef.data != "undefined") { %>
+                    <img src="data:image/<%=userPhotoDef.contentType%>;base64, <%=userPhotoDef.data.toString('base64')%>"
+                        height="40" width="40" style="border-radius: 50%;" alt="user photo">
+                    <% } else { %>
+                    <img src="<%= userPhoto %>" height="40" width="40" style="border-radius: 50%;" alt="user photo">
+                    <% } %>
+                    <ul>
                         <li><a href="/users/profile"><%= __('header.Profile') %></a></li>
                         <li><a href="/logout"><%= __('header.Logout') %></a></li>
                     </ul>
@@ -43,7 +49,19 @@
                 <a class="button" href="<%= loginLink %>" target="_blank" role="button">Go to your stripe dashboard</a>
             </div>
         </div>
+        <% } %>
 
+        <% if (typeof zoom != "undefined") { %>
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">Your Zoom Account</h2>
+                <p><%= zoom %></p>
+                <p><%= account.external_accounts.data[0].bank_name %></p>
+                <p><%= account.external_accounts.data[0].account_holder_name %></p>
+                <p>**** **** <%= account.external_accounts.data[0].last4 %></p>
+                <a class="button" href="<%= loginLink %>" target="_blank" role="button">Go to your stripe dashboard</a>
+            </div>
+        </div>
         <% } %>
 
         <form action="/create" method="POST">
@@ -51,8 +69,8 @@
             <!-- <a
                 href="https://zoom.us/oauth/authorize?response_type=code&client_id=<%= CLIENT_id %>&redirect_uri=http://localhost:5000/create">Login
                 with Zoom</a> -->
-            <a
-                href="https://zoom.us/oauth/authorize?response_type=code&client_id=<%= CLIENT_id %>&redirect_uri=https://fathomless-crag-65791.herokuapp.com/create" target="blank">Login
+            <a href="https://zoom.us/oauth/authorize?response_type=code&client_id=<%= CLIENT_id %>&redirect_uri=https://fathomless-crag-65791.herokuapp.com/create"
+                target="blank">Login
                 with Zoom</a>
 
             <div class="form-group">

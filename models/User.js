@@ -77,6 +77,20 @@ const UserSchema = new mongoose.Schema({
         type: String,
         require: false,
     },
+    zoom: {
+        id: {
+            type: String,
+            require: false,
+        },
+        accessToken: {
+            type: String,
+            require: false,
+        },
+        refreshToken: {
+            type: String,
+            require: false,
+        }
+    },
     like: [{
         id: {
             type: String,
