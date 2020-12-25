@@ -5,13 +5,19 @@ const passport = require('passport');
 const fetch = require('node-fetch');
 const moment = require('moment');
 const stripe = require('stripe')('sk_test_51Hfnh4BHyna8CK9qjfFDuXjt1pmBPnPMoGflpvhPIet1ytDmqDZD3sayrbLnHbIQXnLBIZ8UWxSe62EaNZuw2oDO00b2zFDdno');
-const { ensureAuthenticated } = require('../config/auth');
-const { onlyDevs } = require('../config/dev');
+const {
+  ensureAuthenticated
+} = require('../config/auth');
+const {
+  onlyDevs
+} = require('../config/dev');
 
 const Video = require('../models/Video');
 const User = require('../models/User');
 const Lesson = require('../models/Lesson');
-const { response } = require('express');
+const {
+  response
+} = require('express');
 
 router.get('/', (req, res) => {
   // if (req.session.passport) {
@@ -22,7 +28,9 @@ router.get('/', (req, res) => {
   // }
 });
 
-router.get('/error', (req, res) => { res.send('Login error') });
+router.get('/error', (req, res) => {
+  res.send('Login error')
+});
 router.get('/privacy-policy', (req, res) => res.render('privacy-policy'));
 router.get('/terms-of-service', (req, res) => res.render('terms-of-service'));
 
@@ -47,7 +55,9 @@ router.get('/auth/google/callback',
     session: true
   }),
   async (req, res) => {
-    const user = await User.findOne({ email: req.user._json.email }).exec();
+    const user = await User.findOne({
+      email: req.user._json.email
+    }).exec();
     if (user.loginCount == 1) {
       req.flash('success_msg', res.__('msg.success.preference'))
       res.redirect('/users/preference');
@@ -59,14 +69,21 @@ router.get('/auth/google/callback',
 );
 
 router.get('/dashboard/:sort', ensureAuthenticated, (req, res) => {
-  User.findOne({ email: req.user._json.email }, async (err, user) => {
+  User.findOne({
+    email: req.user._json.email
+  }, async (err, user) => {
     const limit = 12;
 
     let query = {
-      $and: [
-        { level: user.tags.level },
-        { genre: user.tags.genre[0] },
-        { purpose: user.tags.purpose }
+      $and: [{
+          level: user.tags.level
+        },
+        {
+          genre: user.tags.genre[0]
+        },
+        {
+          purpose: user.tags.purpose
+        }
       ]
     }
 
@@ -95,23 +112,36 @@ router.get('/dashboard/:sort', ensureAuthenticated, (req, res) => {
 
     if (countRec.length < 12) {
       query = {
-        $or: [
-          { level: query.$and[0].level },
-          { genre: query.$and[1].genre },
-          { purpose: query.$and[2].purpose }
+        $or: [{
+            level: query.$and[0].level
+          },
+          {
+            genre: query.$and[1].genre
+          },
+          {
+            purpose: query.$and[2].purpose
+          }
         ]
       }
 
       countRec = await Video.find(query).exec();
     }
 
-    Video.paginate({}, { page: req.query.page, limit: req.query.limit, sort: { publishedDate: req.params.sort } }, async (err, result) => {
+    Video.paginate({}, {
+      page: req.query.page,
+      limit: req.query.limit,
+      sort: {
+        publishedDate: req.params.sort
+      }
+    }, async (err, result) => {
 
       const max = countRec.length - limit;
       const skip = Math.floor(Math.random() * max);
 
       const options = {
-        sort: { publishedDate: -1 },
+        sort: {
+          publishedDate: -1
+        },
         limit: limit,
         skip: skip
       };
@@ -203,27 +233,54 @@ router.get('/dashboard/:sort', ensureAuthenticated, (req, res) => {
 });
 
 router.post('/dashboard', ensureAuthenticated, (req, res) => {
-  const { lengthCat, language, level, genre, purpose, mood, search } = req.body;
+  const {
+    lengthCat,
+    language,
+    level,
+    genre,
+    purpose,
+    mood,
+    search
+  } = req.body;
 
   const searchQuery = new RegExp(escapeRegex(search), 'gi');
 
   const query = {
-    $and: [
-      { lengthCat: lengthCat },
-      { language: language },
-      { level: level },
-      { genre: genre },
-      { purpose: purpose },
-      { mood: mood }
+    $and: [{
+        lengthCat: lengthCat
+      },
+      {
+        language: language
+      },
+      {
+        level: level
+      },
+      {
+        genre: genre
+      },
+      {
+        purpose: purpose
+      },
+      {
+        mood: mood
+      }
     ],
-    $or: [
-      { title: searchQuery },
-      { choreographer: searchQuery }
+    $or: [{
+        title: searchQuery
+      },
+      {
+        choreographer: searchQuery
+      }
     ]
   }
 
-  Video.paginate(query, { page: req.query.page, limit: 100 }, async (err, result) => {
-    const user = await User.findOne({ email: req.user._json.email }).exec();
+  Video.paginate(query, {
+    page: req.query.page,
+    limit: 100
+  }, async (err, result) => {
+    const user = await User.findOne({
+      email: req.user._json.email
+    }).exec();
     let title = [];
     let choreographer = [];
     let url = [];
@@ -266,8 +323,12 @@ router.post('/dashboard', ensureAuthenticated, (req, res) => {
 router.get('/results', ensureAuthenticated, (req, res) => res.render('results'));
 
 router.get('/choreographer/:id', ensureAuthenticated, (req, res) => {
-  Video.find({ choreographer: req.params.id }, async (err, result) => {
-    const user = await User.findOne({ email: req.user._json.email }).exec();
+  Video.find({
+    choreographer: req.params.id
+  }, async (err, result) => {
+    const user = await User.findOne({
+      email: req.user._json.email
+    }).exec();
     const title = [];
     const url = [];
     const level = [];
@@ -296,7 +357,9 @@ router.get('/choreographer/:id', ensureAuthenticated, (req, res) => {
 })
 
 router.get('/calendar', ensureAuthenticated, (req, res) => {
-  User.findOne({ email: req.user._json.email }, (err, user) => {
+  User.findOne({
+    email: req.user._json.email
+  }, (err, user) => {
 
     let time = encodeURIComponent(moment().format());
     let summary = [];
@@ -305,8 +368,10 @@ router.get('/calendar', ensureAuthenticated, (req, res) => {
     let idCal = [];
 
     fetch(`https://www.googleapis.com/calendar/v3/calendars/${user.email}/events?orderBy=startTime&q=vibin&singleEvents=true&timeMin=${time}&key=${process.env.API_key}`, {
-      'headers': { 'Authorization': `Bearer ${user.accessToken}` },
-    })
+        'headers': {
+          'Authorization': `Bearer ${user.accessToken}`
+        },
+      })
       .then(response => response.json())
       .then(data => {
         if (data.items == undefined) {
@@ -337,10 +402,18 @@ router.get('/calendar', ensureAuthenticated, (req, res) => {
 });
 
 router.get('/follow', ensureAuthenticated, async (req, res) => {
-  const currentUser = await User.findOne({ email: req.user._json.email }, 'following userPhoto userPhotoDef tags email').exec();
-  const recUser = await User.find({ "tags.genre": currentUser.tags.genre[0] }, null, { limit: 3 }).exec();
+  const currentUser = await User.findOne({
+    email: req.user._json.email
+  }, 'following userPhoto userPhotoDef tags email').exec();
+  const recUser = await User.find({
+    "tags.genre": currentUser.tags.genre[0]
+  }, null, {
+    limit: 3
+  }).exec();
 
-  User.find({ _id: currentUser.following }, async (err, user) => {
+  User.find({
+    _id: currentUser.following
+  }, async (err, user) => {
 
     let allUser = new Array();
     let time = new Array();
@@ -352,7 +425,13 @@ router.get('/follow', ensureAuthenticated, async (req, res) => {
 
     for (j = 0; j < user.length; j++) {
       for (i = 0; i < user[j].like.length; i++) {
-        allUser[j][i] = await Video.find({ _id: user[j].like[i].id }, null, { sort: { 'like.date': -1 } }).exec();
+        allUser[j][i] = await Video.find({
+          _id: user[j].like[i].id
+        }, null, {
+          sort: {
+            'like.date': -1
+          }
+        }).exec();
         time[j][i] = moment(allUser[j][i][0].like[0].date).fromNow();
       }
     }
@@ -371,13 +450,20 @@ router.get('/follow', ensureAuthenticated, async (req, res) => {
 });
 
 router.post('/calendar', ensureAuthenticated, (req, res) => {
-  User.findOne({ email: req.user._json.email }, (err, user) => {
+  User.findOne({
+    email: req.user._json.email
+  }, (err, user) => {
 
-    const { idCal } = req.body;
+    const {
+      idCal
+    } = req.body;
 
     let result = fetch(`https://www.googleapis.com/calendar/v3/calendars/${user.email}/events/${idCal}?key=${process.env.API_key}`, {
       'method': 'DELETE',
-      'headers': { 'Authorization': `Bearer ${user.accessToken}`, 'Accept': 'application/json' }
+      'headers': {
+        'Authorization': `Bearer ${user.accessToken}`,
+        'Accept': 'application/json'
+      }
     })
 
     result.then(function (result) {
@@ -393,8 +479,12 @@ router.post('/calendar', ensureAuthenticated, (req, res) => {
 });
 
 router.get('/player/:id', ensureAuthenticated, (req, res) => {
-  Video.findOne({ id: req.params.id }, async (err, result) => {
-    const user = await User.findOne({ email: req.user._json.email }).exec();
+  Video.findOne({
+    id: req.params.id
+  }, async (err, result) => {
+    const user = await User.findOne({
+      email: req.user._json.email
+    }).exec();
     if (result == null) {
       req.flash('error_msg', res.__('msg.error.video_del'));
       res.redirect('/dashboard/-1?page=1&limit=15');
@@ -414,25 +504,56 @@ router.get('/player/:id', ensureAuthenticated, (req, res) => {
 });
 
 router.post('/player/:id', ensureAuthenticated, async (req, res) => {
-  const { id, action } = req.body;
+  const {
+    id,
+    action
+  } = req.body;
 
-  const videoID = await Video.findOne({ id: id }, '_id').exec();
+  const videoID = await Video.findOne({
+    id: id
+  }, '_id').exec();
 
-  User.findOne({ email: req.user._json.email }, (err, user) => {
+  User.findOne({
+    email: req.user._json.email
+  }, (err, user) => {
 
     const userID = user._id;
 
     try {
       if (action == 'like') {
-        Video.findByIdAndUpdate(videoID._id, { $push: { like: [{ id: userID.toString() }] } }).exec();
-        User.findByIdAndUpdate(userID, { $push: { like: [{ id: videoID.toObject()._id }] } }).exec()
+        Video.findByIdAndUpdate(videoID._id, {
+          $push: {
+            like: [{
+              id: userID.toString()
+            }]
+          }
+        }).exec();
+        User.findByIdAndUpdate(userID, {
+            $push: {
+              like: [{
+                id: videoID.toObject()._id
+              }]
+            }
+          }).exec()
           .then(function (user) {
             res.redirect(`/player/${id}`)
           })
           .catch(err => console.log(err));
       } else if (action == 'unlike') {
-        Video.findByIdAndUpdate(videoID._id, { $pull: { like: { id: user._id.toString() } } }).exec();
-        User.findByIdAndUpdate(userID, { $pull: { like: { id: videoID.toObject()._id } } }).exec()
+        Video.findByIdAndUpdate(videoID._id, {
+          $pull: {
+            like: {
+              id: user._id.toString()
+            }
+          }
+        }).exec();
+        User.findByIdAndUpdate(userID, {
+            $pull: {
+              like: {
+                id: videoID.toObject()._id
+              }
+            }
+          }).exec()
           .then(function (user) {
             res.redirect(`/player/${id}`)
           })
@@ -445,49 +566,63 @@ router.post('/player/:id', ensureAuthenticated, async (req, res) => {
 });
 
 router.post('/player/:id/calendar', ensureAuthenticated, (req, res) => {
-  const { id, date, time } = req.body;
+  const {
+    id,
+    date,
+    time
+  } = req.body;
   let errors = [];
 
-  Video.findOne({ id: id }, (err, result) => {
-    User.findOne({ email: req.user._json.email }, (err, user) => {
+  Video.findOne({
+    id: id
+  }, (err, result) => {
+    User.findOne({
+      email: req.user._json.email
+    }, (err, user) => {
       fetch(`https://www.googleapis.com/calendar/v3/calendars/${user.email}/events?key=${process.env.API_key}`, {
-        'method': 'POST',
-        'headers': {
-          'Authorization': `Bearer ${user.accessToken}`,
-          'Content-Type': 'application/json'
-        },
-        'body': JSON.stringify({
-          'end': {
-            'dateTime': date + ":00",
-            'timeZone': 'Asia/Tokyo'
+          'method': 'POST',
+          'headers': {
+            'Authorization': `Bearer ${user.accessToken}`,
+            'Content-Type': 'application/json'
           },
-          'start': {
-            'dateTime': date + ":00",
-            'timeZone': 'Asia/Tokyo'
-          },
-          'summary': result.title + " Vibin'",
-          "description": id,
-          "reminders": {
-            "useDefault": false,
-            "overrides": [
-              {
+          'body': JSON.stringify({
+            'end': {
+              'dateTime': date + ":00",
+              'timeZone': 'Asia/Tokyo'
+            },
+            'start': {
+              'dateTime': date + ":00",
+              'timeZone': 'Asia/Tokyo'
+            },
+            'summary': result.title + " Vibin'",
+            "description": id,
+            "reminders": {
+              "useDefault": false,
+              "overrides": [{
                 "method": "email",
                 "minutes": 30
-              }
-            ]
-          }
+              }]
+            }
+          })
         })
-      })
         .then(response => response.json())
         .then(data => {
           if (date == '') {
-            errors.push({ msg: res.__('msg.error.fill') });
+            errors.push({
+              msg: res.__('msg.error.fill')
+            });
           }
 
           if (errors.length > 0) {
-            res.render('player', { errors, userPhoto: req.session.passport.user.photos[0].value, title: result.title, choreographer: result.choreographer, id: id, level: result.level });
-          }
-          else {
+            res.render('player', {
+              errors,
+              userPhoto: req.session.passport.user.photos[0].value,
+              title: result.title,
+              choreographer: result.choreographer,
+              id: id,
+              level: result.level
+            });
+          } else {
             req.flash('success_msg', res.__('msg.success.schedule'));
             res.redirect('/calendar');
           }
@@ -497,7 +632,9 @@ router.post('/player/:id/calendar', ensureAuthenticated, (req, res) => {
 })
 
 router.get('/upload', ensureAuthenticated, onlyDevs, async (req, res) => {
-  const user = await User.findOne({ email: req.user._json.email }).exec();
+  const user = await User.findOne({
+    email: req.user._json.email
+  }).exec();
   res.render('upload', {
     userPhoto: user.userPhoto,
     userPhotoDef: user.userPhotoDef,
@@ -506,26 +643,80 @@ router.get('/upload', ensureAuthenticated, onlyDevs, async (req, res) => {
 })
 
 router.post('/upload', (req, res) => {
-  const { title, choreographer, thumbnail, url, id, publishedDate, length, lengthCat, language, level, genre, purpose, mood } = req.body;
+  const {
+    title,
+    choreographer,
+    thumbnail,
+    url,
+    id,
+    publishedDate,
+    length,
+    lengthCat,
+    language,
+    level,
+    genre,
+    purpose,
+    mood
+  } = req.body;
   let errors = [];
 
   // Check required fields
   if (title == '' || choreographer == '' || thumbnail == '' || url == '' || id == '' || publishedDate == '' || length == '' || lengthCat == '' || language == '' || level == undefined || genre == undefined || purpose == undefined || mood == undefined) {
-    errors.push({ msg: res.__('msg.error.fill') });
+    errors.push({
+      msg: res.__('msg.error.fill')
+    });
   }
 
   if (errors.length > 0) {
-    res.render('upload', { errors, userPhoto: req.session.passport.user.photos[0].value, API_key: process.env.API_key, CLIENT_id: process.env.CLIENT_id, title, choreographer, thumbnail, url, id, publishedDate, length, lengthCat, language, level, genre, purpose, mood });
+    res.render('upload', {
+      errors,
+      userPhoto: req.session.passport.user.photos[0].value,
+      API_key: process.env.API_key,
+      CLIENT_id: process.env.CLIENT_id,
+      title,
+      choreographer,
+      thumbnail,
+      url,
+      id,
+      publishedDate,
+      length,
+      lengthCat,
+      language,
+      level,
+      genre,
+      purpose,
+      mood
+    });
   } else {
-    Video.findOne({ url: url })
+    Video.findOne({
+        url: url
+      })
       .then(video => {
         if (video) {
-          errors.push({ msg: res.__('msg.error.dupl') });
+          errors.push({
+            msg: res.__('msg.error.dupl')
+          });
           res.render('upload', {
-            errors, userPhoto: req.session.passport.user.photos[0].value, API_key: process.env.API_key
+            errors,
+            userPhoto: req.session.passport.user.photos[0].value,
+            API_key: process.env.API_key
           });
         } else {
-          const newVideo = new Video({ title, choreographer, thumbnail, url, id, publishedDate, length, lengthCat, language, level, genre, purpose, mood });
+          const newVideo = new Video({
+            title,
+            choreographer,
+            thumbnail,
+            url,
+            id,
+            publishedDate,
+            length,
+            lengthCat,
+            language,
+            level,
+            genre,
+            purpose,
+            mood
+          });
           newVideo.save()
             .then(function (video) {
               req.flash('success_msg', res.__('msg.success.upload'));
@@ -536,16 +727,16 @@ router.post('/upload', (req, res) => {
       })
   }
   Video.updateMany({}, {
-    $addToSet: {
-      length: ["any"],
-      language: ["any"],
-      level: ["any"],
-      lengthCat: ["any"],
-      genre: ["any"],
-      purpose: ["any"],
-      mood: ["any"]
-    }
-  },
+      $addToSet: {
+        length: ["any"],
+        language: ["any"],
+        level: ["any"],
+        lengthCat: ["any"],
+        genre: ["any"],
+        purpose: ["any"],
+        mood: ["any"]
+      }
+    },
     function (err, result) {
       if (err) {
         console.log(err);
@@ -555,9 +746,15 @@ router.post('/upload', (req, res) => {
 })
 
 router.get('/reservation/:id', ensureAuthenticated, async (req, res) => {
-  const user = await User.findOne({ email: req.user._json.email }, 'userPhoto userPhotoDef').exec();
-  const lesson = await Lesson.findOne({ _id: req.params.id }).exec();
-  const choreographer = await User.findOne({ _id: lesson.choreographerID }).exec();
+  const user = await User.findOne({
+    email: req.user._json.email
+  }, 'userPhoto userPhotoDef').exec();
+  const lesson = await Lesson.findOne({
+    _id: req.params.id
+  }).exec();
+  const choreographer = await User.findOne({
+    _id: lesson.choreographerID
+  }).exec();
   const account = await stripe.accounts.retrieve(choreographer.stripeID);
 
   // const intent = await stripe.paymentIntents.create({
@@ -605,7 +802,9 @@ router.get('/reservation/:id', ensureAuthenticated, async (req, res) => {
 router.get('/success', ensureAuthenticated, async (req, res) => {
   req.flash('success_msg', res.__('msg.success.login'));
 
-  const user = await User.findOne({ email: req.user._json.email }, 'userPhoto userPhotoDef').exec();
+  const user = await User.findOne({
+    email: req.user._json.email
+  }, 'userPhoto userPhotoDef').exec();
 
   res.render('success', {
     userPhoto: user.userPhoto,
@@ -663,10 +862,8 @@ router.get('/success', ensureAuthenticated, async (req, res) => {
 //   res.render('checkout', { client_secret: intent.client_secret });
 // });
 
+
 router.get('/create', ensureAuthenticated, async (req, res) => {
-
-  const user = await User.findOne({ email: req.user._json.email }).exec();
-
   if (req.query.code) {
     fetch(`https://zoom.us/oauth/token?grant_type=authorization_code&code=${req.query.code}&redirect_uri=https://fathomless-crag-65791.herokuapp.com/create`, {
       'method': 'POST',
@@ -703,169 +900,173 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
                 }
               })
 
-              // if (user.stripeID) {
-              //   const account = await stripe.accounts.retrieve(user.stripeID);
-              //   const loginLink = await stripe.accounts.createLoginLink(user.stripeID);
+              let render = {
+                choreographer: user.username,
+                userPhoto: user.userPhoto,
+                userPhotoDef: user.userPhotoDef,
+                CLIENT_id: process.env.ZOOM_CLIENT_ID,
+                zoom: zoom
+              }
 
-              //   res.render('create', {
-              //     account: account,
-              //     loginLink: loginLink.url,
-              //     choreographer: user.username,
-              //     userPhoto: user.userPhoto,
-              //     userPhotoDef: user.userPhotoDef,
-              //     CLIENT_id: process.env.ZOOM_CLIENT_ID,
-              //     zoom: zoom
-              //   });
-              // } else {
-              //   res.render('create', {
-              //     userPhoto: user.userPhoto,
-              //     userPhotoDef: user.userPhotoDef,
-              //     CLIENT_id: process.env.ZOOM_CLIENT_ID,
-              //     zoom: zoom
-              //   });
-              // }
+              if (user.stripeID) {
+                const account = await stripe.accounts.retrieve(user.stripeID);
+                const loginLink = await stripe.accounts.createLoginLink(user.stripeID);
+                render.account = account
+                render.loginLink = loginLink
+              }
+
+             res.render('create', render);
             })
         }
       })
   }
 
-  if (user.stripeID && user.zoom.id) {
-    const account = await stripe.accounts.retrieve(user.stripeID);
-    const loginLink = await stripe.accounts.createLoginLink(user.stripeID);
+  const user = await User.findOne({ email: req.user._json.email }).exec();
 
-    fetch(`https://api.zoom.us/v2/users`, {
-      'headers': {
-        'Authorization': `Bearer ${user.zoom.accessToken}`,
-      }
-    })
-      .then(response => response.json())
-      .then(async zoom => {
-        res.render('create', {
-          account: account,
-          loginLink: loginLink.url,
-          choreographer: user.username,
-          userPhoto: user.userPhoto,
-          userPhotoDef: user.userPhotoDef,
-          CLIENT_id: process.env.ZOOM_CLIENT_ID,
-          zoom: zoom
-        });
-      })
-  } else if (user.stripeID) {
-    const account = await stripe.accounts.retrieve(user.stripeID);
-    const loginLink = await stripe.accounts.createLoginLink(user.stripeID);
-
-    res.render('create', {
-      account: account,
-      loginLink: loginLink.url,
-      choreographer: user.username,
-      userPhoto: user.userPhoto,
-      userPhotoDef: user.userPhotoDef,
-      CLIENT_id: process.env.ZOOM_CLIENT_ID,
-    });
-  } else if (user.zoomID) {
-    fetch(`https://api.zoom.us/v2/users`, {
-      'headers': {
-        'Authorization': `Bearer ${user.zoom.accessToken}`,
-      }
-    })
-      .then(response => response.json())
-      .then(async zoom => {
-        res.render('create', {
-          account: account,
-          loginLink: loginLink.url,
-          choreographer: user.username,
-          userPhoto: user.userPhoto,
-          userPhotoDef: user.userPhotoDef,
-          CLIENT_id: process.env.ZOOM_CLIENT_ID,
-          zoom: zoom
-        });
-      })
-  } else {
-    res.render('create', {
-      userPhoto: user.userPhoto,
-      userPhotoDef: user.userPhotoDef,
-      CLIENT_id: process.env.ZOOM_CLIENT_ID,
-    });
+  let render = {
+    choreographer: user.username,
+    userPhoto: user.userPhoto,
+    userPhotoDef: user.userPhotoDef,
+    CLIENT_id: process.env.ZOOM_CLIENT_ID,
   }
+
+  if (user.stripeID) {
+    const account = await stripe.accounts.retrieve(user.stripeID);
+    const loginLink = await stripe.accounts.createLoginLink(user.stripeID);
+
+    render.account = account
+    render.loginLink = loginLink
+    console.log(render)
+  }
+
+  if (user.zoom.id) {
+    fetch(`https://api.zoom.us/v2/users`, {
+        'headers': {
+          'Authorization': `Bearer ${user.zoom.accessToken}`,
+        }
+      })
+      .then(response => response.json())
+      .then(zoom => {
+        render.zoom = zoom
+      })
+  }
+  res.render('create', render);
 })
 
 router.post('/create', async (req, res) => {
   const user = await User.findOne({ email: req.user._json.email }).exec();
-  // const account = await stripe.accounts.retrieve(user.stripeID);
+  const account = await stripe.accounts.retrieve(user.stripeID);
+  const loginLink = await stripe.accounts.createLoginLink(user.stripeID);
   const choreographerID = user._id;
 
   const { title, thumbnail, language, choreographer, time, price, level, genre, purpose, mood } = req.body;
+
   let errors = [];
 
   if (title == '' || thumbnail == '' || language == '' || choreographer == '' || time == '' || price == '' || level == undefined || genre == undefined || purpose == undefined || mood == undefined) {
-    errors.push({ msg: res.__('msg.error.fill') });
+    errors.push({ msg: res.__('msg.error.fill')});
   }
 
-  if (!user.zoom) {
-    errors.push({ msg: 'no zoom' });
+  if (!user.zoom.id) {
+    errors.push({ msg: 'no zoom'});
     // res.__('msg.error.fill')
   }
 
   if (errors.length > 0) {
-    res.render('create', { errors, userPhoto: req.session.passport.user.photos[0].value, API_key: process.env.API_key, CLIENT_id: process.env.CLIENT_id, title, thumbnail, language, choreographer, price, level, genre, purpose, mood });
+    res.render('create', {
+      errors,
+      account: account,
+      loginLink: loginLink,
+      userPhoto: user.userPhoto,
+      userPhotoDef: user.userPhotoDef,
+      API_key: process.env.API_key,
+      CLIENT_id: process.env.CLIENT_id,
+      title,
+      thumbnail,
+      language,
+      choreographer,
+      price,
+      level,
+      genre,
+      purpose,
+      mood
+    });
   } else {
     Lesson.findOne({ title: title })
       .then(lesson => {
         if (lesson) {
-          errors.push({ msg: res.__('msg.error.fill') });
+          errors.push({ msg: res.__('msg.error.dupl')});
           res.render('create', {
-            errors, userPhoto: req.session.passport.user.photos[0].value, API_key: process.env.API_key
+            errors,
+            account: account,
+            loginLink: loginLink,
+            userPhoto: user.userPhoto,
+            userPhotoDef: user.userPhotoDef,
+            API_key: process.env.API_key,
+            CLIENT_id: process.env.ZOOM_CLIENT_ID,
           });
         } else {
-          const newLesson = new Lesson({ title, thumbnail, language, choreographer, choreographerID, time, price, level, genre, purpose, mood });
+          const newLesson = new Lesson({
+            title,
+            thumbnail,
+            language,
+            choreographer,
+            choreographerID,
+            time,
+            price,
+            level,
+            genre,
+            purpose,
+            mood
+          });
           newLesson.save()
             .then(async function (lesson) {
               console.log(lesson);
 
               // create meeting
               fetch(`https://api.zoom.us/v2/users/${user.zoom.id}/meetings`, {
-                'headers': {
-                  'method': 'POST',
-                  'Authorization': `Bearer ${user.zoom.accessToken}`,
-                },
-                // moment(data.items[i].start.dateTime).format('MMMM Do YYYY, h:mm a');
-                'body': JSON.stringify({
-                  "topic": `${lesson.title}`,
-                  "type": 2,
-                  "start_time": "string [date-time]",
-                  "duration": 40,
-                  "timezone": "Asia/Tokyo",
-                  // "password": "string",
-                  "agenda": `${lesson.level} ${lesson.genre} lesson for ${lesson.purpose}! Let's dance`,
-                  "settings": {
-                    "contact_email": `${user.email}`,
-                    "contact_name": `${lesson.choreographer}`,
-                    "use_pmi": true,
-                    "auto_recording": "cloud",
-                    "registrants_email_notification": true,
-                    "meeting_authentication": true,
-                  }
+                  'headers': {
+                    'method': 'POST',
+                    'Authorization': `Bearer ${user.zoom.accessToken}`,
+                  },
+                  // moment(data.items[i].start.dateTime).format('MMMM Do YYYY, h:mm a');
+                  'body': JSON.stringify({
+                    "topic": `${lesson.title}`,
+                    "type": 2,
+                    "start_time": "string [date-time]",
+                    "duration": 40,
+                    "timezone": "Asia/Tokyo",
+                    // "password": "string",
+                    "agenda": `${lesson.level} ${lesson.genre} lesson for ${lesson.purpose}! Let's dance`,
+                    "settings": {
+                      "contact_email": `${user.email}`,
+                      "contact_name": `${lesson.choreographer}`,
+                      "use_pmi": true,
+                      "auto_recording": "cloud",
+                      "registrants_email_notification": true,
+                      "meeting_authentication": true,
+                    }
+                  })
                 })
-              })
                 .then(response => response.json())
-                .then(async zoom => {
-                  res.render('create', {
-                    account: account,
-                    loginLink: loginLink.url,
-                    choreographer: user.username,
-                    userPhoto: user.userPhoto,
-                    userPhotoDef: user.userPhotoDef,
-                    CLIENT_id: process.env.ZOOM_CLIENT_ID,
-                    zoom: zoom
-                  });
+                .then(zoom => {
+                  res.redirect('/create');
+                  // res.render('create', {
+                  //   account: account,
+                  //   loginLink: loginLink.url,
+                  //   choreographer: user.username,
+                  //   userPhoto: user.userPhoto,
+                  //   userPhotoDef: user.userPhotoDef,
+                  //   CLIENT_id: process.env.ZOOM_CLIENT_ID,
+                  //   zoom: zoom
+                  // });
                 })
 
-              if (account.details_submitted == true) {
-                req.flash('success_msg', res.__('msg.success.create'));
-                res.redirect('/create');
-              } else {
+              if (account == undefined) {
                 try {
-                  const account = await stripe.accounts.create({ type: "express" });
+                  const account = await stripe.accounts.create({
+                    type: "express"
+                  });
                   const accountLink = await stripe.accountLinks.create({
                     account: account.id,
                     refresh_url: 'https://vibin.tokyo/create',
@@ -874,7 +1075,15 @@ router.post('/create', async (req, res) => {
                   });
 
                   if (account) {
-                    User.findOneAndUpdate({ email: req.user._json.email }, { stripeID: account.id }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, user) => {
+                    User.findOneAndUpdate({
+                      email: req.user._json.email
+                    }, {
+                      stripeID: account.id
+                    }, {
+                      upsert: true,
+                      new: true,
+                      setDefaultsOnInsert: true
+                    }, (err, user) => {
                       if (err) {
                         console.log(err);
                       }
@@ -888,6 +1097,9 @@ router.post('/create', async (req, res) => {
                     error: err.message
                   });
                 }
+              } else {
+                req.flash('success_msg', res.__('msg.success.create'));
+                res.redirect('/create');
               }
             })
             .catch(err => console.log(err));
@@ -895,14 +1107,14 @@ router.post('/create', async (req, res) => {
       })
   }
   Lesson.updateMany({}, {
-    $addToSet: {
-      language: ["any"],
-      level: ["any"],
-      genre: ["any"],
-      purpose: ["any"],
-      mood: ["any"]
-    }
-  },
+      $addToSet: {
+        language: ["any"],
+        level: ["any"],
+        genre: ["any"],
+        purpose: ["any"],
+        mood: ["any"]
+      }
+    },
     function (err, result) {
       if (err) {
         console.log(err);
@@ -953,13 +1165,15 @@ router.post('/webhook', (req, res) => {
       // Then define and call a method to handle the successful attachment of a PaymentMethod.
       // handlePaymentMethodAttached(paymentMethod);
       break;
-    // ... handle other event types
+      // ... handle other event types
     default:
       console.log(`Unhandled event type ${event.type}`);
   }
 
   // Return a response to acknowledge receipt of the event
-  res.json({ received: true });
+  res.json({
+    received: true
+  });
 });
 
 function escapeRegex(text) {
