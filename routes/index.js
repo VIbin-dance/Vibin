@@ -936,11 +936,9 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
 
     render.account = account
     render.loginLink = loginLink
-    console.log(render)
   }
 
   if (user.zoom.id) {
-    console.log('theres zoom ID!!');
     fetch(`https://api.zoom.us/v2/users`, {
         'headers': {
           'Authorization': `Bearer ${user.zoom.accessToken}`,
@@ -948,10 +946,10 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
       })
       .then(response => response.json())
       .then(zoom => {
-        console.log(zoom);
         render.zoom = zoom
       })
-  }
+    }
+  console.log(render);
   res.render('create', render);
 })
 
