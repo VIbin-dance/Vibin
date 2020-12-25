@@ -864,6 +864,8 @@ router.get('/success', ensureAuthenticated, async (req, res) => {
 
 
 router.get('/create', ensureAuthenticated, async (req, res) => {
+  const user = await User.findOne({ email: req.user._json.email }).exec();
+
   if (req.query.code) {
     fetch(`https://zoom.us/oauth/token?grant_type=authorization_code&code=${req.query.code}&redirect_uri=https://fathomless-crag-65791.herokuapp.com/create`, {
       'method': 'POST',
@@ -900,28 +902,26 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
                 }
               })
 
-              let render = {
-                choreographer: user.username,
-                userPhoto: user.userPhoto,
-                userPhotoDef: user.userPhotoDef,
-                CLIENT_id: process.env.ZOOM_CLIENT_ID,
-                zoom: zoom
-              }
+            //   let render = {
+            //     choreographer: user.username,
+            //     userPhoto: user.userPhoto,
+            //     userPhotoDef: user.userPhotoDef,
+            //     CLIENT_id: process.env.ZOOM_CLIENT_ID,
+            //     zoom: zoom
+            //   }
 
-              if (user.stripeID) {
-                const account = await stripe.accounts.retrieve(user.stripeID);
-                const loginLink = await stripe.accounts.createLoginLink(user.stripeID);
-                render.account = account
-                render.loginLink = loginLink
-              }
+            //   if (user.stripeID) {
+            //     const account = await stripe.accounts.retrieve(user.stripeID);
+            //     const loginLink = await stripe.accounts.createLoginLink(user.stripeID);
+            //     render.account = account
+            //     render.loginLink = loginLink
+            //   }
 
-             res.render('create', render);
+            //  res.render('create', render);
             })
         }
       })
   }
-
-  const user = await User.findOne({ email: req.user._json.email }).exec();
 
   let render = {
     choreographer: user.username,
@@ -940,6 +940,7 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
   }
 
   if (user.zoom.id) {
+    console.log('theres zoom ID!!');
     fetch(`https://api.zoom.us/v2/users`, {
         'headers': {
           'Authorization': `Bearer ${user.zoom.accessToken}`,
@@ -947,6 +948,7 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
       })
       .then(response => response.json())
       .then(zoom => {
+        console.log(zoom);
         render.zoom = zoom
       })
   }
@@ -980,7 +982,7 @@ router.post('/create', async (req, res) => {
       userPhoto: user.userPhoto,
       userPhotoDef: user.userPhotoDef,
       API_key: process.env.API_key,
-      CLIENT_id: process.env.CLIENT_id,
+      CLIENT_id: process.env.ZOOM_CLIENT_ID,
       title,
       thumbnail,
       language,
