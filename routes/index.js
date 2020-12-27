@@ -18,6 +18,7 @@ const Lesson = require('../models/Lesson');
 const {
   response
 } = require('express');
+const { renderFile } = require('ejs');
 
 router.get('/', (req, res) => {
   // if (req.session.passport) {
@@ -938,18 +939,40 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
     render.loginLink = loginLink
   }
 
-  if (user.zoom.id) {
+  const fetchUser = () => {
     fetch(`https://api.zoom.us/v2/users`, {
-        'headers': {
-          'Authorization': `Bearer ${user.zoom.accessToken}`,
-        }
+      'headers': {
+        'Authorization': `Bearer ${user.zoom.accessToken}`,
+      }
+    })
+    .then(response => response.json())
+    .then(zoom => {
+      if (zoom.code == 124) {
+        fetch(`https://zoom.us/oauth/token?grant_type=refresh_token&refresh_token=${user.zoom.refreshToken}`, {
+          'headers': {
+            'Authorization': 'Basic c3RPRXpJVExROXlVd1pWSm1IaHdDUTpNNWpkREU0d1l3VERIandwdnJtQ0kzSGdoOUQ0M0ZvWQ==',
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          User.findOneAndUpdate({ email: req.user._json.email }, {
+            zoom: {
+              accessToken: data.access_token
+            }
+          }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, user) => {
+            console.log(err || user);
+          })
+        })
+      }
+      console.log(render)
+      render.zoom = zoom
       })
-      .then(response => response.json())
-      .then(zoom => {
-        render.zoom = zoom
-      })
-    }
-  console.log(render);
+  }
+
+  if (user.zoom) {
+    fetchUser();
+  }
+
   res.render('create', render);
 })
 
