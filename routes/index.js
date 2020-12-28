@@ -955,21 +955,23 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
         })
         .then(response => response.json())
         .then(data => {
+          console.log(data);
           User.findOneAndUpdate({ email: req.user._json.email }, {
             zoom: {
               accessToken: data.access_token
             }
           }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, user) => {
             console.log(err || user);
+            fetchUser();
           })
         })
       }
-      console.log(render)
       render.zoom = zoom
       })
   }
 
   if (user.zoom) {
+    console.log(render);
     fetchUser();
   }
 
