@@ -906,8 +906,16 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
       })
   }
 
+  let render = {
+    choreographer: user.username,
+    userPhoto: user.userPhoto,
+    userPhotoDef: user.userPhotoDef,
+    CLIENT_id: process.env.ZOOM_CLIENT_ID,
+  }
   
   const fetchUser = () => {
+    let obj; 
+
     fetch(`https://api.zoom.us/v2/users`, {
       'headers': {
         'Authorization': `Bearer ${user.zoom.accessToken}`,
@@ -915,7 +923,6 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
     })
     .then(response => response.json())
     .then(zoom => {
-      console.log(zoom);
       if (zoom.code == 124) {
         fetch(`https://zoom.us/oauth/token?grant_type=refresh_token&refresh_token=${user.zoom.refreshToken}`, {
           'headers': {
@@ -924,7 +931,6 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
         })
         .then(response => response.json())
         .then(data => {
-          console.log(data);
           User.findOneAndUpdate({ email: req.user._json.email }, {
             zoom: {
               accessToken: data.access_token
@@ -935,15 +941,9 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
           })
         })
       }
-      render.zoom = zoom
+      // render.zoom = zoom.users[0]
+      obj = zoom;
     })
-  }
-  
-  let render = {
-    choreographer: user.username,
-    userPhoto: user.userPhoto,
-    userPhotoDef: user.userPhotoDef,
-    CLIENT_id: process.env.ZOOM_CLIENT_ID,
   }
 
   if (user.stripeID) {
@@ -955,7 +955,6 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
   }
 
   if (user.zoom.id) {
-    console.log('call fetchuser')
     fetchUser();
   }
   
