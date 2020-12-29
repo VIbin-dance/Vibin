@@ -906,7 +906,7 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
       })
   }
 
-  let render = {
+  var render = {
     choreographer: user.username,
     userPhoto: user.userPhoto,
     userPhotoDef: user.userPhotoDef,
@@ -914,8 +914,6 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
   }
   
   const fetchUser = () => {
-    let obj; 
-
     fetch(`https://api.zoom.us/v2/users`, {
       'headers': {
         'Authorization': `Bearer ${user.zoom.accessToken}`,
@@ -941,13 +939,9 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
           })
         })
       }
-      // render.zoom = zoom.users[0]
-      obj = zoom;
+      render.zoom = zoom.users[0]
     })
   }
-
-  console.log(obj);
-  render.zoom = obj;
 
   if (user.stripeID) {
     const account = await stripe.accounts.retrieve(user.stripeID);
