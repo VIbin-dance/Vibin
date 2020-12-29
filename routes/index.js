@@ -898,9 +898,8 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
                   refreshToken: data.refresh_token,
                 }
               }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, user) => {
-                if (err) {
-                  console.log(err);
-                }
+                console.log(err || user);
+                res.redirect('create');
               })
 
             //   let render = {
