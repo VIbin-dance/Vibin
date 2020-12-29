@@ -73,7 +73,7 @@
                 <% } %>
                 <p><%= typeof zoom %></p>
 
-                    <% if (typeof zoom != "undefined") { %>
+                    <% if (zoom.code != 124) { %>
                         <div class="card">
                             <div class="card-body">
                                 <h2 class="card-title">Your Zoom Account</h2>
@@ -91,7 +91,7 @@
                         </div>
                         <% } %>
 
-                            <% if (typeof zoom == "undefined" ) { %>
+                            <% if (typeof zoom == "undefined" || zoom.code == 124) { %>
                                 <a class="button"
                                     href="https://zoom.us/oauth/authorize?response_type=code&client_id=<%= CLIENT_id %>&redirect_uri=https://fathomless-crag-65791.herokuapp.com/create"
                                     target="_blank" role="button">Login

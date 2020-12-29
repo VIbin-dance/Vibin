@@ -922,24 +922,25 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
 
    const zoom = await response.json();
 
-   if (zoom.code === 124) {
-     fetch(`https://zoom.us/oauth/token?grant_type=refresh_token&refresh_token=${user.zoom.refreshToken}`, {
-          'headers': {
-            'Authorization': 'Basic c3RPRXpJVExROXlVd1pWSm1IaHdDUTpNNWpkREU0d1l3VERIandwdnJtQ0kzSGdoOUQ0M0ZvWQ==',
-          }
-        })
-        .then(response => response.json())
-        .then(data => {
-          User.findOneAndUpdate({ email: req.user._json.email }, {
-            zoom: {
-              accessToken: data.access_token
-            }
-          }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, user) => {
-            console.log(err || user);
-            fetchUser();
-          })
-        })
-      }
+  //  if (zoom.code == 124) {
+  //    fetch(`https://zoom.us/oauth/token?grant_type=refresh_token&refresh_token=${user.zoom.refreshToken}`, {
+  //         'headers': {
+  //           'Authorization': 'Basic c3RPRXpJVExROXlVd1pWSm1IaHdDUTpNNWpkREU0d1l3VERIandwdnJtQ0kzSGdoOUQ0M0ZvWQ==',
+  //         }
+  //       })
+  //       .then(response => response.json())
+  //       .then(data => {
+  //         console.log(data);
+  //         User.findOneAndUpdate({ email: req.user._json.email }, {
+  //           zoom: {
+  //             accessToken: data.access_token
+  //           }
+  //         }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, user) => {
+  //           console.log(err || user);
+  //           fetchUser();
+  //         })
+  //       })
+  //     }
       return zoom;
     }
 
