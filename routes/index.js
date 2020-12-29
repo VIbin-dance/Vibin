@@ -946,6 +946,9 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
     })
   }
 
+  console.log(obj);
+  render.zoom = obj;
+
   if (user.stripeID) {
     const account = await stripe.accounts.retrieve(user.stripeID);
     const loginLink = await stripe.accounts.createLoginLink(user.stripeID);
