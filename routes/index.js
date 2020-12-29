@@ -906,23 +906,24 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
       })
   }
 
-  var render = {
+  let render = {
     choreographer: user.username,
     userPhoto: user.userPhoto,
     userPhotoDef: user.userPhotoDef,
     CLIENT_id: process.env.ZOOM_CLIENT_ID,
   }
   
-  const fetchUser = () => {
-    fetch(`https://api.zoom.us/v2/users`, {
+  const fetchUser = async () => {
+    const response = await fetch(`https://api.zoom.us/v2/users`, {
       'headers': {
         'Authorization': `Bearer ${user.zoom.accessToken}`,
       }
-    })
-    .then(response => response.json())
-    .then(zoom => {
-      if (zoom.code == 124) {
-        fetch(`https://zoom.us/oauth/token?grant_type=refresh_token&refresh_token=${user.zoom.refreshToken}`, {
+    });
+
+   const zoom = await response.json();
+
+   if (zoom.code === 124) {
+     fetch(`https://zoom.us/oauth/token?grant_type=refresh_token&refresh_token=${user.zoom.refreshToken}`, {
           'headers': {
             'Authorization': 'Basic c3RPRXpJVExROXlVd1pWSm1IaHdDUTpNNWpkREU0d1l3VERIandwdnJtQ0kzSGdoOUQ0M0ZvWQ==',
           }
@@ -939,9 +940,8 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
           })
         })
       }
-      render.zoom = zoom.users[0]
-    })
-  }
+      return zoom;
+    }
 
   if (user.stripeID) {
     const account = await stripe.accounts.retrieve(user.stripeID);
@@ -953,6 +953,7 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
 
   if (user.zoom.id) {
     fetchUser();
+    render.zoom = await fetchUser()
   }
   
   console.log(render);
