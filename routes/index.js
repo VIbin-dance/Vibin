@@ -901,43 +901,12 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
                 console.log(err || user);
                 res.redirect('create');
               })
-
-            //   let render = {
-            //     choreographer: user.username,
-            //     userPhoto: user.userPhoto,
-            //     userPhotoDef: user.userPhotoDef,
-            //     CLIENT_id: process.env.ZOOM_CLIENT_ID,
-            //     zoom: zoom
-            //   }
-
-            //   if (user.stripeID) {
-            //     const account = await stripe.accounts.retrieve(user.stripeID);
-            //     const loginLink = await stripe.accounts.createLoginLink(user.stripeID);
-            //     render.account = account
-            //     render.loginLink = loginLink
-            //   }
-
-            //  res.render('create', render);
             })
         }
       })
   }
 
-  let render = {
-    choreographer: user.username,
-    userPhoto: user.userPhoto,
-    userPhotoDef: user.userPhotoDef,
-    CLIENT_id: process.env.ZOOM_CLIENT_ID,
-  }
-
-  if (user.stripeID) {
-    const account = await stripe.accounts.retrieve(user.stripeID);
-    const loginLink = await stripe.accounts.createLoginLink(user.stripeID);
-
-    render.account = account
-    render.loginLink = loginLink
-  }
-
+  
   const fetchUser = () => {
     fetch(`https://api.zoom.us/v2/users`, {
       'headers': {
@@ -946,6 +915,7 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
     })
     .then(response => response.json())
     .then(zoom => {
+      console.log(zoom);
       if (zoom.code == 124) {
         fetch(`https://zoom.us/oauth/token?grant_type=refresh_token&refresh_token=${user.zoom.refreshToken}`, {
           'headers': {
@@ -966,14 +936,30 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
         })
       }
       render.zoom = zoom
-      })
+    })
+  }
+  
+  let render = {
+    choreographer: user.username,
+    userPhoto: user.userPhoto,
+    userPhotoDef: user.userPhotoDef,
+    CLIENT_id: process.env.ZOOM_CLIENT_ID,
   }
 
-  if (user.zoom) {
-    console.log(render);
+  if (user.stripeID) {
+    const account = await stripe.accounts.retrieve(user.stripeID);
+    const loginLink = await stripe.accounts.createLoginLink(user.stripeID);
+
+    render.account = account
+    render.loginLink = loginLink
+  }
+
+  if (user.zoom.id) {
+    console.log('call fetchuser')
     fetchUser();
   }
-
+  
+  console.log(render);
   res.render('create', render);
 })
 
