@@ -823,8 +823,8 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
             .then(async zoom => {
               console.log(zoom);
 
-              const hashAccessToken = encrypt(zoom.access_token);
-              const hashRefreshToken = encrypt(zoom.refresh_token);
+              const hashAccessToken = encrypt(zoom.access_token.toString());
+              const hashRefreshToken = encrypt(zoom.refresh_token.toString());
 
               //user update
               User.findOneAndUpdate({ email: req.user._json.email }, {
