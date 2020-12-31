@@ -8,6 +8,7 @@ const stripe = require('stripe')('sk_test_51Hfnh4BHyna8CK9qjfFDuXjt1pmBPnPMoGflp
 const { ensureAuthenticated } = require('../config/auth');
 const { onlyDevs } = require('../config/dev');
 const { encrypt, decrypt } = require('../config/crypto');
+const { sendMail } = require('../config/email');
 
 const Video = require('../models/Video');
 const User = require('../models/User');
@@ -822,8 +823,8 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
             .then(async zoom => {
               console.log(zoom);
 
-              const hashAccessToken = encrypt(data.access_token);
-              const hashRefreshToken = encrypt(data.refresh_token);
+              const hashAccessToken = encrypt(zoom.access_token);
+              const hashRefreshToken = encrypt(zoom.refresh_token);
 
               //user update
               User.findOneAndUpdate({ email: req.user._json.email }, {
@@ -834,7 +835,6 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
                 }
               }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, user) => {
                 console.log(err || user);
-                res.redirect('create');
               })
             })
         }
