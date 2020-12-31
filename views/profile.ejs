@@ -3,25 +3,48 @@
         <h1 class="logo"><a href="/dashboard/-1?page=1&limit=15">Vibin'</a></h1>
         <nav class="nav-menu d-none d-lg-block">
             <ul>
-                <li class="active"><a href="/dashboard/-1?page=1&limit=15"><%= __('header.Home') %></a></li>
-                <li><a href="/follow"><%= __('header.Following') %></a></li>
-                <li><a href="/calendar"><%= __('header.Calendar') %></a></li>
-                <li><a href="/create"><%= __('header.Create') %></a></li>
+                <li class="active">
+                    <a href="/dashboard/-1?page=1&limit=15">
+                        <%= __('header.Home') %>
+                    </a>
+                </li>
+                <li>
+                    <a href="/follow">
+                        <%= __('header.Following') %>
+                    </a>
+                </li>
+                <li>
+                    <a href="/calendar">
+                        <%= __('header.Calendar') %>
+                    </a>
+                </li>
+                <li>
+                    <a href="/create">
+                        <%= __('header.Create') %>
+                    </a>
+                </li>
             </ul>
         </nav>
         <nav class="nav-menu d-none d-lg-block">
             <ul>
                 <li class="drop-down">
                     <% if (typeof userPhotoDef.data != "undefined") { %>
-                    <img src="data:image/<%=userPhotoDef.contentType%>;base64, <%=userPhotoDef.data.toString('base64')%>"
-                        height="40" width="40" style="border-radius: 50%;" alt="user photo">
-                    <% } else { %>
-                    <img src="<%= userPhoto %>" height="40" width="40" style="border-radius: 50%;" alt="user photo">
-                    <% } %>
-                    <ul>
-                        <li><a href="/users/profile"><%= __('header.Profile') %></a></li>
-                        <li><a href="/logout"><%= __('header.Logout') %></a></li>
-                    </ul>
+                        <img src="data:image/<%=userPhotoDef.contentType%>;base64, <%=userPhotoDef.data.toString('base64')%>" height="40" width="40" style="border-radius: 50%;" alt="user photo">
+                        <% } else { %>
+                            <img src="<%= userPhoto %>" height="40" width="40" style="border-radius: 50%;" alt="user photo">
+                            <% } %>
+                                <ul>
+                                    <li>
+                                        <a href="/users/profile">
+                                            <%= __('header.Profile') %>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/logout">
+                                            <%= __('header.Logout') %>
+                                        </a>
+                                    </li>
+                                </ul>
                 </li>
             </ul>
         </nav>
@@ -34,78 +57,129 @@
         <div class="col-lg-8 col-xs-12 m-auto text-center">
             <%- include ('partials/messages') %>
 
-            <% if (typeof userPhotoDef.data != "undefined") { %>
-            <img src="data:image/<%=userPhotoDef.contentType%>;base64, <%=userPhotoDef.data.toString('base64')%>"
-                height="100" width="100" style="border-radius: 50%; margin: 20px;" alt="user photo">
-            <% } else { %>
-            <img src="<%= userPhoto %>" height="100" width="100" style="border-radius: 50%; margin: 20px;"
-                alt="user photo">
-            <% } %>
+                <% if (typeof userPhotoDef.data != "undefined") { %>
+                    <img src="data:image/<%=userPhotoDef.contentType%>;base64, <%=userPhotoDef.data.toString('base64')%>" height="100" width="100" style="border-radius: 50%; margin: 20px;" alt="user photo">
+                    <% } else { %>
+                        <img src="<%= userPhoto %>" height="100" width="100" style="border-radius: 50%; margin: 20px;" alt="user photo">
+                        <% } %>
 
-            <a class="btn btn-danger" href="/users/profile/edit"><%= __('profile.edit profile') %></a>
-            <h2 class="mb-3"><i class="fas fa-user-plus"></i><%= username %></h2>
-            <p><%= followerCount %> <%= __('profile.follower') %></p>
-            <p><%= followingCount %> <%= __('profile.following') %></p>
-            <p><%= bio %></p>
-            <a class="btn btn-dark" href="/logout"><%= __('profile.logout') %></a>
+                            <a class="btn btn-danger" href="/users/profile/edit">
+                                <%= __('profile.edit profile') %>
+                            </a>
+                            <h2 class="mb-3"><i class="fas fa-user-plus"></i>
+                                <%= username %>
+                            </h2>
+                            <p>
+                                <%= followerCount %>
+                                    <%= __('profile.follower') %>
+                            </p>
+                            <p>
+                                <%= followingCount %>
+                                    <%= __('profile.following') %>
+                            </p>
+                            <p>
+                                <%= bio %>
+                            </p>
+                            <a class="btn btn-dark" href="/logout">
+                                <%= __('profile.logout') %>
+                            </a>
         </div>
     </div>
 </section>
 
 <section id="results" class="results">
     <div class="container">
-        <h3><%= __('profile.liked videos') %></h3>
+        <h3>
+            <%= __('profile.liked videos') %>
+        </h3>
         <hr>
         <div class="row">
             <% for(let i=0; i < likedVid.length; i++) { %>
-            <div class="col-lg-4 col-xs-6">
-                <div class="box">
-                    <a href="/player/<%= likedVid[i].id %>">
+                <div class="col-lg-4 col-xs-6">
+                    <div class="box">
+                        <a href="/player/<%= likedVid[i].id %>">
                         <img src="<%= likedVid[i].thumbnail %>" alt="thumbnail">
                     </a>
-                    <h4 id="likedVid.title<%= i %>"><%= likedVid[i].title %></h4>
-                    <a class="special"
-                        href="/choreographer/<%= likedVid[i].choreographer %>"><%= likedVid[i].choreographer %></a>
-                    <p><%= likedVid[i].level[0] %></p>
+                        <h4 id="likedVid.title<%= i %>">
+                            <%= likedVid[i].title %>
+                        </h4>
+                        <a class="special" href="/choreographer/<%= likedVid[i].choreographer %>">
+                            <%= likedVid[i].choreographer %>
+                        </a>
+                        <p>
+                            <%= likedVid[i].level[0] %>
+                        </p>
+                    </div>
                 </div>
-            </div>
-            <% } %>
+                <% } %>
+        </div>
+    </div>
+</section>
+
+<section id="results" class="results">
+    <div class="container">
+        <h3>
+            <%= __('profile.liked videos') %>
+        </h3>
+        <hr>
+        <div class="row">
+            <% for(let i=0; i < likedVid.length; i++) { %>
+                <div class="col-lg-4 col-xs-6">
+                    <div class="box">
+                        <a href="/player/<%= likedVid[i].id %>">
+                        <img src="<%= likedVid[i].thumbnail %>" alt="thumbnail">
+                    </a>
+                        <h4 id="likedVid.title<%= i %>">
+                            <%= likedVid[i].title %>
+                        </h4>
+                        <a class="special" href="/choreographer/<%= likedVid[i].choreographer %>">
+                            <%= likedVid[i].choreographer %>
+                        </a>
+                        <p>
+                            <%= likedVid[i].level[0] %>
+                        </p>
+                    </div>
+                </div>
+                <% } %>
         </div>
     </div>
 </section>
 
 <div class="container">
     <nav class="navbar fixed-bottom navbar-dark bg-light justify-content-center">
-      <ul>
-        <li><a href="/dashboard/-1?page=1&limit=15">
-            <svg width="2.0em" height="2.0em" viewBox="0 0 16 16" class="bi bi-house" fill="currentColor"
-              xmlns="http://www.w3.org/2000/svg">
+        <ul>
+            <li>
+                <a href="/dashboard/-1?page=1&limit=15">
+                    <svg width="2.0em" height="2.0em" viewBox="0 0 16 16" class="bi bi-house" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd"
                 d="M2 13.5V7h1v6.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V7h1v6.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5zm11-11V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z" />
               <path fill-rule="evenodd"
                 d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z" />
             </svg>
-          </a></li>
-        <li><a href="/follow">
-            <svg width="2.0em" height="2.0em" viewBox="0 0 16 16" class="bi bi-file-person" fill="currentColor"
-              xmlns="http://www.w3.org/2000/svg">
+                </a>
+            </li>
+            <li>
+                <a href="/follow">
+                    <svg width="2.0em" height="2.0em" viewBox="0 0 16 16" class="bi bi-file-person" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd"
                 d="M4 1h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H4z" />
               <path d="M13.784 14c-.497-1.27-1.988-3-5.784-3s-5.287 1.73-5.784 3h11.568z" />
               <path fill-rule="evenodd" d="M8 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
             </svg>
-          </a></li>
-        <li><a href="/create">
-            <svg width="2.0em" height="2.0em" viewBox="0 0 16 16" class="bi bi-upload" fill="currentColor"
-              xmlns="http://www.w3.org/2000/svg">
+                </a>
+            </li>
+            <li>
+                <a href="/create">
+                    <svg width="2.0em" height="2.0em" viewBox="0 0 16 16" class="bi bi-upload" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd"
                 d="M.5 8a.5.5 0 0 1 .5.5V12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8.5a.5.5 0 0 1 1 0V12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V8.5A.5.5 0 0 1 .5 8zM5 4.854a.5.5 0 0 0 .707 0L8 2.56l2.293 2.293A.5.5 0 1 0 11 4.146L8.354 1.5a.5.5 0 0 0-.708 0L5 4.146a.5.5 0 0 0 0 .708z" />
               <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0v-8A.5.5 0 0 1 8 2z" />
             </svg>
-          </a></li>
-        <li><a href="/calendar">
-            <svg width="2.0em" height="2.0em" viewBox="0 0 16 16" class="bi bi-calendar-plus" fill="currentColor"
-              xmlns="http://www.w3.org/2000/svg">
+                </a>
+            </li>
+            <li>
+                <a href="/calendar">
+                    <svg width="2.0em" height="2.0em" viewBox="0 0 16 16" class="bi bi-calendar-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd"
                 d="M8 7a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7z" />
               <path fill-rule="evenodd" d="M7.5 9.5A.5.5 0 0 1 8 9h2a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0v-2z" />
@@ -114,18 +188,20 @@
               <path fill-rule="evenodd"
                 d="M3.5 0a.5.5 0 0 1 .5.5V1a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 .5-.5zm9 0a.5.5 0 0 1 .5.5V1a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 .5-.5z" />
             </svg>
-          </a></li>
-        <li class="active"><a href="/users/profile">
-            <% if (typeof userPhotoDef.data != "undefined") { %>
-            <img src="data:image/<%=userPhotoDef.contentType%>;base64, <%=userPhotoDef.data.toString('base64')%>"
-              height="27" width="27" style="border-radius: 50%;" alt="user photo">
-            <% } else { %>
-            <img src="<%= userPhoto %>" height="27" width="27" style="border-radius: 50%;" alt="user photo">
-            <% } %>
-          </a></li>
-      </ul>
+                </a>
+            </li>
+            <li class="active">
+                <a href="/users/profile">
+                    <% if (typeof userPhotoDef.data != "undefined") { %>
+                        <img src="data:image/<%=userPhotoDef.contentType%>;base64, <%=userPhotoDef.data.toString('base64')%>" height="27" width="27" style="border-radius: 50%;" alt="user photo">
+                        <% } else { %>
+                            <img src="<%= userPhoto %>" height="27" width="27" style="border-radius: 50%;" alt="user photo">
+                            <% } %>
+                </a>
+            </li>
+        </ul>
     </nav>
-  </div>
+</div>
 
 <footer id="footer">
     <div class="footer-top">
@@ -139,23 +215,49 @@
                     </p>
                 </div>
                 <div class="col-lg-2 col-md-6 footer-links">
-                    <h4><%= __('footer.Sitemap') %></h4>
+                    <h4>
+                        <%= __('footer.Sitemap') %>
+                    </h4>
                     <ul>
-                        <li><i class="bx bx-chevron-right"></i> <a href="#about"><%= __('footer.Aboutus') %></a></li>
-                        <li><i class="bx bx-chevron-right"></i> <a
-                                href="/dashboard/-1?page=1&limit=15"><%= __('footer.Home') %></a></li>
-                        <li><i class="bx bx-chevron-right"></i> <a href="/calendar"><%= __('footer.Calendar') %></a>
+                        <li><i class="bx bx-chevron-right"></i>
+                            <a href="#about">
+                                <%= __('footer.Aboutus') %>
+                            </a>
                         </li>
-                        <li><i class="bx bx-chevron-right"></i> <a href="/upload"><%= __('footer.Upload') %></a></li>
-                        <li><i class="bx bx-chevron-right"></i> <a href="/terms-of-service"><%= __('footer.TOS') %></a>
+                        <li><i class="bx bx-chevron-right"></i>
+                            <a href="/dashboard/-1?page=1&limit=15">
+                                <%= __('footer.Home') %>
+                            </a>
                         </li>
-                        <li><i class="bx bx-chevron-right"></i> <a href="/privacy-policy"><%= __('footer.PP') %></a>
+                        <li><i class="bx bx-chevron-right"></i>
+                            <a href="/calendar">
+                                <%= __('footer.Calendar') %>
+                            </a>
+                        </li>
+                        <li><i class="bx bx-chevron-right"></i>
+                            <a href="/upload">
+                                <%= __('footer.Upload') %>
+                            </a>
+                        </li>
+                        <li><i class="bx bx-chevron-right"></i>
+                            <a href="/terms-of-service">
+                                <%= __('footer.TOS') %>
+                            </a>
+                        </li>
+                        <li><i class="bx bx-chevron-right"></i>
+                            <a href="/privacy-policy">
+                                <%= __('footer.PP') %>
+                            </a>
                         </li>
                     </ul>
                 </div>
                 <div class="col-lg-4 col-md-6 footer-newsletter">
-                    <h4><%= __('footer.News1') %></h4>
-                    <p><%= __('footer.News2') %></p>
+                    <h4>
+                        <%= __('footer.News1') %>
+                    </h4>
+                    <p>
+                        <%= __('footer.News2') %>
+                    </p>
                     <form action="" method="post">
                         <input type="email" name="email"><input type="submit" value="<%= __('footer.Subscribe') %>">
                     </form>

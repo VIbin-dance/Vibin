@@ -71,15 +71,11 @@
                     </div>
                 </div>
                 <% } %>
-                <p><%= typeof zoom %></p>
 
-                    <% if (zoom.code != 124) { %>
+                    <% if (typeof zoom != "undefined") { %>
                         <div class="card">
                             <div class="card-body">
                                 <h2 class="card-title">Your Zoom Account</h2>
-                                <p>
-                                    <%= zoom.id %>
-                                </p>
                                 <p>
                                     <%= zoom.users[0].email %>
                                 </p>

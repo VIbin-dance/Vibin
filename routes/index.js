@@ -5,20 +5,13 @@ const passport = require('passport');
 const fetch = require('node-fetch');
 const moment = require('moment');
 const stripe = require('stripe')('sk_test_51Hfnh4BHyna8CK9qjfFDuXjt1pmBPnPMoGflpvhPIet1ytDmqDZD3sayrbLnHbIQXnLBIZ8UWxSe62EaNZuw2oDO00b2zFDdno');
-const {
-  ensureAuthenticated
-} = require('../config/auth');
-const {
-  onlyDevs
-} = require('../config/dev');
+const { ensureAuthenticated } = require('../config/auth');
+const { onlyDevs } = require('../config/dev');
+const { encrypt, decrypt } = require('../config/crypto');
 
 const Video = require('../models/Video');
 const User = require('../models/User');
 const Lesson = require('../models/Lesson');
-const {
-  response
-} = require('express');
-const { renderFile } = require('ejs');
 
 router.get('/', (req, res) => {
   // if (req.session.passport) {
@@ -77,14 +70,14 @@ router.get('/dashboard/:sort', ensureAuthenticated, (req, res) => {
 
     let query = {
       $and: [{
-          level: user.tags.level
-        },
-        {
-          genre: user.tags.genre[0]
-        },
-        {
-          purpose: user.tags.purpose
-        }
+        level: user.tags.level
+      },
+      {
+        genre: user.tags.genre[0]
+      },
+      {
+        purpose: user.tags.purpose
+      }
       ]
     }
 
@@ -114,14 +107,14 @@ router.get('/dashboard/:sort', ensureAuthenticated, (req, res) => {
     if (countRec.length < 12) {
       query = {
         $or: [{
-            level: query.$and[0].level
-          },
-          {
-            genre: query.$and[1].genre
-          },
-          {
-            purpose: query.$and[2].purpose
-          }
+          level: query.$and[0].level
+        },
+        {
+          genre: query.$and[1].genre
+        },
+        {
+          purpose: query.$and[2].purpose
+        }
         ]
       }
 
@@ -248,30 +241,30 @@ router.post('/dashboard', ensureAuthenticated, (req, res) => {
 
   const query = {
     $and: [{
-        lengthCat: lengthCat
-      },
-      {
-        language: language
-      },
-      {
-        level: level
-      },
-      {
-        genre: genre
-      },
-      {
-        purpose: purpose
-      },
-      {
-        mood: mood
-      }
+      lengthCat: lengthCat
+    },
+    {
+      language: language
+    },
+    {
+      level: level
+    },
+    {
+      genre: genre
+    },
+    {
+      purpose: purpose
+    },
+    {
+      mood: mood
+    }
     ],
     $or: [{
-        title: searchQuery
-      },
-      {
-        choreographer: searchQuery
-      }
+      title: searchQuery
+    },
+    {
+      choreographer: searchQuery
+    }
     ]
   }
 
@@ -369,10 +362,10 @@ router.get('/calendar', ensureAuthenticated, (req, res) => {
     let idCal = [];
 
     fetch(`https://www.googleapis.com/calendar/v3/calendars/${user.email}/events?orderBy=startTime&q=vibin&singleEvents=true&timeMin=${time}&key=${process.env.API_key}`, {
-        'headers': {
-          'Authorization': `Bearer ${user.accessToken}`
-        },
-      })
+      'headers': {
+        'Authorization': `Bearer ${user.accessToken}`
+      },
+    })
       .then(response => response.json())
       .then(data => {
         if (data.items == undefined) {
@@ -530,12 +523,12 @@ router.post('/player/:id', ensureAuthenticated, async (req, res) => {
           }
         }).exec();
         User.findByIdAndUpdate(userID, {
-            $push: {
-              like: [{
-                id: videoID.toObject()._id
-              }]
-            }
-          }).exec()
+          $push: {
+            like: [{
+              id: videoID.toObject()._id
+            }]
+          }
+        }).exec()
           .then(function (user) {
             res.redirect(`/player/${id}`)
           })
@@ -549,12 +542,12 @@ router.post('/player/:id', ensureAuthenticated, async (req, res) => {
           }
         }).exec();
         User.findByIdAndUpdate(userID, {
-            $pull: {
-              like: {
-                id: videoID.toObject()._id
-              }
+          $pull: {
+            like: {
+              id: videoID.toObject()._id
             }
-          }).exec()
+          }
+        }).exec()
           .then(function (user) {
             res.redirect(`/player/${id}`)
           })
@@ -581,31 +574,31 @@ router.post('/player/:id/calendar', ensureAuthenticated, (req, res) => {
       email: req.user._json.email
     }, (err, user) => {
       fetch(`https://www.googleapis.com/calendar/v3/calendars/${user.email}/events?key=${process.env.API_key}`, {
-          'method': 'POST',
-          'headers': {
-            'Authorization': `Bearer ${user.accessToken}`,
-            'Content-Type': 'application/json'
+        'method': 'POST',
+        'headers': {
+          'Authorization': `Bearer ${user.accessToken}`,
+          'Content-Type': 'application/json'
+        },
+        'body': JSON.stringify({
+          'end': {
+            'dateTime': date + ":00",
+            'timeZone': 'Asia/Tokyo'
           },
-          'body': JSON.stringify({
-            'end': {
-              'dateTime': date + ":00",
-              'timeZone': 'Asia/Tokyo'
-            },
-            'start': {
-              'dateTime': date + ":00",
-              'timeZone': 'Asia/Tokyo'
-            },
-            'summary': result.title + " Vibin'",
-            "description": id,
-            "reminders": {
-              "useDefault": false,
-              "overrides": [{
-                "method": "email",
-                "minutes": 30
-              }]
-            }
-          })
+          'start': {
+            'dateTime': date + ":00",
+            'timeZone': 'Asia/Tokyo'
+          },
+          'summary': result.title + " Vibin'",
+          "description": id,
+          "reminders": {
+            "useDefault": false,
+            "overrides": [{
+              "method": "email",
+              "minutes": 30
+            }]
+          }
         })
+      })
         .then(response => response.json())
         .then(data => {
           if (date == '') {
@@ -690,8 +683,8 @@ router.post('/upload', (req, res) => {
     });
   } else {
     Video.findOne({
-        url: url
-      })
+      url: url
+    })
       .then(video => {
         if (video) {
           errors.push({
@@ -728,16 +721,16 @@ router.post('/upload', (req, res) => {
       })
   }
   Video.updateMany({}, {
-      $addToSet: {
-        length: ["any"],
-        language: ["any"],
-        level: ["any"],
-        lengthCat: ["any"],
-        genre: ["any"],
-        purpose: ["any"],
-        mood: ["any"]
-      }
-    },
+    $addToSet: {
+      length: ["any"],
+      language: ["any"],
+      level: ["any"],
+      lengthCat: ["any"],
+      genre: ["any"],
+      purpose: ["any"],
+      mood: ["any"]
+    }
+  },
     function (err, result) {
       if (err) {
         console.log(err);
@@ -757,16 +750,6 @@ router.get('/reservation/:id', ensureAuthenticated, async (req, res) => {
     _id: lesson.choreographerID
   }).exec();
   const account = await stripe.accounts.retrieve(choreographer.stripeID);
-
-  // const intent = await stripe.paymentIntents.create({
-  //   payment_method_types: ['card'],
-  //   amount: lesson.price,
-  //   currency: 'jpy',
-  //   application_fee_amount: lesson.price * 0.4,
-  //   transfer_data: {
-  //     destination: account.id,
-  //   },
-  // });
 
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
@@ -813,57 +796,6 @@ router.get('/success', ensureAuthenticated, async (req, res) => {
   });
 })
 
-// router.get('/cancel', ensureAuthenticated, async (req, res) => {
-//   req.flash('success_msg', res.__('msg.success.login'));
-//   res.redirect('/reservation/-1?page=1&limit=15');
-//   // const user = await User.findOne({ email: req.user._json.email }, 'userPhoto userPhotoDef').exec();
-
-//   // res.render('cancel', {
-//   //   userPhoto: user.userPhoto,
-//   //   userPhotoDef: user.userPhotoDef,
-//   // });
-// })
-
-// router.post('/create-session', async (req, res) => {
-//   const session = await stripe.checkout.sessions.create({
-//     payment_method_types: ['card'],
-//     customer_email: req.user._json.email,
-//     submit_type: 'pay',
-//     line_items: [
-//       {
-//         price_data: {
-//           currency: 'jpy',
-//           product_data: {
-//             name: 'Stubborn Attachments',
-//             images: ['https://i.imgur.com/EHyR2nP.png'],
-//           },
-//           unit_amount: 2000,
-//         },
-//         quantity: 1,
-//       },
-//     ],
-//     mode: 'payment',
-//     success_url: 'http://localhost:5000/success',
-//     cancel_url: 'http://localhost:5000/cancel',
-//   });
-//   res.json({ id: session.id });
-// });
-
-// router.get('/checkout', async (req, res) => {
-//   const intent = await stripe.paymentIntents.create({
-//     payment_method_types: ['card'],
-//     amount: 1000,
-//     currency: 'jpy',
-//     application_fee_amount: 123,
-//     transfer_data: {
-//       destination: '{{CONNECTED_STRIPE_ACCOUNT_ID}}',
-//     },
-//   });
-
-//   res.render('checkout', { client_secret: intent.client_secret });
-// });
-
-
 router.get('/create', ensureAuthenticated, async (req, res) => {
   const user = await User.findOne({ email: req.user._json.email }).exec();
 
@@ -890,12 +822,15 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
             .then(async zoom => {
               console.log(zoom);
 
+              const hashAccessToken = encrypt(data.access_token);
+              const hashRefreshToken = encrypt(data.refresh_token);
+
               //user update
               User.findOneAndUpdate({ email: req.user._json.email }, {
                 zoom: {
                   id: zoom.users[0].id,
-                  accessToken: data.access_token,
-                  refreshToken: data.refresh_token,
+                  accessToken: hashAccessToken,
+                  refreshToken: hashRefreshToken,
                 }
               }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, user) => {
                 console.log(err || user);
@@ -910,39 +845,41 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
     choreographer: user.username,
     userPhoto: user.userPhoto,
     userPhotoDef: user.userPhotoDef,
-    CLIENT_id: process.env.ZOOM_CLIENT_ID,
+    CLIENT_id: process.env.ZOOM_CLIENT_ID
   }
-  
+
   const fetchUser = async () => {
+    const accessToken = decrypt(user.zoom.accessToken);
+
     const response = await fetch(`https://api.zoom.us/v2/users`, {
       'headers': {
-        'Authorization': `Bearer ${user.zoom.accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       }
     });
 
-   const zoom = await response.json();
+    const zoom = await response.json();
 
-  //  if (zoom.code == 124) {
-  //    fetch(`https://zoom.us/oauth/token?grant_type=refresh_token&refresh_token=${user.zoom.refreshToken}`, {
-  //         'headers': {
-  //           'Authorization': 'Basic c3RPRXpJVExROXlVd1pWSm1IaHdDUTpNNWpkREU0d1l3VERIandwdnJtQ0kzSGdoOUQ0M0ZvWQ==',
-  //         }
-  //       })
-  //       .then(response => response.json())
-  //       .then(data => {
-  //         console.log(data);
-  //         User.findOneAndUpdate({ email: req.user._json.email }, {
-  //           zoom: {
-  //             accessToken: data.access_token
-  //           }
-  //         }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, user) => {
-  //           console.log(err || user);
-  //           fetchUser();
-  //         })
-  //       })
-  //     }
-      return zoom;
-    }
+    //  if (zoom.code == 124) {
+    //    fetch(`https://zoom.us/oauth/token?grant_type=refresh_token&refresh_token=${user.zoom.refreshToken}`, {
+    //         'headers': {
+    //           'Authorization': 'Basic c3RPRXpJVExROXlVd1pWSm1IaHdDUTpNNWpkREU0d1l3VERIandwdnJtQ0kzSGdoOUQ0M0ZvWQ==',
+    //         }
+    //       })
+    //       .then(response => response.json())
+    //       .then(data => {
+    //         console.log(data);
+    //         User.findOneAndUpdate({ email: req.user._json.email }, {
+    //           zoom: {
+    //             accessToken: data.access_token
+    //           }
+    //         }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, user) => {
+    //           console.log(err || user);
+    //           fetchUser();
+    //         })
+    //       })
+    //     }
+    return zoom;
+  }
 
   if (user.stripeID) {
     const account = await stripe.accounts.retrieve(user.stripeID);
@@ -956,8 +893,9 @@ router.get('/create', ensureAuthenticated, async (req, res) => {
     fetchUser();
     render.zoom = await fetchUser()
   }
-  
+
   console.log(render);
+  // console.log(user.zoom.accessToken);
   res.render('create', render);
 })
 
@@ -972,38 +910,20 @@ router.post('/create', async (req, res) => {
   let errors = [];
 
   if (title == '' || thumbnail == '' || language == '' || choreographer == '' || time == '' || price == '' || level == undefined || genre == undefined || purpose == undefined || mood == undefined) {
-    errors.push({ msg: res.__('msg.error.fill')});
+    errors.push({ msg: res.__('msg.error.fill') });
   }
 
   if (!user.zoom.id) {
-    errors.push({ msg: 'no zoom'});
-    // res.__('msg.error.fill')
+    errors.push({ msg: 'no zoom' });
   }
 
   if (errors.length > 0) {
-    res.render('create', {
-      errors,
-      account: account,
-      loginLink: loginLink,
-      userPhoto: user.userPhoto,
-      userPhotoDef: user.userPhotoDef,
-      API_key: process.env.API_key,
-      CLIENT_id: process.env.ZOOM_CLIENT_ID,
-      title,
-      thumbnail,
-      language,
-      choreographer,
-      price,
-      level,
-      genre,
-      purpose,
-      mood
-    });
+    res.render('create', { errors, account: account, loginLink: loginLink, userPhoto: user.userPhoto, userPhotoDef: user.userPhotoDef, API_key: process.env.API_key, CLIENT_id: process.env.ZOOM_CLIENT_ID, title, thumbnail, language, choreographer, price, level, genre, purpose, mood });
   } else {
     Lesson.findOne({ title: title })
       .then(lesson => {
         if (lesson) {
-          errors.push({ msg: res.__('msg.error.dupl')});
+          errors.push({ msg: res.__('msg.error.dupl') });
           res.render('create', {
             errors,
             account: account,
@@ -1014,115 +934,82 @@ router.post('/create', async (req, res) => {
             CLIENT_id: process.env.ZOOM_CLIENT_ID,
           });
         } else {
-          const newLesson = new Lesson({
-            title,
-            thumbnail,
-            language,
-            choreographer,
-            choreographerID,
-            time,
-            price,
-            level,
-            genre,
-            purpose,
-            mood
-          });
+          const newLesson = new Lesson({ title, thumbnail, language, choreographer, choreographerID, time, price, level, genre, purpose, mood });
           newLesson.save()
             .then(async function (lesson) {
-              console.log(lesson);
+              const accessToken = decrypt(user.zoom.accessToken);
 
+              console.log(lesson);
               // create meeting
               fetch(`https://api.zoom.us/v2/users/${user.zoom.id}/meetings`, {
-                  'headers': {
-                    'method': 'POST',
-                    'Authorization': `Bearer ${user.zoom.accessToken}`,
-                  },
-                  // moment(data.items[i].start.dateTime).format('MMMM Do YYYY, h:mm a');
-                  'body': JSON.stringify({
-                    "topic": `${lesson.title}`,
-                    "type": 2,
-                    "start_time": "string [date-time]",
-                    "duration": 40,
-                    "timezone": "Asia/Tokyo",
-                    // "password": "string",
-                    "agenda": `${lesson.level} ${lesson.genre} lesson for ${lesson.purpose}! Let's dance`,
-                    "settings": {
-                      "contact_email": `${user.email}`,
-                      "contact_name": `${lesson.choreographer}`,
-                      "use_pmi": true,
-                      "auto_recording": "cloud",
-                      "registrants_email_notification": true,
-                      "meeting_authentication": true,
-                    }
-                  })
-                })
-                .then(response => response.json())
-                .then(zoom => {
-                  res.redirect('/create');
-                  // res.render('create', {
-                  //   account: account,
-                  //   loginLink: loginLink.url,
-                  //   choreographer: user.username,
-                  //   userPhoto: user.userPhoto,
-                  //   userPhotoDef: user.userPhotoDef,
-                  //   CLIENT_id: process.env.ZOOM_CLIENT_ID,
-                  //   zoom: zoom
-                  // });
-                })
-
-              if (account == undefined) {
-                try {
-                  const account = await stripe.accounts.create({
-                    type: "express"
-                  });
-                  const accountLink = await stripe.accountLinks.create({
-                    account: account.id,
-                    refresh_url: 'https://vibin.tokyo/create',
-                    return_url: 'http://localhost:5000/create',
-                    type: 'account_onboarding',
-                  });
-
-                  if (account) {
-                    User.findOneAndUpdate({
-                      email: req.user._json.email
-                    }, {
-                      stripeID: account.id
-                    }, {
-                      upsert: true,
-                      new: true,
-                      setDefaultsOnInsert: true
-                    }, (err, user) => {
-                      if (err) {
-                        console.log(err);
-                      }
-                    })
+                'method': 'POST',
+                'headers': {
+                  'Authorization': `Bearer ${accessToken}`,
+                  'Content-Type': 'application/json',
+                },
+                // moment(data.items[i].start.dateTime).format('MMMM Do YYYY, h:mm a');
+                'body': JSON.stringify({
+                  "topic": `${lesson.title}`,
+                  "type": 2,
+                  "start_time": moment(lesson.time).format('YYYY-MM-DDTHH:mm:ss'),
+                  "duration": 40,
+                  "timezone": "Asia/Tokyo",
+                  // "password": "string",
+                  "agenda": `${lesson.level} ${lesson.genre} lesson for ${lesson.purpose}! Let's dance`,
+                  "settings": {
+                    "contact_email": `${user.email}`,
+                    "contact_name": `${lesson.choreographer}`,
+                    "use_pmi": true,
+                    "auto_recording": "cloud",
+                    "registrants_email_notification": true,
+                    "meeting_authentication": true
                   }
+                })
+              })
+                .then(response => response.json())
+                .then(async zoom => {
+                  console.log(zoom);
 
-                  req.flash('success_msg', res.__('msg.success.create'));
-                  res.redirect(accountLink.url);
-                } catch (err) {
-                  res.status(500).send({
-                    error: err.message
-                  });
-                }
-              } else {
-                req.flash('success_msg', res.__('msg.success.create'));
-                res.redirect('/create');
-              }
+                  if (account == undefined) {
+                    try {
+                      const account = await stripe.accounts.create({ type: "express" });
+                      const accountLink = await stripe.accountLinks.create({
+                        account: account.id,
+                        refresh_url: 'https://localhost:5000/create',
+                        return_url: 'http://localhost:5000/create',
+                        type: 'account_onboarding',
+                      });
+
+                      User.findOneAndUpdate({ email: req.user._json.email }, { stripeID: account.id }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, user) => {
+                        console.log(err || user);
+                      })
+
+                      res.redirect(accountLink.url);
+                    } catch (err) {
+                      res.status(500).send({
+                        error: err.message
+                      });
+                    }
+                  } else {
+                    req.flash('success_msg', res.__('msg.success.create'));
+                    res.redirect('/create');
+                  }
+                })
+
             })
             .catch(err => console.log(err));
         }
       })
   }
   Lesson.updateMany({}, {
-      $addToSet: {
-        language: ["any"],
-        level: ["any"],
-        genre: ["any"],
-        purpose: ["any"],
-        mood: ["any"]
-      }
-    },
+    $addToSet: {
+      language: ["any"],
+      level: ["any"],
+      genre: ["any"],
+      purpose: ["any"],
+      mood: ["any"]
+    }
+  },
     function (err, result) {
       if (err) {
         console.log(err);
@@ -1130,26 +1017,6 @@ router.post('/create', async (req, res) => {
     }
   );
 })
-
-// router.get('/zoom', (req, res) => {
-//   fetch(`https://zoom.us/oauth/token?grant_type=authorization_code&code=${req.query.code}&redirect_uri=https://fathomless-crag-65791.herokuapp.com/create`, {
-//     'method': 'POST',
-//     'headers': {
-//       'Authorization': 'Basic c3RPRXpJVExROXlVd1pWSm1IaHdDUTpNNWpkREU0d1l3VERIandwdnJtQ0kzSGdoOUQ0M0ZvWQ==',
-//     }
-//   })
-//     .then(response => response.json())
-//     .then(data => {
-//       console.log(data);
-//       if (data.error) {
-//         req.flash('error_msg', data.reason);
-//         res.redirect('/create');
-//       } else {
-//         req.flash('success_msg', res.__('msg.success.login'));
-//         res.redirect('/create');
-//       }
-//     })
-// })
 
 // Match the raw body to content type application/json
 router.post('/webhook', (req, res) => {
@@ -1173,7 +1040,7 @@ router.post('/webhook', (req, res) => {
       // Then define and call a method to handle the successful attachment of a PaymentMethod.
       // handlePaymentMethodAttached(paymentMethod);
       break;
-      // ... handle other event types
+    // ... handle other event types
     default:
       console.log(`Unhandled event type ${event.type}`);
   }
