@@ -1,14 +1,14 @@
-const transporter = require("./email");
+const transporter = require("./transport").transporter;
 
 const sendMail = (to, subject, text) => {
     const message = {
         from: process.env.EMAIL,
         to: `${to}`,
         subject: `${subject}`,
-        html: `${text}`,
+        text: `${text}`,
     };
 
-    transporter.sendMail(message, async (err, response) => {
+    transporter.sendMail(message, async(err, response) => {
         console.log(err || response);
     });
 };

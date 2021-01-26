@@ -8,7 +8,7 @@ const stripe = require('stripe')('sk_test_51Hfnh4BHyna8CK9qjfFDuXjt1pmBPnPMoGflp
 const { ensureAuthenticated } = require('../config/auth');
 const { onlyDevs } = require('../config/dev');
 // const { encrypt, decrypt } = require('../config/crypto');
-// const { sendMail } = require('../config/email');
+const { sendMail } = require('../config/email');
 
 const Video = require('../models/Video');
 const User = require('../models/User');
@@ -982,6 +982,7 @@ router.post('/create', async(req, res) => {
                                 const newLesson = new Lesson({ title, thumbnail, language, choreographer, choreographerID, time, price, level, genre, purpose, mood });
                                 newLesson.save()
                                     .then(async function(lesson) {
+                                        sendMail(user.email, 'Your lesson is registered', lesson);
                                         console.log(lesson);
                                         req.flash('success_msg', res.__('msg.success.schedule'));
                                         res.redirect('/calendar');
