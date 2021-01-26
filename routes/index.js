@@ -7,7 +7,6 @@ const moment = require('moment');
 const stripe = require('stripe')('sk_test_51Hfnh4BHyna8CK9qjfFDuXjt1pmBPnPMoGflpvhPIet1ytDmqDZD3sayrbLnHbIQXnLBIZ8UWxSe62EaNZuw2oDO00b2zFDdno');
 const { ensureAuthenticated } = require('../config/auth');
 const { onlyDevs } = require('../config/dev');
-// const { encrypt, decrypt } = require('../config/crypto');
 const { sendMail } = require('../config/email');
 
 const Video = require('../models/Video');
@@ -769,7 +768,6 @@ router.get('/reservation/:id', ensureAuthenticated, async(req, res) => {
     console.log(session);
 
     res.render('reservation', {
-        // client_secret: intent.clinet_secret,
         id: session.id,
         lesson: lesson,
         userPhoto: user.userPhoto,
@@ -795,86 +793,12 @@ router.get('/success', ensureAuthenticated, async(req, res) => {
 router.get('/create', ensureAuthenticated, async(req, res) => {
     const user = await User.findOne({ email: req.user._json.email }).exec();
 
-    // if (req.query.code) {
-    //   fetch(`https://zoom.us/oauth/token?grant_type=authorization_code&code=${req.query.code}&redirect_uri=https://fathomless-crag-65791.herokuapp.com/create`, {
-    //     'method': 'POST',
-    //     'headers': {
-    //       'Authorization': 'Basic c3RPRXpJVExROXlVd1pWSm1IaHdDUTpNNWpkREU0d1l3VERIandwdnJtQ0kzSGdoOUQ0M0ZvWQ==',
-    //     }
-    //   })
-    //     .then(response => response.json())
-    //     .then(data => {
-    //       console.log(data);
-    //       if (data.error) {
-    //         req.flash('error_msg', data.reason);
-    //         res.redirect('/create');
-    //       } else {
-    //         fetch(`https://api.zoom.us/v2/users`, {
-    //           'headers': {
-    //             'Authorization': `Bearer ${data.access_token}`,
-    //           }
-    //         })
-    //           .then(response => response.json())
-    //           .then(async zoom => {
-    //             console.log(zoom);
-
-    //             const hashAccessToken = encrypt(data.access_token.toString());
-    //             const hashRefreshToken = encrypt(data.refresh_token.toString());
-
-    //             //user update
-    //             User.findOneAndUpdate({ email: req.user._json.email }, {
-    //               zoom: {
-    //                 id: zoom.users[0].id,
-    //                 accessToken: hashAccessToken,
-    //                 refreshToken: hashRefreshToken,
-    //               }
-    //             }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, user) => {
-    //               console.log(err || user);
-    //             })
-    //           })
-    //       }
-    //     })
-    // }
-
     let render = {
         choreographer: user.username,
         userPhoto: user.userPhoto,
         userPhotoDef: user.userPhotoDef,
         CLIENT_id: process.env.ZOOM_CLIENT_ID
     }
-
-    // const fetchUser = async () => {
-    //   const accessToken = decrypt(user.zoom.accessToken);
-
-    //   const response = await fetch(`https://api.zoom.us/v2/users`, {
-    //     'headers': {
-    //       'Authorization': `Bearer ${accessToken}`,
-    //     }
-    //   });
-
-    //   const zoom = await response.json();
-
-    //   //  if (zoom.code == 124) {
-    //   //    fetch(`https://zoom.us/oauth/token?grant_type=refresh_token&refresh_token=${user.zoom.refreshToken}`, {
-    //   //         'headers': {
-    //   //           'Authorization': 'Basic c3RPRXpJVExROXlVd1pWSm1IaHdDUTpNNWpkREU0d1l3VERIandwdnJtQ0kzSGdoOUQ0M0ZvWQ==',
-    //   //         }
-    //   //       })
-    //   //       .then(response => response.json())
-    //   //       .then(data => {
-    //   //         console.log(data);
-    //   //         User.findOneAndUpdate({ email: req.user._json.email }, {
-    //   //           zoom: {
-    //   //             accessToken: data.access_token
-    //   //           }
-    //   //         }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, user) => {
-    //   //           console.log(err || user);
-    //   //           fetchUser();
-    //   //         })
-    //   //       })
-    //   //     }
-    //   return zoom;
-    // }
 
     if (user.stripeID) {
         const account = await stripe.accounts.retrieve(user.stripeID);
@@ -883,11 +807,6 @@ router.get('/create', ensureAuthenticated, async(req, res) => {
         render.account = account
         render.loginLink = loginLink
     }
-
-    // if (user.zoom.id) {
-    //   fetchUser();
-    //   render.zoom = await fetchUser()
-    // }
 
     console.log(render);
     res.render('create', render);
@@ -1009,65 +928,6 @@ router.post('/create', async(req, res) => {
         }
     );
 })
-
-// const accessToken = decrypt(user.zoom.accessToken);
-
-// // create meeting
-// fetch(`https://api.zoom.us/v2/users/${user.zoom.id}/meetings`, {
-//   'method': 'POST',
-//   'headers': {
-//     'Authorization': `Bearer ${accessToken}`,
-//     'Content-Type': 'application/json',
-//   },
-//   // moment(data.items[i].start.dateTime).format('MMMM Do YYYY, h:mm a');
-//   'body': JSON.stringify({
-//     "topic": `${lesson.title}`,
-//     "type": 2,
-//     "start_time": moment(lesson.time).format('YYYY-MM-DDTHH:mm:ss'),
-//     "duration": 40,
-//     "timezone": "Asia/Tokyo",
-//     // "password": "string",
-//     "agenda": `${lesson.level} ${lesson.genre} lesson for ${lesson.purpose}! Let's dance`,
-//     "settings": {
-//       "contact_email": `${user.email}`,
-//       "contact_name": `${lesson.choreographer}`,
-//       "use_pmi": true,
-//       "auto_recording": "cloud",
-//       "registrants_email_notification": true,
-//       "meeting_authentication": true
-//     }
-//   })
-// })
-//   .then(response => response.json())
-//   .then(async zoom => {
-//     console.log(zoom);
-
-// if (account == undefined) {
-//   try {
-//     const account = await stripe.accounts.create({ type: "express" });
-//     const accountLink = await stripe.accountLinks.create({
-//       account: account.id,
-//       refresh_url: 'https://localhost:5000/create',
-//       return_url: 'http://localhost:5000/create',
-//       type: 'account_onboarding',
-//     });
-
-//     User.findOneAndUpdate({ email: req.user._json.email }, { stripeID: account.id }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, user) => {
-//       console.log(err || user);
-//     })
-
-//     res.redirect(accountLink.url);
-//   } catch (err) {
-//     res.status(500).send({
-//       error: err.message
-//     });
-//   }
-// } else {
-//   req.flash('success_msg', res.__('msg.success.create'));
-//   res.redirect('/create');
-// }
-//   })
-
 
 // Match the raw body to content type application/json
 router.post('/webhook', (req, res) => {
