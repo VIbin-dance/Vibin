@@ -10,6 +10,7 @@ const upload = multer({ storage: storage });
 
 const User = require('../models/User');
 const Video = require('../models/Video');
+const Lesson = require('../models/Lesson');
 
 router.get('/register', (req, res) => res.render('register'));
 router.get('/login', (req, res) => res.render('login'));
@@ -71,7 +72,7 @@ router.get('/preference', ensureAuthenticated, (req, res) => {
     })
 });
 
-router.post('/preference', ensureAuthenticated, async (req, res) => {
+router.post('/preference', ensureAuthenticated, async(req, res) => {
     const { level, purpose, genre } = req.body;
     let errors = [];
 
@@ -91,10 +92,13 @@ router.post('/preference', ensureAuthenticated, async (req, res) => {
 
         if (errors.length > 0) {
             res.render('preference', {
-                errors, userPhoto: user.userPhoto, userPhotoDef: user.userPhotoDef, level, purpose
+                errors,
+                userPhoto: user.userPhoto,
+                userPhotoDef: user.userPhotoDef,
+                level,
+                purpose
             });
-        }
-        else {
+        } else {
             req.flash('success_msg', res.__('msg.success.tags'));
             res.redirect('/dashboard/-1?page=1&limit=15');
         }
@@ -102,9 +106,10 @@ router.post('/preference', ensureAuthenticated, async (req, res) => {
 })
 
 router.get('/profile', ensureAuthenticated, (req, res) => {
-    User.findOne({ email: req.user._json.email }, async (err, user) => {
+    User.findOne({ email: req.user._json.email }, async(err, user) => {
 
         const likedVid = await Video.find({ 'like.id': user._id.toString() }).exec()
+        const lesson = await Lesson.find({ 'choreographerID': user._id.toString() }).exec()
 
         if (!user) {
             req.flash('error_msg', res.__('msg.error.noUser'));
@@ -112,6 +117,7 @@ router.get('/profile', ensureAuthenticated, (req, res) => {
         } else {
             res.render('profile', {
                 likedVid: likedVid,
+                lesson: lesson,
                 user: user,
                 followingCount: user.following.length,
                 followerCount: user.follower.length,
@@ -149,7 +155,7 @@ router.get('/profile/edit', ensureAuthenticated, (req, res) => {
     })
 })
 
-router.post('/profile/edit', ensureAuthenticated, upload.single('userPhotoDef'), async (req, res) => {
+router.post('/profile/edit', ensureAuthenticated, upload.single('userPhotoDef'), async(req, res) => {
     const user = await User.findOne({ email: req.user._json.email }).exec();
 
     const { username, bio, level, purpose, genre } = req.body;
@@ -198,7 +204,16 @@ router.post('/profile/edit', ensureAuthenticated, upload.single('userPhotoDef'),
 
     if (errors.length > 0) {
         res.render('profileEdit', {
-            errors, userPhoto: user.userPhoto, userPhotoDef: user.userPhotoDef, email: user.email, user, username, bio, level, purpose, genre
+            errors,
+            userPhoto: user.userPhoto,
+            userPhotoDef: user.userPhotoDef,
+            email: user.email,
+            user,
+            username,
+            bio,
+            level,
+            purpose,
+            genre
         });
     } else {
         User.findOneAndUpdate({ email: req.user._json.email }, query, (err, user) => {
@@ -211,7 +226,7 @@ router.post('/profile/edit', ensureAuthenticated, upload.single('userPhotoDef'),
 
 router.get('/:id', ensureAuthenticated, (req, res) => {
     User.findOne({ _id: req.params.id }, (err, user) => {
-        User.findOne({ email: req.user._json.email }, async (err, currentUser) => {
+        User.findOne({ email: req.user._json.email }, async(err, currentUser) => {
 
             const likedVid = await Video.find({ 'like.id': user._id.toString() }).exec()
 
@@ -248,7 +263,7 @@ router.post('/:id', ensureAuthenticated, (req, res) => {
         if (action == 'follow') {
             User.findByIdAndUpdate(follower, { $push: { following: [following] } }).exec();
             User.findByIdAndUpdate(following, { $push: { follower: [follower] } }).exec()
-                .then(function (user) {
+                .then(function(user) {
                     req.flash('success_msg', res.__('msg.success.followed'));
                     res.redirect(`/users/${user._id}`);
                 })
@@ -256,7 +271,7 @@ router.post('/:id', ensureAuthenticated, (req, res) => {
         } else if (action == 'unfollow') {
             User.findByIdAndUpdate(follower, { $pull: { following: following } }).exec();
             User.findByIdAndUpdate(following, { $pull: { follower: follower } }).exec()
-                .then(function (user) {
+                .then(function(user) {
                     req.flash('success_msg', res.__('msg.success.unfollowed'));
                     res.redirect(`/users/${user._id}`);
                 })
@@ -268,7 +283,7 @@ router.post('/:id', ensureAuthenticated, (req, res) => {
 })
 
 router.get('/:type/:id', ensureAuthenticated, (req, res) => {
-    User.findOne({ _id: req.params.id }, async (err, user) => {
+    User.findOne({ _id: req.params.id }, async(err, user) => {
 
         const currentUser = await User.findOne({ email: req.user._json.email }).exec();
 
