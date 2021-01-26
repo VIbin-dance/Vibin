@@ -808,7 +808,6 @@ router.get('/create', ensureAuthenticated, async(req, res) => {
         render.loginLink = loginLink
     }
 
-    console.log(render);
     res.render('create', render);
 })
 
