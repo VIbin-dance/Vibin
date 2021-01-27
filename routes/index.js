@@ -900,8 +900,19 @@ router.post('/create', async(req, res) => {
                                 const newLesson = new Lesson({ title, thumbnail, language, choreographer, choreographerID, time, price, level, genre, purpose, mood });
                                 newLesson.save()
                                     .then(async function(lesson) {
-                                        sendMail(user.email, 'Your lesson is registered', lesson);
-                                        console.log(lesson);
+                                        const text = `
+                                        <h1>レッスンが登録されました&#10024;</h1>
+                                        <h2>タイトル：${lesson.title}</h2>
+                                        <a href="/reservation/<%= lesson.id %>">
+                                          <img src="<%= lesson.thumbnail %>" alt="thumbnail">
+                                        </a>
+                                        <p>価格：${lesson.price}</p>
+                                        <p>レベル：${lesson.level}</p>
+                                        <p>ジャンル：${lesson.genre}</p>
+                                        <p>ムード：${lesson.mood}</p>`
+
+                                        sendMail(user.email, 'Your lesson is registered', text);
+
                                         req.flash('success_msg', res.__('msg.success.schedule'));
                                         res.redirect('/calendar');
                                     })
