@@ -360,7 +360,7 @@ router.get("/results", ensureAuthenticated, (req, res) =>
 );
 
 router.get("/choreographer/:id", ensureAuthenticated, (req, res) => {
-  Video.find(
+  Lesson.find(
     {
       choreographer: req.params.id,
     },
