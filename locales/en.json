@@ -162,13 +162,13 @@
 			"4": "Get funky!",
 			"top": ","
 		}
-    },
-    "calendar": {
-        "top": "Upcoming vibes!",
-        "sub1": "We have ",
-        "sub2": " sessions ahead!",
-        "plan": " Let's plan our sessions!"
-    },
+	},
+	"calendar": {
+		"top": "Upcoming vibes!",
+		"sub1": "We have ",
+		"sub2": " sessions ahead!",
+		"plan": " Let's plan our sessions!"
+	},
 	"profile": {
 		"follower": "followers",
 		"following": "following",
