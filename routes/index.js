@@ -849,11 +849,10 @@ router.get("/reservation/:id", ensureAuthenticated, async (req, res) => {
     cancel_url: `http://localhost:5000/reservation/${req.params.id}`,
   });
 
-  console.log(session);
-
   res.render("reservation", {
     id: session.id,
     lesson: lesson,
+    choreographer: choreographer,
     userPhoto: user.userPhoto,
     userPhotoDef: user.userPhotoDef,
   });
