@@ -67,7 +67,6 @@ router.get("/dashboard/:sort", ensureAuthenticated, async (req, res) => {
     const user = await User.findOne({
         email: req.user._json.email,
       }).exec();
-  
     Lesson.paginate(
     {},
     {

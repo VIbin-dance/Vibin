@@ -10,7 +10,7 @@
                     <label for="Photo"><%= __('profile.photo') %><p><small><%= __('profile.choose photo') %></small>
                         </p></label>
                     <div class="text-center">
-                        <% if (typeof userPhotoDef.data != "undefined") { %>
+                        <% if (typeof userPhotoDef != "undefined") { %>
                         <img id="output"
                             src="data:image/<%=userPhotoDef.contentType%>;base64, <%=userPhotoDef.data.toString('base64')%>"
                             style="border-radius: 50%;" height="80" width="80" alt="user photo">

@@ -12,9 +12,11 @@ const UserSchema = new mongoose.Schema({
         require: true
     },
     userPhotoDef: {
+        type: Object,
         data: Buffer,
         originalname: String,
-        contentType: String
+        contentType: String,
+        require: false
     },
     loginCount: {
         type: Number,

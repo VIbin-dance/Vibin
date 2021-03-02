@@ -105,7 +105,8 @@
 				"top": "Level",
 				"Beginner": "Beginner",
 				"Intermediate": "Intermediate",
-				"Advanced": "Advanced"
+				"Advanced": "Advanced",
+				"undefined": "dashboard.search.level.undefined"
 			},
 			"genre": {
 				"top": "Genre",
@@ -123,7 +124,8 @@
 				"top": "Purpose",
 				"Skill Improvements": "Skill Improvements",
 				"Health and Exercise": "Health and Exercise",
-				"Entertainment": "Entertainment"
+				"Entertainment": "Entertainment",
+				"undefined": "dashboard.search.purpose.undefined"
 			},
 			"mood": {
 				"top": "Mood",

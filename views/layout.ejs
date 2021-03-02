@@ -58,7 +58,7 @@
     <!-- Template Main JS File -->
     <script src="/assets/js/main.js"></script>
 
-    <% if (typeof userPhoto !="undefined" ) { %>
+    <% if (typeof userPhoto != "undefined" ) { %>
     <header id="header" class="fixed-top">
         <div class="container d-flex align-items-center justify-content-between">
             <h1 class="logo"><a href="/dashboard/-1?page=1&limit=15">Vibin'</a></h1>
@@ -78,7 +78,7 @@
             <nav class="nav-menu d-none d-lg-block">
                 <ul>
                     <li class="drop-down">
-                        <% if (typeof userPhotoDef !="undefined" ) { %>
+                        <% if (typeof userPhotoDef != "undefined" ) { %>
                             <img src="data:image/<%=userPhotoDef.contentType%>;base64, <%=userPhotoDef.data.toString('base64')%>"
                                 height="40" width="40" style="border-radius: 50%;" alt="user photo">
                             <% } else if (typeof userPhoto !="undefined" ) { %>
