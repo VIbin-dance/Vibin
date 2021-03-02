@@ -538,7 +538,7 @@ section {
 }
 
 @media (max-width: 768px) {
-  .about h1 {
+  h1 {
     font-size: 28px;
     line-height: 36px;
   }
