@@ -78,20 +78,6 @@ router.get("/dashboard/:sort", ensureAuthenticated, async (req, res) => {
       },
     },
     async (err, lesson) => {
-      const idLesson = [];
-      const titleLesson = [];
-      const choreographerLesson = [];
-      const levelLesson = [];
-      const thumbnailLesson = [];
-
-      for (let i = 0; i < lesson.length; i++) {
-        idLesson[i] = lesson[i]._id;
-        titleLesson[i] = lesson[i].title;
-        choreographerLesson[i] = lesson[i].choreographer;
-        levelLesson[i] = lesson[i].level[0];
-        thumbnailLesson[i] = lesson[i].thumbnail;
-      }
-      console.log(lesson)
       res.render("dashboard", {
         user: user,
         userPhoto: user.userPhoto,
@@ -269,16 +255,17 @@ router.get("/dashboard/:sort", ensureAuthenticated, async (req, res) => {
   // })
 });
 
-router.post("/dashboard", ensureAuthenticated, (req, res) => {
+router.post("/dashboard", ensureAuthenticated, async (req, res) => {
   const { lengthCat, language, level, genre, purpose, mood, search } = req.body;
 
   const searchQuery = new RegExp(escapeRegex(search), "gi");
 
+  const user = await User.findOne({
+    email: req.user._json.email,
+  }).exec();
+
   const query = {
     $and: [
-      {
-        lengthCat: lengthCat,
-      },
       {
         language: language,
       },
@@ -305,50 +292,28 @@ router.post("/dashboard", ensureAuthenticated, (req, res) => {
     ],
   };
 
-  Video.paginate(
+  Lesson.paginate(
     query,
     {
       page: req.query.page,
       limit: 100,
     },
-    async (err, result) => {
-      const user = await User.findOne({
-        email: req.user._json.email,
-      }).exec();
-      let title = [];
-      let choreographer = [];
-      let url = [];
-      let level = [];
-      let thumbnail = [];
-      let id = [];
+    async (err, lesson) => {
+      console.log(lesson);
 
-      if (!result.docs.length) {
+      if (!lesson.docs.length) {
         req.flash("error_msg", res.__("msg.error.video"));
         res.redirect("/dashboard/-1?page=1&limit=15");
       } else {
-        for (let i = 0; i < result.docs.length; i++) {
-          title[i] = result.docs[i].title;
-          choreographer[i] = result.docs[i].choreographer;
-          url[i] = result.docs[i].url;
-          level[i] = result.docs[i].level[0];
-          thumbnail[i] = result.docs[i].thumbnail;
-          id[i] = result.docs[i].id;
-        }
         res.render("results", {
+          user: user,
           userPhoto: user.userPhoto,
           userPhotoDef: user.userPhotoDef,
-          count: result.total,
-          username: req.session.passport.user.displayName,
-          videos: result.docs,
-          title: title,
-          choreographer: choreographer,
-          url: url,
-          id: id,
-          level: level,
-          thumbnail: thumbnail,
-          currentPage: result.page,
-          pageCount: result.pages,
-          pages: paginate.getArrayPages(req)(3, result.pages, req.query.page),
+          username: user.username,
+          lesson: lesson,
+          currentPage: lesson.page,
+          pageCount: lesson.pages,
+          pages: paginate.getArrayPages(req)(3, lesson.pages, req.query.page),
         });
       }
     }
