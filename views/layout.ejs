@@ -74,7 +74,7 @@
                         <% if (typeof userPhotoDef != "undefined") { %>
                         <img src="data:image/<%=userPhotoDef.contentType%>;base64, <%=userPhotoDef.data.toString('base64')%>"
                             height="40" width="40" style="border-radius: 50%;" alt="user photo">
-                        <% } else { %>
+                        <% } else if (typeof userPhoto != "undefined") { %>
                         <img src="<%= userPhoto %>" height="40" width="40" style="border-radius: 50%;" alt="user photo">
                         <% } %>
                         <ul>
