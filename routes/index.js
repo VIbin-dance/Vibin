@@ -255,7 +255,7 @@ router.get("/dashboard/:sort", ensureAuthenticated, async (req, res) => {
 });
 
 router.post("/dashboard", ensureAuthenticated, async (req, res) => {
-  const { lengthCat, language, level, genre, purpose, mood, search } = req.body;
+  const { language, level, genre, purpose, mood, search } = req.body;
 
   const searchQuery = new RegExp(escapeRegex(search), "gi");
 
@@ -291,13 +291,10 @@ router.post("/dashboard", ensureAuthenticated, async (req, res) => {
     ],
   };
 
-  Lesson.paginate(
-    query,
-    {
+  Lesson.paginate(query, {
       page: req.query.page,
       limit: 100,
-    },
-    async (err, lesson) => {
+    }, async (err, lesson) => {
       console.log(lesson);
 
       if (!lesson.docs.length) {
@@ -323,38 +320,22 @@ router.get("/results", ensureAuthenticated, (req, res) =>
   res.render("results")
 );
 
-router.get("/choreographer/:id", ensureAuthenticated, (req, res) => {
-  Lesson.find(
-    {
-      choreographer: req.params.id,
-    },
-    async (err, result) => {
-      const user = await User.findOne({
-        email: req.user._json.email,
-      }).exec();
-      const title = [];
-      const url = [];
-      const level = [];
-      const thumbnail = [];
-      const id = [];
-      for (let i = 0; i < result.length; i++) {
-        title[i] = result[i].title;
-        url[i] = result[i].url;
-        level[i] = result[i].level;
-        thumbnail[i] = result[i].thumbnail;
-        id[i] = result[i].id;
-      }
+router.get("/choreographer/:id", ensureAuthenticated, async (req, res) => {
+  const user = await User.findOne({ email: req.user._json.email }).exec();
+
+  Lesson.paginate({choreographer: req.params.id}, {
+        page: req.query.page,
+        limit: req.query.limit,
+  }, (err, lesson) => {
       res.render("choreographer", {
         userPhoto: user.userPhoto,
         userPhotoDef: user.userPhotoDef,
-        count: result.length,
+        count: lesson.length,
         choreographer: req.params.id,
-        videos: result,
-        title: title,
-        url: url,
-        level: level,
-        thumbnail: thumbnail,
-        id: id,
+        lesson: lesson,
+        currentPage: lesson.page,
+        pageCount: lesson.pages,
+        pages: paginate.getArrayPages(req)(3, lesson.pages, req.query.page),
       });
     }
   );

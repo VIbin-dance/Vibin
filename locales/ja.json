@@ -102,8 +102,7 @@
 				"top": "難易度",
 				"Beginner": "初心者",
 				"Intermediate": "中級者",
-				"Advanced": "上級者",
-				"Skill Improvements": "dashboard.search.level.Skill Improvements"
+				"Advanced": "上級者"
 			},
 			"genre": {
 				"top": "ジャンル",
@@ -125,7 +124,7 @@
 			},
 			"mood": {
 				"top": "ムード・特徴",
-				"Groovy": "グルーヴィ――",
+				"Groovy": "グルーヴィ―",
 				"Funky": "ファンキー",
 				"Chill": "チル",
 				"Romantic": "ロマンティック",

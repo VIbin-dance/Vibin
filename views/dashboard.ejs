@@ -13,23 +13,6 @@
                 </h2><br>
 
                 <div class="form-group">
-                    <select class="form-control chosen-value" type="length" id="length" name="lengthCat">
-                        <option selected="null" value="any">
-                            <%= __('dashboard.search.length.top') %>
-                        </option>
-                        <option value="short">
-                            <%= __('dashboard.search.length.short') %>
-                        </option>
-                        <option value="medium">
-                            <%= __('dashboard.search.length.medium') %>
-                        </option>
-                        <option value="long">
-                            <%= __('dashboard.search.length.long') %>
-                        </option>
-                    </select>
-                </div>
-
-                <div class="form-group">
                     <select class="form-control chosen-value" type="language" id="language" name="language">
                         <option selected="null" value="any">
                             <%= __('dashboard.search.language.top') %>
@@ -192,8 +175,9 @@
                                     <a class="special" href="/choreographer/<%= lesson.docs[i].choreographer %>">
                                         <%= lesson.docs[i].choreographer %>
                                     </a>
-                                    <p>
-                                        <%= __(`dashboard.search.level.${lesson.docs[i].level[0]}`) %>
+                                    <p><%= lesson.docs[i].price %> Yen</p>
+                                    <p class="mb-0">
+                                        <%= __(`dashboard.search.level.${lesson.docs[i].level[0]}`) %> | <%= __(`dashboard.search.genre.${lesson.docs[i].genre[0]}`) %> | <%= __(`dashboard.search.purpose.${lesson.docs[i].purpose[0]}`) %> | <%= __(`dashboard.search.mood.${lesson.docs[i].mood[0]}`) %>
                                     </p>
                                 </div>
                             </div>

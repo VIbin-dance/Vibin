@@ -18,8 +18,9 @@
                 <a class="special" href="/choreographer/<%= lesson.docs[i].choreographer %>">
                   <%= lesson.docs[i].choreographer %>
                 </a>
-                <p>
-                  <%= __(`dashboard.search.level.${lesson.docs[i].level[0]}`) %>
+                <p><%= lesson.docs[i].price %> Yen</p>
+                <p class="mb-0">
+                    <%= __(`dashboard.search.level.${lesson.docs[i].level[0]}`) %> | <%= __(`dashboard.search.genre.${lesson.docs[i].genre[0]}`) %> | <%= __(`dashboard.search.purpose.${lesson.docs[i].purpose[0]}`) %> | <%= __(`dashboard.search.mood.${lesson.docs[i].mood[0]}`) %>
                 </p>
               </div>
             </div>
