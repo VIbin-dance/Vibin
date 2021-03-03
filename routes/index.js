@@ -14,6 +14,7 @@ const { sendMail } = require("../config/email");
 const Video = require("../models/Video");
 const User = require("../models/User");
 const Lesson = require("../models/Lesson");
+const { forEach } = require("async");
 
 router.get("/", (req, res) => {
   res.render("landing");
@@ -64,25 +65,27 @@ router.get(
 );
 
 router.get("/dashboard/:sort", ensureAuthenticated, async (req, res) => {
-    const user = await User.findOne({
-        email: req.user._json.email,
-      }).exec();
-    Lesson.paginate(
-    {},
-    {
+    const user = await User.findOne({ email: req.user._json.email }).exec();
+
+    Lesson.paginate({}, {
       page: req.query.page,
       limit: req.query.limit,
       sort: {
         publishedDate: req.params.sort,
       },
-    },
-    async (err, lesson) => {
+    }, async (err, lesson) => {
+      const choreographer = [];
+      for (let i=0; i<lesson.docs.length; i++) {
+        choreographer[i] = await User.findOne({ _id: lesson.docs[i].choreographerID.toString() }).exec();
+      }
+      
       res.render("dashboard", {
         user: user,
         userPhoto: user.userPhoto,
         userPhotoDef: user.userPhotoDef,
         username: user.username,
         lesson: lesson,
+        choreographer: choreographer,
         currentSort: req.params.sort,
         currentPage: lesson.page,
         pageCount: lesson.pages,
@@ -259,9 +262,7 @@ router.post("/dashboard", ensureAuthenticated, async (req, res) => {
 
   const searchQuery = new RegExp(escapeRegex(search), "gi");
 
-  const user = await User.findOne({
-    email: req.user._json.email,
-  }).exec();
+  const user = await User.findOne({ email: req.user._json.email }).exec();
 
   const query = {
     $and: [
@@ -295,18 +296,22 @@ router.post("/dashboard", ensureAuthenticated, async (req, res) => {
       page: req.query.page,
       limit: 100,
     }, async (err, lesson) => {
-      console.log(lesson);
-
       if (!lesson.docs.length) {
         req.flash("error_msg", res.__("msg.error.video"));
         res.redirect("/dashboard/-1?page=1&limit=15");
       } else {
+        const choreographer = [];
+        for (let i=0; i<lesson.docs.length; i++) {
+          choreographer[i] = await User.findOne({ _id: lesson.docs[i].choreographerID.toString() }).exec();
+        }
+
         res.render("results", {
           user: user,
           userPhoto: user.userPhoto,
           userPhotoDef: user.userPhotoDef,
           username: user.username,
           lesson: lesson,
+          choreographer: choreographer,
           currentPage: lesson.page,
           pageCount: lesson.pages,
           pages: paginate.getArrayPages(req)(3, lesson.pages, req.query.page),
@@ -323,15 +328,17 @@ router.get("/results", ensureAuthenticated, (req, res) =>
 router.get("/choreographer/:id", ensureAuthenticated, async (req, res) => {
   const user = await User.findOne({ email: req.user._json.email }).exec();
 
-  Lesson.paginate({choreographer: req.params.id}, {
+  Lesson.paginate({choreographerID: req.params.id}, {
         page: req.query.page,
         limit: req.query.limit,
-  }, (err, lesson) => {
+  }, async (err, lesson) => {
+      const choreographer = await User.findOne({ _id: lesson.docs[0].choreographerID.toString() }).exec();
+
       res.render("choreographer", {
         userPhoto: user.userPhoto,
         userPhotoDef: user.userPhotoDef,
         count: lesson.length,
-        choreographer: req.params.id,
+        choreographer: choreographer,
         lesson: lesson,
         currentPage: lesson.page,
         pageCount: lesson.pages,

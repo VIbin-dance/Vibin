@@ -2,7 +2,7 @@
 <section id="results" class="results">
   <div class="container">
     <%- include ('partials/messages') %>
-    <h3><%= choreographer %>'s videos &#128064;</h3>
+    <h3><%= choreographer.username %>'s videos &#128064;</h3>
     <div class="row">
       <% for(let i=0; i < lesson.docs.length; i++) { %>
         <div class="col-lg-4 col-xs-6">
@@ -13,8 +13,8 @@
             <h4 id="title<%= i %>">
               <%= lesson.docs[i].title %>
             </h4>
-            <a class="special" href="/choreographer/<%= lesson.docs[i].choreographer %>">
-              <%= lesson.docs[i].choreographer %>
+            <a class="special" href="/choreographer/<%= choreographer._id %>">
+              <%= choreographer.username %>
             </a>
             <p><%= lesson.docs[i].price %> Yen</p>
             <p class="mb-0">
