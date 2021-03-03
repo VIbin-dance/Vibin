@@ -34,6 +34,7 @@
     </div>
 </section>
 
+<% if (lesson.length > 0) { %> 
 <section id="results" class="results">
     <div class="container">
         <h3>
@@ -44,7 +45,7 @@
             <% for(let i=0; i < lesson.length; i++) { %>
                 <div class="col-lg-4 col-xs-6">
                     <div class="box">
-                        <a href="/player/<%= lesson[i].id %>">
+                        <a href="#">
                         <img src="<%= lesson[i].thumbnail %>" alt="thumbnail">
                     </a>
                         <h4 id="lesson.title<%= i %>">
@@ -62,6 +63,8 @@
         </div>
     </div>
 </section>
+<% } %>
+
 <!-- 
 <section id="results" class="results">
     <div class="container">

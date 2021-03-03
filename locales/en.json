@@ -210,5 +210,7 @@
 		"News2": "Get the latest news from Vibin'!",
 		"Subscribe": "Subscribe"
 	},
-	"top": "top"
+	"top": "top",
+	"dashboard.search.level.": "dashboard.search.level.",
+	"dashboard.search.purpose.": "dashboard.search.purpose."
 }
