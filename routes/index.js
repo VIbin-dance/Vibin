@@ -850,11 +850,12 @@ router.get("/create", ensureAuthenticated, async (req, res) => {
 });
 
 router.post("/create", upload.single('thumbnail'), async (req, res) => {
+  const { title, language, time, price, level, genre, purpose, mood } = req.body;
+  let errors = [];
   const user = await User.findOne({ email: req.user._json.email }).exec();
-  const account = await stripe.accounts.retrieve(user.stripeID);
-  const loginLink = await stripe.accounts.createLoginLink(user.stripeID);
   const choreographerID = user._id;
-
+  const account = await stripe.accounts.retrieve(user.stripeID);
+  let loginLink;
   const buffer = await sharp(req.file.buffer).resize(1280, 720).toBuffer()
   const thumbnail = {
       data: buffer,
@@ -862,25 +863,10 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
       contentType: req.file.mimetype
   };
 
-  const {
-    title,
-    language,
-    choreographer,
-    time,
-    price,
-    level,
-    genre,
-    purpose,
-    mood,
-  } = req.body;
-
-  let errors = [];
-
   if (
     title == "" ||
     thumbnail == "" ||
     language == "" ||
-    choreographer == "" ||
     time == "" ||
     price == "" ||
     level == undefined ||
@@ -890,6 +876,33 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
   ) {
     errors.push({ msg: res.__("msg.error.fill") });
   }
+
+  console.log(account)
+  if (account == "undefined") {    
+    try {
+      const account = await stripe.accounts.create({ type: "express" });
+      const accountLink = await stripe.accountLinks.create({
+        account: account.id,
+        refresh_url: "https://localhost:5000/create",
+        return_url: "http://localhost:5000/create",
+        type: "account_onboarding",
+      });
+
+      User.findOneAndUpdate({ email: req.user._json.email }, { stripeID: account.id }, { upsert: true, new: true, setDefaultsOnInsert: true },
+        (err, user) => {
+          console.log(err || user);
+        }
+        );
+        res.redirect(accountLink.url);
+      } catch (err) {
+        res.status(500).send({
+          error: err.message,    
+        });
+      }
+    } else if (account != "undefined") {
+      loginLink = await stripe.accounts.createLoginLink(user.stripeID);    
+    }
+
 
   if (errors.length > 0) {
     res.render("create", {
@@ -992,7 +1005,6 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
                 title,
                 thumbnail,
                 language,
-                choreographer,
                 choreographerID,
                 time,
                 price,

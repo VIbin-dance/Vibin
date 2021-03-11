@@ -1,3 +1,5 @@
+<body onload="setTime()">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
 <div class="top-space"></div>
 <div class="col-lg-8 m-auto">
     <h1 class="text-center mb-3"><i class="fas fa-user-plus"></i>CREATE</h1>
@@ -62,7 +64,7 @@
                         <label for="choreographer">Choreographer</label>
                         <input type="choreographer" id="choreographer" name="choreographer" class="form-control"
                             placeholder="Enter The Choreographer"
-                            value="<%= typeof choreographer != 'undefined' ? choreographer : '' %>" />
+                            value="<%= typeof choreographer != 'undefined' ? choreographer : '' %>" readonly/>
                     </div>
 
                     <div class="form-group">
@@ -251,6 +253,7 @@
 </div>
 </form>
 </div>
+</body>
 
 <script>
     const loadFile = function (event) {
@@ -258,5 +261,10 @@
         image.src = URL.createObjectURL(event.target.files[0]);
         image.style.display = "block"
         console.log(image.style.display)
+    };
+
+    function setTime() {    
+        document.getElementById('time').min = moment().format('YYYY-MM-DDThh:mm')
+        console.log(document.getElementById('time').min)
     };
 </script>
