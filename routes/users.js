@@ -116,7 +116,6 @@ router.post('/profile/edit', ensureAuthenticated, upload.single('userPhotoDef'),
     let query = {};
     let errors = [];
 
-
     if (req.file != undefined) {
         const buffer = await sharp(req.file.buffer).resize(500, 500).toBuffer()
         userPhotoDef = {

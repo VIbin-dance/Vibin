@@ -37,8 +37,9 @@
 
                 <div class="form-group">
                     <label for="bio"><%= __('profile.bio') %></label>
-                    <input type="bio" id="bio" name="bio" class="form-control" placeholder="Enter Your Bio"
-                        value="<%= typeof bio != 'undefined' ? bio : '' %>" />
+                    <textarea rows="4" type="bio" id="bio" name="bio" class="form-control" placeholder="Enter Your Bio"><%= typeof bio != 'undefined' ? bio : '' %></textarea>
+                    <!-- <input type="bio" id="bio" name="bio" class="form-control" placeholder="Enter Your Bio"
+                        value="<%= typeof bio != 'undefined' ? bio : '' %>" /> -->
                 </div>
 
                 <div class="form-group" id="levelDrop">
