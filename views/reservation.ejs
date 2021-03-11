@@ -41,9 +41,9 @@
                     <% } %>
                 </div>         
                 <div class="text-center">
-                <a href="/choreographer/<%= choreographer.username %>" style="font-size: 22px;"><%= choreographer.username %></a>
+                <a href="/choreographer/<%= choreographer._id %>" style="font-size: 22px;"><%= choreographer.username %></a>
                 </div>
-                <h5><%= choreographer.bio %></h5>
+                <br><h5 style="white-space:pre-wrap;"><%= choreographer.bio %></h5>
                 <p class="mb-0">Contact: <%= choreographer.email %></p>
             </div>
         </aside>

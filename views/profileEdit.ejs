@@ -36,8 +36,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="bio"><%= __('profile.bio') %></label>
-                    <textarea rows="4" type="bio" id="bio" name="bio" class="form-control" placeholder="Enter Your Bio"><%= typeof bio != 'undefined' ? bio : '' %></textarea>
+                    <label for="bio"><%= __('profile.bio') %> (140字)</label>
+                    <textarea rows="4" type="bio" id="bio" name="bio" class="form-control" placeholder="Enter Your Bio" maxlength="140"><%= typeof bio != 'undefined' ? bio : '' %></textarea>
                     <!-- <input type="bio" id="bio" name="bio" class="form-control" placeholder="Enter Your Bio"
                         value="<%= typeof bio != 'undefined' ? bio : '' %>" /> -->
                 </div>
