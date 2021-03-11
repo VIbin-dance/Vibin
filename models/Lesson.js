@@ -25,6 +25,10 @@ const LessonSchema = new mongoose.Schema({
         type: Number,
         require: true,
     },
+    time: {
+        type: Date,
+        require: true,
+    },
     level: {
         type: Array,
         required: true,

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { ensureAuthenticated } = require('../config/auth');
+const moment = require("moment");
 const multer = require('multer');
 const sharp = require('sharp');
 
@@ -62,6 +63,10 @@ router.get('/profile', ensureAuthenticated, (req, res) => {
 
         const likedVid = await Video.find({ 'like.id': user._id.toString() }).exec()
         const lesson = await Lesson.find({ 'choreographerID': user._id.toString() }).exec()
+        const time = [];
+        for (let i=0; i<lesson.length; i++) {
+          time[i] = moment(lesson[i].time).format('MM/DD HH:mm');
+        }
 
         if (!user) {
             req.flash('error_msg', res.__('msg.error.noUser'));
@@ -70,6 +75,7 @@ router.get('/profile', ensureAuthenticated, (req, res) => {
             res.render('profile', {
                 likedVid: likedVid,
                 lesson: lesson,
+                time: time,
                 user: user,
                 followingCount: user.following.length,
                 followerCount: user.follower.length,

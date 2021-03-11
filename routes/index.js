@@ -81,8 +81,10 @@ router.get("/dashboard/:sort", ensureAuthenticated, async (req, res) => {
       },
     }, async (err, lesson) => {
       const choreographer = [];
+      const time = [];
       for (let i=0; i<lesson.docs.length; i++) {
         choreographer[i] = await User.findOne({ _id: lesson.docs[i].choreographerID.toString() }).exec();
+        time[i] = moment(lesson.docs[i].time).format('MM/DD HH:mm');
       }
       
       res.render("dashboard", {
@@ -90,6 +92,7 @@ router.get("/dashboard/:sort", ensureAuthenticated, async (req, res) => {
         userPhoto: user.userPhoto,
         userPhotoDef: user.userPhotoDef,
         username: user.username,
+        time: time,
         lesson: lesson,
         choreographer: choreographer,
         currentSort: req.params.sort,
@@ -307,8 +310,10 @@ router.post("/dashboard", ensureAuthenticated, async (req, res) => {
         res.redirect("/dashboard/-1?page=1&limit=15");
       } else {
         const choreographer = [];
+        const time = [];
         for (let i=0; i<lesson.docs.length; i++) {
           choreographer[i] = await User.findOne({ _id: lesson.docs[i].choreographerID.toString() }).exec();
+          time[i] = moment(lesson.docs[i].time).format('MM/DD HH:mm');
         }
 
         res.render("results", {
@@ -317,6 +322,7 @@ router.post("/dashboard", ensureAuthenticated, async (req, res) => {
           userPhotoDef: user.userPhotoDef,
           username: user.username,
           lesson: lesson,
+          time: time,
           choreographer: choreographer,
           currentPage: lesson.page,
           pageCount: lesson.pages,
@@ -339,6 +345,10 @@ router.get("/choreographer/:id", ensureAuthenticated, async (req, res) => {
         limit: req.query.limit,
   }, async (err, lesson) => {
       const choreographer = await User.findOne({ _id: lesson.docs[0].choreographerID.toString() }).exec();
+      const time = [];
+      for (let i=0; i<lesson.docs.length; i++) {
+        time[i] = moment(lesson.docs[i].time).format('MM/DD HH:mm');
+      }
 
       res.render("choreographer", {
         userPhoto: user.userPhoto,
@@ -346,6 +356,7 @@ router.get("/choreographer/:id", ensureAuthenticated, async (req, res) => {
         count: lesson.length,
         choreographer: choreographer,
         lesson: lesson,
+        time: time,
         currentPage: lesson.page,
         pageCount: lesson.pages,
         pages: paginate.getArrayPages(req)(3, lesson.pages, req.query.page),
@@ -877,7 +888,6 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
     errors.push({ msg: res.__("msg.error.fill") });
   }
 
-  console.log(account)
   if (account == "undefined") {    
     try {
       const account = await stripe.accounts.create({ type: "express" });

@@ -16,7 +16,7 @@
             <a class="special" href="/choreographer/<%= choreographer._id %>">
               <%= choreographer.username %>
             </a>
-            <p><%= lesson.docs[i].price %> Yen</p>
+            <p><%= lesson.docs[i].price %> Yen | <%= time[i] %></p>
             <p class="mb-0">
                 <%= __(`dashboard.search.level.${lesson.docs[i].level[0]}`) %> | <%= __(`dashboard.search.genre.${lesson.docs[i].genre[0]}`) %> | <%= __(`dashboard.search.purpose.${lesson.docs[i].purpose[0]}`) %> | <%= __(`dashboard.search.mood.${lesson.docs[i].mood[0]}`) %>
             </p>

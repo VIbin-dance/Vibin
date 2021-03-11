@@ -52,7 +52,7 @@
                         <a class="special" href="/choreographer/<%= user._id %>">
                             <%= user.username %>
                           </a>
-                          <p><%= lesson[i].price %> Yen</p>
+                          <p><%= lesson[i].price %> Yen | <%= time[i] %></p>
                           <p class="mb-0">
                               <%= __(`dashboard.search.level.${lesson[i].level[0]}`) %> | <%= __(`dashboard.search.genre.${lesson[i].genre[0]}`) %> | <%= __(`dashboard.search.purpose.${lesson[i].purpose[0]}`) %> | <%= __(`dashboard.search.mood.${lesson[i].mood[0]}`) %>
                           </p>
