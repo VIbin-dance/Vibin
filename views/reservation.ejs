@@ -5,7 +5,7 @@
                 <div class="card-deck">
                     <div class="card mb-3" style="min-width: 47vh; max-width: 80vh; margin: 20px;">
                         <a href="#">
-                            <img style="height: 100%; width: 100%; display: block;" src="<%= lesson.thumbnail %>"
+                            <img style="height: 100%; width: 100%; display: block;" src="data:image/<%=lesson.thumbnail.contentType%>;base64, <%=lesson.thumbnail.data.toString('base64')%>"
                                 alt="thumbnail of the lesson">
                         </a>
                     </div>
@@ -13,7 +13,7 @@
             </div>
         </div>
         
-        <aside class="col-md-5 blog-sidebar" style="">
+        <aside class="col-md-5 blog-sidebar">
             <div class="p-3">
                 <h1>
                     <%= lesson.title %> by <a href="/choreographer/<%= lesson.choreographer %>">

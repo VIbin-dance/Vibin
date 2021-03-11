@@ -46,17 +46,18 @@
                 <div class="col-lg-4 col-xs-6">
                     <div class="box">
                         <a href="#">
-                        <img src="<%= lesson[i].thumbnail %>" alt="thumbnail">
-                    </a>
+                            <img src="data:image/<%=lesson[i].thumbnail.contentType%>;base64, <%=lesson[i].thumbnail.data.toString('base64')%>" alt="thumbnail">
+                        </a>
                         <h4 id="lesson.title<%= i %>">
                             <%= lesson[i].title %>
                         </h4>
-                        <a class="special" href="/choreographer/<%= lesson[i].choreographer %>">
-                            <%= lesson[i].choreographer %>
-                        </a>
-                        <p>
-                            <%= lesson[i].level[0] %>
-                        </p>
+                        <a class="special" href="/choreographer/<%= user._id %>">
+                            <%= user.username %>
+                          </a>
+                          <p><%= lesson[i].price %> Yen</p>
+                          <p class="mb-0">
+                              <%= __(`dashboard.search.level.${lesson[i].level[0]}`) %> | <%= __(`dashboard.search.genre.${lesson[i].genre[0]}`) %> | <%= __(`dashboard.search.purpose.${lesson[i].purpose[0]}`) %> | <%= __(`dashboard.search.mood.${lesson[i].mood[0]}`) %>
+                          </p>
                     </div>
                 </div>
                 <% } %>

@@ -25,7 +25,7 @@
             </div>
             <% } %>
 
-                <form action="/create" method="POST" style="margin-top: 3%;">
+                <form action="/create" method="POST" enctype="multipart/form-data" style="margin-top: 3%;">
 
                     <div class="form-group">
                         <label for="title">Title</label>
@@ -33,11 +33,18 @@
                             value="<%= typeof title != 'undefined' ? title : '' %>" />
                     </div>
 
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="thumbnail">Thumbnail</label>
                         <input type="thumbnail" id="thumbnail" name="thumbnail" class="form-control"
                             placeholder="Enter The Thumbnail"
                             value="<%= typeof thumbnail != 'undefined' ? thumbnail : '' %>" />
+                    </div> -->
+
+                    <div class="form-group">
+                        <label for="Photo">Thumbnail<p><small>写真を選択してください。写真は自動的に切り取られます。</small>
+                            </p></label>
+                            <br><img id="output" src="" height="180" width="320" alt="thumbnail" style="margin-bottom: 2%; display:none"/>
+                            <input type="file" id="thumbnail" name="thumbnail" accept="image/*" onchange="loadFile(event)" />
                     </div>
 
                     <div class="form-group" id="languageDrop">
@@ -244,3 +251,12 @@
 </div>
 </form>
 </div>
+
+<script>
+    const loadFile = function (event) {
+        const image = document.getElementById('output');
+        image.src = URL.createObjectURL(event.target.files[0]);
+        image.style.display = "block"
+        console.log(image.style.display)
+    };
+</script>

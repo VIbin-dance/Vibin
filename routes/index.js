@@ -4,6 +4,8 @@ const paginate = require("express-paginate");
 const passport = require("passport");
 const fetch = require("node-fetch");
 const moment = require("moment");
+const multer = require('multer');
+const sharp = require('sharp');
 const stripe = require("stripe")(
   "sk_test_51Hfnh4BHyna8CK9qjfFDuXjt1pmBPnPMoGflpvhPIet1ytDmqDZD3sayrbLnHbIQXnLBIZ8UWxSe62EaNZuw2oDO00b2zFDdno"
 );
@@ -15,6 +17,10 @@ const Video = require("../models/Video");
 const User = require("../models/User");
 const Lesson = require("../models/Lesson");
 const { forEach } = require("async");
+
+
+const storage = multer.memoryStorage()
+const upload = multer({ storage: storage });
 
 router.get("/", (req, res) => {
   res.render("landing");
@@ -785,7 +791,6 @@ router.get("/reservation/:id", ensureAuthenticated, async (req, res) => {
     line_items: [
       {
         name: lesson.title,
-        images: [lesson.thumbnail],
         amount: lesson.price,
         currency: "jpy",
         quantity: 1,
@@ -844,15 +849,21 @@ router.get("/create", ensureAuthenticated, async (req, res) => {
   res.render("create", render);
 });
 
-router.post("/create", async (req, res) => {
+router.post("/create", upload.single('thumbnail'), async (req, res) => {
   const user = await User.findOne({ email: req.user._json.email }).exec();
   const account = await stripe.accounts.retrieve(user.stripeID);
   const loginLink = await stripe.accounts.createLoginLink(user.stripeID);
   const choreographerID = user._id;
 
+  const buffer = await sharp(req.file.buffer).resize(1280, 720).toBuffer()
+  const thumbnail = {
+      data: buffer,
+      originalname: req.file.originalname,
+      contentType: req.file.mimetype
+  };
+
   const {
     title,
-    thumbnail,
     language,
     choreographer,
     time,

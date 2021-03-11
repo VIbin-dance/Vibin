@@ -167,7 +167,7 @@
                             <div class="col-lg-4 col-xs-6">
                                 <div class="box">
                                     <a href="/reservation/<%= lesson.docs[i].id %>">
-                                        <img src="<%= lesson.docs[i].thumbnail %>" alt="thumbnail">
+                                        <img src="data:image/<%=lesson.docs[i].thumbnail.contentType%>;base64, <%=lesson.docs[i].thumbnail.data.toString('base64')%>" alt="thumbnail">
                                     </a>
                                     <h4 id="title<%= i %>">
                                         <%= lesson.docs[i].title %>
