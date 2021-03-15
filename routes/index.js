@@ -77,7 +77,7 @@ router.get("/dashboard/:sort", ensureAuthenticated, async (req, res) => {
       page: req.query.page,
       limit: req.query.limit,
       sort: {
-        publishedDate: req.params.sort,
+        time: req.params.sort,
       },
     }, async (err, lesson) => {
       const choreographer = [];
@@ -1099,6 +1099,17 @@ router.post("/webhook", (req, res) => {
     received: true,
   });
 });
+
+router.get('/lessons/edit/:id', ensureAuthenticated, async (req, res) => {
+  const lesson = await Lesson.find({ _id: req.params.id }).exec()
+  const user = await User.findOne({ email: req.user._json.email }).exec();
+  res.render("lessonsEdit", {
+    lesson: lesson,
+    user: user,
+    userPhoto: user.userPhoto,
+    userPhotoDef: user.userPhotoDef,
+  })
+})
 
 function escapeRegex(text) {
   return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
