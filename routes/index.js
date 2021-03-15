@@ -926,7 +926,7 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
       title,
       thumbnail,
       language,
-      choreographer,
+      choreographer: user.username,
       price,
       level,
       genre,
@@ -1030,14 +1030,14 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
                                         <h1>レッスンが登録されました&#10024;</h1>
                                         <h2>タイトル：${lesson.title}</h2>
                                         <a href="/reservation/<%= lesson.id %>">
-                                          <img src="<%= lesson.thumbnail %>" alt="thumbnail">
+                                          <img src="data:image/<%=lesson.thumbnail.contentType%>;base64, <%=lesson.thumbnail.data.toString('base64')%>" alt="thumbnail">          
                                         </a>
                                         <p>価格：${lesson.price}</p>
                                         <p>レベル：${lesson.level}</p>
                                         <p>ジャンル：${lesson.genre}</p>
                                         <p>ムード：${lesson.mood}</p>`;
 
-                  sendMail(user.email, "Your lesson is registered", text);
+                  sendMail(user.email, "レッスンが登録されました!", text);
 
                   req.flash("success_msg", res.__("msg.success.schedule"));
                   res.redirect("/calendar");
