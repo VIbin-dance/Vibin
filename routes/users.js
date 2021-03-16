@@ -61,7 +61,7 @@ router.post('/preference', ensureAuthenticated, async(req, res) => {
 router.get('/profile', ensureAuthenticated, (req, res) => {
     User.findOne({ email: req.user._json.email }, async(err, user) => {
 
-        const likedVid = await Video.find({ 'like.id': user._id.toString() }).exec()
+        // const likedVid = await Video.find({ 'like.id': user._id.toString() }).exec()
         const lesson = await Lesson.find({ 'choreographerID': user._id.toString() }).exec()
         const time = [];
         for (let i=0; i<lesson.length; i++) {
@@ -73,7 +73,7 @@ router.get('/profile', ensureAuthenticated, (req, res) => {
             res.redirect('/dashboard/-1?page=1&limit=15');
         } else {
             res.render('profile', {
-                likedVid: likedVid,
+                // likedVid: likedVid,
                 lesson: lesson,
                 time: time,
                 user: user,

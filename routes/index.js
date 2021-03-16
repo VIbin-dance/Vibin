@@ -12,6 +12,7 @@ const stripe = require("stripe")(
 const { ensureAuthenticated } = require("../config/auth");
 const { onlyDevs } = require("../config/dev");
 const { sendMail } = require("../config/email");
+const { addCalendar } = require("../config/calendar");
 
 const Video = require("../models/Video");
 const User = require("../models/User");
@@ -783,18 +784,9 @@ router.post("/player/:id/calendar", ensureAuthenticated, (req, res) => {
 // })
 
 router.get("/reservation/:id", ensureAuthenticated, async (req, res) => {
-  const user = await User.findOne(
-    {
-      email: req.user._json.email,
-    },
-    "userPhoto userPhotoDef"
-  ).exec();
-  const lesson = await Lesson.findOne({
-    _id: req.params.id,
-  }).exec();
-  const choreographer = await User.findOne({
-    _id: lesson.choreographerID,
-  }).exec();
+  const user = await User.findOne({ email: req.user._json.email }, "userPhoto userPhotoDef").exec();
+  const lesson = await Lesson.findOne({ _id: req.params.id }).exec();
+  const choreographer = await User.findOne({ _id: lesson.choreographerID }).exec();
   const account = await stripe.accounts.retrieve(choreographer.stripeID);
 
   const session = await stripe.checkout.sessions.create({
@@ -808,12 +800,12 @@ router.get("/reservation/:id", ensureAuthenticated, async (req, res) => {
       },
     ],
     payment_intent_data: {
-      application_fee_amount: lesson.price * 0.4,
+      application_fee_amount: lesson.price * 0.2,
       transfer_data: {
         destination: account.id,
       },
     },
-    success_url: "http://localhost:5000/success",
+    success_url: `http://localhost:5000/success?id=${req.params.id}`,
     cancel_url: `http://localhost:5000/reservation/${req.params.id}`,
   });
 
@@ -826,18 +818,36 @@ router.get("/reservation/:id", ensureAuthenticated, async (req, res) => {
   });
 });
 
-// router.get('/success', ensureAuthenticated, async(req, res) => {
-//     req.flash('success_msg', res.__('msg.success.login'));
+router.get('/success', ensureAuthenticated, async(req, res) => {
+  // const session = await stripe.checkout.sessions.retrieve(req.query.id);
+  // const customer = await stripe.customers.retrieve(session.customer);
+  const lesson = await Lesson.findOne({ _id: req.query.id }).exec();
+  const user = await User.findOne({ email: req.user._json.email }).exec();
+  // req.flash('success_msg', res.__('msg.success.login'));
+  const dateTime = moment(lesson.time).format("YYYY-MM-DDThh:mm");
 
-//     const user = await User.findOne({
-//         email: req.user._json.email
-//     }, 'userPhoto userPhotoDef').exec();
+  const text = `
+  <h1>レッスンご購入ありがとうございます&#10024;</h1>
+  <h2>タイトル：${lesson.title}</h2>
+  <a href="/reservation/<%= lesson.id %>">
+    <img src="data:image/<%=lesson.thumbnail.contentType%>;base64, <%=lesson.thumbnail.data.toString('base64')%>" alt="thumbnail">          
+  </a>
+  <p>日時：${lesson.time}</p>
+  <p>価格：${lesson.price}</p>
+  <p>レベル：${lesson.level}</p>
+  <p>ジャンル：${lesson.genre}</p>
+  <p>ムード：${lesson.mood}</p>`;
+  
+  // sendMail(user.email, "ご購入ありがとうございました!", text);
+  // addCalendar(user, lesson.title, dateTime);
 
-//     res.render('success', {
-//         userPhoto: user.userPhoto,
-//         userPhotoDef: user.userPhotoDef,
-//     });
-// })
+  res.render('success', {
+    // session: session,
+    // customer: customer,
+    userPhoto: user.userPhoto,
+    userPhotoDef: user.userPhotoDef,
+  });
+})
 
 router.get("/create", ensureAuthenticated, async (req, res) => {
   const user = await User.findOne({ email: req.user._json.email }).exec();
