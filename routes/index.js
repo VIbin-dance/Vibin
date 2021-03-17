@@ -880,7 +880,12 @@ router.get("/create", ensureAuthenticated, async (req, res) => {
 
   if (user.stripeID) {
     const account = await stripe.accounts.retrieve(user.stripeID);
-    const loginLink = await stripe.accounts.createLoginLink(user.stripeID);
+    const loginLink = await stripe.accountLinks.create({
+      account: account.id,
+      refresh_url: "https://localhost:5000/create",
+      return_url: "http://localhost:5000/create",
+      type: "account_onboarding",
+    });
 
     render.account = account;
     render.loginLink = loginLink;
@@ -891,36 +896,21 @@ router.get("/create", ensureAuthenticated, async (req, res) => {
 
 router.post("/create", upload.single('thumbnail'), async (req, res) => {
   const { title, language, time, price, level, genre, purpose, mood } = req.body;
-  let errors = [];
   const user = await User.findOne({ email: req.user._json.email }).exec();
   const choreographerID = user._id;
-  const account = await stripe.accounts.retrieve(user.stripeID);
+  let errors = [];
+  let account;
   let loginLink;
-  const buffer = await sharp(req.file.buffer).resize(1280, 720).toBuffer()
-  const thumbnail = {
-      data: buffer,
-      originalname: req.file.originalname,
-      contentType: req.file.mimetype
-  };
 
-  if (
-    title == "" ||
-    thumbnail == "" ||
-    language == "" ||
-    time == "" ||
-    price == "" ||
-    level == undefined ||
-    genre == undefined ||
-    purpose == undefined ||
-    mood == undefined
-  ) {
+  if (title == "" || req.file == undefined || language == "" || time == "" || price == "" || level == undefined || genre == undefined || purpose == undefined || mood == undefined ) {
     errors.push({ msg: res.__("msg.error.fill") });
   }
 
-  if (account == "undefined") {    
+  if (user.stripeID == undefined) {    
     try {
       const account = await stripe.accounts.create({ type: "express" });
-      const accountLink = await stripe.accountLinks.create({
+      console.log(account)
+      const loginLink = await stripe.accountLinks.create({
         account: account.id,
         refresh_url: "https://localhost:5000/create",
         return_url: "http://localhost:5000/create",
@@ -930,15 +920,17 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
       User.findOneAndUpdate({ email: req.user._json.email }, { stripeID: account.id }, { upsert: true, new: true, setDefaultsOnInsert: true },
         (err, user) => {
           console.log(err || user);
-        }
-        );
-        res.redirect(accountLink.url);
+        });
+        res.redirect(loginLink.url);
+
       } catch (err) {
         res.status(500).send({
           error: err.message,    
         });
       }
-    } else if (account != "undefined") {
+    } else {
+      account = await stripe.accounts.retrieve(user.stripeID);
+      console.log(account)
       loginLink = await stripe.accounts.createLoginLink(user.stripeID);    
     }
 
@@ -953,7 +945,6 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
       API_key: process.env.API_key,
       CLIENT_id: process.env.ZOOM_CLIENT_ID,
       title,
-      thumbnail,
       language,
       choreographer: user.username,
       price,
@@ -963,6 +954,13 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
       mood,
     });
   } else {
+    const buffer = await sharp(req.file.buffer).resize(1280, 720).toBuffer()
+    const thumbnail = {
+        data: buffer,
+        originalname: req.file.originalname,
+        contentType: req.file.mimetype
+    };
+
     Lesson.findOne({ title: title }).then(async (lesson) => {
       if (lesson) {
         errors.push({ msg: res.__("msg.error.dupl") });
@@ -975,34 +973,8 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
           API_key: process.env.API_key,
           CLIENT_id: process.env.ZOOM_CLIENT_ID,
         });
-      } else if (account == undefined) {
-        try {
-          const account = await stripe.accounts.create({ type: "express" });
-          const accountLink = await stripe.accountLinks.create({
-            account: account.id,
-            refresh_url: "https://localhost:5000/create",
-            return_url: "http://localhost:5000/create",
-            type: "account_onboarding",
-          });
-
-          User.findOneAndUpdate(
-            { email: req.user._json.email },
-            { stripeID: account.id },
-            { upsert: true, new: true, setDefaultsOnInsert: true },
-            (err, user) => {
-              console.log(err || user);
-            }
-          );
-
-          res.redirect(accountLink.url);
-        } catch (err) {
-          res.status(500).send({
-            error: err.message,
-          });
-        }
       } else {
         const dateTime = moment(time).format("YYYY-MM-DDThh:mm");
-        console.log(dateTime);
 
         fetch(
           `https://www.googleapis.com/calendar/v3/calendars/${user.email}/events?key=${process.env.API_key}`,
@@ -1040,22 +1012,10 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
             if (data.error) {
               console.log(data.error);
             } else {
-              const newLesson = new Lesson({
-                title,
-                thumbnail,
-                language,
-                choreographerID,
-                time,
-                price,
-                level,
-                genre,
-                purpose,
-                mood,
-              });
-              newLesson
-                .save()
-                .then(async function (lesson) {
-                  const text = `
+              const newLesson = new Lesson({ title, thumbnail, language, choreographerID, time, price, level, genre, purpose, mood });
+              newLesson.save()
+              .then(async function (lesson) {
+                const text = `
                                         <h1>レッスンが登録されました&#10024;</h1>
                                         <h2>タイトル：${lesson.title}</h2>
                                         <a href="/reservation/<%= lesson.id %>">
@@ -1072,29 +1032,26 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
                   res.redirect("/calendar");
                 })
                 .catch((err) => console.log(err));
-            }
-          });
+              }
+            });
+          }
+        });
       }
-    });
-  }
-  Lesson.updateMany(
-    {},
-    {
+      Lesson.updateMany({}, {
       $addToSet: {
         language: ["any"],
         level: ["any"],
         genre: ["any"],
         purpose: ["any"],
         mood: ["any"],
-      },
-    },
-    function (err, result) {
+      }
+    }, function (err, result) {
       if (err) {
         console.log(err);
       }
     }
-  );
-});
+    );
+  });
 
 // Match the raw body to content type application/json
 router.post("/webhook", (req, res) => {
