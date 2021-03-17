@@ -44,95 +44,11 @@
                 <a href="/choreographer/<%= choreographer._id %>" style="font-size: 22px;"><%= choreographer.username %></a>
                 </div>
                 <br><h5 style="white-space:pre-wrap;"><%= choreographer.bio %></h5>
-                <p class="mb-0">Contact: <%= choreographer.email %></p>
+                <p class="mb-0">Contact: <a href="mailto:<%= choreographer.email %>"><%= choreographer.email %></a></p>
             </div>
         </aside>
     </div>
 </main>
-<!-- 
-<section id="upload">
-    <div class="col-lg-10 m-auto"> -->
-        <!-- <div class="product">
-                <img src="<%= lesson.thumbnail %>" height="300px" width="300px" alt="thumbnail of the lesson" />
-                <div class="description">
-                    <h3><%= lesson.title %> by <%= lesson.choreographer %></h3>
-                    <h5><%= lesson.level %> | <%= lesson.genre %> | <%= lesson.purpose %> | <%= lesson.mood %></h5>
-                    <h5><%= lesson.price %></h5>
-                </div>
-            </div> -->
-
-        <!-- <h1 class="text-center mb-3"><i class="fas fa-user-plus"></i>RESERVATION</h1>
-        <div class="card">
-            <div class="card-body text-center">
-                <img src="<%= lesson.thumbnail %>" alt="thumbnail of the lesson" /><br>
-                <h2 class="card-title">
-                    <%= lesson.title %> by <%= lesson.choreographer %>
-                </h2>
-                <p>
-                    <%= lesson.level %> | <%= lesson.genre %> | <%= lesson.purpose %> | <%= lesson.mood %>
-                </p>
-                <p>
-                    <%= lesson.price %> Yen
-                </p>
-                <button class="button" id="checkout-button">Checkout</button>
-            </div>
-        </div> -->
-
-
-
-        <!-- <form id="payment-form">
-            <div id="card-element">
-            </div>
-
-            <div id="card-errors" role="alert"></div>
-
-            <button id="submit">Pay</button>
-        </form> -->
-    </div>
-</section>
-
-<!-- <div class="card">
-        <img src="<%= lesson.thumbnail %>" alt="thumbnail of the lesson" />
-        <div class="card-body">
-            <h5 class="card-title"><%= lesson.title %> by <%= lesson.choreographer %></h5>
-            <p class="card-text"><%= lesson.level %> | <%= lesson.genre %> | <%= lesson.purpose %> | <%= lesson.mood %></p>
-            <p><%= lesson.price %></p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-        </div>
-    </div> -->
-
-<!-- <form action="/charge" method="post" id="payment-form">
-        <div class="form-row">
-            <label for="card-element">
-                Credit or debit card
-            </label>
-            <div id="card-element">
-            </div>
-            <div id="card-errors"></div>
-        </div>
-        <button>Submit Payment</button>
-    </form> -->
-
-<!-- <div class="sr-root">
-    <div class="sr-main">
-        <form id="payment-form" class="sr-payment-form">
-            <div class="sr-combo-inputs-row">
-                <div class="sr-input sr-card-element" id="card-element"></div>
-            </div>
-            <div class="sr-field-error" id="card-errors" role="alert"></div>
-            <button id="submit">
-                <div class="spinner hidden" id="spinner"></div>
-                <span id="button-text">Pay</span><span id="order-amount"></span>
-            </button>
-        </form>
-        <div class="sr-result hidden">
-            <p>Payment completed<br /></p>
-            <pre>
-          <code></code>
-        </pre>
-        </div>
-    </div>
-</div> -->
 
 <script>
     const stripe = Stripe('pk_test_51Hfnh4BHyna8CK9qTj8LQtd4eXIMABQaBcg0js1jz7p7v7hOqiZGp4lLo56EpDRPTLpBaWyLIUAjPM4HZDnaNeEa00ZvYK3VNA');
@@ -141,9 +57,6 @@
 
     checkoutButton.addEventListener('click', () => {
         stripe.redirectToCheckout({
-            // Make the id field from the Checkout Session creation API response
-            // available to this file, so you can provide it as argument here
-            // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
             sessionId: '<%= id %>'
         })
         // If `redirectToCheckout` fails due to a browser or network

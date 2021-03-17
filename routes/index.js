@@ -596,78 +596,78 @@ router.post("/player/:id", ensureAuthenticated, async (req, res) => {
   );
 });
 
-router.post("/player/:id/calendar", ensureAuthenticated, (req, res) => {
-  const { id, date, time } = req.body;
-  let errors = [];
+// router.post("/player/:id/calendar", ensureAuthenticated, (req, res) => {
+//   const { id, date, time } = req.body;
+//   let errors = [];
 
-  Video.findOne(
-    {
-      id: id,
-    },
-    (err, result) => {
-      User.findOne(
-        {
-          email: req.user._json.email,
-        },
-        (err, user) => {
-          fetch(
-            `https://www.googleapis.com/calendar/v3/calendars/${user.email}/events?key=${process.env.API_key}`,
-            {
-              method: "POST",
-              headers: {
-                Authorization: `Bearer ${user.accessToken}`,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                end: {
-                  dateTime: date + ":00",
-                  timeZone: "Asia/Tokyo",
-                },
-                start: {
-                  dateTime: date + ":00",
-                  timeZone: "Asia/Tokyo",
-                },
-                summary: result.title + " Vibin'",
-                description: id,
-                reminders: {
-                  useDefault: false,
-                  overrides: [
-                    {
-                      method: "email",
-                      minutes: 30,
-                    },
-                  ],
-                },
-              }),
-            }
-          )
-            .then((response) => response.json())
-            .then((data) => {
-              if (date == "") {
-                errors.push({
-                  msg: res.__("msg.error.fill"),
-                });
-              }
+//   Video.findOne(
+//     {
+//       id: id,
+//     },
+//     (err, result) => {
+//       User.findOne(
+//         {
+//           email: req.user._json.email,
+//         },
+//         (err, user) => {
+//           fetch(
+//             `https://www.googleapis.com/calendar/v3/calendars/${user.email}/events?key=${process.env.API_key}`,
+//             {
+//               method: "POST",
+//               headers: {
+//                 Authorization: `Bearer ${user.accessToken}`,
+//                 "Content-Type": "application/json",
+//               },
+//               body: JSON.stringify({
+//                 end: {
+//                   dateTime: date + ":00",
+//                   timeZone: "Asia/Tokyo",
+//                 },
+//                 start: {
+//                   dateTime: date + ":00",
+//                   timeZone: "Asia/Tokyo",
+//                 },
+//                 summary: result.title + " Vibin'",
+//                 description: id,
+//                 reminders: {
+//                   useDefault: false,
+//                   overrides: [
+//                     {
+//                       method: "email",
+//                       minutes: 30,
+//                     },
+//                   ],
+//                 },
+//               }),
+//             }
+//           )
+//             .then((response) => response.json())
+//             .then((data) => {
+//               if (date == "") {
+//                 errors.push({
+//                   msg: res.__("msg.error.fill"),
+//                 });
+//               }
 
-              if (errors.length > 0) {
-                res.render("player", {
-                  errors,
-                  userPhoto: req.session.passport.user.photos[0].value,
-                  title: result.title,
-                  choreographer: result.choreographer,
-                  id: id,
-                  level: result.level,
-                });
-              } else {
-                req.flash("success_msg", res.__("msg.success.schedule"));
-                res.redirect("/calendar");
-              }
-            });
-        }
-      );
-    }
-  );
-});
+//               if (errors.length > 0) {
+//                 res.render("player", {
+//                   errors,
+//                   userPhoto: req.session.passport.user.photos[0].value,
+//                   title: result.title,
+//                   choreographer: result.choreographer,
+//                   id: id,
+//                   level: result.level,
+//                 });
+//               } else {
+//                 req.flash("success_msg", res.__("msg.success.schedule"));
+//                 res.redirect("/calendar");
+//               }
+//             });
+//         }
+//       );
+//     }
+//   );
+// });
 
 // router.get('/upload', ensureAuthenticated, onlyDevs, async(req, res) => {
 //     const user = await User.findOne({
@@ -784,66 +784,85 @@ router.post("/player/:id/calendar", ensureAuthenticated, (req, res) => {
 // })
 
 router.get("/reservation/:id", ensureAuthenticated, async (req, res) => {
-  const user = await User.findOne({ email: req.user._json.email }, "userPhoto userPhotoDef").exec();
+  const user = await User.findOne({ email: req.user._json.email }).exec();
   const lesson = await Lesson.findOne({ _id: req.params.id }).exec();
   const choreographer = await User.findOne({ _id: lesson.choreographerID }).exec();
   const account = await stripe.accounts.retrieve(choreographer.stripeID);
 
-  const session = await stripe.checkout.sessions.create({
-    payment_method_types: ["card"],
-    line_items: [
-      {
-        name: lesson.title,
-        amount: lesson.price,
-        currency: "jpy",
-        quantity: 1,
+  if (user.lesson.includes(lesson.id)) {
+    res.render('success', {
+      lesson: lesson,
+      choreographer: choreographer,
+      userPhoto: user.userPhoto,
+      userPhotoDef: user.userPhotoDef,
+    })
+  } else {
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: [
+        {
+          name: lesson.title,
+          amount: lesson.price,
+          currency: "jpy",
+          quantity: 1,
+        },
+      ],
+      customer_email: user.email,
+      payment_intent_data: {
+        application_fee_amount: lesson.price * 0.2,
+        transfer_data: {
+          destination: account.id,
+        },
       },
-    ],
-    payment_intent_data: {
-      application_fee_amount: lesson.price * 0.2,
-      transfer_data: {
-        destination: account.id,
-      },
-    },
-    success_url: `http://localhost:5000/success?id=${req.params.id}`,
-    cancel_url: `http://localhost:5000/reservation/${req.params.id}`,
-  });
-
-  res.render("reservation", {
-    id: session.id,
-    lesson: lesson,
-    choreographer: choreographer,
-    userPhoto: user.userPhoto,
-    userPhotoDef: user.userPhotoDef,
-  });
+      success_url: `http://localhost:5000/success?id=${req.params.id}`,
+      cancel_url: `http://localhost:5000/reservation/${req.params.id}`,
+    });
+    console.log(session);
+  
+    res.render("reservation", {
+      id: session.id,
+      lesson: lesson,
+      choreographer: choreographer,
+      userPhoto: user.userPhoto,
+      userPhotoDef: user.userPhotoDef,
+    });
+  }
 });
 
 router.get('/success', ensureAuthenticated, async(req, res) => {
-  // const session = await stripe.checkout.sessions.retrieve(req.query.id);
-  // const customer = await stripe.customers.retrieve(session.customer);
   const lesson = await Lesson.findOne({ _id: req.query.id }).exec();
   const user = await User.findOne({ email: req.user._json.email }).exec();
-  // req.flash('success_msg', res.__('msg.success.login'));
-  const dateTime = moment(lesson.time).format("YYYY-MM-DDThh:mm");
 
-  const text = `
-  <h1>レッスンご購入ありがとうございます&#10024;</h1>
-  <h2>タイトル：${lesson.title}</h2>
-  <a href="/reservation/<%= lesson.id %>">
-    <img src="data:image/<%=lesson.thumbnail.contentType%>;base64, <%=lesson.thumbnail.data.toString('base64')%>" alt="thumbnail">          
-  </a>
-  <p>日時：${lesson.time}</p>
-  <p>価格：${lesson.price}</p>
-  <p>レベル：${lesson.level}</p>
-  <p>ジャンル：${lesson.genre}</p>
-  <p>ムード：${lesson.mood}</p>`;
+  if (user.lesson.includes(lesson.id)) {
+    console.log('already done')
+  } else {
+    User.findOneAndUpdate(
+      { email: req.user._json.email },
+      { $push: { lesson: [lesson._id] } },
+      { upsert: true, new: true, setDefaultsOnInsert: true },
+      (err, user) => {
+        console.log(err || user);
+      }
+      );
+      
+      const text = `
+      <h1>レッスンご購入ありがとうございます&#10024;</h1>
+      <h2>タイトル：${lesson.title}</h2>
+      <a href="/reservation/<%= lesson.id %>">
+        <img src="data:image/<%=lesson.thumbnail.contentType%>;base64, <%=lesson.thumbnail.data.toString('base64')%>" alt="thumbnail">          
+      </a>
+      <p>日時：${lesson.time}</p>
+      <p>価格：${lesson.price}</p>
+      <p>レベル：${lesson.level}</p>
+      <p>ジャンル：${lesson.genre}</p>
+      <p>ムード：${lesson.mood}</p>`;
   
-  // sendMail(user.email, "ご購入ありがとうございました!", text);
-  // addCalendar(user, lesson.title, dateTime);
+      sendMail(user.email, "ご購入ありがとうございました!", text);
+      const dateTime = moment(lesson.time).format("YYYY-MM-DDThh:mm");
+      addCalendar(user, lesson.title, dateTime);
+}
 
   res.render('success', {
-    // session: session,
-    // customer: customer,
     userPhoto: user.userPhoto,
     userPhotoDef: user.userPhotoDef,
   });

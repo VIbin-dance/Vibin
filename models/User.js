@@ -79,6 +79,9 @@ const UserSchema = new mongoose.Schema({
         type: String,
         require: false,
     },
+    lesson: {
+        type: Array
+    },
     zoom: {
         id: {
             type: String,
