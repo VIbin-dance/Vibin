@@ -954,11 +954,11 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
       mood,
     });
   } else {
-    const buffer = await sharp(req.file.buffer).resize(1280, 720).toBuffer()
+    const buffer = await sharp(req.file.buffer).resize(1280, 720).toBuffer();
     const thumbnail = {
-        data: buffer,
-        originalname: req.file.originalname,
-        contentType: req.file.mimetype
+      data: buffer,
+      originalname: req.file.originalname,
+      contentType: req.file.mimetype,
     };
 
     Lesson.findOne({ title: title }).then(async (lesson) => {
@@ -976,46 +976,13 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
       } else {
         const dateTime = moment(time).format("YYYY-MM-DDThh:mm");
 
-        fetch(
-          `https://www.googleapis.com/calendar/v3/calendars/${user.email}/events?key=${process.env.API_key}`,
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${user.accessToken}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              end: {
-                dateTime: dateTime + ":00",
-                timeZone: "Asia/Tokyo",
-              },
-              start: {
-                dateTime: dateTime + ":00",
-                timeZone: "Asia/Tokyo",
-              },
-              summary: title + " Vibin'",
-              reminders: {
-                useDefault: false,
-                overrides: [
-                  {
-                    method: "email",
-                    minutes: 30,
-                  },
-                ],
-              },
-            }),
-          }
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data);
-            if (data.error) {
-              console.log(data.error);
-            } else {
-              const newLesson = new Lesson({ title, thumbnail, language, choreographerID, time, price, level, genre, purpose, mood });
-              newLesson.save()
-              .then(async function (lesson) {
-                const text = `
+        addCalendar(user, title, dateTime);
+
+        const newLesson = new Lesson({ title, thumbnail, language, choreographerID, time, price, level, genre, purpose, mood });
+          newLesson
+            .save()
+            .then(async function (lesson) {
+              const text = `
                                         <h1>レッスンが登録されました&#10024;</h1>
                                         <h2>タイトル：${lesson.title}</h2>
                                         <a href="/reservation/<%= lesson.id %>">
@@ -1026,17 +993,15 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
                                         <p>ジャンル：${lesson.genre}</p>
                                         <p>ムード：${lesson.mood}</p>`;
 
-                  sendMail(user.email, "レッスンが登録されました!", text);
+              sendMail(user.email, "レッスンが登録されました!", text);
 
-                  req.flash("success_msg", res.__("msg.success.schedule"));
-                  res.redirect("/calendar");
-                })
-                .catch((err) => console.log(err));
-              }
-            });
-          }
-        });
+              req.flash("success_msg", res.__("msg.success.schedule"));
+              res.redirect("/calendar");
+            })
+            .catch((err) => console.log(err));
       }
+    });
+  }
       Lesson.updateMany({}, {
       $addToSet: {
         language: ["any"],
@@ -1045,12 +1010,9 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
         purpose: ["any"],
         mood: ["any"],
       }
-    }, function (err, result) {
-      if (err) {
-        console.log(err);
-      }
-    }
-    );
+    }, (err, result) => {
+        console.log(err || result);
+    });
   });
 
 // Match the raw body to content type application/json
