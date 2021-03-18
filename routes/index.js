@@ -96,6 +96,7 @@ router.get("/dashboard/:sort", ensureAuthenticated, async (req, res) => {
         time: time,
         lesson: lesson,
         choreographer: choreographer,
+        moment: moment,
         currentSort: req.params.sort,
         currentPage: lesson.page,
         pageCount: lesson.pages,
