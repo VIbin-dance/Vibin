@@ -147,6 +147,8 @@
 			"search": "Search"
 		},
 		"Future vibes": "Future vibes",
+		"Yen": "Yen",
+		"Past vibes": "Past vibes",
 		"Recommended videos": "Recommended videos",
 		"Latest videos": "Latest videos",
 		"sub1": "We have",
@@ -164,6 +166,25 @@
 			"4": "Get funky!",
 			"top": ","
 		}
+	},
+	"reservation": {
+		"purchase": "Purchase",
+		"choreo": "About this choreographer",
+		"contact": "Contact"
+	},
+	"result": "Search result",
+	"create": {
+		"create": "Create a lesson",
+		"bank": "Registered Bank Account",
+		"stripe": "Go to your stripe dashboard",
+		"title": "Title",
+		"titlePlace": "Enter The Title",
+		"price": "Price",
+		"pricePlace": "Enter The Price",
+		"thumbnail": "Thumbnail",
+		"thumbnailDesc": "Choose a photo for your thumbnail. Your photo will automatically be cropped.",
+		"time": "Time",
+		"choreo": "先生"
 	},
 	"calendar": {
 		"top": "Upcoming vibes!",

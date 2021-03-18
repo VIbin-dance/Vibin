@@ -142,6 +142,8 @@
 			"search": "検索"
 		},
 		"Future vibes": "これからのバイブス",
+		"Past vibes": "これまでのバイブス",
+		"Yen": "円",
 		"Recommended videos": "おすすめ",
 		"Latest videos": "最新",
 		"sub1": "",
@@ -159,6 +161,25 @@
 			"4": "ファンキーな気分？",
 			"top": " さん、"
 		}
+	},
+	"reservation": {
+		"purchase": "購入",
+		"choreo": "この先生について",
+		"contact": "連絡先"
+	},
+	"result": "検索結果",
+	"create": {
+		"create": "レッスンを作成",
+		"bank": "登録されている口座",
+		"stripe": "Stripeダッシュボードを確認する",
+		"title": "タイトル",
+		"titlePlace": "タイトルを入力してください",
+		"price": "価格",
+		"pricePlace": "希望の価格を入力してください",
+		"thumbnail": "サムネイル",
+		"thumbnailDesc": "写真を選択してください。写真は自動的に切り取られます。",
+		"time": "日時",
+		"choreo": "先生"
 	},
 	"calendar": {
 		"top": "これからの予定",

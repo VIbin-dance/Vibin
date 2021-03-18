@@ -4,7 +4,7 @@
     <div class="container">
       <%- include ('partials/messages') %>
         <h2 class="user text-center"><span id="random"></span></h2><br>
-        <h3>Search result &#128373;</h3>
+        <h3><%= __('result') %> &#128373;</h3>
         <div class="row">
           <% for(let i=0; i < lesson.docs.length; i++) { %>
             <div class="col-lg-4 col-xs-6">
@@ -18,7 +18,7 @@
                 <a class="special" href="/choreographer/<%= choreographer[i]._id %>">
                   <%= choreographer[i].username %>
                 </a>
-                <p><%= lesson.docs[i].price %> Yen | <%= time[i] %></p>
+                <p><%= lesson.docs[i].price %> <%= __('dashboard.Yen') %> | <%= time[i] %></p>
                 <p class="mb-0">
                     <%= __(`dashboard.search.level.${lesson.docs[i].level[0]}`) %> | <%= __(`dashboard.search.genre.${lesson.docs[i].genre[0]}`) %> | <%= __(`dashboard.search.purpose.${lesson.docs[i].purpose[0]}`) %> | <%= __(`dashboard.search.mood.${lesson.docs[i].mood[0]}`) %>
                 </p>
@@ -40,10 +40,10 @@
     }
   }
   var quotes = [
-    "How's your dance looking?",
-    "You've got a nice taste!",
-    "Great choreos!",
-    "That one vibes!"
+    "<%= __('dashboard.Quote.1') %>",
+    "<%= __('dashboard.Quote.2') %>",
+    "<%= __('dashboard.Quote.3') %>",
+    "<%= __('dashboard.Quote.4') %>"
   ];
   let index = Math.floor(Math.random() * (quotes.length));
 

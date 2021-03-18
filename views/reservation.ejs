@@ -21,18 +21,18 @@
                     </a>
                 </h1>
                 <ol class="list-unstyled">
-                    <li><%= lesson.level[0] %> | <%= lesson.genre[0] %> | <%= lesson.purpose[0] %> | <%= lesson.mood[0] %></li>
+                    <li><%= __(`dashboard.search.level.${lesson.level[0]}`) %> | <%= __(`dashboard.search.genre.${lesson.genre[0]}`) %> | <%= __(`dashboard.search.purpose.${lesson.purpose[0]}`) %> | <%= __(`dashboard.search.mood.${lesson.mood[0]}`) %></li>
                 </ol>
-                <h4><%= lesson.price %> Yen</h4>
+                <h4><%= lesson.price %> <%= __('dashboard.Yen') %></h4>
                 <hr>
                 <div class="text-center">
-                    <button class="btn btn-danger btn-lg btn-block" id="checkout-button">Checkout</button>
+                    <button class="btn btn-danger btn-lg btn-block" id="checkout-button"><%= __('reservation.purchase') %></button>
                 </div>
             </div>
 
             <div class="p-3 mb-3 bg-light rounded">
                 <div class="text-center">
-                    <h4>About this choreographer</h4>
+                    <h4><%= __('reservation.choreo') %></h4>
                     <% if (typeof choreographer.userPhotoDef !="undefined" ) { %>
                     <img src="data:image/<%= choreographer.userPhotoDef.contentType%>;base64, <%= choreographer.userPhotoDef.data.toString('base64')%>"
                                 height="100" width="100" style="border-radius: 50%;" alt="user photo">
@@ -44,7 +44,7 @@
                 <a href="/choreographer/<%= choreographer._id %>" style="font-size: 22px;"><%= choreographer.username %></a>
                 </div>
                 <br><h5 style="white-space:pre-wrap;"><%= choreographer.bio %></h5>
-                <p class="mb-0">Contact: <a href="mailto:<%= choreographer.email %>"><%= choreographer.email %></a></p>
+                <p class="mb-0"><%= __('reservation.contact') %>: <a href="mailto:<%= choreographer.email %>"><%= choreographer.email %></a></p>
             </div>
         </aside>
     </div>
