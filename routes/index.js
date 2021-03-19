@@ -797,6 +797,15 @@ router.get("/reservation/:id", ensureAuthenticated, async (req, res) => {
       userPhoto: user.userPhoto,
       userPhotoDef: user.userPhotoDef,
     })
+  } else if (lesson.price === 0) {
+    res.render('reservation', {
+      id: undefined,
+      params: req.params.id,
+      lesson: lesson,
+      choreographer: choreographer,
+      userPhoto: user.userPhoto,
+      userPhotoDef: user.userPhotoDef,
+    })
   } else {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
@@ -815,10 +824,9 @@ router.get("/reservation/:id", ensureAuthenticated, async (req, res) => {
           destination: account.id,
         },
       },
-      success_url: `http://localhost:5000/success?id=${req.params.id}`,
+      success_url: `http://localhost:5000/success/${req.params.id}`,
       cancel_url: `http://localhost:5000/reservation/${req.params.id}`,
     });
-    console.log(session);
   
     res.render("reservation", {
       id: session.id,
@@ -830,8 +838,8 @@ router.get("/reservation/:id", ensureAuthenticated, async (req, res) => {
   }
 });
 
-router.get('/success', ensureAuthenticated, async(req, res) => {
-  const lesson = await Lesson.findOne({ _id: req.query.id }).exec();
+router.get('/success/:id', ensureAuthenticated, async(req, res) => {
+  const lesson = await Lesson.findOne({ _id: req.params.id }).exec();
   const user = await User.findOne({ email: req.user._json.email }).exec();
 
   if (user.lesson.includes(lesson.id)) {

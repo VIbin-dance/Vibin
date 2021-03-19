@@ -26,7 +26,11 @@
                 <h4><%= lesson.price %> <%= __('dashboard.Yen') %></h4>
                 <hr>
                 <div class="text-center">
-                    <button class="btn btn-danger btn-lg btn-block" id="checkout-button"><%= __('reservation.purchase') %></button>
+                    <% if (id != undefined) { %>
+                        <button class="btn btn-danger btn-lg btn-block" id="checkout-button"><%= __('reservation.purchase') %></button>
+                    <% } else { %>
+                        <a href="/success/<%= params %>" class="btn btn-danger btn-lg btn-block"><%= __('reservation.purchase') %></a>
+                    <% } %>
                 </div>
             </div>
 
@@ -52,15 +56,11 @@
 
 <script>
     const stripe = Stripe('pk_test_51Hfnh4BHyna8CK9qTj8LQtd4eXIMABQaBcg0js1jz7p7v7hOqiZGp4lLo56EpDRPTLpBaWyLIUAjPM4HZDnaNeEa00ZvYK3VNA');
-
     const checkoutButton = document.getElementById('checkout-button');
 
     checkoutButton.addEventListener('click', () => {
         stripe.redirectToCheckout({
             sessionId: '<%= id %>'
         })
-        // If `redirectToCheckout` fails due to a browser or network
-        // error, display the localized error message to your customer
-        // using `error.message`.
     });
 </script>
