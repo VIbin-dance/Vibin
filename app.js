@@ -7,6 +7,7 @@ const flash = require('connect-flash');
 const paginate = require('express-paginate');
 const passport = require('passport');
 const helmet = require('helmet');
+require('newrelic');
 const { I18n } = require('i18n');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
