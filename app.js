@@ -7,6 +7,8 @@ const flash = require('connect-flash');
 const paginate = require('express-paginate');
 const passport = require('passport');
 const helmet = require('helmet');
+const compression = require('compression');
+const minify = require('express-minify');
 require('newrelic');
 const { I18n } = require('i18n');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
@@ -17,6 +19,8 @@ const app = express();
 require('dotenv').config();
 
 app.use(helmet());
+app.use(compression());
+app.use(minify());
 app.use(express.static(path.join(__dirname + '/public')));
 app.use(expressLayouts);
 app.set('view engine', 'ejs');
@@ -43,13 +47,13 @@ passport.deserializeUser((user, done) => {
 });
 
 passport.use(new GoogleStrategy({
-    clientID: process.env.CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: process.env.GOOGLE_CALLBACK_URL,
-},
+        clientID: process.env.CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: process.env.GOOGLE_CALLBACK_URL,
+    },
     (accessToken, refreshToken, profile, done) => {
         if (profile) {
-            User.findOne({ googleId: profile.id }, async (err, user) => {
+            User.findOne({ googleId: profile.id }, async(err, user) => {
                 if (user == null || user.loginCount == null || user.loginCount == 0) {
                     User.findOneAndUpdate({ googleId: profile.id }, {
                         $set: {
@@ -86,8 +90,7 @@ passport.use(new GoogleStrategy({
                             return done(null, profile);
                         }
                     })
-                }
-                else {
+                } else {
                     return done(null, false);
                 }
             })
