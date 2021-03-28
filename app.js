@@ -1,4 +1,5 @@
 const express = require('express');
+const http = require('http');
 const expressLayouts = require('express-ejs-layouts');
 const session = require('express-session');
 const mongoose = require('mongoose');
@@ -9,16 +10,44 @@ const passport = require('passport');
 const helmet = require('helmet');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
+require('dotenv').config();
+
 const User = require('./models/User');
+const {
+    formatMsg,
+    userJoin,
+    getCurrentUser,
+    userLeaves,
+    getRoomUsers,
+    createLiveTime,
+    closeLive,
+    getCurrentLivetime
+} = require('./config/chat');
+
+// by ymzk
+const cors = require('cors');
+var logger = require('morgan');
+const socketio = require('socket.io');
+// -----------------------------------
 
 const app = express();
+const Server = http.createServer(app);
+
+// // by ymzk
+const io = socketio(Server);
 // require('newrelic');
-require('dotenv').config();
+// by ymzk
+app.use(cors());
+// app.use(logger('dev'));
+
+
 
 app.use(helmet());
 app.use(express.static(path.join(__dirname + '/public')));
 app.use(expressLayouts);
 app.set('view engine', 'ejs');
+// // -----------------------------------
+
 
 app.use(session({
     secret: process.env.SESSIN_SECRET,
@@ -44,40 +73,49 @@ passport.deserializeUser((user, done) => {
 // Oauthログイン
 // データベースに保存
 passport.use(new GoogleStrategy({
-    clientID: process.env.CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: process.env.GOOGLE_CALLBACK_URL,
-},
-(accessToken, refreshToken, profile, done) => {
-    if (profile) {
-        User.findOneAndUpdate({
-            googleId: profile.id
-        }, {
-            username:  profile.displayName,
-            email:  profile.emails[0].value,
-            name: { familyName: profile.name.familyName, givenName: profile.name.givenName },
-            googleId: profile.id,
-            accessToken: accessToken
-        }, {upsert: true, new: true, setDefaultsOnInsert: true }, (err, user)  => {
-            if (err) {
-                return done(err, false, {
-                    message: err
-                });
-            } else {
-                return done(null, profile);
-            }
-        });
-    } else {
-        return done(null, false);
+        clientID: process.env.CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: process.env.GOOGLE_CALLBACK_URL
+        // accessType: 'offline'
+    },
+    (accessToken, refreshToken, profile, done) => {
+        if (profile) {
+            User.findOneAndUpdate({
+                googleId: profile.id
+            }, {
+                username: profile.displayName,
+                email: profile.emails[0].value,
+                name: { familyName: profile.name.familyName, givenName: profile.name.givenName },
+                googleId: profile.id,
+                accessToken: accessToken
+            }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, user) => {
+                if (err) {
+                    return done(err, false, {
+                        message: err
+                    });
+                } else {
+                    return done(null, profile);
+                }
+            });
+        } else {
+            return done(null, false);
+        }
     }
-}
 ));
 
-const db = process.env.MongoURI;
+
+// var loginTime = function (req, res, next) {
+//     console.log("LOGGED - ///" + Date.now() + " /// " + process.env.PORT);
+//     next();
+// };
+// app.use(loginTime);
+
+
 
 // Connect to Mongo
+const db = process.env.MongoURI;
 mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
-    .then(() => console.log('MongoDB connected...'))
+    .then(() => console.log('MongoDB ~~ connected... !!!'))
     .catch(err => console.log(err));
 
 app.use(express.urlencoded({ extended: false }));
@@ -93,14 +131,96 @@ app.use((req, res, next) => {
     next();
 });
 
+
+
+
+
+
+// live chating middleware with client connects
+io.on("connection", (socket) => {
+    // user's login - run when start live page & chat room
+    socket.on('joinRoom', (user_infor) => {
+        const { u_name, room_id, ch_arn } = user_infor;
+        // user connect register user list
+        const connect_user = userJoin(socket.id, u_name, room_id);
+
+        socket.join(connect_user.roomId);
+
+        // welcome message
+        socket.emit("client_message", formatMsg("Admin", "http://localhost:5000/assets/img/profile/user03.png", "WelCome to Vibin!"));
+
+        // set and get live time
+        let live_time = 0;
+        // console.log("channel user's : " + getRoomUsers(connect_user.roomId) + " ( id : " + connect_user.roomId + " )");
+
+        if (getRoomUsers(connect_user.roomId) == 1) {
+            live_time = Math.floor(Date.now() / 1000);
+            createLiveTime(connect_user.roomId, live_time);
+        } else {
+            live_time = getCurrentLivetime(connect_user.roomId).ch_time;
+        }
+
+        // send user numbers and room info
+        io.to(connect_user.roomId).emit("channel_users", {
+            room_id: connect_user.roomId,
+            user_counts: getRoomUsers(connect_user.roomId)
+        });
+        socket.emit("channel_time", {
+            live_time: live_time
+        });
+    });
+
+
+
+
+
+
+
+    // listen for user's chat msg
+    socket.on("server_message", (data) => {
+        const send_user = getCurrentUser(socket.id);
+
+        const { user_name, user_photo, chat_msg } = data;
+        io.to(send_user.roomId).emit("client_message", formatMsg(user_name, user_photo, chat_msg));
+    })
+
+    // run when client disconnect
+    socket.on("disconnect", () => {
+        const leave_user = userLeaves(socket.id);
+
+        if (leave_user) {
+            // io.to(leave_user.roomId).emit("client_message", formatMsg("Admin", "http://localhost:5000/assets/img/profile/user03.png", "A user has left the chat"));
+
+            io.to(leave_user.roomId).emit("user_counts", {
+                room_id: leave_user.roomId,
+                user_counts: getRoomUsers(leave_user.roomId)
+            });
+
+            // delete liveTime, if user's count is 0
+            if (getRoomUsers(leave_user.roomId) == 0) {
+                closeLive(leave_user.roomId);
+                // console.log("live closed...");
+            }
+        }
+    })
+})
+
+
+
+
+
+
+
+
 app.use(paginate.middleware(10, 50))
 
 app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
+app.use('/lesson', require('./routes/lesson'));
 app.use('/company', require('./routes/company'));
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-    console.log(`Server started on ${ PORT }`);
+Server.listen(PORT, () => {
+    console.log(`Server started on ${PORT}`);
 });

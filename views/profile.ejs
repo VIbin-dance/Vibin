@@ -28,34 +28,66 @@
         <div class="col-lg-8 col-xs-12 m-auto">
             <h1 class="text-center mb-3"><i class="fas fa-user-plus"></i>Profile</h1>
             <%- include ('partials/messages') %>
-            <form action="/users/profile" method="POST">
+                <form action="/users/profile" method="POST">
 
-                <div class="form-group">
-                    <label for="email">Photo</label><br>
-                    <img src="<%= userPhoto %>" height="80" width="80" alt="user photo">
-                </div>
+                    <div class="form-group">
+                        <label for="email">Photo</label><br>
+                        <img src="<%= userPhoto %>" height="80" width="80" alt="user photo">
+                    </div>
 
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <h4><%= email %></h4>
-                </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <h4>
+                            <%= email %>
+                        </h4>
+                    </div>
 
-                <div class="form-group">
-                    <label for="firstname">Firstname</label>
-                    <h4><%= firstName %></h4>
-                </div>
+                    <div class="form-group">
+                        <label for="firstname">Firstname</label>
+                        <h4>
+                            <%= firstName %>
+                        </h4>
+                    </div>
 
-                <div class="form-group">
-                    <label for="lastname">Lastname</label>
-                    <h4><%= lastName %></h4>
-                </div>
+                    <div class="form-group">
+                        <label for="lastname">Lastname</label>
+                        <h4>
+                            <%= lastName %>
+                        </h4>
+                    </div>
 
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <h4><%= username %></h4>
-                </div>
-            </form>
-            <a class="btn btn-dark" href="/logout">Logout</a>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <h4>
+                            <%= username %>
+                        </h4>
+                    </div>
+                </form>
+                <a class="btn btn-dark" href="/logout">Logout</a>
+
+                <h2 class="text-center mt-5 mb-3"><i class="fas fa-user-plus"></i>購入したレッスン一覧</h2>
+
+                <ul class="ticket_block">
+
+                    <% for( var ticket of tickets) { %>
+                    <li>
+                        <a href="/lesson/student/<%= ticket.lesson_id %>" class="lesson_title"><%= ticket.lesson_title %></a>
+                        <div class="desc">
+                            <p><span>先生の名前 : </span><%= ticket.choreographerName %></p>
+                            <p><span>難易度 : </span><%= ticket.level %></p>
+                            <p><span>ジャンル : </span><%= ticket.genre %></p>
+                            <p><span>日時 : </span><%= ticket.date %></p>
+                        </div>
+                    </li>
+                    <% } %>
+                    
+                </ul>
+
+                <h2 class="text-center mt-5 mb-3"><i class="fas fa-user-plus"></i>マイチャンネル</h2>
+
+                <a class="btn btn-dark" href="/lesson/channel">チャンネル管理</a>
+                <a class="btn btn-dark" href="/lesson/techer">レッスンを開始する</a>
+                
         </div>
     </div>
 </section>
