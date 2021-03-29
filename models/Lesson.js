@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate');
 
 const LessonSchema = new mongoose.Schema({
     title: {
@@ -6,16 +7,15 @@ const LessonSchema = new mongoose.Schema({
         required: true
     },
     thumbnail: {
-        type: String,
+        type: Object,
+        data: Buffer,
+        originalname: String,
+        contentType: String,
         required: true
     },
     language: {
         type: Array,
         required: true,
-    },
-    choreographer: {
-        type: Array,
-        require: true
     },
     choreographerID: {
         type: String,
@@ -23,6 +23,10 @@ const LessonSchema = new mongoose.Schema({
     },
     price: {
         type: Number,
+        require: true,
+    },
+    time: {
+        type: Date,
         require: true,
     },
     level: {
@@ -46,6 +50,8 @@ const LessonSchema = new mongoose.Schema({
         default: Date.now
     },
 });
+
+LessonSchema.plugin(mongoosePaginate);
 
 const Lesson = mongoose.model('Lesson', LessonSchema);
 

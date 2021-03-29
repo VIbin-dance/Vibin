@@ -12,9 +12,11 @@ const UserSchema = new mongoose.Schema({
         require: true
     },
     userPhotoDef: {
+        type: Object,
         data: Buffer,
         originalname: String,
-        contentType: String
+        contentType: String,
+        require: false
     },
     loginCount: {
         type: Number,
@@ -76,6 +78,9 @@ const UserSchema = new mongoose.Schema({
     stripeID: {
         type: String,
         require: false,
+    },
+    lesson: {
+        type: Array
     },
     zoom: {
         id: {

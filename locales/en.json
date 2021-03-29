@@ -105,7 +105,8 @@
 				"top": "Level",
 				"Beginner": "Beginner",
 				"Intermediate": "Intermediate",
-				"Advanced": "Advanced"
+				"Advanced": "Advanced",
+				"undefined": "dashboard.search.level.undefined"
 			},
 			"genre": {
 				"top": "Genre",
@@ -123,7 +124,8 @@
 				"top": "Purpose",
 				"Skill Improvements": "Skill Improvements",
 				"Health and Exercise": "Health and Exercise",
-				"Entertainment": "Entertainment"
+				"Entertainment": "Entertainment",
+				"undefined": "dashboard.search.purpose.undefined"
 			},
 			"mood": {
 				"top": "Mood",
@@ -145,6 +147,8 @@
 			"search": "Search"
 		},
 		"Future vibes": "Future vibes",
+		"Yen": "Yen",
+		"Past vibes": "Past vibes",
 		"Recommended videos": "Recommended videos",
 		"Latest videos": "Latest videos",
 		"sub1": "We have",
@@ -162,13 +166,32 @@
 			"4": "Get funky!",
 			"top": ","
 		}
-    },
-    "calendar": {
-        "top": "Upcoming vibes!",
-        "sub1": "We have ",
-        "sub2": " sessions ahead!",
-        "plan": " Let's plan our sessions!"
-    },
+	},
+	"reservation": {
+		"purchase": "Purchase",
+		"choreo": "About this choreographer",
+		"contact": "Contact"
+	},
+	"result": "Search result",
+	"create": {
+		"create": "Create a lesson",
+		"bank": "Registered Bank Account",
+		"stripe": "Go to your stripe dashboard",
+		"title": "Title",
+		"titlePlace": "Enter The Title",
+		"price": "Price",
+		"pricePlace": "Enter The Price",
+		"thumbnail": "Thumbnail",
+		"thumbnailDesc": "Choose a photo for your thumbnail. Your photo will automatically be cropped.",
+		"time": "Time",
+		"choreo": "先生"
+	},
+	"calendar": {
+		"top": "Upcoming vibes!",
+		"sub1": "We have ",
+		"sub2": " sessions ahead!",
+		"plan": " Let's plan our sessions!"
+	},
 	"profile": {
 		"follower": "followers",
 		"following": "following",
@@ -208,5 +231,7 @@
 		"News2": "Get the latest news from Vibin'!",
 		"Subscribe": "Subscribe"
 	},
-	"top": "top"
+	"top": "top",
+	"dashboard.search.level.": "dashboard.search.level.",
+	"dashboard.search.purpose.": "dashboard.search.purpose."
 }

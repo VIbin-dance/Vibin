@@ -8,6 +8,9 @@ const flash = require('connect-flash');
 const paginate = require('express-paginate');
 const passport = require('passport');
 const helmet = require('helmet');
+const compression = require('compression');
+const minify = require('express-minify');
+require('newrelic');
 const { I18n } = require('i18n');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
@@ -44,6 +47,8 @@ app.use(cors());
 
 
 app.use(helmet());
+app.use(compression());
+app.use(minify());
 app.use(express.static(path.join(__dirname + '/public')));
 app.use(expressLayouts);
 app.set('view engine', 'ejs');
@@ -74,26 +79,49 @@ passport.deserializeUser((user, done) => {
 passport.use(new GoogleStrategy({
         clientID: process.env.CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: process.env.GOOGLE_CALLBACK_URL
-        // accessType: 'offline'
+        callbackURL: process.env.GOOGLE_CALLBACK_URL,
     },
     (accessToken, refreshToken, profile, done) => {
         if (profile) {
-            User.findOneAndUpdate({
-                googleId: profile.id
-            }, {
-                username: profile.displayName,
-                email: profile.emails[0].value,
-                name: { familyName: profile.name.familyName, givenName: profile.name.givenName },
-                googleId: profile.id,
-                accessToken: accessToken
-            }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, user) => {
-                if (err) {
-                    return done(err, false, {
-                        message: err
-                    });
+            User.findOne({ googleId: profile.id }, async(err, user) => {
+                if (user == null || user.loginCount == null || user.loginCount == 0) {
+                    User.findOneAndUpdate({ googleId: profile.id }, {
+                        $set: {
+                            loginCount: 1,
+                            username: profile.displayName,
+                            email: profile.emails[0].value,
+                            name: { familyName: profile.name.familyName, givenName: profile.name.givenName },
+                            userPhoto: profile.photos[0].value,
+                            googleId: profile.id,
+                            accessToken: accessToken
+                        }
+                    }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, user) => {
+                        if (err) {
+                            return done(err, false, {
+                                message: err
+                            });
+                        } else {
+                            return done(null, profile);
+                        }
+                    })
+                } else if (user.loginCount > 0) {
+                    User.findOneAndUpdate({ googleId: profile.id }, {
+                        $set: {
+                            googleId: profile.id,
+                            accessToken: accessToken,
+                            loginCount: user.loginCount + 1,
+                        }
+                    }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, user) => {
+                        if (err) {
+                            return done(err, false, {
+                                message: err
+                            });
+                        } else {
+                            return done(null, profile);
+                        }
+                    })
                 } else {
-                    return done(null, profile);
+                    return done(null, false);
                 }
             });
         } else {
