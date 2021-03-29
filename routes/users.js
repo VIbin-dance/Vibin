@@ -1,11 +1,8 @@
 const express = require('express');
 const router = express.Router();
-<<<<<<< HEAD
-=======
 const nodemailer = require('nodemailer');
 const passport = require('passport');
 const moment = require('moment');
->>>>>>> aws-live
 const { ensureAuthenticated } = require('../config/auth');
 const multer = require('multer');
 const sharp = require('sharp');

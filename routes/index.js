@@ -62,14 +62,7 @@ router.get('/error', (req, res) => {
     res.send('Login error');
 });
 
-        if (user.tags.level == undefined) {
-            const level = ["Beginner", "Intermediate", "Advanced"]
-            const randomLevel = level[Math.floor(Math.random() * level.length)]
-
-            query.$and[0].level = randomLevel;
-        }
-
-router.get('/dashboard', (req, res) => {
+router.get('/dashboard/:sort', ensureAuthenticated, (req, res) => {
     Video.paginate({}, { page: req.query.page, limit: req.query.limit, sort: { publishedDate: req.params.sort } }, (err, result) => {
         const title = [];
         const choreographer = [];
@@ -111,7 +104,7 @@ router.get('/dashboard', (req, res) => {
     });
 });
 
-router.post('/dashboard', (req, res) => {
+router.post('/dashboard', ensureAuthenticated, (req, res) => {
     const { lengthCat, language, level, genre, purpose, mood, search } = req.body;
 
     const searchQuery = new RegExp(escapeRegex(search), 'gi');
