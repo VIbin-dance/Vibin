@@ -538,7 +538,7 @@ router.post("/create", upload.single('thumbnail'), async(req, res) => {
             mood,
         });
     } else {
-        const buffer = await sharp(req.file.buffer).resize(1280, 720).toBuffer();
+        const buffer = await sharp(req.file.buffer).resize(640, 360).toBuffer();
         const thumbnail = {
             data: buffer,
             originalname: req.file.originalname,
