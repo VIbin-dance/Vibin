@@ -4,7 +4,6 @@ const nodemailer = require('nodemailer');
 const passport = require('passport');
 const moment = require('moment');
 const { ensureAuthenticated } = require('../config/auth');
-const moment = require("moment");
 const multer = require('multer');
 const sharp = require('sharp');
 
