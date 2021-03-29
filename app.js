@@ -44,16 +44,12 @@ const io = socketio(Server);
 app.use(cors());
 // app.use(logger('dev'));
 
-
-
 app.use(helmet());
 app.use(compression());
 app.use(minify());
 app.use(express.static(path.join(__dirname + '/public')));
 app.use(expressLayouts);
 app.set('view engine', 'ejs');
-// // -----------------------------------
-
 
 app.use(session({
     secret: process.env.SESSIN_SECRET,
@@ -137,8 +133,6 @@ passport.use(new GoogleStrategy({
 // };
 // app.use(loginTime);
 
-
-
 // Connect to Mongo
 const db = process.env.MongoURI;
 mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
@@ -155,11 +149,6 @@ app.use((req, res, next) => {
     res.locals.error = req.flash('error');
     next();
 });
-
-
-
-
-
 
 // live chating middleware with client connects
 io.on("connection", (socket) => {
@@ -195,12 +184,6 @@ io.on("connection", (socket) => {
         });
     });
 
-
-
-
-
-
-
     // listen for user's chat msg
     socket.on("server_message", (data) => {
         const send_user = getCurrentUser(socket.id);
@@ -230,13 +213,6 @@ io.on("connection", (socket) => {
     })
 })
 
-
-
-
-
-
-
-
 app.use(paginate.middleware(10, 50))
 
 const i18n = new I18n({
@@ -246,13 +222,6 @@ const i18n = new I18n({
 })
 
 app.use(i18n.init);
-
-// app.use(function (req, res, next) {
-//     if (req.session.locale) {
-//         i18n.setLocale(req, req.session.locale);
-//     }
-//     next();
-// });
 
 app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));

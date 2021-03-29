@@ -10,9 +10,6 @@ const Video = require('../models/Video');
 const Channel = require('../models/Channel');
 const Schedule = require('../models/Schedule');
 
-
-
-
 // import & setting AIVS module
 const {
     IvsClient,
@@ -45,9 +42,6 @@ const aivs_client = new IvsClient({
     },
     region: process.env.AWS_REGION
 });
-
-
-
 
 // Routes
 router.get('/', function (req, res) {
@@ -214,14 +208,13 @@ router.get('/techer', ensureAuthenticated, (req, res) => {
             req.flash('error_msg', '現在所有しているチャンネルがありません。');
             res.redirect('/lesson/channel');
         } else {
-
             ch_count = 1;
             res.render('techer', {
                 userPhoto: req.session.passport.user.photos[0].value,
                 email: req.user._json.email,
                 firstName: req.user.name.givenName,
                 lastName: req.user.name.familyName,
-                username: req.user._json.name,
+                username: req.user._json.username,
                 count: ch_count,
                 ch_name: ch.ch_name,
                 ch_latency: ch.latencyMode,
