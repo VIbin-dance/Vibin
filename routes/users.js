@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const nodemailer = require('nodemailer');
 const passport = require('passport');
+const moment = require('moment');
 const { ensureAuthenticated } = require('../config/auth');
 
 
@@ -65,12 +66,21 @@ router.get('/profile', ensureAuthenticated, (req, res) => {
             req.flash('error_msg', 'There is no such user');
             res.redirect('/dashboard?page=1&limit=15');
         } else {
+            // このパラメータに予約購入したレッスンのデータをDBから検索して記入してください。
+            // フィールド名は実際DBでどうなっているかを確認して修正する必要があります。
+            let date = moment(new Date()).format("MMMM Do YYYY, h:mm A");
+            var tickets = [
+                { lesson_title: "サンプル1", lesson_id: "123123", choreographerName: "阿部一燈", level: "Intermediate", genre: "Locking", mood: "Groovy, Funky, any", date: date },
+                { lesson_title: "サンプル2", lesson_id: "123123", choreographerName: "阿部一燈", level: "Intermediate", genre: "Locking", mood: "Groovy, Funky, any", date: date }
+            ];
+
             res.render('profile', {
                 userPhoto: req.session.passport.user.photos[0].value,
                 email: user.email,
                 firstName: user.name.givenName,
                 lastName: user.name.familyName,
-                username: user.username
+                username: user.username,
+                tickets: tickets
             })
         }
     })
