@@ -1245,9 +1245,9 @@ body::-webkit-scrollbar-thumb {
   padding: 0 16px 5rem;
 }
 
-#results .container {
+/* #results .container {
   padding: 7rem 0 0;
-}
+} */
 
 #results .bold {
   font-weight: bold;

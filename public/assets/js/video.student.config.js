@@ -225,6 +225,7 @@ autosize(document.querySelector("#chat_msg"));
     var devicesCallback = function (devices) {
         // Identify all webcams
         webcamList = [];
+        console.log(devices);
         for (var i = 0; i < devices.length; i++) {
             if (devices[i].kind === 'videoinput' && devices[i].label.search("Webcam") >= 0 ) {
                 webcamList[webcamList.length] = devices[i].deviceId;
