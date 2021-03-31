@@ -228,20 +228,6 @@
     // });
 
     $(document).ready(function () {
-
-        // student player - dual view button
-        $(".togglePeer").click(function () {
-            $(".togglePeer").toggleClass("active");
-            $("#self_camera").toggleClass("active");
-    
-            if ($(this).hasClass('active')) {
-                $("#amazon-ivs-videojs").addClass("dualScreen");
-                $("#self_camera").addClass("dualScreen");
-            } else {
-                $("#amazon-ivs-videojs").removeClass("dualScreen");
-                $("#self_camera").removeClass("dualScreen");
-            }
-        })
     
         // chat box - scroll down animation
         $(".message_wrap").animate({ scrollTop: $('.message_wrap ul').prop("scrollHeight")}, 300);
