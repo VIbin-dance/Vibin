@@ -8,7 +8,8 @@ autosize(document.querySelector("#chat_msg"));
     const temp = document.querySelector("#ch_playurl");
     let STREAM_PLAY_URL = temp.value;
     STREAM_PLAY_URL = "https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.DmumNckWFTqz.m3u8";
-    
+    // STREAM_PLAY_URL = "";
+
     // Set up IVS playback tech and quality plugin
     registerIVSTech(videojs);
     registerIVSQualityPlugin(videojs);
@@ -45,7 +46,6 @@ autosize(document.querySelector("#chat_msg"));
         // Logs low latency setting and latency value 5s after playback starts
         const PlayerState = videoJSPlayer.getIVSEvents().PlayerState;
         ivsPlayer.addEventListener(PlayerState.PLAYING, () => {
-            // console.log("Player State - PLAYING");
             setTimeout(() => {
                 console.log(
                     `This stream is ${ivsPlayer.isLiveLowLatency() ? "" : "not "
@@ -81,99 +81,9 @@ autosize(document.querySelector("#chat_msg"));
     // Register ready callback
     videoJSPlayer.ready(readyCallback);
 
-    var button = videoJSPlayer.controlBar.addChild('button', {
-        text: '',
-        buttonChildExample: {
-            buttonChildOption: true
-        }
-    });
-    button.addClass('togglePeer');
-
-    document.querySelector(".vjs-volume-panel").classList.add("vjs-hover");
-})();
 
 
-
-// Initialize WebCamera
-(function () {
-    'use strict';
-
-    var mediaStream = null;
-    var webcamList;
-    var currentCam = null;
-    var video = document.getElementById('self_camera');
-
-    // writeError(string) - Provides a way to display errors to the user
-    var writeError = function (string) {
-        // console.log( "1. currentCam number : ", currentCam );
-        // console.log( "2. webcamList length : ",  webcamList.length );
-        // console.log( "3. webcamList content : ",  webcamList );
-        console.log(string);
-    };
-
-    // initializeVideoStream() - Callback function when getUserMedia() returns successfully with a mediaStream object,
-    // set the mediaStream on the video tag
-    var initializeVideoStream = function (stream) {
-        mediaStream = stream;
-        video.srcObject = mediaStream;
-
-        if (video.paused) video.play();
-
-        if (webcamList.length > 1) {
-            // writeError('----' + e.name + '----');
-        }
-    };
-
-    // getUserMediaError() - Callback function when getUserMedia() returns error
-    // 1. Show the error message with the error.name
-    var getUserMediaError = function (e) {
-        if (e.name.indexOf('NotFoundError') >= 0) {
-            writeError('Webcam not found.');
-        } else {
-            // writeError('----' + e.name + '----');
-            writeError('The following error occurred: "' + e.name + '" Please check your webcam device(s) and try again.');
-        }
-    };
-
-    var isEnterKey = function (evt) {
-        var charCode = (typeof evt.which === 'number') ? evt.which : evt.keyCode;
-
-        if (charCode !== 13 && charCode !== 32) {
-            return false;
-        }
-
-        return true;
-    }
-
-    // nextWebCam() - Function to rotate through the webcam device list
-    // 1. Release the current webcam (if there is one in use)
-    // 2. Call getUserMedia() to access the next webcam
-    var nextWebCam = function () {
-        writeError('nextWebCam 1 ----' + currentCam + '----');
-
-        if (currentCam !== null) {
-            currentCam++;
-            if (currentCam >= webcamList.length) {
-                currentCam = 0;
-            }
-
-            if (typeof video.srcObject !== 'undefined') video.srcObject = null;
-            video.src = null;
-            if (mediaStream) {
-                var videoTracks = mediaStream.getVideoTracks();
-                videoTracks[0].stop();
-                mediaStream = null;
-            }
-        }
-        else {
-            currentCam = 0;
-        }
-
-        // front camera
-        // { audio: true, video: { facingMode: "user" } }
-        // rear camera
-        // { audio: true, video: { facingMode: { exact: "environment" } } }
-
+<<<<<<< HEAD
         // var front = false;
         // document.getElementById('flip-button').onclick = function() { front = !front; };
         // var constraints = { video: { facingMode: (front? "user" : "environment") } };
@@ -229,56 +139,32 @@ autosize(document.querySelector("#chat_msg"));
         for (var i = 0; i < devices.length; i++) {
             if (devices[i].kind === 'videoinput' && devices[i].label.search("Webcam") >= 0 ) {
                 webcamList[webcamList.length] = devices[i].deviceId;
+=======
+    // person view toggle button
+    var Button = videojs.getComponent('Button');
+    var MyButton = videojs.extend(Button, {
+        constructor: function () {
+            Button.apply(this, arguments);
+            /* initialize button */
+        },
+        handleClick: function () {
+            if (document.querySelector('.togglePeer').classList.contains('active')) {
+                document.querySelector('.togglePeer').classList.remove("active");
+                document.querySelector('#live_screen').classList.remove("dualScreen");
+                document.querySelector('#self_camera').classList.remove("dualScreen");
+            } else {
+                document.querySelector('.togglePeer').classList.add("active");
+                document.querySelector('#live_screen').classList.add("dualScreen");
+                document.querySelector('#self_camera').classList.add("dualScreen");
+>>>>>>> aws-live
             }
         }
-
-        if (webcamList.length > 0) {
-            // Start video with the first device on the list
-            nextWebCam();
-        }
-        else {
-            writeError('Webcam not found.');
-        }
-
-    };
-
-    // APISetup() - function to start the Media Capture API
-    // 1. Enumerate the webcam devices
-    // 2. Set up event listner for the webcam 'switch' button
-    var APISetup = function () {
-        enumerateMediaDevices();
-        deviceChanged();
-    };
-
-    // init() - The entry point to the demo code
-    // 1. Detect whether getUserMedia() is supported, show an error if not
-    var init = function () {
-        if (navigator.getUserMedia) {
-            APISetup();
-        }
-        else {
-            writeError('You are using a browser that does not support the Media Capture API');
-        }
-    };
-
-    Webcam.on('load', function () {
-        // library is loaded
-        console.log(' webcam loading ');
     });
 
-    Webcam.on('live', function () {
-        // camera is live, showing preview image
-        console.log(' webcam live run ');
-    });
+    videojs.registerComponent('MyButton', MyButton);
+    var custom_btn = videoJSPlayer.getChild('controlBar').addChild('myButton', {});
+    custom_btn.addClass('togglePeer');
 
-    Webcam.on('error', function (err) {
-        // an error occurred (see 'err')
-        console.log(' webcam error :', err);
-    });
-
-    navigator.mediaDevices.addEventListener('devicechange', deviceChanged);
-
-    init();
-
-}());
+    document.querySelector(".vjs-volume-panel").classList.add("vjs-hover");
+})();
 

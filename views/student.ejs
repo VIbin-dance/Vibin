@@ -21,9 +21,13 @@
                     <!-- vjs-theme-city -->
                     <!-- vjs-theme-forest -->
                     <!-- vjs-theme-sea -->
-                    <video id="amazon-ivs-videojs" class="video-js vjs-4-3 vjs-fill vjs-big-play-centered"
+                    <!-- vjs-fluid, vjs-16-9, or vjs-4-3 -->
+                    <div id="live_screen">
+                        <video id="amazon-ivs-videojs" class="video-js vjs-fluid vjs-fill vjs-big-play-centered"
                         preload="auto" controls autoplay playsinline></video>
-                    <video id="self_camera" autoplay playsinline preload="auto"></video>
+                    </div>
+                    <!-- <video id="self_camera" autoplay playsinline preload="auto"></video> -->
+                    <div id="self_camera"></div>
                 </div>
 
 
@@ -108,8 +112,10 @@
 
 <script src="/assets/js/webcam.min.js"></script>
 <script src="/assets/js/ie-adapter-0.2.3.js"></script>
+<script src="/assets/js/webcam.config.js"></script>
 
 <script src="/assets/js/video.student.config.js"></script>
+<!-- <script src="/assets/js/webcam.student.js"></script> -->
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/assets/js/chat.config.js"></script>
