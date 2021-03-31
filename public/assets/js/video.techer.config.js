@@ -1,11 +1,3 @@
-// const DEFAULT_STREAM_0 = "https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.DmumNckWFTqz.m3u8";
-// const DEFAULT_STREAM_1 = "https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.XFAcAcypUxQm.m3u8";
-// const DEFAULT_STREAM_2 = "https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.YtnrVcQbttF0.m3u8";
-// const DEFAULT_STREAM_3 = "https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.xhP3ExfcX8ON.m3u8";
-// const DEFAULT_STREAM_4 = "https://d6hwdeiig07o4.cloudfront.net/ivs/956482054022/cTo5UpKS07do/2020-07-13T22-54-42.188Z/OgRXMLtq8M11/media/hls/master.m3u8";
-
-// ch_playURL
-let STREAM_PLAY_URL = '';
 // textarea autoresize
 autosize(document.querySelector("#chat_msg"));
 
@@ -14,7 +6,7 @@ autosize(document.querySelector("#chat_msg"));
     'use strict';
     // get playback channel url
     const temp = document.querySelector("#ch_playurl");
-    STREAM_PLAY_URL = temp.value;
+    let STREAM_PLAY_URL = temp.value;
     STREAM_PLAY_URL = "https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.DmumNckWFTqz.m3u8";
     // STREAM_PLAY_URL = "";
 
@@ -25,7 +17,6 @@ autosize(document.querySelector("#chat_msg"));
     // Initialize video.js player
     const videoJSPlayer = videojs("amazon-ivs-videojs", {
         techOrder: ["AmazonIVS"],
-        // liveui: true,
         controlBar: {
             playToggle: {
                 replay: false
@@ -55,7 +46,6 @@ autosize(document.querySelector("#chat_msg"));
         // Logs low latency setting and latency value 5s after playback starts
         const PlayerState = videoJSPlayer.getIVSEvents().PlayerState;
         ivsPlayer.addEventListener(PlayerState.PLAYING, () => {
-            console.log("Player State - PLAYING");
             setTimeout(() => {
                 console.log(
                     `This stream is ${ivsPlayer.isLiveLowLatency() ? "" : "not "
