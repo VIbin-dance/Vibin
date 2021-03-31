@@ -12,7 +12,6 @@ const storage = multer.memoryStorage()
 const upload = multer({ storage: storage });
 
 const User = require('../models/User');
-const Video = require('../models/Video');
 const Lesson = require('../models/Lesson');
 
 router.get('/register', (req, res) => res.render('register'));
@@ -64,7 +63,7 @@ router.get('/profile', ensureAuthenticated, (req, res) => {
     User.findOne({ email: req.user._json.email }, async(err, user) => {
 
         // const likedVid = await Video.find({ 'like.id': user._id.toString() }).exec()
-        const lesson = await Lesson.find({ 'choreographerID': user._id.toString() }).exec()
+        const lesson = await Lesson.find({ 'choreographerID': user.googleId }).exec()
         const time = [];
         for (let i=0; i<lesson.length; i++) {
           time[i] = moment(lesson[i].time).format('MM/DD HH:mm');
@@ -76,11 +75,15 @@ router.get('/profile', ensureAuthenticated, (req, res) => {
         } else {
             // このパラメータに予約購入したレッスンのデータをDBから検索して記入してください。
             // フィールド名は実際DBでどうなっているかを確認して修正する必要があります。
+            tickets = [];
             let date = moment(new Date()).format("MMMM Do YYYY, h:mm A");
-            var tickets = [
-                { lesson_title: "サンプル1", lesson_id: "123123", choreographerName: "阿部一燈", level: "Intermediate", genre: "Locking", mood: "Groovy, Funky, any", date: date },
-                { lesson_title: "サンプル2", lesson_id: "123123", choreographerName: "阿部一燈", level: "Intermediate", genre: "Locking", mood: "Groovy, Funky, any", date: date }
-            ];
+            for (let i=0; i<user.lesson.length;i++) {
+                tickets[i] = await Lesson.find({ _id: user.lesson[i] }).exec();
+            }
+            // var tickets = [
+            //     { lesson_title: "サンプル1", lesson_id: "123123", choreographerName: "阿部一燈", level: "Intermediate", genre: "Locking", mood: "Groovy, Funky, any", date: date },
+            //     { lesson_title: "サンプル2", lesson_id: "123123", choreographerName: "阿部一燈", level: "Intermediate", genre: "Locking", mood: "Groovy, Funky, any", date: date }
+            // ];
 
             res.render('profile', {
                 // likedVid: likedVid,

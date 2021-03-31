@@ -7,7 +7,7 @@ autosize(document.querySelector("#chat_msg"));
     // get playback channel url
     const temp = document.querySelector("#ch_playurl");
     let STREAM_PLAY_URL = temp.value;
-    STREAM_PLAY_URL = "https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.DmumNckWFTqz.m3u8";
+    // STREAM_PLAY_URL = "https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.DmumNckWFTqz.m3u8";
     // STREAM_PLAY_URL = "";
 
     // Set up IVS playback tech and quality plugin
@@ -83,63 +83,6 @@ autosize(document.querySelector("#chat_msg"));
 
 
 
-<<<<<<< HEAD
-        // var front = false;
-        // document.getElementById('flip-button').onclick = function() { front = !front; };
-        // var constraints = { video: { facingMode: (front? "user" : "environment") } };
-
-        navigator.mediaDevices.getUserMedia({
-            audio: true,
-            video: true,
-            video: {
-                width: 800,
-                height: 600,
-                deviceId: { exact: webcamList[currentCam] }
-            }
-        }).then( stream => {
-            initializeVideoStream(stream);
-        }).catch(getUserMediaError);
-    };
-
-
-    // enumerateMediaDevices() - function to start enumerateDevices() and define the callback functions
-    var enumerateMediaDevices = function () {
-        /*eslint-disable*/
-        navigator.mediaDevices.enumerateDevices().then(devicesCallback).catch(getUserMediaError);
-        /*eslint-enable*/
-    };
-
-    // deviceChanged() - Handle devicechange event
-    // 1. Reset webcamList
-    // 2. Re-enumerate webcam devices
-    var deviceChanged = function () {
-        // navigator.mediaDevices.removeEventListener('devicechange', deviceChanged);
-        // Reset the webcam list and re-enumerate
-
-        // webcamList = [];
-        enumerateMediaDevices();
-
-        Webcam.set({
-            width: '30rem',
-            height: '100%',
-        });
-        Webcam.attach('#self_camera');
-    };
-
-    // devicesCallback() - Callback function for device enumeration
-    // 1. Identify all webcam devices and store the info in the webcamList
-    // 2. Start the demo with the first webcam on the list
-    // 3. Show the webcam 'switch' button when there are multiple webcams
-    // 4. Show error message when there is no webcam
-    // 5. Register event listener (devicechange) to respond to device plugin or unplug
-    var devicesCallback = function (devices) {
-        // Identify all webcams
-        webcamList = [];
-        console.log(devices);
-        for (var i = 0; i < devices.length; i++) {
-            if (devices[i].kind === 'videoinput' && devices[i].label.search("Webcam") >= 0 ) {
-                webcamList[webcamList.length] = devices[i].deviceId;
-=======
     // person view toggle button
     var Button = videojs.getComponent('Button');
     var MyButton = videojs.extend(Button, {
@@ -156,7 +99,6 @@ autosize(document.querySelector("#chat_msg"));
                 document.querySelector('.togglePeer').classList.add("active");
                 document.querySelector('#live_screen').classList.add("dualScreen");
                 document.querySelector('#self_camera').classList.add("dualScreen");
->>>>>>> aws-live
             }
         }
     });

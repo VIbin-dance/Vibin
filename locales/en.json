@@ -106,7 +106,10 @@
 				"Beginner": "Beginner",
 				"Intermediate": "Intermediate",
 				"Advanced": "Advanced",
-				"undefined": "dashboard.search.level.undefined"
+				"undefined": "dashboard.search.level.undefined",
+				"Locking": "dashboard.search.level.Locking",
+				"Skill Improvements": "dashboard.search.level.Skill Improvements",
+				"Groovy": "dashboard.search.level.Groovy"
 			},
 			"genre": {
 				"top": "Genre",

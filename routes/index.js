@@ -77,7 +77,7 @@ router.get("/dashboard/:sort", ensureAuthenticated, async(req, res) => {
         const choreographer = [];
         const time = [];
         for (let i = 0; i < lesson.docs.length; i++) {
-            choreographer[i] = await User.findOne({ _id: lesson.docs[i].choreographerID.toString() }).exec();
+            choreographer[i] = await User.findOne({ googleId: lesson.docs[i].choreographerID.toString() }).exec();
             time[i] = moment(lesson.docs[i].time).format('MM/DD HH:mm');
         }
 
@@ -367,7 +367,7 @@ router.post("/player/:id", ensureAuthenticated, async(req, res) => {
 router.get("/reservation/:id", ensureAuthenticated, async(req, res) => {
     const user = await User.findOne({ email: req.user._json.email }).exec();
     const lesson = await Lesson.findOne({ _id: req.params.id }).exec();
-    const choreographer = await User.findOne({ _id: lesson.choreographerID }).exec();
+    const choreographer = await User.findOne({ googleId: lesson.choreographerID }).exec();
     const account = await stripe.accounts.retrieve(choreographer.stripeID);
 
     if (user.lesson.includes(lesson.id)) {
@@ -481,7 +481,7 @@ router.get("/create", ensureAuthenticated, async(req, res) => {
 router.post("/create", upload.single('thumbnail'), async(req, res) => {
     const { title, language, time, price, level, genre, purpose, mood } = req.body;
     const user = await User.findOne({ email: req.user._json.email }).exec();
-    const choreographerID = user._id;
+    const choreographerID = user.googleId;
     let errors = [];
     let account;
     let loginLink;

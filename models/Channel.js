@@ -6,6 +6,10 @@ const ChannelSchema = new mongoose.Schema({
         require: true,
         unique: true
     },
+    choreographerID: {
+        type: String,
+        require: true
+    },
     ch_name: {
         type: String,
         require: true

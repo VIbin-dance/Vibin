@@ -33,7 +33,11 @@
                         <div class="outline"></div>
                         <div class="inner_img">
                             <figure>
-                                <img src="<%= userPhoto %>" alt="">
+                                <% if (typeof userPhotoDef !="undefined" ) { %>
+                                <img src="data:image/<%=userPhotoDef.contentType%>;base64, <%=userPhotoDef.data.toString('base64')%>" alt="user photo">
+                                <% } else if (typeof userPhoto !="undefined" ) { %>
+                                <img src="<%= userPhoto %>" alt="user photo">
+                                <% } %>
                             </figure>
                         </div>
                     </a>

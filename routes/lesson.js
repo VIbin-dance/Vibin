@@ -9,6 +9,7 @@ const User = require('../models/User');
 const Video = require('../models/Video');
 const Channel = require('../models/Channel');
 const Schedule = require('../models/Schedule');
+const Lesson = require('../models/Lesson');
 
 // import & setting AIVS module
 const {
@@ -200,7 +201,8 @@ router.post('/delete_channel', ensureAuthenticated, function (req, res) {
 
 });
 
-router.get('/techer', ensureAuthenticated, (req, res) => {
+router.get('/techer', ensureAuthenticated, async (req, res) => {
+    const user = await User.findOne({ email: req.user._json.email }).exec();
     // let currentUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
     // let videoCHK = currentUrl.search("aaa");
     Channel.findOne({ googleId: req.user.id }, (err, ch) => {
@@ -210,11 +212,14 @@ router.get('/techer', ensureAuthenticated, (req, res) => {
         } else {
             ch_count = 1;
             res.render('techer', {
-                userPhoto: req.session.passport.user.photos[0].value,
+                // userPhoto: req.session.passport.user.photos[0].value,
+                userPhoto: user.userPhoto,
+                userPhotoDef: user.userPhotoDef,
                 email: req.user._json.email,
-                firstName: req.user.name.givenName,
-                lastName: req.user.name.familyName,
-                username: req.user._json.username,
+                username: user.username,
+                // firstName: req.user.name.givenName,
+                // lastName: req.user.name.familyName,
+                // username: req.user._json.username,
                 count: ch_count,
                 ch_name: ch.ch_name,
                 ch_latency: ch.latencyMode,
@@ -228,33 +233,39 @@ router.get('/techer', ensureAuthenticated, (req, res) => {
     });
 });
 
-router.get('/student/:lesson_id', ensureAuthenticated, function (req, res) {
-
-    Schedule.findOne({ lesson_Id: req.params.lesson_id }, (err, ls) => {
+router.get('/student/:lesson_id', ensureAuthenticated, async (req, res) => {
+    const user = await User.findOne({ email: req.user._json.email }).exec();
+    Lesson.findOne({ choreographerID: req.params.lesson_id }, (err, ls) => {
         if(!ls){
             req.flash('error_msg', '選択したレッスンの期限が切れたか情報が正しくありません。');
             res.redirect('/users/profile');
         } else {
-            Channel.findOne({ googleId: ls.techerGoogleId }, (err, ch) => {
+            Channel.findOne({ googleId: ls.choreographerID }, async (err, ch) => {
                 if(!ch) {
                     req.flash('error_msg', '現在所有しているチャンネルがありません。');
                     res.redirect('/users/profile');
                 } else {
-
+                    const choreographer = await User.findOne({ googleId : req.params.lesson_id }).exec();
                     ch_count = 1;
                     res.render('student', {
-                        userPhoto: req.session.passport.user.photos[0].value,
+                        userPhoto: user.userPhoto,
+                        userPhotoDef: user.userPhotoDef,
                         email: req.user._json.email,
-                        firstName: req.user.name.givenName,
-                        lastName: req.user.name.familyName,
-                        username: req.user._json.name,
+                        username: user.username,
+                        teacher: choreographer,
+                        teacherPhoto: choreographer.userPhoto,
+                        teacherPhotoDef: choreographer.userPhotoDef,
+                        lesson: ls,
+                        // userPhoto: req.session.passport.user.photos[0].value,
+                        // firstName: req.user.name.givenName,
+                        // lastName: req.user.name.familyName,
+                        // username: req.user._json.name,
+                        // techerPhoto: req.session.passport.user.photos[0].value,
                         count: ch_count,
-                        techerPhoto: req.session.passport.user.photos[0].value,
                         ch_name: ls.lesson_name,
                         ch_arn: ch.arn,
                         ch_streamkey: ch.streamKey.value,
                         ch_playURL: ch.playbackUrl,
-                        genres: ls.genre
                     })
                 }
             });
@@ -262,5 +273,39 @@ router.get('/student/:lesson_id', ensureAuthenticated, function (req, res) {
     });
     
 });
+// router.get('/student/:lesson_id', ensureAuthenticated, function (req, res) {
+
+//     Schedule.findOne({ lesson_Id: req.params.lesson_id }, (err, ls) => {
+//         if(!ls){
+//             req.flash('error_msg', '選択したレッスンの期限が切れたか情報が正しくありません。');
+//             res.redirect('/users/profile');
+//         } else {
+//             Channel.findOne({ googleId: ls.techerGoogleId }, (err, ch) => {
+//                 if(!ch) {
+//                     req.flash('error_msg', '現在所有しているチャンネルがありません。');
+//                     res.redirect('/users/profile');
+//                 } else {
+
+//                     ch_count = 1;
+//                     res.render('student', {
+//                         userPhoto: req.session.passport.user.photos[0].value,
+//                         email: req.user._json.email,
+//                         firstName: req.user.name.givenName,
+//                         lastName: req.user.name.familyName,
+//                         username: req.user._json.name,
+//                         count: ch_count,
+//                         techerPhoto: req.session.passport.user.photos[0].value,
+//                         ch_name: ls.lesson_name,
+//                         ch_arn: ch.arn,
+//                         ch_streamkey: ch.streamKey.value,
+//                         ch_playURL: ch.playbackUrl,
+//                         genres: ls.genre
+//                     })
+//                 }
+//             });
+//         }
+//     });
+    
+// });
 
 module.exports = router;

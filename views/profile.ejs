@@ -26,13 +26,13 @@
 
 <% if (lesson.length> 0) { %>
         <div class="container">
-            <h3>Lessons ahead</h3>
+            <h3>教えるレッスン</h3>
             <hr>
             <div class="row">
                 <% for(let i=0; i < lesson.length; i++) { %>
                     <div class="col-lg-4 col-xs-6">
                         <div class="box">
-                            <a href="#">
+                            <a href="/lesson/techer">
                                 <img src="data:image/<%=lesson[i].thumbnail.contentType%>;base64, <%=lesson[i].thumbnail.data.toString('base64')%>"
                                     alt="thumbnail">
                             </a>
@@ -57,14 +57,46 @@
                     </div>
                     <% } %>
                 </div>
-                <% } %>
+        </div>
+<% } %>
+<% if (tickets.length> 0) { %>
+        <div class="container">
             <h3>購入したレッスン一覧</h3>
             <hr>
-            <ul class="ticket_block">
-                <% for( var ticket of tickets) { %>
+            <div class="row">
+                <% for(let i=0; i < tickets.length; i++) { %>
+                    <div class="col-lg-4 col-xs-6">
+                        <div class="box">
+                            <a href="/lesson/student/<%= tickets[i][0].choreographerID %>">
+                                <img src="data:image/<%=tickets[i][0].thumbnail.contentType%>;base64, <%=tickets[i][0].thumbnail.data.toString('base64')%>"
+                                    alt="thumbnail">
+                            </a>
+                            <h4 id="tickets.title<%= i %>">
+                                <%= tickets[i][0].title %>
+                            </h4>
+                            <a class="special" href="/choreographer/<%= user._id %>">
+                                <%= user.username %>
+                            </a>
+                            <p>
+                                <%= tickets[i].price %> Yen | <%= time[i] %>
+                            </p>
+                            <p class="mb-0">
+                                <%= __(`dashboard.search.level.${tickets[i][0].level[0]}`) %> | 
+                                <%= __(`dashboard.search.genre.${tickets[i][0].genre[0]}`) %> | 
+                                <%= __(`dashboard.search.purpose.${tickets[i][0].purpose[0]}`) %> | 
+                                <%= __(`dashboard.search.mood.${tickets[i][0].mood[0]}`) %>
+                            </p>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+<% } %>
+            <!-- <ul class="ticket_block">
+                <% for( let ticket of tickets) { %>
                     <li>
                         <a href="/lesson/student/<%= ticket.lesson_id %>" class="lesson_title">
-                            <%= ticket.lesson_title %>
+                            <%= ticket %>
                         </a>
                         <div class="desc">
                             <p><span>先生の名前 : </span>
@@ -82,7 +114,7 @@
                         </div>
                     </li>
                 <% } %>
-            </ul>
+            </ul> -->
             <h3>マイチャンネル</h3>
             <hr>
             <a class="btn btn-dark" href="/lesson/channel">チャンネル管理</a>

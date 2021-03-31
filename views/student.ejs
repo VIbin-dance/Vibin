@@ -38,7 +38,11 @@
                             <div class="outline"></div>
                             <div class="inner_img">
                                 <figure>
-                                    <img src="<%= userPhoto %>" alt="">
+                                    <% if (typeof teacherPhotoDef !="undefined" ) { %>
+                                    <img src="data:image/<%=teacherPhotoDef.contentType%>;base64, <%=teacherPhotoDef.data.toString('base64')%>" alt="teacher photo">
+                                    <% } else if (typeof teacherPhoto !="undefined" ) { %>
+                                    <img src="<%= teacherPhoto %>" alt="teacher photo">
+                                    <% } %>
                                 </figure>
                             </div>
                         </a>
@@ -46,14 +50,13 @@
                             <p class="name">
                                 <%= ch_name %>
                             </p>
-                            <p class="level">先生 : <%= username %>
+                            <p class="level">先生 : <%= teacher.username %>
                             </p>
                             <ul class="category_grid">
-                                <% for (var i=0; i < genres.length; i++) { %>
-                                    <li><a href="">
-                                            <%= genres[i] %>
-                                        </a></li>
-                                    <% } %>
+                                    <li><a href=""><%= __(`dashboard.search.level.${lesson.level[0]}`) %></a></li>
+                                    <li><a href=""><%= __(`dashboard.search.genre.${lesson.genre[0]}`) %></a></li>
+                                    <li><a href=""><%= __(`dashboard.search.purpose.${lesson.purpose[0]}`) %></a></li>
+                                    <li><a href=""><%= __(`dashboard.search.mood.${lesson.mood[0]}`) %></a></li>
                             </ul>
                         </div>
                     </div>
