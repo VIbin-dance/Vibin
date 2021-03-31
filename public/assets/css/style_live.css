@@ -104,30 +104,24 @@ body::-webkit-scrollbar-thumb {
 .live_grid {
   position: relative;
   width: 100%;
-  height: calc( 100vh - 65px);
   padding: 0 0 0;
   overflow: hidden;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
+  -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
 }
 
 @media screen and (max-width: 768px) {
   .live_grid {
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-            flex-direction: column;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
   }
 }
 
 .live_grid .video_grid {
   position: relative;
-  width: 100%;
   width: calc( 100% - 350px);
   -webkit-box-ordinal-group: 2;
       -ms-flex-order: 1;
@@ -502,28 +496,64 @@ body::-webkit-scrollbar-thumb {
           justify-content: stretch;
 }
 
-.live_grid .video_grid .channelView-ivs #amazon-ivs-videojs {
+@media screen and (max-width: 768px) {
+  .live_grid .video_grid .channelView-ivs {
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+  }
+}
+
+.live_grid .video_grid .channelView-ivs #live_screen {
+  position: relative;
   width: 100%;
 }
 
-.live_grid .video_grid .channelView-ivs #amazon-ivs-videojs .vjs-control-bar {
+.live_grid .video_grid .channelView-ivs #live_screen.dualScreen {
+  width: 50%;
+  background: #000;
+}
+
+@media screen and (max-width: 768px) {
+  .live_grid .video_grid .channelView-ivs #live_screen.dualScreen {
+    width: 100%;
+    height: 55vw;
+  }
+}
+
+.live_grid .video_grid .channelView-ivs #live_screen.dualScreen #amazon-ivs-videojs {
+  position: absolute;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  left: 50%;
+  top: 50%;
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs {
+  width: 100%;
+}
+
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar {
   height: 5em;
 }
 
-.live_grid .video_grid .channelView-ivs #amazon-ivs-videojs .vjs-control-bar .vjs-button {
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-button {
   width: 5em;
 }
 
-.live_grid .video_grid .channelView-ivs #amazon-ivs-videojs .vjs-control-bar .vjs-button .vjs-icon-placeholder::before {
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-button .vjs-icon-placeholder::before {
   font-size: 2.5em;
   line-height: 2;
 }
 
-.live_grid .video_grid .channelView-ivs #amazon-ivs-videojs .vjs-control-bar .vjs-button.togglePeer {
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-button.togglePeer {
   position: relative;
 }
 
-.live_grid .video_grid .channelView-ivs #amazon-ivs-videojs .vjs-control-bar .vjs-button.togglePeer::before {
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-button.togglePeer::before {
   position: absolute;
   content: '';
   width: 5em;
@@ -543,7 +573,7 @@ body::-webkit-scrollbar-thumb {
           mask-position: center center;
 }
 
-.live_grid .video_grid .channelView-ivs #amazon-ivs-videojs .vjs-control-bar .vjs-button.togglePeer.active::before {
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-button.togglePeer.active::before {
   -webkit-mask-image: url(../img/people-arrows.svg);
           mask-image: url(../img/people-arrows.svg);
   -webkit-mask-size: 3.1em;
@@ -554,62 +584,65 @@ body::-webkit-scrollbar-thumb {
           mask-position: center center;
 }
 
-.live_grid .video_grid .channelView-ivs #amazon-ivs-videojs .vjs-control-bar .vjs-volume-panel {
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-volume-panel {
   width: 15em;
 }
 
-.live_grid .video_grid .channelView-ivs #amazon-ivs-videojs .vjs-control-bar .vjs-volume-panel .vjs-volume-control {
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-volume-panel .vjs-volume-control {
   height: 5em;
   width: 10em;
   opacity: 1;
 }
 
-.live_grid .video_grid .channelView-ivs #amazon-ivs-videojs .vjs-control-bar .vjs-volume-panel .vjs-volume-control .vjs-volume-bar {
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-volume-panel .vjs-volume-control .vjs-volume-bar {
   margin: 2.35em 0.45em;
 }
 
-.live_grid .video_grid .channelView-ivs #amazon-ivs-videojs .vjs-control-bar .vjs-volume-panel .vjs-volume-control .vjs-volume-bar.vjs-slider-horizontal {
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-volume-panel .vjs-volume-control .vjs-volume-bar.vjs-slider-horizontal {
   width: 10em;
 }
 
-.live_grid .video_grid .channelView-ivs #amazon-ivs-videojs .vjs-control-bar .vjs-current-time .vjs-current-time-display {
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-current-time .vjs-current-time-display {
   font-size: 1.5em;
   line-height: 3.5em;
 }
 
-.live_grid .video_grid .channelView-ivs #amazon-ivs-videojs .vjs-control-bar .vjs-live-display {
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-live-display {
   display: none;
 }
 
-.live_grid .video_grid .channelView-ivs #amazon-ivs-videojs .vjs-control-bar .vjs-menu-button.vjs-subs-caps-button {
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-menu-button.vjs-subs-caps-button {
   display: none;
 }
 
-.live_grid .video_grid .channelView-ivs #amazon-ivs-videojs .vjs-control-bar .vjs-menu-button-popup .vjs-menu ul {
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-menu-button-popup .vjs-menu ul {
   max-height: -webkit-fit-content;
   max-height: -moz-fit-content;
   max-height: fit-content;
 }
 
-.live_grid .video_grid .channelView-ivs #amazon-ivs-videojs .vjs-control-bar .vjs-menu-button-popup .vjs-menu ul li {
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-menu-button-popup .vjs-menu ul li {
   line-height: 2.4em;
 }
 
-.live_grid .video_grid .channelView-ivs #amazon-ivs-videojs .video-js .vjs-menu-button-popup .vjs-menu {
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .video-js .vjs-menu-button-popup .vjs-menu {
   left: auto;
   right: 0;
   top: 2em;
-}
-
-.live_grid .video_grid .channelView-ivs #amazon-ivs-videojs.dualScreen {
-  width: 50%;
 }
 
 .live_grid .video_grid .channelView-ivs #self_camera {
   position: relative;
   display: none;
   width: 50%;
-  min-height: 38rem;
+  height: 720px;
+}
+
+@media screen and (max-width: 768px) {
+  .live_grid .video_grid .channelView-ivs #self_camera {
+    width: 100%;
+    height: 55vw !important;
+  }
 }
 
 .live_grid .video_grid .channelView-ivs #self_camera video {
@@ -668,7 +701,14 @@ body::-webkit-scrollbar-thumb {
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 992px) {
+  .live_grid .video_grid .channel_info.student {
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+  }
+}
+
+@media screen and (max-width: 992px) {
   .live_grid .video_grid .channel_info.student {
     -ms-flex-wrap: wrap;
         flex-wrap: wrap;
@@ -962,7 +1002,7 @@ body::-webkit-scrollbar-thumb {
 .live_grid .chat_grid {
   position: relative;
   width: 0;
-  height: 100%;
+  height: 865px;
   background: #fff;
   -webkit-box-ordinal-group: 3;
       -ms-flex-order: 2;
@@ -979,13 +1019,14 @@ body::-webkit-scrollbar-thumb {
 @media screen and (max-width: 768px) {
   .live_grid .chat_grid.collapseOn {
     width: 100%;
-    height: calc(100% - 80vw);
+    height: 40vh;
   }
 }
 
 @media screen and (max-width: 768px) {
   .live_grid .chat_grid {
     width: 100%;
+    height: 40vh;
   }
 }
 
