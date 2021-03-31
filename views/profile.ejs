@@ -49,14 +49,15 @@
                             </p>
                             <p class="mb-0">
                                 <%= __(`dashboard.search.level.${lesson[i].level[0]}`) %> | <%=
-                                        __(`dashboard.search.genre.${lesson[i].genre[0]}`) %> | <%=
-                                            __(`dashboard.search.purpose.${lesson[i].purpose[0]}`) %> | <%=
-                                                __(`dashboard.search.mood.${lesson[i].mood[0]}`) %>
+                                __(`dashboard.search.genre.${lesson[i].genre[0]}`) %> | <%=
+                                __(`dashboard.search.purpose.${lesson[i].purpose[0]}`) %> | <%=
+                                __(`dashboard.search.mood.${lesson[i].mood[0]}`) %>
                             </p>
                         </div>
                     </div>
+                    <% } %>
+                </div>
                 <% } %>
-            </div>
             <h3>購入したレッスン一覧</h3>
             <hr>
             <ul class="ticket_block">
@@ -89,4 +90,3 @@
             
         </div>
     </section>
-    <% } %>
