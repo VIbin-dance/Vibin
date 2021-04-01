@@ -15,7 +15,7 @@
                                 <%= __('profile.edit profile') %>
                             </a>
                             <h2 class="mb-3"><i class="fas fa-user-plus"></i>
-                                <%= username %>
+                                <%= user.username %>
                             </h2>
                             <p style="white-space:pre-wrap;"><%= bio %></p>
                             <a class="btn btn-dark" href="/logout">
@@ -71,24 +71,24 @@
                 <% for(let i=0; i < tickets.length; i++) { %>
                     <div class="col-lg-4 col-xs-6">
                         <div class="box">
-                            <a href="/lesson/student/<%= tickets[i][0].choreographerID %>">
-                                <img src="data:image/<%=tickets[i][0].thumbnail.contentType%>;base64, <%=tickets[i][0].thumbnail.data.toString('base64')%>"
+                            <a href="/lesson/student/<%= tickets[i].choreographerID %>">
+                                <img src="data:image/<%=tickets[i].thumbnail.contentType%>;base64, <%=tickets[i].thumbnail.data.toString('base64')%>"
                                     alt="thumbnail">
                             </a>
                             <h4 id="tickets.title<%= i %>">
-                                <%= tickets[i][0].title %>
+                                <%= tickets[i].title %>
                             </h4>
-                            <a class="special" href="/choreographer/<%= user._id %>">
-                                <%= user.username %>
+                            <a class="special" href="/choreographer/<%= choreographer[i].googleId %>">
+                                <%= choreographer[i].username %>
                             </a>
                             <p>
-                                <%= tickets[i].price %> Yen | <%= time[i] %>
+                                <%= tickets[i].price %> Yen | <%= time2[i] %>
                             </p>
                             <p class="mb-0">
-                                <%= __(`dashboard.search.level.${tickets[i][0].level[0]}`) %> | 
-                                <%= __(`dashboard.search.genre.${tickets[i][0].genre[0]}`) %> | 
-                                <%= __(`dashboard.search.purpose.${tickets[i][0].purpose[0]}`) %> | 
-                                <%= __(`dashboard.search.mood.${tickets[i][0].mood[0]}`) %>
+                                <%= __(`dashboard.search.level.${tickets[i].level[0]}`) %> | 
+                                <%= __(`dashboard.search.genre.${tickets[i].genre[0]}`) %> | 
+                                <%= __(`dashboard.search.purpose.${tickets[i].purpose[0]}`) %> | 
+                                <%= __(`dashboard.search.mood.${tickets[i].mood[0]}`) %>
                             </p>
                         </div>
                     </div>

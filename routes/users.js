@@ -61,45 +61,39 @@ router.post('/preference', ensureAuthenticated, async(req, res) => {
 
 router.get('/profile', ensureAuthenticated, (req, res) => {
     User.findOne({ email: req.user._json.email }, async(err, user) => {
-
-        // const likedVid = await Video.find({ 'like.id': user._id.toString() }).exec()
         const lesson = await Lesson.find({ 'choreographerID': user.googleId }).exec()
         const time = [];
         for (let i=0; i<lesson.length; i++) {
-          time[i] = moment(lesson[i].time).format('MM/DD HH:mm');
+            time[i] = moment(lesson[i].time).format('MM/DD HH:mm');
+        }
+        
+        const tickets = [];
+        const choreographer = [];
+        const time2 = [];
+        for (let i=0; i<user.lesson.length;i++) {
+            tickets[i] = await Lesson.findOne({ _id: user.lesson[i] }).exec();
+            choreographer[i] = await User.findOne({ googleId: tickets[i].choreographerID.toString() }).exec();
+            time2[i] = moment(tickets[i].time).format('MM/DD HH:mm');
         }
 
         if (!user) {
             req.flash('error_msg', res.__('msg.error.noUser'));
             res.redirect('/dashboard/-1?page=1&limit=15');
         } else {
-            // このパラメータに予約購入したレッスンのデータをDBから検索して記入してください。
-            // フィールド名は実際DBでどうなっているかを確認して修正する必要があります。
-            tickets = [];
-            let date = moment(new Date()).format("MMMM Do YYYY, h:mm A");
-            for (let i=0; i<user.lesson.length;i++) {
-                tickets[i] = await Lesson.find({ _id: user.lesson[i] }).exec();
-            }
-            // var tickets = [
-            //     { lesson_title: "サンプル1", lesson_id: "123123", choreographerName: "阿部一燈", level: "Intermediate", genre: "Locking", mood: "Groovy, Funky, any", date: date },
-            //     { lesson_title: "サンプル2", lesson_id: "123123", choreographerName: "阿部一燈", level: "Intermediate", genre: "Locking", mood: "Groovy, Funky, any", date: date }
-            // ];
-
             res.render('profile', {
-                // likedVid: likedVid,
-                lesson: lesson,
-                time: time,
                 user: user,
-                followingCount: user.following.length,
-                followerCount: user.follower.length,
                 bio: user.bio,
                 userPhoto: user.userPhoto,
                 userPhotoDef: user.userPhotoDef,
-                email: user.email,
-                firstName: user.name.givenName,
-                lastName: user.name.familyName,
-                username: user.username,
-                tickets: tickets
+                lesson: lesson,
+                time: time,
+                // followingCount: user.following.length,
+                // followerCount: user.follower.length,
+                // firstName: user.name.givenName,
+                // lastName: user.name.familyName,
+                tickets: tickets,
+                choreographer: choreographer,
+                time2: time2,
             })
         }
     })

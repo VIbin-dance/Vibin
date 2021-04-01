@@ -160,7 +160,7 @@ router.get("/choreographer/:id", ensureAuthenticated, async(req, res) => {
         page: req.query.page,
         limit: req.query.limit,
     }, async(err, lesson) => {
-        const choreographer = await User.findOne({ _id: lesson.docs[0].choreographerID.toString() }).exec();
+        const choreographer = await User.findOne({ googleId: lesson.docs[0].choreographerID}).exec();
         const time = [];
         for (let i = 0; i < lesson.docs.length; i++) {
             time[i] = moment(lesson.docs[i].time).format('MM/DD HH:mm');
@@ -190,31 +190,48 @@ router.get("/calendar", ensureAuthenticated, (req, res) => {
             let dateTime = [];
             let id = [];
             let idCal = [];
+            let run_status = [];
 
-            fetch(
-                    `https://www.googleapis.com/calendar/v3/calendars/${user.email}/events?orderBy=startTime&q=vibin&singleEvents=true&timeMin=${time}&key=${process.env.API_key}`, {
-                        headers: {
-                            Authorization: `Bearer ${user.accessToken}`,
+            fetch(`https://www.googleapis.com/calendar/v3/calendars/${user.email}/events?orderBy=startTime&q=vibin&singleEvents=true&timeMin=${time}&key=${process.env.API_key}`, {
+                headers: {
+                    Authorization: `Bearer ${user.accessToken}`,
                         },
                     }
                 )
                 .then((response) => response.json())
-                .then((data) => {
+                .then(async (data) => {
                     if (data.items == undefined) {
                         req.flash("error_msg", res.__("msg.error.auth"));
                         res.redirect("/");
                     } else {
                         for (i = 0; i < data.items.length; i++) {
-                            summary[i] = data.items[i].summary;
-                            dateTime[i] = moment(data.items[i].start.dateTime).format(
-                                "MMMM Do YYYY, h:mm a"
-                            );
-                            id[i] = data.items[i].description;
-                            idCal[i] = data.items[i].id;
+                            summary[i] = data.items[i].summary
+                            dateTime[i] = moment(data.items[i].start.dateTime).format('MMMM Do YYYY, h:mm a');
+                            id[i] = data.items[i].description
+                            idCal[i] = data.items[i].id
+        
+                            var s_date = new Date( data.items[i].start.dateTime ).getTime();
+                            var e_date = new Date( data.items[i].end.dateTime ).getTime();
+                            var c_date = new Date().getTime();
+        
+                            if( s_date < c_date && e_date > c_date ) {
+                                run_status[i] = "( live now )"
+                            } else {
+                                run_status[i] = ""
+                            }
                         }
-                        res.render("calendar", {
-                            userPhoto: user.userPhoto,
-                            userPhotoDef: user.userPhotoDef,
+
+                        const tickets = [];
+                        const choreographer = [];
+                        const time2 = [];
+                        for (let i=0; i<user.lesson.length;i++) {
+                            tickets[i] = await Lesson.findOne({ _id: user.lesson[i] }).exec();
+                            choreographer[i] = await User.findOne({ googleId: tickets[i].choreographerID.toString() }).exec();
+                            time2[i] = moment(tickets[i].time).format('MM/DD HH:mm');
+                        }
+        
+                        res.render('calendar', {
+                            userPhoto: req.session.passport.user.photos[0].value,
                             count: data.items.length,
                             API_key: process.env.API_key,
                             CALENDAR_ID: user.email,
@@ -223,6 +240,10 @@ router.get("/calendar", ensureAuthenticated, (req, res) => {
                             dateTime: dateTime,
                             id: id,
                             idCal: idCal,
+                            run_status: run_status,
+                            tickets: tickets,
+                            choreographer: choreographer,
+                            time2: time2,
                         });
                     }
                 });

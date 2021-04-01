@@ -6,210 +6,42 @@
     </div>
     <br>
     <br>
-    <div class="container">
-        <h4>Upcoming vibes!</h3>
-            <p>We have <%= count %> sessions ahead!
-                    <% if (count==0) { %>
-                        <a href="/dashboard/-1?page=1&limit=15">
-                            Let's plan our sessions!
-                        </a>
-                        <% } %>
-            </p>
 
-            <%- include ('partials/messages') %>
-                <div class="row">
-                    <% for(let i=0; i < count; i++) { %>
-                        <div class="col-lg-12">
-                            <form action="/calendar" method="POST">
-                                <h5><a href="/player/<%= id[i] %>">
-                                        <%= summary[i] %>
-                                            <%= run_status[i] %>
-                                    </a></h5>
-                                <p>
-                                    <%= dateTime[i] %>
-                                </p>
-                                <input id="idCal" name="idCal" class="form-control" placeholder="Enter The ID"
-                                    value="<%= typeof idCal[i] != 'undefined' ? idCal[i] : '' %>" hidden />
-                                <button class="deleteButton" type="submit">cancel</button>
-                            </form>
-                            <br>
-
-                        </div>
-                        <% } %>
-                </div>
-
-                <h4 class="mt-5 mb-3">購入したレッスン一覧</h3>
-                    <!-- <h1 class="text-center mt-5 mb-3"><i class="fas fa-user-plus"></i>購入したレッスン一覧</h1> -->
-
-                    <ul class="ticket_block">
-
-                        <% for( var ticket of tickets) { %>
-                            <li>
-                                <a href="/lesson/student/<%= ticket.lesson_id %>" class="lesson_title">
-                                    <%= ticket.lesson_title %>
-                                </a>
-                                <div class="desc">
-                                    <p><span>先生の名前 : </span>
-                                        <%= ticket.choreographerName %>
-                                    </p>
-                                    <p><span>難易度 : </span>
-                                        <%= ticket.level %>
-                                    </p>
-                                    <p><span>ジャンル : </span>
-                                        <%= ticket.genre %>
-                                    </p>
-                                    <p><span>日時 : </span>
-                                        <%= ticket.date %>
-                                    </p>
-                                </div>
-                            </li>
-                            <% } %>
-
-                    </ul>
-    </div>
-<<<<<<< HEAD
-</section>
-
-<div class="container">
-    <nav class="navbar fixed-bottom navbar-dark bg-light justify-content-center">
-        <ul>
-            <li><a href="/dashboard/-1?page=1&limit=15">
-<<<<<<< HEAD
-                    <svg width="2.0em" height="2.0em" viewBox="0 0 16 16" class="bi bi-house" fill="currentColor"
-=======
-                    <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-house" fill="currentColor"
->>>>>>> aws-live
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
-                            d="M2 13.5V7h1v6.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V7h1v6.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5zm11-11V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z" />
-                        <path fill-rule="evenodd"
-                            d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z" />
-                    </svg>
-<<<<<<< HEAD
-                </a></li>
-            <li><a href="/follow">
-                    <svg width="2.0em" height="2.0em" viewBox="0 0 16 16" class="bi bi-file-person" fill="currentColor"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
-                            d="M4 1h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H4z" />
-                        <path d="M13.784 14c-.497-1.27-1.988-3-5.784-3s-5.287 1.73-5.784 3h11.568z" />
-                        <path fill-rule="evenodd" d="M8 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
-                    </svg>
-                </a></li>
-            <li><a href="/create">
-                    <svg width="2.0em" height="2.0em" viewBox="0 0 16 16" class="bi bi-upload" fill="currentColor"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
-                            d="M.5 8a.5.5 0 0 1 .5.5V12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8.5a.5.5 0 0 1 1 0V12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V8.5A.5.5 0 0 1 .5 8zM5 4.854a.5.5 0 0 0 .707 0L8 2.56l2.293 2.293A.5.5 0 1 0 11 4.146L8.354 1.5a.5.5 0 0 0-.708 0L5 4.146a.5.5 0 0 0 0 .708z" />
-                        <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0v-8A.5.5 0 0 1 8 2z" />
-                    </svg>
-                </a></li>
-            <li class="active"><a href="/calendar">
-                    <svg width="2.0em" height="2.0em" viewBox="0 0 16 16" class="bi bi-calendar-plus"
-=======
-                </a>Home</li>
-            <li class="active"><a href="/calendar">
-                    <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-calendar-plus"
->>>>>>> aws-live
-                        fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
-                            d="M8 7a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7z" />
-                        <path fill-rule="evenodd"
-                            d="M7.5 9.5A.5.5 0 0 1 8 9h2a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0v-2z" />
-                        <path fill-rule="evenodd"
-                            d="M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1zm1-3a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2z" />
-                        <path fill-rule="evenodd"
-                            d="M3.5 0a.5.5 0 0 1 .5.5V1a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 .5-.5zm9 0a.5.5 0 0 1 .5.5V1a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 .5-.5z" />
-                    </svg>
-<<<<<<< HEAD
-                </a></li>
-            <li><a href="/users/profile">
-                    <% if (typeof userPhotoDef.data != "undefined") { %>
-                    <img src="data:image/<%=userPhotoDef.contentType%>;base64, <%=userPhotoDef.data.toString('base64')%>"
-                        height="27" width="27" style="border-radius: 50%;" alt="user photo">
-                    <% } else { %>
-                    <img src="<%= userPhoto %>" height="27" width="27" style="border-radius: 50%;" alt="user photo">
-                    <% } %>
-                </a></li>
-=======
-                </a>Calendar</li>
-            <li><a href="/upload">
-                    <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-upload" fill="currentColor"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
-                            d="M.5 8a.5.5 0 0 1 .5.5V12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8.5a.5.5 0 0 1 1 0V12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V8.5A.5.5 0 0 1 .5 8zM5 4.854a.5.5 0 0 0 .707 0L8 2.56l2.293 2.293A.5.5 0 1 0 11 4.146L8.354 1.5a.5.5 0 0 0-.708 0L5 4.146a.5.5 0 0 0 0 .708z" />
-                        <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0v-8A.5.5 0 0 1 8 2z" />
-                    </svg>
-                </a>Upload</li>
-            <li><a href="/users/profile">
-                    <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-file-person" fill="currentColor"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
-                            d="M4 1h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H4z" />
-                        <path d="M13.784 14c-.497-1.27-1.988-3-5.784-3s-5.287 1.73-5.784 3h11.568z" />
-                        <path fill-rule="evenodd" d="M8 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
-                    </svg>
-                </a>User</li>
->>>>>>> aws-live
-        </ul>
-    </nav>
-</div>
-
-<footer id="footer">
-    <div class="footer-top">
+<% if (tickets.length> 0) { %>
+    <section id="results" class="results">
         <div class="container">
+            <h3>購入したレッスン一覧</h3>
+            <hr>
             <div class="row">
-                <div class="col-lg-3 col-md-6 footer-contact">
-                    <h3>Vibin'</h3>
-                    <p>
-                        <strong><%= __('footer.Phone') %>:</strong> +81 080 4339 9251<br>
-                        <strong><%= __('footer.E-Mail') %>:</strong> info@vibin.tokyo<br>
-                    </p>
-                </div>
-                <div class="col-lg-2 col-md-6 footer-links">
-                    <h4><%= __('footer.Sitemap') %></h4>
-                    <ul>
-                        <li><i class="bx bx-chevron-right"></i> <a href="#about"><%= __('footer.Aboutus') %></a></li>
-                        <li><i class="bx bx-chevron-right"></i> <a
-                                href="/dashboard/-1?page=1&limit=15"><%= __('footer.Home') %></a></li>
-                        <li><i class="bx bx-chevron-right"></i> <a href="/calendar"><%= __('footer.Calendar') %></a>
-                        </li>
-                        <li><i class="bx bx-chevron-right"></i> <a href="/upload"><%= __('footer.Upload') %></a></li>
-                        <li><i class="bx bx-chevron-right"></i> <a href="/terms-of-service"><%= __('footer.TOS') %></a>
-                        </li>
-                        <li><i class="bx bx-chevron-right"></i> <a href="/privacy-policy"><%= __('footer.PP') %></a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-lg-2 col-md-6 footer-links">
-                    <h4>Company</h4>
-                    <ul>
-                        <li><i class="bx bx-chevron-right"></i> <a href="/company/about">About us</a></li>
-                </div>
-                <div class="col-lg-4 col-md-6 footer-newsletter">
-                    <h4><%= __('footer.News1') %></h4>
-                    <p><%= __('footer.News2') %></p>
-                    <form action="" method="post">
-                        <input type="email" name="email"><input type="submit" value="<%= __('footer.Subscribe') %>">
-                    </form>
-                </div>
-                <div class="social-links text-center text-md-right pt-3 pt-md-0">
-                    <a href="https://www.facebook.com/Vibin-107436974343750" class="facebook" target="_blank"><i
-                            class="bx bxl-facebook"></i></a>
-                    <a href="https://www.instagram.com/vibin_dance/" class="instagram" target="_blank"><i
-                            class="bx bxl-instagram"></i></a>
-                </div>
+                <% for(let i=0; i < tickets.length; i++) { %>
+                    <div class="col-lg-4 col-xs-6">
+                        <div class="box">
+                            <a href="/lesson/student/<%= tickets[i].choreographerID %>">
+                                <img src="data:image/<%=tickets[i].thumbnail.contentType%>;base64, <%=tickets[i].thumbnail.data.toString('base64')%>"
+                                    alt="thumbnail">
+                            </a>
+                            <h4 id="tickets.title<%= i %>">
+                                <%= tickets[i].title %>
+                                <%= run_status[i] %>
+                            </h4>
+                            <a class="special" href="/choreographer/<%= choreographer[i].googleId %>">
+                                <%= choreographer[i].username %>
+                            </a>
+                            <p>
+                                <%= tickets[i].price %> Yen | <%= time2[i] %>
+                            </p>
+                            <p class="mb-0">
+                                <%= __(`dashboard.search.level.${tickets[i].level[0]}`) %> | 
+                                <%= __(`dashboard.search.genre.${tickets[i].genre[0]}`) %> | 
+                                <%= __(`dashboard.search.purpose.${tickets[i].purpose[0]}`) %> | 
+                                <%= __(`dashboard.search.mood.${tickets[i].mood[0]}`) %>
+                            </p>
+                        </div>
+                    </div>
+                <% } %>
             </div>
         </div>
+    </section>
+<% } %>
     </div>
-    <div class="container d-md-flex py-4">
-        <div class="mr-md-auto text-center text-md-left">
-            <div class="copyright">
-                &copy; Copyright <strong><span>Vibin'</span></strong>. All Rights Reserved
-            </div>
-        </div>
-    </div>
-</footer>
-=======
 </section>
->>>>>>> staging
