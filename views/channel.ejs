@@ -1,31 +1,6 @@
-<header id="header" class="fixed-top">
-    <div class="container d-flex align-items-center justify-content-between">
-        <h1 class="logo"><a href="/">Vibin'</a></h1>
-        <nav class="nav-menu d-none d-lg-block">
-            <ul>
-                <li><a href="/dashboard/-1?page=1&limit=15">Home</a></li>
-                <li><a href="/calendar">Calendar</a></li>
-                <li><a href="/upload">Upload</a></li>
-            </ul>
-        </nav>
-        <nav class="nav-menu d-none d-lg-block">
-            <ul>
-                <li class="drop-down">
-                    <img src="<%= userPhoto %>" height="40" width="40" style="border-radius: 50%;" alt="user photo">
-                    <ul>
-                        <li><a href="/users/profile">Profile</a></li>
-                        <li><a href="/logout">Logout</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </nav>
-    </div>
-</header>
-
 <!-- live video & chat section -->
-
+<div class="top-space">
 <section id="channel_grid">
-
     <div class="container">
         <%- include ('partials/messages') %>
             <p class="block_label">チャンネル一覧</p>

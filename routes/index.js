@@ -46,8 +46,7 @@ router.get(
     })
 );
 
-router.get(
-    "/auth/google/callback",
+router.get("/auth/google/callback",
     passport.authenticate("google", {
         failureRedirect: "/error",
         session: true,
@@ -106,28 +105,16 @@ router.post("/dashboard", ensureAuthenticated, async(req, res) => {
     const user = await User.findOne({ email: req.user._json.email }).exec();
 
     const query = {
-        $and: [{
-                language: language,
-            },
-            {
-                level: level,
-            },
-            {
-                genre: genre,
-            },
-            {
-                purpose: purpose,
-            },
-            {
-                mood: mood,
-            },
+        $and: [
+            { language: language },
+            { level: level },
+            { genre: genre },
+            { purpose: purpose },
+            { mood: mood },
         ],
-        $or: [{
-                title: searchQuery,
-            },
-            {
-                choreographer: searchQuery,
-            },
+        $or: [
+            { title: searchQuery },
+            { choreographer: searchQuery },
         ],
     };
 
