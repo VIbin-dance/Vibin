@@ -72,7 +72,7 @@ router.get('/profile', ensureAuthenticated, (req, res) => {
         const time2 = [];
         for (let i=0; i<user.lesson.length;i++) {
             tickets[i] = await Lesson.findOne({ _id: user.lesson[i] }).exec();
-            choreographer[i] = await User.findOne({ googleId: tickets[i].choreographerID.toString() }).exec();
+            choreographer[i] = await User.findOne({ googleId: tickets[i].choreographerID }).exec();
             time2[i] = moment(tickets[i].time).format('MM/DD HH:mm');
         }
 

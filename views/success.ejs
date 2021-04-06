@@ -1,31 +1,21 @@
-<div class="top-space"></div>
-<section id="results" class="results">
-    <div class="container">
-        <h2>Thank you for your purchase!</h2><br>
-        <div class="row">
-            <div class="col-lg-12">
-                <h3>Who we are</h3>
-                <ol>
-                    <li>
-                        <p>We appreciate your business! If you have any questions, please email
-                            <a href="mailto:info@vibin.tokyo">info@vibin.tokyo</a>.</p>
-                    </li>
-                </ol>
-            </div>
-        </div>
-    </div>
-</section>
-
 <main role="main" class="container col-md-10 col-sm-10" style="margin-top:10%; margin-bottom: 5%;">
     <div class="row">
         <div class="col-md-7 blog-main">
             <div class="blog-post">
                 <div class="card-deck">
-                    <div class="card mb-3" style="min-width: 47vh; max-width: 80vh; margin-top: 30px;">
-                        <a href="#">
+                    <div class="mb-3" style="min-width: 47vh; max-width: 80vh; margin-top: 30px;">
+                        <h2>Thank you for your purchase!</h2>
+                        <p></p>
+                        <ol class="list-unstyled">
+                            <li>An email has been sent to this email: <b><%= user.email %></b></li><br>
+                            <li>1. Go to your <a href="/users/profile">profile</a> or <a href="/calendar">calendar</a> page for purchased livestream</li>
+                            <li>2. At <%= dateTime %>, access the class. Class will start</li>
+                            <li>In any case of error, contact your teacher or contact us</li>
+                        </ol>
+                        <!-- <a href="#">
                             <img style="height: 100%; width: 100%; display: block;" src="data:image/<%=lesson.thumbnail.contentType%>;base64, <%=lesson.thumbnail.data.toString('base64')%>"
                                 alt="thumbnail of the lesson">
-                        </a>
+                        </a> -->
                     </div>
                 </div>
             </div>
@@ -33,10 +23,12 @@
         
         <aside class="col-md-5 blog-sidebar">
             <div class="p-3">
-                <h1>
-                    <%= lesson.title %> by <a href="/choreographer/<%= choreographer._id %>">
-                        <%= choreographer.username %>
-                    </a>
+                <h4>You purchased...</h4>
+                <a href="/lesson/student/<%= lesson.choreographerID %>">
+                <img style="height: 100%; width: 100%; display: block;" src="data:image/<%=lesson.thumbnail.contentType%>;base64, <%=lesson.thumbnail.data.toString('base64')%>"
+                alt="thumbnail of the lesson"></a><br>
+                <h1><%= lesson.title %> by 
+                    <a href="/choreographer/<%= choreographer.googleId %>"><%= choreographer.username %></a>
                 </h1>
                 <ol class="list-unstyled">
                     <li><%= __(`dashboard.search.level.${lesson.level[0]}`) %> | <%= __(`dashboard.search.genre.${lesson.genre[0]}`) %> | <%= __(`dashboard.search.purpose.${lesson.purpose[0]}`) %> | <%= __(`dashboard.search.mood.${lesson.mood[0]}`) %></li>
@@ -44,8 +36,8 @@
                 <h4><%= lesson.price %> <%= __('dashboard.Yen') %></h4>
                 <hr>
                 <div class="text-center">
-                        <button class="btn btn-danger btn-lg btn-block" id="checkout-button"><%= __('reservation.purchase') %></button>
-                        <a href="/success" class="btn btn-danger btn-lg btn-block"><%= __('reservation.purchase') %></a>
+                        <!-- <button class="btn btn-danger btn-lg btn-block" id="checkout-button"><%= __('reservation.purchase') %></button> -->
+                        <!-- <a href="" class="btn btn-danger btn-lg btn-block">Purchased</a> -->
                 </div>
             </div>
 
@@ -60,7 +52,7 @@
                     <% } %>
                 </div>         
                 <div class="text-center">
-                <a href="/choreographer/<%= choreographer._id %>" style="font-size: 22px;"><%= choreographer.username %></a>
+                <a href="/choreographer/<%= choreographer.googleId %>" style="font-size: 22px;"><%= choreographer.username %></a>
                 </div>
                 <br><h5 style="white-space:pre-wrap;"><%= choreographer.bio %></h5>
                 <p class="mb-0"><%= __('reservation.contact') %>: <a href="mailto:<%= choreographer.email %>"><%= choreographer.email %></a></p>

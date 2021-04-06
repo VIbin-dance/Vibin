@@ -18,7 +18,7 @@ const Lesson = require("../models/Lesson");
 const storage = multer.memoryStorage()
 const upload = multer({ storage: storage });
 
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
     res.render("landing");
 });
 
@@ -129,7 +129,7 @@ router.post("/dashboard", ensureAuthenticated, async(req, res) => {
             const choreographer = [];
             const time = [];
             for (let i = 0; i < lesson.docs.length; i++) {
-                choreographer[i] = await User.findOne({ _id: lesson.docs[i].choreographerID.toString() }).exec();
+                choreographer[i] = await User.findOne({ googleId: lesson.docs[i].choreographerID }).exec();
                 time[i] = moment(lesson.docs[i].time).format('MM/DD HH:mm');
             }
 
@@ -181,74 +181,73 @@ router.get("/choreographer/:id", ensureAuthenticated, async(req, res) => {
 });
 
 router.get("/calendar", ensureAuthenticated, (req, res) => {
-    User.findOne({
-            email: req.user._json.email,
-        },
-        (err, user) => {
-            let time = encodeURIComponent(moment().format());
-            let summary = [];
-            let dateTime = [];
-            let id = [];
-            let idCal = [];
-            let run_status = [];
+    User.findOne({ email: req.user._json.email }, (err, user) => {
+        let time = encodeURIComponent(moment().format());
+        let summary = [];
+        let dateTime = [];
+        let id = [];
+        let idCal = [];
+        let run_status = [];
 
-            fetch(`https://www.googleapis.com/calendar/v3/calendars/${user.email}/events?orderBy=startTime&q=vibin&singleEvents=true&timeMin=${time}&key=${process.env.API_key}`, {
-                headers: {
-                    Authorization: `Bearer ${user.accessToken}`,
-                        },
-                    }
-                )
-                .then((response) => response.json())
-                .then(async (data) => {
-                    if (data.items == undefined) {
-                        req.flash("error_msg", res.__("msg.error.auth"));
-                        res.redirect("/");
-                    } else {
-                        for (i = 0; i < data.items.length; i++) {
-                            summary[i] = data.items[i].summary
-                            dateTime[i] = moment(data.items[i].start.dateTime).format('MMMM Do YYYY, h:mm a');
-                            id[i] = data.items[i].description
-                            idCal[i] = data.items[i].id
+        fetch(`https://www.googleapis.com/calendar/v3/calendars/${user.email}/events?orderBy=startTime&q=vibin&singleEvents=true&key=${process.env.API_key}`, {
+            headers: {
+                Authorization: `Bearer ${user.accessToken}`,
+                    },
+                }
+            )
+            .then((response) => response.json())
+            .then(async (data) => {
+                if (data.items == undefined) {
+                    req.flash("error_msg", res.__("msg.error.auth"));
+                    res.redirect("/");
+                } else {
+                    for (i = 0; i < data.items.length; i++) {
+                        summary[i] = data.items[i].summary
+                        dateTime[i] = moment(data.items[i].start.dateTime).format('MMMM Do YYYY, h:mm a');
+                        id[i] = data.items[i].description
+                        idCal[i] = data.items[i].id
         
-                            var s_date = new Date( data.items[i].start.dateTime ).getTime();
-                            var e_date = new Date( data.items[i].end.dateTime ).getTime();
-                            var c_date = new Date().getTime();
+                        var s_date = new Date( data.items[i].start.dateTime ).getTime();
+                        var e_date = new Date( data.items[i].end.dateTime ).getTime();
+                        var c_date = new Date().getTime();
         
-                            if( s_date < c_date && e_date > c_date ) {
-                                run_status[i] = "( live now )"
-                            } else {
-                                run_status[i] = ""
-                            }
+                        if( s_date < c_date && e_date > c_date ) {
+                            run_status[i] = "( live now )"
+                        } else {
+                            run_status[i] = ""
                         }
+                    }
 
-                        const tickets = [];
-                        const choreographer = [];
-                        const time2 = [];
-                        for (let i=0; i<user.lesson.length;i++) {
-                            tickets[i] = await Lesson.findOne({ _id: user.lesson[i] }).exec();
-                            choreographer[i] = await User.findOne({ googleId: tickets[i].choreographerID.toString() }).exec();
+                    const tickets = [];
+                    const choreographer = [];
+                    const time2 = [];
+                    for (let i=0; i<user.lesson.length;i++) {
+                        tickets[i] = await Lesson.findOne({ _id: user.lesson[i] }).exec();
+                        if (tickets.length > 0) {
+                            choreographer[i] = await User.findOne({ googleId: tickets[i].choreographerID }).exec();
                             time2[i] = moment(tickets[i].time).format('MM/DD HH:mm');
                         }
-        
-                        res.render('calendar', {
-                            userPhoto: req.session.passport.user.photos[0].value,
-                            count: data.items.length,
-                            API_key: process.env.API_key,
-                            CALENDAR_ID: user.email,
-                            accessToken: user.accessToken,
-                            summary: summary,
-                            dateTime: dateTime,
-                            id: id,
-                            idCal: idCal,
-                            run_status: run_status,
-                            tickets: tickets,
-                            choreographer: choreographer,
-                            time2: time2,
-                        });
                     }
-                });
-        }
-    );
+        
+                    res.render('calendar', {
+                        userPhoto: user.userPhoto,
+                        userPhotoDef: user.userPhotoDef,
+                        count: data.items.length,
+                        API_key: process.env.API_key,
+                        CALENDAR_ID: user.email,
+                        accessToken: user.accessToken,
+                        summary: summary,
+                        dateTime: dateTime,
+                        id: id,
+                        idCal: idCal,
+                        run_status: run_status,
+                        tickets: tickets,
+                        choreographer: choreographer,
+                        time2: time2,
+                    });
+                }
+            });
+    });
 });
 
 router.post("/calendar", ensureAuthenticated, (req, res) => {
@@ -377,11 +376,15 @@ router.get("/reservation/:id", ensureAuthenticated, async(req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.id }).exec();
     const choreographer = await User.findOne({ googleId: lesson.choreographerID }).exec();
     const account = await stripe.accounts.retrieve(choreographer.stripeID);
+    const dateTime = moment(lesson.time).format('MM/DD HH:mm');
 
     if (user.lesson.includes(lesson.id)) {
         res.render('success', {
             lesson: lesson,
+            dateTime: dateTime,
+            params: req.params.id,
             choreographer: choreographer,
+            user: user,
             userPhoto: user.userPhoto,
             userPhotoDef: user.userPhotoDef,
         })
@@ -410,7 +413,7 @@ router.get("/reservation/:id", ensureAuthenticated, async(req, res) => {
                     destination: account.id,
                 },
             },
-            success_url: `http://localhost:5000/success/${req.params.id}`,
+            success_url: `http://localhost:5000/success/${req.params.id}` + '?session_id={CHECKOUT_SESSION_ID}',
             cancel_url: `http://localhost:5000/reservation/${req.params.id}`,
         });
 
@@ -425,12 +428,15 @@ router.get("/reservation/:id", ensureAuthenticated, async(req, res) => {
 });
 
 router.get('/success/:id', ensureAuthenticated, async(req, res) => {
-    const lesson = await Lesson.findOne({ _id: req.params.id }).exec();
     const user = await User.findOne({ email: req.user._json.email }).exec();
+    const lesson = await Lesson.findOne({ _id: req.params.id }).exec();
+    const choreographer = await User.findOne({ googleId: lesson.choreographerID }).exec();
+    const dateTime = moment(lesson.time).format('MM/DD HH:mm');
+    const session = await stripe.checkout.sessions.retrieve(req.query.session_id);
 
     if (user.lesson.includes(lesson.id)) {
         console.log('already done')
-    } else {
+    } else if (session.payment_status == 'paid') {
         User.findOneAndUpdate({ email: req.user._json.email }, { $push: { lesson: [lesson._id] } }, { upsert: true, new: true, setDefaultsOnInsert: true },
             (err, user) => {
                 console.log(err || user);
@@ -438,23 +444,30 @@ router.get('/success/:id', ensureAuthenticated, async(req, res) => {
         );
 
         const text = `
-      <h1>レッスンご購入ありがとうございます&#10024;</h1>
-      <h2>タイトル：${lesson.title}</h2>
-      <a href="/reservation/<%= lesson.id %>">
+        <p>この度はレッスンのご予約をいただきまして、誠にありがとうございます。</p>
+        <p>▼ご予約内容▼</p>
+        <p>--------------------------------------------</p>
+        <p>${lesson.title}</p>
+        <a href="/reservation/<%= lesson.id %>">
         <img src="data:image/<%=lesson.thumbnail.contentType%>;base64, <%=lesson.thumbnail.data.toString('base64')%>" alt="thumbnail">
-      </a>
-      <p>日時：${lesson.time}</p>
-      <p>価格：${lesson.price}</p>
-      <p>レベル：${lesson.level}</p>
-      <p>ジャンル：${lesson.genre}</p>
-      <p>ムード：${lesson.mood}</p>`;
-
-        sendMail(user.email, "ご購入ありがとうございました!", text);
+        </a>
+        <p>日時：${dateTime}</p>
+        <p>価格：${lesson.price} Yen</p>
+        <p>${lesson.level[0]} | ${lesson.genre[0]} | ${lesson.purpose[0]} | ${lesson.mood[0]}</p>
+        <p>--------------------------------------------</p>`
+    
+          sendMail(user.email, "ご予約を受付いたしました！", text);
         const dateTime = moment(lesson.time).format("YYYY-MM-DDThh:mm");
         addCalendar(user, lesson.title, dateTime);
+    } else {
+        res.redirect(`/reservation/${req.params.id}`)
     }
 
     res.render('success', {
+        lesson: lesson,
+        dateTime: dateTime,
+        choreographer: choreographer,
+        user: user,
         userPhoto: user.userPhoto,
         userPhotoDef: user.userPhotoDef,
     });
@@ -522,10 +535,8 @@ router.post("/create", upload.single('thumbnail'), async(req, res) => {
         }
     } else {
         account = await stripe.accounts.retrieve(user.stripeID);
-        console.log(account)
         loginLink = await stripe.accounts.createLoginLink(user.stripeID);
     }
-
 
     if (errors.length > 0) {
         res.render("create", {
@@ -566,7 +577,7 @@ router.post("/create", upload.single('thumbnail'), async(req, res) => {
                     CLIENT_id: process.env.ZOOM_CLIENT_ID,
                 });
             } else {
-                const dateTime = moment(time).format("YYYY-MM-DDThh:mm");
+                const dateTime = moment(time).format("YYYY-MM-DDTHH:mm");
 
                 addCalendar(user, title, dateTime);
 
@@ -574,18 +585,21 @@ router.post("/create", upload.single('thumbnail'), async(req, res) => {
                 newLesson
                     .save()
                     .then(async function(lesson) {
-                        const text = `
-                                        <h1>レッスンが登録されました&#10024;</h1>
-                                        <h2>タイトル：${lesson.title}</h2>
-                                        <a href="/reservation/<%= lesson.id %>">
-                                          <img src="data:image/<%=lesson.thumbnail.contentType%>;base64, <%=lesson.thumbnail.data.toString('base64')%>" alt="thumbnail">
-                                        </a>
-                                        <p>価格：${lesson.price}</p>
-                                        <p>レベル：${lesson.level}</p>
-                                        <p>ジャンル：${lesson.genre}</p>
-                                        <p>ムード：${lesson.mood}</p>`;
 
-                        sendMail(user.email, "レッスンが登録されました!", text);
+                        const text = `
+                        <p>この度はレッスンをご登録いただきまして、誠にありがとうございます。</p>
+                        <p>▼登録内容▼</p>
+                        <p>--------------------------------------------</p>
+                        <p>${lesson.title}</p>
+                        <a href="/reservation/<%= lesson.id %>">
+                        <img src="data:image/<%=lesson.thumbnail.contentType%>;base64, <%=lesson.thumbnail.data.toString('base64')%>" alt="thumbnail">
+                        </a>
+                        <p>日時：${dateTime}</p>
+                        <p>価格：${lesson.price} Yen</p>
+                        <p>${lesson.level[0]} | ${lesson.genre[0]} | ${lesson.purpose[0]} | ${lesson.mood[0]}</p>
+                        <p>--------------------------------------------</p>`
+                    
+                          sendMail(user.email, "レッスンの登録を受付いたしました！", text);
 
                         req.flash("success_msg", res.__("msg.success.schedule"));
                         res.redirect("/calendar");
@@ -656,6 +670,9 @@ router.post('/lessons/edit/:id', ensureAuthenticated, async(req, res) => {
     const { id } = req.body;
     Lesson.findByIdAndDelete(id, (err, result) => {
         console.log(err || result);
+
+        // User.findByIdAndUpdate(follower, { $pull: { lesson: lesson } }).exec();
+
         req.flash("success_msg", "Your lesson has been deleted");
         res.redirect("/users/profile")
     })

@@ -150,6 +150,7 @@
         const li = document.createElement("li");
         li.innerHTML = `<figure class="avatar">
                             <img src="${user_photo}" alt="">
+                            <span style="font-size:12px">${user_name}</span>
                         </figure>
                         <div class="message">${chat_msg}<span class="time">${chat_time}</span></div>`;
         chat_list.appendChild(li);

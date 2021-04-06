@@ -8,7 +8,7 @@
     <input type="hidden" name="ch_playurl" id="ch_playurl" value="<%= ch_playURL %>">
     <input type="hidden" name="ch_playTime" id="ch_playTime" value="">
     <input type="hidden" name="ch_arn" id="ch_arn" value="<%= ch_arn %>">
-    <input type="hidden" name="username" id="username" value="<%= email %>">
+    <input type="hidden" name="username" id="username" value="<%= username %>">
     <input type="hidden" name="userphoto" id="userphoto" value="<%= userPhoto %>">
     <input type="hidden" name="chat_room_id" id="chat_room_id" value="<%= ch_streamkey %>">
     <div class="live_grid">
@@ -47,9 +47,7 @@
                             </div>
                         </a>
                         <div class="infor">
-                            <p class="name">
-                                <%= ch_name %>
-                            </p>
+                            <p class="name"><%= ch_name %></p>
                             <p class="level">先生 : <%= teacher.username %>
                             </p>
                             <ul class="category_grid">
@@ -63,12 +61,21 @@
 
                     <div class="count_info">
                         <div class="btn_grid">
+                            <button id="mirror" onclick="mirrorToggle()">
+                                <svg width="2.5em" height="2.5em" viewBox="0 0 16 16" class="bi bi-aspect-ratio" fill="currentColor"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                d="M0 3.5A1.5 1.5 0 0 1 1.5 2h13A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 12.5v-9zM1.5 3a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-13z" />
+                                <path fill-rule="evenodd"
+                                d="M2 4.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1H3v2.5a.5.5 0 0 1-1 0v-3zm12 7a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1H13V8.5a.5.5 0 0 1 1 0v3z" />
+                            </svg>
+                        </button>
                             <button class="favorite"><img src="/assets/img/like.png" alt=""></button>
                             <button class="follow">フォロー</button>
                         </div>
                         <div class="channel_status">
-                            <p class="login_users">1,399</p>
-                            <p class="live_time">6:40:17</p>
+                            <p class="login_users"></p>
+                            <p class="live_time"></p>
                         </div>
                     </div>
 
@@ -92,7 +99,7 @@
                     </ul>
                 </div>
                 <div class="input_wrap">
-                    <button class="btn1">投げ銭</button>
+                    <!-- <button class="btn1">投げ銭</button> -->
                     <textarea name="" id="chat_msg" placeholder="コメントする"></textarea>
                     <button class="send_btn"><img src="/assets/img/send.png" alt=""></button>
                 </div>
@@ -109,6 +116,21 @@
         </button>
     </div>
 </section>
+
+<style>
+.mirror {
+    transform: rotateY(180deg);
+    -webkit-transform: rotateY(180deg);
+    -moz-transform: rotateY(180deg);
+  }
+</style>
+
+<script>
+function mirrorToggle() {
+    document.getElementById("live_screen").classList.toggle("mirror");
+    console.log('mirrored')
+    }
+</script>
 
 <!-- autoresize textarea -->
 <script src="/assets/js/autosize.js"></script>

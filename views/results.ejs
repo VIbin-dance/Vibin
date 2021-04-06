@@ -15,7 +15,7 @@
                 <h4 id="title<%= i %>">
                   <%= lesson.docs[i].title %>
                 </h4>
-                <a class="special" href="/choreographer/<%= choreographer[i]._id %>">
+                <a class="special" href="/choreographer/<%= choreographer[i].googleId %>">
                   <%= choreographer[i].username %>
                 </a>
                 <p><%= lesson.docs[i].price %> <%= __('dashboard.Yen') %> | <%= time[i] %></p>

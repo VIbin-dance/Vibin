@@ -34,7 +34,7 @@
                 <% for(let i=0; i < lesson.length; i++) { %>
                     <div class="col-lg-4 col-xs-6">
                         <div class="box">
-                            <a href="/lesson/techer">
+                            <a href="/lesson/teacher/<%= lesson[i].choreographerID %>">
                                 <img src="data:image/<%=lesson[i].thumbnail.contentType%>;base64, <%=lesson[i].thumbnail.data.toString('base64')%>"
                                     alt="thumbnail">
                             </a>
@@ -43,7 +43,7 @@
                                     <a class="btn btn-sm btn-dark float-right"
                                         href="/lessons/edit/<%= lesson[i]._id %>">Edit</a>
                             </h4>
-                            <a class="special" href="/choreographer/<%= user._id %>">
+                            <a class="special" href="/choreographer/<%= user.googleId%>">
                                 <%= user.username %>
                             </a>
                             <p>
@@ -125,6 +125,6 @@
             <h3>マイチャンネル</h3>
             <hr>
             <a class="btn btn-dark" href="/lesson/channel">チャンネル管理</a>
-            <a class="btn btn-dark" href="/lesson/techer">レッスンを開始する</a>
+            <!-- <a class="btn btn-dark" href="/lesson/teacher">レッスンを開始する</a> -->
         </div>
     </section>

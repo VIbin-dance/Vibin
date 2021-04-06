@@ -13,7 +13,7 @@
           <% } %>
       </div>         
       <div class="text-center">
-      <a href="/choreographer/<%= choreographer._id %>" style="font-size: 22px;"><%= choreographer.username %></a>
+      <a href="/choreographer/<%= choreographer.googleId %>" style="font-size: 22px;"><%= choreographer.username %></a>
       <br><br><h5 style="white-space:pre-wrap;"><%= choreographer.bio %></h5>
       <p class="mb-0"><%= __('reservation.contact') %>: <a href="mailto:<%= choreographer.email %>"><%= choreographer.email %></a></p>
     </div>
@@ -31,7 +31,7 @@
             <h4 id="title<%= i %>">
               <%= lesson.docs[i].title %>
             </h4>
-            <a class="special" href="/choreographer/<%= choreographer._id %>">
+            <a class="special" href="/choreographer/<%= choreographer.googleId %>">
               <%= choreographer.username %>
             </a>
             <p><%= lesson.docs[i].price %> <%= __('dashboard.Yen') %> | <%= time[i] %></p>
