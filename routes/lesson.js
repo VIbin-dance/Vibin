@@ -236,7 +236,7 @@ router.get('/teacher/:lesson_id', ensureAuthenticated, async (req, res) => {
 
 router.get('/student/:lesson_id', ensureAuthenticated, async (req, res) => {
     const user = await User.findOne({ email: req.user._json.email }).exec();
-    Lesson.findOne({ choreographerID: req.params.lesson_id }, (err, ls) => {
+    Lesson.findOne({ _id: req.params.lesson_id }, (err, ls) => {
         if(!ls){
             req.flash('error_msg', '選択したレッスンの期限が切れたか情報が正しくありません。');
             res.redirect('/users/profile');
@@ -246,7 +246,7 @@ router.get('/student/:lesson_id', ensureAuthenticated, async (req, res) => {
                     req.flash('error_msg', '現在所有しているチャンネルがありません。');
                     res.redirect('/users/profile');
                 } else {
-                    const choreographer = await User.findOne({ googleId : req.params.lesson_id }).exec();
+                    const choreographer = await User.findOne({ googleId : ls.choreographerID }).exec();
                     ch_count = 1;
                     res.render('student', {
                         userPhoto: user.userPhoto,

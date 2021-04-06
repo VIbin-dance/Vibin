@@ -432,33 +432,36 @@ router.get('/success/:id', ensureAuthenticated, async(req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.id }).exec();
     const choreographer = await User.findOne({ googleId: lesson.choreographerID }).exec();
     const dateTime = moment(lesson.time).format('MM/DD HH:mm');
-    const session = await stripe.checkout.sessions.retrieve(req.query.session_id);
+    let session;
+    if (req.query.session_id) {
+        session = await stripe.checkout.sessions.retrieve(req.query.session_id);
+    }
 
     if (user.lesson.includes(lesson.id)) {
         console.log('already done')
-    } else if (session.payment_status == 'paid') {
+    } else if (lesson.price === 0 || session.payment_status == 'paid') {
         User.findOneAndUpdate({ email: req.user._json.email }, { $push: { lesson: [lesson._id] } }, { upsert: true, new: true, setDefaultsOnInsert: true },
             (err, user) => {
                 console.log(err || user);
+                const dateTime = moment(lesson.time).format("YYYY-MM-DDThh:mm");
+
+                const text = `
+                <p>この度はレッスンのご予約をいただきまして、誠にありがとうございます。</p>
+                <p>▼ご予約内容▼</p>
+                <p>--------------------------------------------</p>
+                <p>${lesson.title}</p>
+                <a href="/reservation/<%= lesson.id %>">
+                <img src="data:image/<%=lesson.thumbnail.contentType%>;base64, <%=lesson.thumbnail.data.toString('base64')%>" alt="thumbnail">
+                </a>
+                <p>日時：${dateTime}</p>
+                <p>価格：${lesson.price} Yen</p>
+                <p>${lesson.level[0]} | ${lesson.genre[0]} | ${lesson.purpose[0]} | ${lesson.mood[0]}</p>
+                <p>--------------------------------------------</p>`
+            
+                sendMail(user.email, "ご予約を受付いたしました！", text);
+                addCalendar(user, lesson.title, dateTime);
             }
         );
-
-        const text = `
-        <p>この度はレッスンのご予約をいただきまして、誠にありがとうございます。</p>
-        <p>▼ご予約内容▼</p>
-        <p>--------------------------------------------</p>
-        <p>${lesson.title}</p>
-        <a href="/reservation/<%= lesson.id %>">
-        <img src="data:image/<%=lesson.thumbnail.contentType%>;base64, <%=lesson.thumbnail.data.toString('base64')%>" alt="thumbnail">
-        </a>
-        <p>日時：${dateTime}</p>
-        <p>価格：${lesson.price} Yen</p>
-        <p>${lesson.level[0]} | ${lesson.genre[0]} | ${lesson.purpose[0]} | ${lesson.mood[0]}</p>
-        <p>--------------------------------------------</p>`
-    
-          sendMail(user.email, "ご予約を受付いたしました！", text);
-        const dateTime = moment(lesson.time).format("YYYY-MM-DDThh:mm");
-        addCalendar(user, lesson.title, dateTime);
     } else {
         res.redirect(`/reservation/${req.params.id}`)
     }
