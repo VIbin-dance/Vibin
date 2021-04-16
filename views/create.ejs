@@ -269,9 +269,8 @@
     };
 
     function setTime() {    
-        document.getElementById('time').min = moment().format('YYYY-MM-DDThh:mm')
-        // 1 day later
-        // add a day to moment()
+        const min = moment().add(1, 'd')
+        document.getElementById('time').min = min.format('YYYY-MM-DDThh:mm')
         console.log(document.getElementById('time').min)
     };
 </script>

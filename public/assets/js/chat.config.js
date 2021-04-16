@@ -58,6 +58,8 @@
     const channel_arn = document.querySelector("#ch_arn");
     const user_name = document.querySelector("#username");
     const user_photo = document.querySelector("#userphoto");
+    const user_photoDefData = document.getElementById("userphotoDefData").value
+    const user_photoDefType = document.getElementById("userphotoDefType").value
 
     const chat_wrap = document.querySelector(".message_wrap");
     const chat_list = document.querySelector(".message_list");
@@ -113,17 +115,17 @@
     // ///////////////////////////////////////////////////////////////
     // click send Button
     send_btn.addEventListener('click', () => {
-        if (chat_msg.value != '') {
+        if (chat_msg.value.length > 0) {
             sendMsg();
         } else {
             // console.log('message is empty...')
         }
     })
 
-    // keydown ctrl + Enter in input box
+    // keydown Enter in input box
     chat_msg.addEventListener('keydown', (e) => {
-        if (e.ctrlKey && e.keyCode == 13) {
-            if (chat_msg.value != '') {
+        if (e.keyCode == 13) {
+            if (chat_msg.value.length > 0) {
                 sendMsg();
             } else {
                 // console.log('message is empty...')
@@ -134,9 +136,18 @@
     // send Message
     function sendMsg() {
         let convert_msg = chat_msg.value.replace(/\n/g, "<br>");
+        let src;
+
+        if (typeof user_photoDefData !="undefined" ) {
+            src = `data:image/${user_photoDefType};base64, ${user_photoDefData}`
+
+        } else if (typeof user_photo !="undefined" ) {
+            src = `${user_photo.value}`
+        }
+
         const param_message = {
             user_name: user_name.value,
-            user_photo: user_photo.value,
+            user_photo: src,
             chat_msg: convert_msg
         }
         socket.emit("server_message", param_message);
@@ -146,11 +157,22 @@
 
     // receive Message
     socket.on("client_message", (data) => {
-        const { user_name, user_photo, chat_msg, chat_time } = data;
+        const { user_name, user_photo, user_photoDef, chat_msg, chat_time } = data;
         const li = document.createElement("li");
+        let src;
+
+        if (typeof user_photoDef !="undefined" ) {
+            console.log("yeet" + user_photoDef.data)
+            const data = user_photoDef.data.toString('base64')
+            src = `data:image/${user_photoDef.contentType};base64, ${data}`
+        } else if (typeof user_photo !="undefined" ) {
+            src = `${user_photo}`
+        }
+        console.log(src);
+
         li.innerHTML = `<figure class="avatar">
-                            <img src="${user_photo}" alt="">
-                            <span style="font-size:12px">${user_name}</span>
+                            <img src="${src}" alt="">
+                            <p style="font-size:12px; text-align: center;">${user_name}</p>
                         </figure>
                         <div class="message">${chat_msg}<span class="time">${chat_time}</span></div>`;
         chat_list.appendChild(li);

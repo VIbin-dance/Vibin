@@ -10,6 +10,8 @@
     <input type="hidden" name="ch_arn" id="ch_arn" value="<%= ch_arn %>">
     <input type="hidden" name="username" id="username" value="<%= username %>">
     <input type="hidden" name="userphoto" id="userphoto" value="<%= userPhoto %>">
+    <input type="hidden" name="userphotoDefData" id="userphotoDefData" value="<%= userPhotoDef.data.toString('base64')%>">
+    <input type="hidden" name="userphotoDefType" id="userphotoDefType" value="<%= userPhotoDef.contentType %>">
     <input type="hidden" name="chat_room_id" id="chat_room_id" value="<%= ch_streamkey %>">
     <div class="live_grid">
         <div class="video_grid ">
@@ -39,9 +41,9 @@
                             <div class="inner_img">
                                 <figure>
                                     <% if (typeof teacherPhotoDef !="undefined" ) { %>
-                                    <img src="data:image/<%=teacherPhotoDef.contentType%>;base64, <%=teacherPhotoDef.data.toString('base64')%>" alt="teacher photo">
+                                        <img src="data:image/<%=teacherPhotoDef.contentType%>;base64, <%=teacherPhotoDef.data.toString('base64')%>" alt="teacher photo">
                                     <% } else if (typeof teacherPhoto !="undefined" ) { %>
-                                    <img src="<%= teacherPhoto %>" alt="teacher photo">
+                                        <img src="<%= teacherPhoto %>" alt="teacher photo">
                                     <% } %>
                                 </figure>
                             </div>
@@ -70,7 +72,7 @@
                                 d="M2 4.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1H3v2.5a.5.5 0 0 1-1 0v-3zm12 7a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1H13V8.5a.5.5 0 0 1 1 0v3z" />
                             </svg>
                         </button>
-                            <button class="favorite"><img src="/assets/img/like.png" alt=""></button>
+                            <!-- <button class="favorite"><img src="/assets/img/like.png" alt=""></button> -->
                             <button class="follow">フォロー</button>
                         </div>
                         <div class="channel_status">

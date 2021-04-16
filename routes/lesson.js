@@ -52,7 +52,8 @@ router.get('/', function (req, res) {
     });
 });
 
-router.get('/channel', ensureAuthenticated, (req, res) => {
+router.get('/channel', ensureAuthenticated, async (req, res) => {
+    const user = await User.findOne({ email: req.user._json.email }).exec();
     let ch_count;
     // let currentUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
     // let videoCHK = currentUrl.search("aaa");
@@ -87,7 +88,8 @@ router.get('/channel', ensureAuthenticated, (req, res) => {
                     ch_streamkey = ch.streamKey.value;
                 }
                 res.render('channel', {
-                    userPhoto: req.session.passport.user.photos[0].value,
+                    userPhoto: user.userPhoto,
+                    userPhotoDef: user.userPhotoDef,
                     email: user.email,
                     firstName: user.name.givenName,
                     lastName: user.name.familyName,
@@ -203,7 +205,7 @@ router.post('/delete_channel', ensureAuthenticated, function (req, res) {
 
 router.get('/teacher/:lesson_id', ensureAuthenticated, async (req, res) => {
     const user = await User.findOne({ email: req.user._json.email }).exec();
-    const ls = await Lesson.findOne({ choreographerID: req.params.lesson_id }).exec();
+    const ls = await Lesson.findOne({ _id: req.params.lesson_id }).exec();
     // let currentUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
     // let videoCHK = currentUrl.search("aaa");
     Channel.findOne({ googleId: req.user.id }, (err, ch) => {
@@ -271,8 +273,13 @@ router.get('/student/:lesson_id', ensureAuthenticated, async (req, res) => {
                 }
             });
         }
-    });
-    
+    }); 
+});
+
+router.get('/student/details/:lesson_id', ensureAuthenticated, async (req, res) => {
+    const user = await User.findOne({ email: req.user._json.email }).exec();
+
+    // res.render()
 });
 // router.get('/student/:lesson_id', ensureAuthenticated, function (req, res) {
 

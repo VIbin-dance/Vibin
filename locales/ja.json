@@ -43,21 +43,21 @@
 	},
 	"landing": {
 		"hero": {
-			"top": "新しいダンスの体験を",
-			"reason1": "Completely free",
-			"reason2": "踊りたいダンスを簡単に",
-			"reason3": "Simple user interface",
-			"Get started": "始める"
+			"top": "オンラインダンスレッスンを”誰でもすぐに”",
+			"reason1": "新しいダンスレッスンのカタチ。",
+			"reason2": "レッスン設定から決済まで。",
+			"reason3": "ダンスの楽しさをより多くの人に。",
+			"Get started": "無料サインアップ"
 		},
 		"about": {
 			"top": "Vibin'とは?",
-			"sub": "Vibin is a platform where anyone can meet the dance they truly want.",
-			"desc": "When we listen to music our bodies naturally move and vibe. However, when we don’t know how to dance or when we feel anxious about our dancing skills, we tend to force ourselves to stop our bodies from moving and vibing. That’s why we created a place where anyone can learn how to dance.",
-			"prob": "Are you having trouble because...?",
-			"prob1": "Dance lessons are expensive.",
-			"prob2": "It's too scary to go back to dance studios due to the COVID-19",
-			"prob3": "It's difficult to find the dance you love",
-			"prob4": "It’s difficult to stay committed to learning how to dance",
+			"sub": "Vibin’は、“テクノロジーを使いダンスで世界をつなぐ”ことをミッションとして掲げて、サービスの開発・運営をしております。",
+			"desc": "ダンサー（先生)と生徒の隔たりを最小限にし、誰もが自分のダンススキルを共有し、誰もがダンスを学べるコミュニティを作っています。",
+			"prob": "“Vibin’” という名前は、英語の”Vibing=バイブス(その場の良い雰囲気)を感じる”というスラングが由来となっています。",
+			"prob1": "“ダンス”は誰もが生まれつき持っているタレントです。",
+			"prob2": "好きな音楽を聴くと、勝手に体を動きませんか？",
+			"prob3": "きっと、体が自然となんだかの方法で動き始めると思います。",
+			"prob4": "しかしながら、“ダンスの仕方”がわからなかったり、自分のダンス力に自信が持てないと私たちは、無理やり体を動かしたり、Vibin’することをやめてしまいがちです。だから私達は誰もがダンスを学び、自信を持って体を動かせるようなプラットフォームを作りました。",
 			"concl": "Then vibin is for YOU."
 		},
 		"whyus": {

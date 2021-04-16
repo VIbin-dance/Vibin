@@ -161,7 +161,7 @@ io.on("connection", (socket) => {
         socket.join(connect_user.roomId);
 
         // welcome message
-        socket.emit("client_message", formatMsg("Bot", "https://img.icons8.com/pastel-glyph/2x/person-male.png", "WelCome!"));
+        socket.emit("client_message", formatMsg("bot", "https://img.icons8.com/pastel-glyph/2x/person-male.png", "WelCome!"));
 
         // set and get live time
         let live_time = 0;
