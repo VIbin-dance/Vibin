@@ -1,281 +1,88 @@
-<div class="top-space"></div>
-<div class="col-lg-8 m-auto">
-    <h1 class="text-center mb-3"><i class="fas fa-user-plus"></i>YOUR LESSON</h1>
-    <%- include ('partials/messages') %>
-
-        <% if (typeof account !="undefined" ) { %>
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title">Registered Bank Account</h3>
-                    <p>
-                        <%= account.email %>
-                    </p>
-                    <p>
-                        <%= account.external_accounts.data[0].bank_name %>
-                    </p>
-                    <p>
-                        <%= account.external_accounts.data[0].account_holder_name %>
-                    </p>
-                    <p>**** ****
-                        <%= account.external_accounts.data[0].last4 %>
-                    </p>
-                    <a class="btn btn-danger" href="<%= loginLink.url %>" target="_blank" role="button">Go to your stripe
-                        dashboard</a>
+<main role="main" class="container col-md-10 col-sm-10" style="margin-top:10%; margin-bottom: 5%;">
+    <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
+    <h1 class="text-center">レッスン詳細</h1>
+    <div class="row">
+        <div class="col-md-7 blog-main">
+            <div class="blog-post">
+                <div class="p-3">
+                    <div class="card-deck">
+                        <div class="card mb-3" style="min-width: 47vh; max-width: 80vh; margin-top: 30px;">
+                            <a href="#">
+                                <img style="height: 100%; width: 100%; display: block;" src="data:image/<%=lesson.thumbnail.contentType%>;base64, <%=lesson.thumbnail.data.toString('base64')%>"
+                                    alt="thumbnail of the lesson">
+                            </a>
+                        </div>
+                    </div>
+                    <h3>
+                        <%= lesson.title %> by <a href="/choreographer/<%= user.googleId %>">
+                            <%= user.username %>
+                        </a>
+                    </h3>
+                    <ol class="list-unstyled">
+                        <li><%= __(`dashboard.search.level.${lesson.level[0]}`) %> | <%= __(`dashboard.search.genre.${lesson.genre[0]}`) %> | <%= __(`dashboard.search.purpose.${lesson.purpose[0]}`) %> | <%= __(`dashboard.search.mood.${lesson.mood[0]}`) %></li>
+                    </ol>
+                    <h4><%= lesson.price %> <%= __('dashboard.Yen') %></h4>
+                    <hr>
+                    <div class="text-center">
+                        <!-- <% if (id != undefined) { %>
+                            <button class="btn btn-danger btn-lg btn-block" id="checkout-button"><%= __('reservation.purchase') %></button>
+                        <% } else { %>
+                            <a href="/success/<%= params %>" class="btn btn-danger btn-lg btn-block"><%= __('reservation.purchase') %></a>
+                        <% } %> -->
+                    </div>
+                </div>
+    
+                <div class="p-3 mb-3 bg-light rounded">
+                    <div class="text-center">
+                        <h4><%= __('reservation.choreo') %></h4>
+                        <% if (typeof userPhotoDef !="undefined" ) { %>
+                        <img src="data:image/<%= userPhotoDef.contentType%>;base64, <%= userPhotoDef.data.toString('base64')%>"
+                                    height="100" width="100" style="border-radius: 50%;" alt="user photo">
+                        <% } else { %>
+                        <img src="<%= userPhoto %>" height="60" width="60" style="border-radius: 50%;" alt="user photo">
+                        <% } %>
+                    </div>         
+                    <div class="text-center">
+                    <a href="/choreographer/<%= user.googleId %>" style="font-size: 22px;"><%= user.username %></a>
+                    </div>
+                    <br><h5 style="white-space:pre-wrap;"><%= user.bio %></h5>
+                    <p class="mb-0"><%= __('reservation.contact') %>: <a href="mailto:<%= user.email %>"><%= user.email %></a></p>
                 </div>
             </div>
-            <% } %>
-
-            <form action="/lessons/edit/:id" method="POST">
-                <div class="form-group">
-                    <input id="id" name="id" value="<%= typeof id != 'undefined' ? id : '' %>" hidden />
-                </div>
-                <div class="text-center" style="margin:3%;"><button class="btn btn-danger btn-lg" type="submit">Delete</button></div>
-            </form>
-
-                <!-- <form action="#" method="POST" enctype="multipart/form-data" style="margin-top: 3%;"> -->
-
-                    <div class="form-group">
-                        <label for="title">Title</label>
-                        <input type="title" id="title" name="title" class="form-control" placeholder="Enter The Title"
-                            value="<%= typeof lesson[0].title != 'undefined' ? lesson[0].title : '' %>" />
+        </div>
+        
+        <aside class="col-md-5 blog-sidebar">
+            <div class="p-3 mb-3 bg-light rounded">
+                <div class="text-center">
+                    <h4>OBS使用方法</h4>
+                </div>         
+                <br>
+                <ol>
+                    <li>OBSをダウンロード</li>
+                    <li>ご自身の<a href="/lesson/channel">チャンネル管理ページにて</a>Ingest serverとStream keyを取得</li>
+                    <li>設定し、配信を開始</li>
+                    <li>自身の教えるレッスン欄からアクセスしレッスンを開始</li>
+                </ol>
+            </div>
+            <!-- <div class="p-3 mb-3 bg-light rounded">
+                <div class="text-center">
+                    <h4>キャンセル事項</h4>
+                </div>         
+                <br>
+                <ol>
+                    <li>キャンセルはレッスンの6時間前まで可能です</li>
+                    <li>キャンセルした場合、レッスン料金は生徒様に全額返金され、手数料は支払い必要があります</li>
+                    <li>レッスンの開始から15分以上遅れた場合は無断キャンセルとなります</li>
+                    <li>月に無断キャンセルを累積2回するとアカウントは凍結されます</li>
+                </ol>
+                <form action="/edit" method="POST" enctype="multipart/form-data" style="margin-top: 3%;">
+                    <div class="text-center" style="margin:3%;">
+                        <p>上記を踏まえて</p>
+                        <input type="id" id="id" name="id" class="form-control" value="<%= typeof id != 'undefined' ? id : '' %>" hidden/>
+                        <button class="btn btn-danger btn-lg" type="submit">キャンセルする</button>
                     </div>
-
-                    <div class="form-group">
-                        <label for="Photo">Thumbnail<p><small>写真を選択してください。写真は自動的に切り取られます。</small>
-                            </p></label>
-                            <br><img id="output" src="" height="180" width="320" alt="thumbnail" style="margin-bottom: 2%; display:none"/>
-                            <img id="output" src="data:image/<%=lesson[0].thumbnail.contentType%>;base64, <%=lesson[0].thumbnail.data.toString('base64')%>"
-                            style="margin-bottom: 2%;" height="180" width="320" alt="thumbnail">
-                            <input type="file" id="thumbnail" name="thumbnail" accept="image/*" onchange="loadFile(event)" />
-                    </div>
-
-                    <div class="form-group" id="languageDrop">
-                        <label for="language">Language</label>
-                        <select class="form-control" type="language" id="inputState" name="language">
-                            <option selected value="<%= lesson[0].language %>"><%= __(`dashboard.search.level.${lesson[0].level[0]}`) %></option>
-                            <option value="ja">Japanese</option>
-                            <option value="en">English</option>
-                            <option value="ko">Korean</option>
-                            <option value="es">Spanish</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="choreographer">Choreographer</label>
-                        <input type="choreographer" id="choreographer" name="choreographer" class="form-control"
-                            placeholder="Enter The Choreographer"
-                            value="<%= typeof lesson[0].choreographerID != 'undefined' ? lesson[0].choreographerID : '' %>" readonly/>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="time">Time</label>
-                        <input type="datetime-local" id="time" name="time" class="form-control"
-                            value="<%= typeof lesson[0].time != 'undefined' ? lesson[0].time : '' %>" readonly>
-                            <p><%= lesson[0].time %></p>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="price">Price</label>
-                        <input type="number" id="price" name="price" class="form-control" placeholder="Enter The Price"
-                            value="<%= typeof lesson[0].price != 'undefined' ? lesson[0].price : '' %>" min="0" step="100" readonly/>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="level">Level</label>
-                        <fieldset class="form-group">
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="level" name="level" class="form-check-input" type="checkbox"
-                                    <%= lesson[0].level.includes("Beginner") ? "checked" : "" %>
-                                        value="Beginner">Beginner</label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="level" name="level" class="form-check-input" class="form-check-input"
-                                    <%= lesson[0].level.includes("Intermediate") ? "checked" : "" %>
-                                        type="checkbox" value="Intermediate">Intermediate</label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="level" name="level" class="form-check-input" class="form-check-input"
-                                    <%= lesson[0].level.includes("Advanced") ? "checked" : "" %>
-                                        type="checkbox" value="Advanced">Advanced</label>
-                            </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="genre">Genre</label>
-                        <fieldset class="form-group">
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="genre" name="genre" class="form-check-input" type="checkbox"
-                                    <%= lesson[0].genre.includes("Hip Hop") ? "checked" : "" %>
-                                        value="Hip Hop">Hip Hop</label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="genre" name="genre" class="form-check-input" class="form-check-input"
-                                    <%= lesson[0].genre.includes("Locking") ? "checked" : "" %>
-                                        type="checkbox" value="Locking">Locking</label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="genre" name="genre" class="form-check-input" class="form-check-input"
-                                    <%= lesson[0].genre.includes("Jazz") ? "checked" : "" %>
-                                        type="checkbox" value="Jazz">Jazz</label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="genre" name="genre" class="form-check-input" class="form-check-input"
-                                    <%= lesson[0].genre.includes("Breakin") ? "checked" : "" %>
-                                        type="checkbox" value="Breakin">Breakin</label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="genre" name="genre" class="form-check-input" class="form-check-input"
-                                    <%= lesson[0].genre.includes("House") ? "checked" : "" %>
-                                        type="checkbox" value="House">House</label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="genre" name="genre" class="form-check-input" class="form-check-input"
-                                    <%= lesson[0].genre.includes("Popping") ? "checked" : "" %>
-                                        type="checkbox" value="Popping">Popping</label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="genre" name="genre" class="form-check-input" class="form-check-input"
-                                    <%= lesson[0].genre.includes("K-POP") ? "checked" : "" %>
-                                        type="checkbox" value="K-POP">K-POP</label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="genre" name="genre" class="form-check-input" class="form-check-input"
-                                    <%= lesson[0].genre.includes("TikTok") ? "checked" : "" %>
-                                        type="checkbox" value="TikTok">TikTok</label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="genre" name="genre" class="form-check-input" class="form-check-input"
-                                    <%= lesson[0].genre.includes("Bollywood") ? "checked" : "" %>
-                                        type="checkbox" value="Bollywood">Bollywood</label>
-                            </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="purpose">Purpose</label>
-                        <fieldset class="form-group">
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="purpose" name="purpose" class="form-check-input" type="checkbox"
-                                    <%= lesson[0].purpose.includes("Skill Improvements") ? "checked" : "" %>
-                                        value="Skill Improvements">Skill Improvements</label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="purpose" name="purpose" class="form-check-input" class="form-check-input"
-                                    <%= lesson[0].purpose.includes("Health and Exercise") ? "checked" : "" %>
-                                        type="checkbox" value="Health and Exercise">Health and Exercise</label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="purpose" name="purpose" class="form-check-input" class="form-check-input"
-                                    <%= lesson[0].purpose.includes("Entertainment") ? "checked" : "" %>
-                                        type="checkbox" value="Entertainment">Entertainment</label>
-                            </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="mood">Mood</label>
-                        <fieldset class="form-group">
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="mood" name="mood" class="form-check-input" type="checkbox"
-                                    <%= lesson[0].mood.includes("Groovy") ? "checked" : "" %>
-                                        value="Groovy">Groovy</label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="mood" name="mood" class="form-check-input" class="form-check-input"
-                                    <%= lesson[0].mood.includes("Funky") ? "checked" : "" %>
-                                        type="checkbox" value="Funky">Funky</label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="mood" name="mood" class="form-check-input" class="form-check-input"
-                                    <%= lesson[0].mood.includes("Chill") ? "checked" : "" %>
-                                        type="checkbox" value="Chill">Chill</label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="mood" name="mood" class="form-check-input" class="form-check-input"
-                                    <%= lesson[0].mood.includes("Romantic") ? "checked" : "" %>
-                                        type="checkbox" value="Romantic">Romantic</label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="mood" name="mood" class="form-check-input" class="form-check-input"
-                                    <%= lesson[0].mood.includes("Sexy") ? "checked" : "" %>
-                                        type="checkbox" value="Sexy">Sexy</label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="mood" name="mood" class="form-check-input" class="form-check-input"
-                                    <%= lesson[0].mood.includes("Calm") ? "checked" : "" %>
-                                        type="checkbox" value="Calm">Calm</label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="mood" name="mood" class="form-check-input" class="form-check-input"
-                                    <%= lesson[0].mood.includes("Angry") ? "checked" : "" %>
-                                        type="checkbox" value="Angry">Angry</label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="mood" name="mood" class="form-check-input" class="form-check-input"
-                                    <%= lesson[0].mood.includes("Peaceful") ? "checked" : "" %>
-                                        type="checkbox" value="Peaceful">Peaceful</label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="mood" name="mood" class="form-check-input" class="form-check-input"
-                                    <%= lesson[0].mood.includes("Sad") ? "checked" : "" %>
-                                        type="checkbox" value="Sad">Sad</label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="mood" name="mood" class="form-check-input" class="form-check-input"
-                                    <%= lesson[0].mood.includes("Fearful") ? "checked" : "" %>
-                                        type="checkbox" value="Fearful">Fearful</label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="mood" name="mood" class="form-check-input" class="form-check-input"
-                                    <%= lesson[0].mood.includes("Happy") ? "checked" : "" %>
-                                        type="checkbox" value="Happy">Happy</label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="mood" name="mood" class="form-check-input" class="form-check-input"
-                                    <%= lesson[0].mood.includes("Tense") ? "checked" : "" %>
-                                        type="checkbox" value="Tense">Tense</label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="mood" name="mood" class="form-check-input" class="form-check-input"
-                                    <%= lesson[0].mood.includes("Sassy") ? "checked" : "" %>
-                                        type="checkbox" value="Sassy">Sassy</label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="mood" name="mood" class="form-check-input" class="form-check-input"
-                                    <%= lesson[0].mood.includes("Savage") ? "checked" : "" %>
-                                        type="checkbox" value="Savage">Savage</label>
-                            </div>
-                    </div>
-
-                    <div class="text-center" style="margin:3%;"><button class="btn btn-danger btn-lg" type="submit">Upload</button>
-                    </div>
-</div>
-<!-- </form> -->
-</div>
+                </form>
+            </div> -->
+        </aside>
+    </div>
+</main>

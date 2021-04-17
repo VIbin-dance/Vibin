@@ -4,13 +4,14 @@
             <div class="blog-post">
                 <div class="card-deck">
                     <div class="mb-3" style="min-width: 47vh; max-width: 80vh; margin-top: 30px;">
-                        <h2>Thank you for your purchase!</h2>
+                        <h2>ご購入ありがとうございます!</h2>
                         <p></p>
                         <ol class="list-unstyled">
-                            <li>An email has been sent to this email: <b><%= user.email %></b></li><br>
-                            <li>1. Go to your <a href="/users/profile">profile</a> or <a href="/calendar">calendar</a> page for purchased livestream</li>
-                            <li>2. At <%= dateTime %>, access the class. Class will start</li>
-                            <li>In any case of error, contact your teacher or contact us</li>
+                            <li>下記のメールアドレスに詳細を送りました: <b><%= user.email %></b></li><br>
+                            <li>参加方法</li>
+                            <li>1. ご自身の<a href="/users/profile">プロフィール</a>または<a href="/calendar">カレンダー</a>ページにてご購入したレッスンを参照してください。</li>
+                            <li>2. 予定の時刻：<%= dateTime %>にレッスンをクリック、先生がライブ配信を開始します</li>
+                            <li>エラー・不具合等の問題が発生した場合、先生またはVibin'にご連絡ください。</li>
                         </ol>
                         <!-- <a href="#">
                             <img style="height: 100%; width: 100%; display: block;" src="data:image/<%=lesson.thumbnail.contentType%>;base64, <%=lesson.thumbnail.data.toString('base64')%>"
@@ -23,7 +24,7 @@
         
         <aside class="col-md-5 blog-sidebar">
             <div class="p-3">
-                <h4>You purchased...</h4>
+                <h4>購入したレッスン</h4>
                 <a href="/lesson/student/<%= lesson.choreographerID %>">
                 <img style="height: 100%; width: 100%; display: block;" src="data:image/<%=lesson.thumbnail.contentType%>;base64, <%=lesson.thumbnail.data.toString('base64')%>"
                 alt="thumbnail of the lesson"></a><br>

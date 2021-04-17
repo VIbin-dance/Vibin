@@ -99,7 +99,9 @@
 				"Japanese": "Japanese",
 				"English": "English",
 				"Korean": "Korean",
-				"Spanish": "Spanish"
+				"Spanish": "Spanish",
+				"ja": "dashboard.search.language.ja",
+				"ja,any": "dashboard.search.language.ja,any"
 			},
 			"level": {
 				"top": "Level",

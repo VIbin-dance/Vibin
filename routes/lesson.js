@@ -276,6 +276,31 @@ router.get('/student/:lesson_id', ensureAuthenticated, async (req, res) => {
     }); 
 });
 
+router.get('/edit/:id', ensureAuthenticated, async(req, res) => {
+    const lesson = await Lesson.findOne({ _id: req.params.id }).exec()
+    const user = await User.findOne({ email: req.user._json.email }).exec();
+    res.render("lessonsEdit", {
+        id: req.params.id,
+        lesson: lesson,
+        user: user,
+        userPhoto: user.userPhoto,
+        userPhotoDef: user.userPhotoDef,
+    })
+})
+
+router.post('/edit/:id', ensureAuthenticated, async(req, res) => {
+    const { id } = req.body;
+    Lesson.findByIdAndDelete(id, (err, result) => {
+        console.log(err || result);
+
+        // User.findByIdAndUpdate(follower, { $pull: { lesson: lesson } }).exec();
+
+        req.flash("success_msg", "Your lesson has been deleted");
+        res.redirect("/users/profile")
+    })
+})
+
+
 router.get('/student/details/:lesson_id', ensureAuthenticated, async (req, res) => {
     const user = await User.findOne({ email: req.user._json.email }).exec();
 

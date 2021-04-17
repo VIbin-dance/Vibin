@@ -96,7 +96,8 @@
 				"Japanese": "日本語",
 				"English": "英語",
 				"Korean": "韓国語",
-				"Spanish": "スペイン語"
+				"Spanish": "スペイン語",
+				"ja": "dashboard.search.language.ja"
 			},
 			"level": {
 				"top": "難易度",
