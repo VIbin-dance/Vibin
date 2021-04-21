@@ -12,11 +12,11 @@ const User = require('../models/User');
 const Lesson = require('../models/Lesson');
 
 findLesson  =  function (id) { 
-    return Lesson.find({ choreographerID: id})
+    return Lesson.find({ choreographerID: id}).lean()
 }
 
 findTicket = function(id) {
-    return Lesson.find({ _id: id })
+    return Lesson.find({ _id: id }).lean()
 }
 
 router.get('/register', (req, res) => res.render('register'));
