@@ -11,11 +11,11 @@ const upload = multer({ storage: storage });
 const User = require('../models/User');
 const Lesson = require('../models/Lesson');
 
-findLesson  =  function (id) { 
+findLesson  = (id) => { 
     return Lesson.find({ choreographerID: id}).lean()
 }
 
-findTicket = function(id) {
+findTicket = (id) => {
     return Lesson.find({ _id: id }).lean()
 }
 
@@ -61,6 +61,10 @@ router.post('/preference', ensureAuthenticated, async(req, res) => {
         }
     })
 })
+
+findChoreo = (id) => {
+    User.find({ googleId: id }).lean()
+}
 
 router.get('/profile', ensureAuthenticated, async (req, res) => {
     const [lesson, tickets] = await Promise.all([findLesson(req.session.user.googleId), findTicket(req.session.user.lesson)]); 
