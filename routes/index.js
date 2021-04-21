@@ -16,6 +16,14 @@ const Video = require("../models/Video");
 const User = require("../models/User");
 const Lesson = require("../models/Lesson");
 
+findLesson  =  function (id) { 
+    return Lesson.find({ choreographerID: id})
+}
+
+findTicket = function(id) {
+    return Lesson.find({ _id: id })
+}
+
 const storage = multer.memoryStorage()
 const upload = multer({ storage: storage });
 
@@ -314,7 +322,6 @@ router.get("/reservation/:id", ensureAuthenticated, async(req, res) => {
 });
 
 router.get('/success/:id', ensureAuthenticated, async(req, res) => {
-    // const user = await User.findOne({ email: req.user._json.email }).exec();
     const lesson = await Lesson.findOne({ _id: req.params.id }).exec();
     const choreographer = await User.findOne({ googleId: lesson.choreographerID }).exec();
     const dateTime = moment(lesson.time).format('MM/DD HH:mm');

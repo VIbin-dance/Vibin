@@ -1,7 +1,5 @@
 const express = require('express');
 const router = express.Router();
-// const nodemailer = require('nodemailer');
-// const passport = require('passport');
 const moment = require('moment');
 const { ensureAuthenticated } = require('../config/auth');
 const multer = require('multer');
@@ -12,6 +10,14 @@ const upload = multer({ storage: storage });
 
 const User = require('../models/User');
 const Lesson = require('../models/Lesson');
+
+findLesson  =  function (id) { 
+    return Lesson.find({ choreographerID: id})
+}
+
+findTicket = function(id) {
+    return Lesson.find({ _id: id })
+}
 
 router.get('/register', (req, res) => res.render('register'));
 router.get('/login', (req, res) => res.render('login'));
@@ -57,12 +63,11 @@ router.post('/preference', ensureAuthenticated, async(req, res) => {
 })
 
 router.get('/profile', ensureAuthenticated, async (req, res) => {
-    const lesson = await Lesson.find({ choreographerID: req.session.user.googleId }).exec()
-    const tickets = await Lesson.find({ _id: req.session.user.lesson }).exec();
+    const [lesson, tickets] = await Promise.all([findLesson(req.session.user.googleId), findTicket(req.session.user.lesson)]); 
     const choreographer = [];
 
     for (let i=0; i<req.session.user.lesson.length;i++) {
-        choreographer[i] = await User.findOne({ googleId: tickets[i].choreographerID }, 'username').exec();
+        choreographer[i] = await User.findOne({ googleId: tickets[i].choreographerID }, 'username').lean().exec();
     }
 
     res.render('profile', {
