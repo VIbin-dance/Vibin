@@ -1,14 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const nodemailer = require('nodemailer');
-const passport = require('passport');
+// const nodemailer = require('nodemailer');
+// const passport = require('passport');
 const moment = require('moment');
 const { ensureAuthenticated } = require('../config/auth');
 const multer = require('multer');
 const sharp = require('sharp');
 
 const storage = multer.memoryStorage()
-
 const upload = multer({ storage: storage });
 
 const User = require('../models/User');
@@ -18,14 +17,12 @@ router.get('/register', (req, res) => res.render('register'));
 router.get('/login', (req, res) => res.render('login'));
 
 router.get('/preference', ensureAuthenticated, (req, res) => {
-    User.findOne({ email: req.user._json.email }, (err, user) => {
-        res.render('preference', {
-            userPhoto: user.userPhoto,
-            userPhotoDef: user.userPhotoDef,
-        })
+    res.render('preference', {
+        userPhoto: req.session.user.userPhoto,
+        userPhotoDef: req.session.user.userPhotoDef,
     })
-});
-
+})
+// not yet
 router.post('/preference', ensureAuthenticated, async(req, res) => {
     const { level, purpose, genre } = req.body;
     let errors = [];
@@ -59,9 +56,8 @@ router.post('/preference', ensureAuthenticated, async(req, res) => {
     })
 })
 
-router.get('/profile', ensureAuthenticated, (req, res) => {
-    User.findOne({ email: req.user._json.email }, async(err, user) => {
-        const lesson = await Lesson.find({ 'choreographerID': user.googleId }).exec()
+router.get('/profile', ensureAuthenticated, async (req, res) => {
+        const lesson = await Lesson.find({ 'choreographerID': req.session.user.googleId }).exec()
         const time = [];
         for (let i=0; i<lesson.length; i++) {
             time[i] = moment(lesson[i].time).format('MM/DD HH:mm');
@@ -70,56 +66,44 @@ router.get('/profile', ensureAuthenticated, (req, res) => {
         const tickets = [];
         const choreographer = [];
         const time2 = [];
-        for (let i=0; i<user.lesson.length;i++) {
-            tickets[i] = await Lesson.findOne({ _id: user.lesson[i] }).exec();
+        for (let i=0; i<req.session.user.lesson.length;i++) {
+            tickets[i] = await Lesson.findOne({ _id: req.session.user.lesson[i] }).exec();
             choreographer[i] = await User.findOne({ googleId: tickets[i].choreographerID }).exec();
             time2[i] = moment(tickets[i].time).format('MM/DD HH:mm');
         }
 
-        if (!user) {
+        if (!req.session.user) {
             req.flash('error_msg', res.__('msg.error.noUser'));
             res.redirect('/dashboard/-1?page=1&limit=15');
         } else {
             res.render('profile', {
-                user: user,
-                bio: user.bio,
-                userPhoto: user.userPhoto,
-                userPhotoDef: user.userPhotoDef,
+                user: req.session.user,
+                bio: req.session.user.bio,
+                userPhoto: req.session.user.userPhoto,
+                userPhotoDef: req.session.user.userPhotoDef,
                 lesson: lesson,
                 time: time,
-                // followingCount: user.following.length,
-                // followerCount: user.follower.length,
-                // firstName: user.name.givenName,
-                // lastName: user.name.familyName,
                 tickets: tickets,
                 choreographer: choreographer,
                 time2: time2,
             })
         }
-    })
 })
 
 router.get('/profile/edit', ensureAuthenticated, (req, res) => {
-    User.findOne({ email: req.user._json.email }, (err, user) => {
-        if (!user) {
-            req.flash('error_msg', res.__('msg.error.noUser'));
-            res.redirect('/dashboard/-1?page=1&limit=15');
-        } else {
-            res.render('profileEdit', {
-                user: user,
-                followingCount: user.following.length,
-                followerCount: user.follower.length,
-                bio: user.bio,
-                userPhoto: user.userPhoto,
-                userPhotoDef: user.userPhotoDef,
-                email: user.email,
-                firstName: user.name.givenName,
-                lastName: user.name.familyName,
-                curUsername: user.username,
-                username: user.username
+    if (!req.session.user) {
+        req.flash('error_msg', res.__('msg.error.noUser'));
+        res.redirect('/dashboard/-1?page=1&limit=15');
+    } else {
+        res.render('profileEdit', {
+            user: req.session.user,
+            bio: req.session.user.bio,
+            userPhoto: req.session.user.userPhoto,
+            userPhotoDef: req.session.user.userPhotoDef,
+            email: req.session.user.email,
+            username: req.session.user.username
             })
         }
-    })
 })
 
 router.post('/profile/edit', ensureAuthenticated, upload.single('userPhotoDef'), async(req, res) => {
@@ -183,122 +167,12 @@ router.post('/profile/edit', ensureAuthenticated, upload.single('userPhotoDef'),
             genre
         });
     } else {
-        User.findOneAndUpdate({ email: req.user._json.email }, query, (err, user) => {
-            req.flash('success_msg', res.__('msg.success.profile'));
-            res.redirect('/users/profile');
-        })
+        await User.findOneAndUpdate({ email: req.user._json.email }, query).exec()
+        const user = await User.findOne({ email: req.user._json.email }).exec();
+        req.session.user = user
+        req.flash('success_msg', res.__('msg.success.profile'));
+        res.redirect('/users/profile');
     }
-
 })
-
-// router.get('/:id', ensureAuthenticated, (req, res) => {
-//     User.findOne({ _id: req.params.id }, (err, user) => {
-//         User.findOne({ email: req.user._json.email }, async(err, currentUser) => {
-
-//             const likedVid = await Video.find({ 'like.id': user._id.toString() }).exec()
-
-//             if (!user) {
-//                 req.flash('error_msg', res.__('msg.error.noUser'));
-//                 res.redirect('/dashboard/-1?page=1&limit=15');
-//             } else {
-//                 res.render('users', {
-//                     likedVid: likedVid,
-//                     user: user,
-//                     currentUser: currentUser,
-//                     followingCount: user.following.length,
-//                     followerCount: user.follower.length,
-//                     bio: user.bio,
-//                     following: user._id,
-//                     follower: currentUser._id,
-//                     userPhoto: currentUser.userPhoto,
-//                     userPhotoDef: currentUser.userPhotoDef,
-//                     proPhoto: user.userPhoto,
-//                     proPhotoDef: user.userPhotoDef,
-//                     firstName: user.name.givenName,
-//                     lastName: user.name.familyName,
-//                     username: user.username
-//                 });
-//             }
-//         })
-//     })
-// })
-
-// router.post('/:id', ensureAuthenticated, (req, res) => {
-//     const { following, follower, action } = req.body;
-
-//     try {
-//         if (action == 'follow') {
-//             User.findByIdAndUpdate(follower, { $push: { following: [following] } }).exec();
-//             User.findByIdAndUpdate(following, { $push: { follower: [follower] } }).exec()
-//                 .then(function(user) {
-//                     req.flash('success_msg', res.__('msg.success.followed'));
-//                     res.redirect(`/users/${user._id}`);
-//                 })
-//                 .catch(err => console.log(err));
-//         } else if (action == 'unfollow') {
-//             User.findByIdAndUpdate(follower, { $pull: { following: following } }).exec();
-//             User.findByIdAndUpdate(following, { $pull: { follower: follower } }).exec()
-//                 .then(function(user) {
-//                     req.flash('success_msg', res.__('msg.success.unfollowed'));
-//                     res.redirect(`/users/${user._id}`);
-//                 })
-//                 .catch(err => console.log(err));
-//         }
-//     } catch (err) {
-//         console.log(err);
-//     }
-// })
-
-// router.get('/:type/:id', ensureAuthenticated, (req, res) => {
-//     User.findOne({ _id: req.params.id }, async(err, user) => {
-
-//         const currentUser = await User.findOne({ email: req.user._json.email }).exec();
-
-//         if (!user) {
-//             req.flash('error_msg', res.__('msg.error.noUser'));
-//             res.redirect('/dashboard/-1?page=1&limit=15');
-//         }
-
-//         if (req.params.type == 'following') {
-//             const following = [];
-
-//             for (let i = 0; i < user.following.length; i++) {
-//                 following[i] = await User.findById(user.following[i], 'username').exec();
-//             }
-
-//             const currentUser = await User.findOne({ email: req.user._json.email }).exec();
-
-//             res.render('follow', {
-//                 follow: following,
-//                 type: req.params.type,
-//                 userPhoto: currentUser.userPhoto,
-//                 userPhotoDef: currentUser.userPhotoDef,
-//                 followCount: user.following.length,
-//                 username: user.username
-//             });
-//         } else if (err) {
-//             console.log(err);
-//         }
-
-//         if (req.params.type == 'follower') {
-//             const follower = [];
-
-//             for (let i = 0; i < user.follower.length; i++) {
-//                 follower[i] = await User.findById(user.follower[i], 'username').exec();
-//             }
-
-//             res.render('follow', {
-//                 follow: follower,
-//                 type: req.params.type,
-//                 userPhoto: currentUser.userPhoto,
-//                 userPhotoDef: currentUser.userPhotoDef,
-//                 followCount: user.follower.length,
-//                 username: user.username
-//             });
-//         } else if (err) {
-//             console.log(err);
-//         }
-//     })
-// })
 
 module.exports = router;

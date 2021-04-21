@@ -7,6 +7,7 @@ const moment = require("moment");
 const multer = require('multer');
 const sharp = require('sharp');
 const stripe = require("stripe")("sk_test_51Hfnh4BHyna8CK9qjfFDuXjt1pmBPnPMoGflpvhPIet1ytDmqDZD3sayrbLnHbIQXnLBIZ8UWxSe62EaNZuw2oDO00b2zFDdno");
+
 const { ensureAuthenticated } = require("../config/auth");
 const { sendMail } = require("../config/email");
 const { addCalendar } = require("../config/calendar");
@@ -18,13 +19,8 @@ const Lesson = require("../models/Lesson");
 const storage = multer.memoryStorage()
 const upload = multer({ storage: storage });
 
-router.get("/", async (req, res) => {
-    res.render("landing");
-});
-
-router.get("/error", (req, res) => {
-    res.send("Login error");
-});
+router.get("/", async (req, res) => { res.render("landing"); });
+router.get("/error", (req, res) => { res.send("Login error"); });
 router.get("/privacy-policy", (req, res) => res.render("privacy-policy"));
 router.get("/terms-of-service", (req, res) => res.render("terms-of-service"));
 
@@ -34,8 +30,7 @@ router.get("/logout", (req, res) => {
     res.redirect("/");
 });
 
-router.get(
-    "/auth/google",
+router.get("/auth/google",
     passport.authenticate("google", {
         scope: [
             "https://www.googleapis.com/auth/userinfo.profile",
@@ -50,12 +45,10 @@ router.get("/auth/google/callback",
     passport.authenticate("google", {
         failureRedirect: "/error",
         session: true,
-    }),
-    async(req, res) => {
-        const user = await User.findOne({
-            email: req.user._json.email,
-        }).exec();
-        if (user.loginCount == 1) {
+    }), async(req, res) => {
+        const user = await User.findOne({ email: req.user._json.email }).exec();
+        req.session.user = user
+        if (req.session.user.loginCount == 1) {
             req.flash("success_msg", res.__("msg.success.preference"));
             res.redirect("/users/preference");
         } else {
@@ -66,8 +59,6 @@ router.get("/auth/google/callback",
 );
 
 router.get("/dashboard/:sort", ensureAuthenticated, async(req, res) => {
-    const user = await User.findOne({ email: req.user._json.email }).exec();
-
     Lesson.paginate({}, {
         page: req.query.page,
         limit: req.query.limit,
@@ -75,16 +66,17 @@ router.get("/dashboard/:sort", ensureAuthenticated, async(req, res) => {
     }, async(err, lesson) => {
         const choreographer = [];
         const time = [];
+        // should cut these part off
         for (let i = 0; i < lesson.docs.length; i++) {
             choreographer[i] = await User.findOne({ googleId: lesson.docs[i].choreographerID.toString() }).exec();
             time[i] = moment(lesson.docs[i].time).format('MM/DD HH:mm');
         }
 
         res.render("dashboard", {
-            user: user,
-            userPhoto: user.userPhoto,
-            userPhotoDef: user.userPhotoDef,
-            username: user.username,
+            user: req.session.user,
+            userPhoto: req.session.user.userPhoto,
+            userPhotoDef: req.session.user.userPhotoDef,
+            username: req.session.user.username,
             time: time,
             lesson: lesson,
             choreographer: choreographer,
@@ -99,11 +91,8 @@ router.get("/dashboard/:sort", ensureAuthenticated, async(req, res) => {
 
 router.post("/dashboard", ensureAuthenticated, async(req, res) => {
     const { language, level, genre, purpose, mood, search } = req.body;
-
     const searchQuery = new RegExp(escapeRegex(search), "gi");
-
-    const user = await User.findOne({ email: req.user._json.email }).exec();
-
+    // const user = await User.findOne({ email: req.user._json.email }).exec();
     const query = {
         $and: [
             { language: language },
@@ -134,10 +123,10 @@ router.post("/dashboard", ensureAuthenticated, async(req, res) => {
             }
 
             res.render("results", {
-                user: user,
-                userPhoto: user.userPhoto,
-                userPhotoDef: user.userPhotoDef,
-                username: user.username,
+                user: req.session.user,
+                userPhoto: req.session.user.userPhoto,
+                userPhotoDef: req.session.user.userPhotoDef,
+                username: req.session.user.username,
                 lesson: lesson,
                 time: time,
                 choreographer: choreographer,
@@ -149,26 +138,24 @@ router.post("/dashboard", ensureAuthenticated, async(req, res) => {
     });
 });
 
-router.get("/results", ensureAuthenticated, (req, res) =>
-    res.render("results")
-);
+router.get("/results", ensureAuthenticated, (req, res) =>  res.render("results"));
 
 router.get("/choreographer/:id", ensureAuthenticated, async(req, res) => {
-    const user = await User.findOne({ email: req.user._json.email }).exec();
+    // const user = await User.findOne({ email: req.user._json.email }).exec();
 
     Lesson.paginate({ choreographerID: req.params.id }, {
         page: req.query.page,
         limit: req.query.limit,
     }, async(err, lesson) => {
-        const choreographer = await User.findOne({ googleId: lesson.docs[0].choreographerID}).exec();
+        const choreographer = await User.findOne({ googleId: req.params.id }).exec();
         const time = [];
         for (let i = 0; i < lesson.docs.length; i++) {
             time[i] = moment(lesson.docs[i].time).format('MM/DD HH:mm');
         }
 
         res.render("choreographer", {
-            userPhoto: user.userPhoto,
-            userPhotoDef: user.userPhotoDef,
+            userPhoto: req.session.user.userPhoto,
+            userPhotoDef: req.session.user.userPhotoDef,
             count: lesson.length,
             choreographer: choreographer,
             lesson: lesson,
@@ -180,6 +167,7 @@ router.get("/choreographer/:id", ensureAuthenticated, async(req, res) => {
     });
 });
 
+// not yet
 router.get("/calendar", ensureAuthenticated, (req, res) => {
     User.findOne({ email: req.user._json.email }, (err, user) => {
         let time = encodeURIComponent(moment().format());
@@ -249,7 +237,7 @@ router.get("/calendar", ensureAuthenticated, (req, res) => {
             });
     });
 });
-
+// not yet
 router.post("/calendar", ensureAuthenticated, (req, res) => {
     User.findOne({
             email: req.user._json.email,
@@ -280,113 +268,20 @@ router.post("/calendar", ensureAuthenticated, (req, res) => {
     );
 });
 
-router.get("/player/:id", ensureAuthenticated, (req, res) => {
-    Video.findOne({
-            id: req.params.id,
-        },
-        async(err, result) => {
-            const user = await User.findOne({
-                email: req.user._json.email,
-            }).exec();
-            if (result == null) {
-                req.flash("error_msg", res.__("msg.error.video_del"));
-                res.redirect("/dashboard/-1?page=1&limit=15");
-            } else {
-                res.render("player", {
-                    like: user.like,
-                    userPhoto: user.userPhoto,
-                    userPhotoDef: user.userPhotoDef,
-                    id: req.params.id,
-                    ObjID: result._id,
-                    title: result.title,
-                    choreographer: result.choreographer,
-                    level: result.level,
-                });
-            }
-        }
-    );
-});
-
-router.post("/player/:id", ensureAuthenticated, async(req, res) => {
-    const { id, action } = req.body;
-
-    const videoID = await Video.findOne({
-            id: id,
-        },
-        "_id"
-    ).exec();
-
-    User.findOne({
-            email: req.user._json.email,
-        },
-        (err, user) => {
-            const userID = user._id;
-
-            try {
-                if (action == "like") {
-                    Video.findByIdAndUpdate(videoID._id, {
-                        $push: {
-                            like: [{
-                                id: userID.toString(),
-                            }, ],
-                        },
-                    }).exec();
-                    User.findByIdAndUpdate(userID, {
-                            $push: {
-                                like: [{
-                                    id: videoID.toObject()._id,
-                                }, ],
-                            },
-                        })
-                        .exec()
-                        .then(function(user) {
-                            res.redirect(`/player/${id}`);
-                        })
-                        .catch((err) => console.log(err));
-                } else if (action == "unlike") {
-                    Video.findByIdAndUpdate(videoID._id, {
-                        $pull: {
-                            like: {
-                                id: user._id.toString(),
-                            },
-                        },
-                    }).exec();
-                    User.findByIdAndUpdate(userID, {
-                            $pull: {
-                                like: {
-                                    id: videoID.toObject()._id,
-                                },
-                            },
-                        })
-                        .exec()
-                        .then(function(user) {
-                            res.redirect(`/player/${id}`);
-                        })
-                        .catch((err) => console.log(err));
-                }
-            } catch (err) {
-                console.log(err);
-            }
-        }
-    );
-});
-
 router.get("/reservation/:id", ensureAuthenticated, async(req, res) => {
-    const user = await User.findOne({ email: req.user._json.email }).exec();
     const lesson = await Lesson.findOne({ _id: req.params.id }).exec();
     const choreographer = await User.findOne({ googleId: lesson.choreographerID }).exec();
-    const account = await stripe.accounts.retrieve(choreographer.stripeID);
-    const dateTime = moment(lesson.time).format('MM/DD HH:mm');
-
-    if (user.lesson.includes(lesson.id)) {
+    
+    if (req.session.user.lesson.includes(lesson.id)) {
+        const dateTime = moment(lesson.time).format('MM/DD HH:mm');
         res.render('success', {
             lesson: lesson,
             dateTime: dateTime,
             params: req.params.id,
             choreographer: choreographer,
-            user: user,
-            userPhoto: user.userPhoto,
-            userPhotoDef: user.userPhotoDef,
+            user: req.session.user,
+            userPhoto: req.session.user.userPhoto,
+            userPhotoDef: req.session.user.userPhotoDef,
         })
     } else if (lesson.price === 0) {
         res.render('reservation', {
@@ -394,10 +289,11 @@ router.get("/reservation/:id", ensureAuthenticated, async(req, res) => {
             params: req.params.id,
             lesson: lesson,
             choreographer: choreographer,
-            userPhoto: user.userPhoto,
-            userPhotoDef: user.userPhotoDef,
+            userPhoto: req.session.user.userPhoto,
+            userPhotoDef: req.session.user.userPhotoDef,
         })
     } else {
+        const account = await stripe.accounts.retrieve(choreographer.stripeID);
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ["card"],
             line_items: [{
@@ -405,7 +301,7 @@ router.get("/reservation/:id", ensureAuthenticated, async(req, res) => {
                 amount: lesson.price,
                 currency: "jpy",
                 quantity: 1,
-            }, ],
+            }],
             customer_email: user.email,
             payment_intent_data: {
                 application_fee_amount: lesson.price * 0.2,
@@ -421,29 +317,30 @@ router.get("/reservation/:id", ensureAuthenticated, async(req, res) => {
             id: session.id,
             lesson: lesson,
             choreographer: choreographer,
-            userPhoto: user.userPhoto,
-            userPhotoDef: user.userPhotoDef,
+            userPhoto: req.session.user.userPhoto,
+            userPhotoDef: req.session.user.userPhotoDef,
         });
     }
 });
 
 router.get('/success/:id', ensureAuthenticated, async(req, res) => {
-    const user = await User.findOne({ email: req.user._json.email }).exec();
+    // const user = await User.findOne({ email: req.user._json.email }).exec();
     const lesson = await Lesson.findOne({ _id: req.params.id }).exec();
     const choreographer = await User.findOne({ googleId: lesson.choreographerID }).exec();
     const dateTime = moment(lesson.time).format('MM/DD HH:mm');
+
     let session;
     if (req.query.session_id) {
         session = await stripe.checkout.sessions.retrieve(req.query.session_id);
     }
 
-    if (user.lesson.includes(lesson.id)) {
+    if (req.session.user.lesson.includes(lesson.id)) {
         console.log('already done')
     } else if (lesson.price === 0 || session.payment_status == 'paid') {
         User.findOneAndUpdate({ email: req.user._json.email }, { $push: { lesson: [lesson._id] } }, { upsert: true, new: true, setDefaultsOnInsert: true },
             (err, user) => {
                 console.log(err || user);
-                const dateTime = moment(lesson.time).format("YYYY-MM-DDThh:mm");
+                // const dateTime = moment(lesson.time).format("YYYY-MM-DDThh:mm");
 
                 const text = `
                 <p>この度はレッスンのご予約をいただきまして、誠にありがとうございます。</p>
@@ -477,17 +374,17 @@ router.get('/success/:id', ensureAuthenticated, async(req, res) => {
 })
 
 router.get("/create", ensureAuthenticated, async(req, res) => {
-    const user = await User.findOne({ email: req.user._json.email }).exec();
+    // const user = await User.findOne({ email: req.user._json.email }).exec();
 
     let render = {
-        choreographer: user.username,
-        userPhoto: user.userPhoto,
-        userPhotoDef: user.userPhotoDef,
+        choreographer: req.session.user.username,
+        userPhoto: req.session.user.userPhoto,
+        userPhotoDef: req.session.user.userPhotoDef,
         CLIENT_id: process.env.ZOOM_CLIENT_ID,
     };
 
-    if (user.stripeID) {
-        const account = await stripe.accounts.retrieve(user.stripeID);
+    if (req.session.user.stripeID) {
+        const account = await stripe.accounts.retrieve(req.session.user.stripeID);
         const loginLink = await stripe.accountLinks.create({
             account: account.id,
             refresh_url: "https://localhost:5000/create",
@@ -501,7 +398,7 @@ router.get("/create", ensureAuthenticated, async(req, res) => {
 
     res.render("create", render);
 });
-
+// not yet
 router.post("/create", upload.single('thumbnail'), async(req, res) => {
     const { title, language, time, price, level, genre, purpose, mood } = req.body;
     const user = await User.findOne({ email: req.user._json.email }).exec();
