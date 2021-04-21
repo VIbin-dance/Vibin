@@ -57,37 +57,24 @@ router.post('/preference', ensureAuthenticated, async(req, res) => {
 })
 
 router.get('/profile', ensureAuthenticated, async (req, res) => {
-        const lesson = await Lesson.find({ 'choreographerID': req.session.user.googleId }).exec()
-        const time = [];
-        for (let i=0; i<lesson.length; i++) {
-            time[i] = moment(lesson[i].time).format('MM/DD HH:mm');
-        }
-        
-        const tickets = [];
-        const choreographer = [];
-        const time2 = [];
-        for (let i=0; i<req.session.user.lesson.length;i++) {
-            tickets[i] = await Lesson.findOne({ _id: req.session.user.lesson[i] }).exec();
-            choreographer[i] = await User.findOne({ googleId: tickets[i].choreographerID }).exec();
-            time2[i] = moment(tickets[i].time).format('MM/DD HH:mm');
-        }
+    const lesson = await Lesson.find({ choreographerID: req.session.user.googleId }).exec()
+    const tickets = await Lesson.find({ _id: req.session.user.lesson }).exec();
+    const choreographer = [];
 
-        if (!req.session.user) {
-            req.flash('error_msg', res.__('msg.error.noUser'));
-            res.redirect('/dashboard/-1?page=1&limit=15');
-        } else {
-            res.render('profile', {
-                user: req.session.user,
-                bio: req.session.user.bio,
-                userPhoto: req.session.user.userPhoto,
-                userPhotoDef: req.session.user.userPhotoDef,
-                lesson: lesson,
-                time: time,
-                tickets: tickets,
-                choreographer: choreographer,
-                time2: time2,
-            })
-        }
+    for (let i=0; i<req.session.user.lesson.length;i++) {
+        choreographer[i] = await User.findOne({ googleId: tickets[i].choreographerID }, 'username').exec();
+    }
+
+    res.render('profile', {
+        user: req.session.user,
+        bio: req.session.user.bio,
+        userPhoto: req.session.user.userPhoto,
+        userPhotoDef: req.session.user.userPhotoDef,
+        lesson: lesson,
+        tickets: tickets,
+        choreographer: choreographer,
+        moment: moment,
+    })
 })
 
 router.get('/profile/edit', ensureAuthenticated, (req, res) => {

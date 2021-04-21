@@ -65,11 +65,8 @@ router.get("/dashboard/:sort", ensureAuthenticated, async(req, res) => {
         sort: { time: req.params.sort },
     }, async(err, lesson) => {
         const choreographer = [];
-        const time = [];
-        // should cut these part off
         for (let i = 0; i < lesson.docs.length; i++) {
-            choreographer[i] = await User.findOne({ googleId: lesson.docs[i].choreographerID.toString() }).exec();
-            time[i] = moment(lesson.docs[i].time).format('MM/DD HH:mm');
+            choreographer[i] = await User.findOne({ googleId: lesson.docs[i].choreographerID.toString() }, 'username').exec();
         }
 
         res.render("dashboard", {
@@ -77,7 +74,6 @@ router.get("/dashboard/:sort", ensureAuthenticated, async(req, res) => {
             userPhoto: req.session.user.userPhoto,
             userPhotoDef: req.session.user.userPhotoDef,
             username: req.session.user.username,
-            time: time,
             lesson: lesson,
             choreographer: choreographer,
             moment: moment,
@@ -116,10 +112,8 @@ router.post("/dashboard", ensureAuthenticated, async(req, res) => {
             res.redirect("/dashboard/-1?page=1&limit=15");
         } else {
             const choreographer = [];
-            const time = [];
             for (let i = 0; i < lesson.docs.length; i++) {
-                choreographer[i] = await User.findOne({ googleId: lesson.docs[i].choreographerID }).exec();
-                time[i] = moment(lesson.docs[i].time).format('MM/DD HH:mm');
+                choreographer[i] = await User.findOne({ googleId: lesson.docs[i].choreographerID.toString() }, 'username').exec();
             }
 
             res.render("results", {
@@ -128,8 +122,8 @@ router.post("/dashboard", ensureAuthenticated, async(req, res) => {
                 userPhotoDef: req.session.user.userPhotoDef,
                 username: req.session.user.username,
                 lesson: lesson,
-                time: time,
                 choreographer: choreographer,
+                moment: moment,
                 currentPage: lesson.page,
                 pageCount: lesson.pages,
                 pages: paginate.getArrayPages(req)(3, lesson.pages, req.query.page),
@@ -148,10 +142,6 @@ router.get("/choreographer/:id", ensureAuthenticated, async(req, res) => {
         limit: req.query.limit,
     }, async(err, lesson) => {
         const choreographer = await User.findOne({ googleId: req.params.id }).exec();
-        const time = [];
-        for (let i = 0; i < lesson.docs.length; i++) {
-            time[i] = moment(lesson.docs[i].time).format('MM/DD HH:mm');
-        }
 
         res.render("choreographer", {
             userPhoto: req.session.user.userPhoto,
@@ -159,7 +149,7 @@ router.get("/choreographer/:id", ensureAuthenticated, async(req, res) => {
             count: lesson.length,
             choreographer: choreographer,
             lesson: lesson,
-            time: time,
+            moment: moment,
             currentPage: lesson.page,
             pageCount: lesson.pages,
             pages: paginate.getArrayPages(req)(3, lesson.pages, req.query.page),

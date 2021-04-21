@@ -46,7 +46,7 @@
                                 <%= user.username %>
                             </a>
                             <p>
-                                <%= lesson[i].price %> Yen | <%= time[i] %>
+                                <%= lesson[i].price %> Yen | <%= moment(lesson[i].time).format('MM/DD HH:mm'); %>
                             </p>
                             <p class="mb-0">
                                 <%= __(`dashboard.search.level.${lesson[i].level[0]}`) %> | <%=
@@ -77,11 +77,11 @@
                             <h4 id="tickets.title<%= i %>">
                                 <%= tickets[i].title %>
                             </h4>
-                            <a class="special" href="/choreographer/<%= choreographer[i].googleId %>">
+                            <a class="special" href="/choreographer/<%= tickets[i].choreographerID %>">
                                 <%= choreographer[i].username %>
                             </a>
                             <p>
-                                <%= tickets[i].price %> Yen | <%= time2[i] %>
+                                <%= tickets[i].price %> Yen | <%= moment(tickets[i].time).format('MM/DD HH:mm'); %>
                             </p>
                             <p class="mb-0">
                                 <%= __(`dashboard.search.level.${tickets[i].level[0]}`) %> | 

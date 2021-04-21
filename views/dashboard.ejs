@@ -168,13 +168,13 @@
                                         <h4 id="title<%= i %>">
                                             <%= lesson.docs[i].title %>
                                         </h4>
-                                        <a class="special" href="/choreographer/<%= choreographer[i].googleId %>">
+                                        <a class="special" href="/choreographer/<%= lesson.docs[i].choreographerID %>">
                                             <%= choreographer[i].username %>
                                         </a>
                                         <p>
                                             <%= lesson.docs[i].price %>
                                                 <%= __('dashboard.Yen') %> |
-                                                    <%= time[i] %>
+                                                    <%= moment(lesson.docs[i].time).format('MM/DD HH:mm'); %>
                                         </p>
                                         <p class="mb-0">
                                             <%= __(`dashboard.search.level.${lesson.docs[i].level[0]}`) %> |
@@ -206,13 +206,13 @@
                                             <h4 id="title<%= i %>">
                                                 <%= lesson.docs[i].title %>
                                             </h4>
-                                            <a class="special" href="/choreographer/<%= choreographer[i]._id %>">
+                                            <a class="special" href="/choreographer/<%= lesson.docs[i].choreographerID %>">
                                                 <%= choreographer[i].username %>
                                             </a>
                                             <p>
                                                 <%= lesson.docs[i].price %>
                                                     <%= __('dashboard.Yen') %> |
-                                                        <%= time[i] %>
+                                                        <%= moment(lesson.docs[i].time).format('MM/DD HH:mm'); %>
                                             </p>
                                             <p class="mb-0">
                                                 <%= __(`dashboard.search.level.${lesson.docs[i].level[0]}`) %> |
