@@ -53,7 +53,7 @@ router.get('/', function (req, res) {
 });
 
 router.get('/channel', ensureAuthenticated, async (req, res) => {
-    const user = await User.findOne({ email: req.user._json.email }).exec();
+    // const user = await User.findOne({ email: req.user._json.email }).exec();
     let ch_count;
     // let currentUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
     // let videoCHK = currentUrl.search("aaa");
@@ -88,12 +88,12 @@ router.get('/channel', ensureAuthenticated, async (req, res) => {
                     ch_streamkey = ch.streamKey.value;
                 }
                 res.render('channel', {
-                    userPhoto: user.userPhoto,
-                    userPhotoDef: user.userPhotoDef,
-                    email: user.email,
-                    firstName: user.name.givenName,
-                    lastName: user.name.familyName,
-                    username: user.username,
+                    userPhoto: req.session.user.userPhoto,
+                    userPhotoDef: req.session.user.userPhotoDef,
+                    email: req.session.user.email,
+                    firstName: req.session.user.name.givenName,
+                    lastName: req.session.user.name.familyName,
+                    username: req.session.user.username,
                     count: ch_count,
                     ch_name: ch_name,
                     ch_latency: ch_latency,
@@ -204,7 +204,7 @@ router.post('/delete_channel', ensureAuthenticated, function (req, res) {
 });
 
 router.get('/teacher/:lesson_id', ensureAuthenticated, async (req, res) => {
-    const user = await User.findOne({ email: req.user._json.email }).exec();
+    // const user = await User.findOne({ email: req.user._json.email }).exec();
     const ls = await Lesson.findOne({ _id: req.params.lesson_id }).exec();
     // let currentUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
     // let videoCHK = currentUrl.search("aaa");
@@ -214,15 +214,11 @@ router.get('/teacher/:lesson_id', ensureAuthenticated, async (req, res) => {
             res.redirect('/lesson/channel');
         } else {
             ch_count = 1;
-            res.render('teacher', {
-                // userPhoto: req.session.passport.user.photos[0].value,
-                userPhoto: user.userPhoto,
-                userPhotoDef: user.userPhotoDef,
-                email: req.user._json.email,
-                username: user.username,
-                // firstName: req.user.name.givenName,
-                // lastName: req.user.name.familyName,
-                // username: req.user._json.username,
+            res.render('teacher', {            
+                userPhoto: req.session.user.userPhoto,
+                userPhotoDef: req.session.user.userPhotoDef,
+                email: req.session.req.user._json.email,
+                username: req.session.user.username,
                 count: ch_count,
                 ch_name: ls.title,
                 ch_latency: ch.latencyMode,
@@ -237,7 +233,7 @@ router.get('/teacher/:lesson_id', ensureAuthenticated, async (req, res) => {
 });
 
 router.get('/student/:lesson_id', ensureAuthenticated, async (req, res) => {
-    const user = await User.findOne({ email: req.user._json.email }).exec();
+    // const user = await User.findOne({ email: req.user._json.email }).exec();
     Lesson.findOne({ _id: req.params.lesson_id }, (err, ls) => {
         if(!ls){
             req.flash('error_msg', '選択したレッスンの期限が切れたか情報が正しくありません。');
@@ -251,11 +247,11 @@ router.get('/student/:lesson_id', ensureAuthenticated, async (req, res) => {
                     const choreographer = await User.findOne({ googleId : ls.choreographerID }).exec();
                     ch_count = 1;
                     res.render('student', {
-                        userPhoto: user.userPhoto,
-                        userPhotoDef: user.userPhotoDef,
-                        email: req.user._json.email,
-                        username: user.username,
-                        teacher: choreographer,
+                        userPhoto: req.session.user.userPhoto,
+                        userPhotoDef: req.session.user.userPhotoDef,
+                        email: req.session.email,
+                        username: req.session.user.username,
+                        choreographer: choreographer,
                         teacherPhoto: choreographer.userPhoto,
                         teacherPhotoDef: choreographer.userPhotoDef,
                         lesson: ls,

@@ -27,12 +27,12 @@
 
 <% if (lesson.length> 0) { %>
 <section id="results" class="results">
-        <div class="container">
-            <h3>教えるレッスン</h3>
+        <div class="">
+            <h2 class="text-center">教えるレッスン</h2>
             <hr>
             <div class="row">
                 <% for(let i=0; i < lesson.length; i++) { %>
-                    <div class="col-lg-4 col-xs-6">
+                    <div class="col-lg-3 col-xs-6 pad">
                         <div class="box">
                             <a href="/lesson/teacher/<%= lesson[i]._id %>">
                                 <img src="data:image/<%=lesson[i].thumbnail.contentType%>;base64, <%=lesson[i].thumbnail.data.toString('base64')%>"
@@ -63,12 +63,12 @@
 <% } %>
 <% if (tickets.length> 0) { %>
     <section id="results" class="results">
-        <div class="container">
-            <h3>購入したレッスン一覧</h3>
+        <div class="">
+            <h2 class="text-center">購入したレッスン一覧</h2>
             <hr>
             <div class="row">
                 <% for(let i=0; i < tickets.length; i++) { %>
-                    <div class="col-lg-4 col-xs-6">
+                    <div class="col-lg-3 col-xs-6 pad">
                         <div class="box">
                             <a href="/lesson/student/<%= tickets[i]._id %>">
                                 <img src="data:image/<%=tickets[i].thumbnail.contentType%>;base64, <%=tickets[i].thumbnail.data.toString('base64')%>"

@@ -18,10 +18,10 @@
     <input type="hidden" name="ch_arn" id="ch_arn" value="<%= ch_arn %>">
     <input type="hidden" name="username" id="username" value="<%= username %>">
     <% if (typeof userPhotoDef != "undefined" ) { %>
-        <input type="hidden" name="userphotoDefData" id="userphotoDefData" value="<%= userPhotoDef.data.toString('base64')%>">
-        <input type="hidden" name="userphotoDefType" id="userphotoDefType" value="<%= userPhotoDef.contentType %>">
+    <input type="hidden" name="userphotoDefData" id="userphotoDefData" value="<%= userPhotoDef.data.toString('base64')%>">
+    <input type="hidden" name="userphotoDefType" id="userphotoDefType" value="<%= userPhotoDef.contentType %>">
     <% } else if (typeof userPhoto !="undefined" ) { %>
-        <input type="hidden" name="userphoto" id="userphoto" value="<%= userPhoto %>">
+    <input type="hidden" name="userphoto" id="userphoto" value="<%= userPhoto %>">
     <% } %>
     <input type="hidden" name="chat_room_id" id="chat_room_id" value="<%= ch_streamkey %>">
     <div class="live_grid">
@@ -45,23 +45,23 @@
 
 
                 <div class="channel_info student">
-
                     <div class="user_info">
                         <a href="" class="avatar live_status">
                             <div class="outline"></div>
                             <div class="inner_img">
                                 <figure>
-                                    <% if (typeof teacherPhotoDef !="undefined" ) { %>
-                                        <img src="data:image/<%=teacherPhotoDef.contentType%>;base64, <%=teacherPhotoDef.data.toString('base64')%>" alt="teacher photo">
-                                    <% } else if (typeof teacherPhoto !="undefined" ) { %>
-                                        <img src="<%= teacherPhoto %>" alt="teacher photo">
+                                    <% if (typeof choreographer.userPhotoDef !="undefined" ) { %>
+                                    <img src="data:image/<%= choreographer.userPhotoDef.contentType%>;base64, <%= choreographer.userPhotoDef.data.toString('base64')%>"
+                                        height="100" width="100" style="border-radius: 50%;" alt="user photo">
+                                    <% } else { %>
+                                    <img src="<%= choreographer.userPhoto %>" height="60" width="60" style="border-radius: 50%;" alt="user photo">
                                     <% } %>
                                 </figure>
                             </div>
                         </a>
                         <div class="infor">
                             <p class="name"><%= ch_name %></p>
-                            <p class="level">先生 : <%= teacher.username %>
+                            <p class="level">先生 : <%= choreographer.username %>
                             </p>
                             <ul class="category_grid">
                                     <li><a href=""><%= __(`dashboard.search.level.${lesson.level[0]}`) %></a></li>
@@ -84,32 +84,37 @@
                             </svg>
                         </button>
                             <!-- <button class="favorite"><img src="/assets/img/like.png" alt=""></button> -->
-                            <button class="follow">フォロー</button>
+                            <!-- <button class="follow">フォロー</button> -->
                         </div>
                         <div class="channel_status">
                             <p class="login_users"></p>
                             <p class="live_time"></p>
                         </div>
                     </div>
-
                 </div>
-        </div>
+                <div class="p-3 mb-3 rounded">
+                    <div class="text-center">
+                        <h4><%= __('reservation.choreo') %></h4>
+                        <% if (typeof choreographer.userPhotoDef !="undefined" ) { %>
+                        <img src="data:image/<%= choreographer.userPhotoDef.contentType%>;base64, <%= choreographer.userPhotoDef.data.toString('base64')%>"
+                                    height="100" width="100" style="border-radius: 50%;" alt="user photo">
+                        <% } else { %>
+                        <img src="<%= choreographer.userPhoto %>" height="60" width="60" style="border-radius: 50%;" alt="user photo">
+                        <% } %>
+                    </div>         
+                    <div class="text-center">
+                        <a href="/choreographer/<%= choreographer.googleId %>" style="font-size: 22px;"><%= choreographer.username %></a>
+                        <br><br><h5 style="white-space:pre-wrap;"><%= choreographer.bio %></h5>
+                        <p class="mb-0"><%= __('reservation.contact') %>: <a href="mailto:<%= choreographer.email %>"><%= choreographer.email %></a></p>
+                    </div>
+                </div>
+            </div>
 
         <div class="chat_grid collapseOn">
             <div class="contain">
                 <div class="chat_header">CHAT</div>
                 <div class="message_wrap">
-                    <ul class="message_list">
-                        <!-- <li>
-                            <figure class="avatar">
-                                <img src="/assets/img/profile/user01.png" alt="">
-                            </figure>
-                            <div class="message">
-                                地よば脈無ナ夫率ヌエラ写以コア全約シフ見高にぱげえ交広ホラミ日載な物子せルッ医席まに開季次でなイ止12索スリ記校ツケヲ前無ネ天72要ヱマ病聞ネホモ尿意あへ上座牛参さイゃし。
-                                <span class="time">7:24 AM</span>
-                            </div>
-                        </li> -->
-                    </ul>
+                    <ul class="message_list"></ul>
                 </div>
                 <div class="input_wrap">
                     <!-- <button class="btn1">投げ銭</button> -->

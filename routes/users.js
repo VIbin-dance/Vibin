@@ -12,11 +12,11 @@ const User = require('../models/User');
 const Lesson = require('../models/Lesson');
 
 findLesson  = (id) => { 
-    return Lesson.find({ choreographerID: id}).lean()
+    return Lesson.find({ choreographerID: id}, null, {sort: { time: -1 }}).lean()
 }
 
 findTicket = (id) => {
-    return Lesson.find({ _id: id }).lean()
+    return Lesson.find({ _id: id }, null, {sort: { time: -1 }}).lean()
 }
 
 router.get('/register', (req, res) => res.render('register'));
@@ -62,10 +62,6 @@ router.post('/preference', ensureAuthenticated, async(req, res) => {
     })
 })
 
-findChoreo = (id) => {
-    User.find({ googleId: id }).lean()
-}
-
 router.get('/profile', ensureAuthenticated, async (req, res) => {
     const [lesson, tickets] = await Promise.all([findLesson(req.session.user.googleId), findTicket(req.session.user.lesson)]); 
     const choreographer = [];
@@ -103,7 +99,7 @@ router.get('/profile/edit', ensureAuthenticated, (req, res) => {
 })
 
 router.post('/profile/edit', ensureAuthenticated, upload.single('userPhotoDef'), async(req, res) => {
-    const user = await User.findOne({ email: req.user._json.email }).exec();
+    const user = await User.findOne({ email: req.user._json.email }).lean().exec();
 
     const { username, bio, level, purpose, genre } = req.body;
     let userPhotoDef = {};
@@ -136,10 +132,6 @@ router.post('/profile/edit', ensureAuthenticated, upload.single('userPhotoDef'),
         }
     }
 
-    if (req.file != undefined && req.file.size > 307200) {
-        errors.push({ msg: res.__('msg.error.size') });
-    }
-
     if (!user) {
         errors.push({ msg: res.__('msg.error.noUser') });
     }
@@ -163,8 +155,8 @@ router.post('/profile/edit', ensureAuthenticated, upload.single('userPhotoDef'),
             genre
         });
     } else {
-        await User.findOneAndUpdate({ email: req.user._json.email }, query).exec()
-        const user = await User.findOne({ email: req.user._json.email }).exec();
+        await User.findOneAndUpdate({ email: req.user._json.email }, query).lean().exec()
+        const user = await User.findOne({ email: req.user._json.email }).lean().exec();
         req.session.user = user
         req.flash('success_msg', res.__('msg.success.profile'));
         res.redirect('/users/profile');

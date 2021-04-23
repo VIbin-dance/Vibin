@@ -54,7 +54,7 @@ router.get("/auth/google/callback",
         failureRedirect: "/error",
         session: true,
     }), async(req, res) => {
-        const user = await User.findOne({ email: req.user._json.email }).exec();
+        const user = await User.findOne({ email: req.user._json.email }).lean().exec();
         req.session.user = user
         if (req.session.user.loginCount == 1) {
             req.flash("success_msg", res.__("msg.success.preference"));
@@ -74,7 +74,7 @@ router.get("/dashboard/:sort", ensureAuthenticated, async(req, res) => {
     }, async(err, lesson) => {
         const choreographer = [];
         for (let i = 0; i < lesson.docs.length; i++) {
-            choreographer[i] = await User.findOne({ googleId: lesson.docs[i].choreographerID.toString() }, 'username').exec();
+            choreographer[i] = await User.findOne({ googleId: lesson.docs[i].choreographerID.toString() }, 'username').lean().exec();
         }
 
         res.render("dashboard", {
@@ -149,7 +149,7 @@ router.get("/choreographer/:id", ensureAuthenticated, async(req, res) => {
         page: req.query.page,
         limit: req.query.limit,
     }, async(err, lesson) => {
-        const choreographer = await User.findOne({ googleId: req.params.id }).exec();
+        const choreographer = await User.findOne({ googleId: req.params.id }).lean().exec();
 
         res.render("choreographer", {
             userPhoto: req.session.user.userPhoto,
@@ -208,7 +208,7 @@ router.get("/calendar", ensureAuthenticated, (req, res) => {
                     const choreographer = [];
                     const time2 = [];
                     for (let i=0; i<user.lesson.length;i++) {
-                        tickets[i] = await Lesson.findOne({ _id: user.lesson[i] }).exec();
+                        tickets[i] = await Lesson.findOne({ _id: user.lesson[i] }).lean().exec();
                         if (tickets.length > 0) {
                             choreographer[i] = await User.findOne({ googleId: tickets[i].choreographerID }).exec();
                             time2[i] = moment(tickets[i].time).format('MM/DD HH:mm');
@@ -267,17 +267,16 @@ router.post("/calendar", ensureAuthenticated, (req, res) => {
 });
 
 router.get("/reservation/:id", ensureAuthenticated, async(req, res) => {
-    const lesson = await Lesson.findOne({ _id: req.params.id }).exec();
-    const choreographer = await User.findOne({ googleId: lesson.choreographerID }).exec();
+    const lesson = await Lesson.findOne({ _id: req.params.id }).lean().exec();
+    const choreographer = await User.findOne({ googleId: lesson.choreographerID }).lean().exec();
     
-    if (req.session.user.lesson.includes(lesson.id)) {
-        const dateTime = moment(lesson.time).format('MM/DD HH:mm');
+    if (req.session.user.lesson.includes(lesson._id.toString())) {
         res.render('success', {
-            lesson: lesson,
-            dateTime: dateTime,
-            params: req.params.id,
-            choreographer: choreographer,
             user: req.session.user,
+            params: req.params.id,
+            lesson: lesson,
+            choreographer: choreographer,
+            moment: moment,
             userPhoto: req.session.user.userPhoto,
             userPhotoDef: req.session.user.userPhotoDef,
         })
@@ -287,6 +286,7 @@ router.get("/reservation/:id", ensureAuthenticated, async(req, res) => {
             params: req.params.id,
             lesson: lesson,
             choreographer: choreographer,
+            moment: moment,
             userPhoto: req.session.user.userPhoto,
             userPhotoDef: req.session.user.userPhotoDef,
         })
@@ -300,7 +300,7 @@ router.get("/reservation/:id", ensureAuthenticated, async(req, res) => {
                 currency: "jpy",
                 quantity: 1,
             }],
-            customer_email: user.email,
+            customer_email: req.session.user.email,
             payment_intent_data: {
                 application_fee_amount: lesson.price * 0.2,
                 transfer_data: {
@@ -315,6 +315,7 @@ router.get("/reservation/:id", ensureAuthenticated, async(req, res) => {
             id: session.id,
             lesson: lesson,
             choreographer: choreographer,
+            moment: moment,
             userPhoto: req.session.user.userPhoto,
             userPhotoDef: req.session.user.userPhotoDef,
         });
@@ -322,8 +323,8 @@ router.get("/reservation/:id", ensureAuthenticated, async(req, res) => {
 });
 
 router.get('/success/:id', ensureAuthenticated, async(req, res) => {
-    const lesson = await Lesson.findOne({ _id: req.params.id }).exec();
-    const choreographer = await User.findOne({ googleId: lesson.choreographerID }).exec();
+    const lesson = await Lesson.findOne({ _id: req.params.id }).lean().exec();
+    const choreographer = await User.findOne({ googleId: lesson.choreographerID }).lean().exec();
     const dateTime = moment(lesson.time).format('MM/DD HH:mm');
 
     let session;
@@ -337,7 +338,6 @@ router.get('/success/:id', ensureAuthenticated, async(req, res) => {
         User.findOneAndUpdate({ email: req.user._json.email }, { $push: { lesson: [lesson._id] } }, { upsert: true, new: true, setDefaultsOnInsert: true },
             (err, user) => {
                 console.log(err || user);
-                // const dateTime = moment(lesson.time).format("YYYY-MM-DDThh:mm");
 
                 const text = `
                 <p>この度はレッスンのご予約をいただきまして、誠にありがとうございます。</p>
@@ -398,7 +398,7 @@ router.get("/create", ensureAuthenticated, async(req, res) => {
 // not yet
 router.post("/create", upload.single('thumbnail'), async(req, res) => {
     const { title, language, time, price, level, genre, purpose, mood } = req.body;
-    const user = await User.findOne({ email: req.user._json.email }).exec();
+    const user = await User.findOne({ email: req.user._json.email }).lean().exec();
     const choreographerID = user.googleId;
     let errors = [];
     let account;

@@ -1002,7 +1002,7 @@ body::-webkit-scrollbar-thumb {
 .live_grid .chat_grid {
   position: relative;
   width: 0;
-  height: 865px;
+  height: 92%;
   background: #fff;
   -webkit-box-ordinal-group: 3;
       -ms-flex-order: 2;
@@ -1014,12 +1014,16 @@ body::-webkit-scrollbar-thumb {
 .live_grid .chat_grid.collapseOn {
   width: 350px;
   border-left: solid #0000001f 1px;
+  position: fixed;
+  right: 0;
 }
 
 @media screen and (max-width: 768px) {
   .live_grid .chat_grid.collapseOn {
     width: 100%;
     height: 40vh;
+    position: unset;
+    right: unset;
   }
 }
 
@@ -1233,14 +1237,14 @@ body::-webkit-scrollbar-thumb {
 }
 
 .live_grid .toggle_chat_btn {
-  position: absolute;
+  position: fixed;
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  top: 0.7rem;
+  top: 4.5rem;
   right: 300px;
   z-index: 900;
   width: 2rem;
