@@ -875,6 +875,12 @@ body::-webkit-scrollbar-thumb {
 }
 
 @media screen and (max-width: 768px) {
+  .chinfo {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 768px) {
   .live_grid .video_grid .channel_info .count_info {
     width: 60%;
   }

@@ -270,7 +270,7 @@ router.get("/reservation/:id", ensureAuthenticated, async(req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.id }).lean().exec();
     const choreographer = await User.findOne({ googleId: lesson.choreographerID }).lean().exec();
     
-    if (req.session.user.lesson.includes(lesson._id.toString())) {
+    if (req.session.user.lesson && req.session.user.lesson.includes(lesson._id)) {
         res.render('success', {
             user: req.session.user,
             params: req.params.id,
@@ -332,12 +332,13 @@ router.get('/success/:id', ensureAuthenticated, async(req, res) => {
         session = await stripe.checkout.sessions.retrieve(req.query.session_id);
     }
 
-    if (req.session.user.lesson.includes(lesson.id)) {
+    if (req.session.user.lesson && req.session.user.lesson.includes(lesson.id)) {
         console.log('already done')
     } else if (lesson.price === 0 || session.payment_status == 'paid') {
         User.findOneAndUpdate({ email: req.user._json.email }, { $push: { lesson: [lesson._id] } }, { upsert: true, new: true, setDefaultsOnInsert: true },
             (err, user) => {
                 console.log(err || user);
+                req.session.user = user
 
                 const text = `
                 <p>この度はレッスンのご予約をいただきまして、誠にありがとうございます。</p>
@@ -352,8 +353,8 @@ router.get('/success/:id', ensureAuthenticated, async(req, res) => {
                 <p>${lesson.level[0]} | ${lesson.genre[0]} | ${lesson.purpose[0]} | ${lesson.mood[0]}</p>
                 <p>--------------------------------------------</p>`
             
-                sendMail(user.email, "ご予約を受付いたしました！", text);
-                addCalendar(user, lesson.title, dateTime);
+                // sendMail(user.email, "ご予約を受付いたしました！", text);
+                // addCalendar(user, lesson.title, dateTime);
             }
         );
     } else {
@@ -371,8 +372,6 @@ router.get('/success/:id', ensureAuthenticated, async(req, res) => {
 })
 
 router.get("/create", ensureAuthenticated, async(req, res) => {
-    // const user = await User.findOne({ email: req.user._json.email }).exec();
-
     let render = {
         choreographer: req.session.user.username,
         userPhoto: req.session.user.userPhoto,

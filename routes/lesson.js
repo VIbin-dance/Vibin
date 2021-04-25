@@ -45,15 +45,11 @@ const aivs_client = new IvsClient({
 });
 
 // Routes
-router.get('/', function (req, res) {
-    // res.send('respond with a resource');
-    res.render('/', {
-        title: 'Student'
-    });
+router.get('/', (req, res) => {
+    res.render('/', { title: 'Student' });
 });
 
 router.get('/channel', ensureAuthenticated, async (req, res) => {
-    // const user = await User.findOne({ email: req.user._json.email }).exec();
     let ch_count;
     // let currentUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
     // let videoCHK = currentUrl.search("aaa");
@@ -62,8 +58,6 @@ router.get('/channel', ensureAuthenticated, async (req, res) => {
             req.flash('error_msg', 'There is no such user');
             res.redirect('/dashboard?page=1&limit=15');
         } else {
-            // console.log(req.user);
-            // console.log("user ID : ", req.user.id);
             let ch_name = "";
             let ch_latency = "";
             let ch_type = "";
@@ -204,10 +198,7 @@ router.post('/delete_channel', ensureAuthenticated, function (req, res) {
 });
 
 router.get('/teacher/:lesson_id', ensureAuthenticated, async (req, res) => {
-    // const user = await User.findOne({ email: req.user._json.email }).exec();
-    const ls = await Lesson.findOne({ _id: req.params.lesson_id }).exec();
-    // let currentUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-    // let videoCHK = currentUrl.search("aaa");
+    const ls = await Lesson.findOne({ _id: req.params.lesson_id }).lean().exec();
     Channel.findOne({ googleId: req.user.id }, (err, ch) => {
         if(!ch) {
             req.flash('error_msg', '現在所有しているチャンネルがありません。');
@@ -233,18 +224,20 @@ router.get('/teacher/:lesson_id', ensureAuthenticated, async (req, res) => {
 });
 
 router.get('/student/:lesson_id', ensureAuthenticated, async (req, res) => {
-    // const user = await User.findOne({ email: req.user._json.email }).exec();
     Lesson.findOne({ _id: req.params.lesson_id }, (err, ls) => {
         if(!ls){
             req.flash('error_msg', '選択したレッスンの期限が切れたか情報が正しくありません。');
             res.redirect('/users/profile');
+        } else if (!req.session.user.lesson.includes(ls._id.toString())) { 
+            req.flash('error_msg', '選択したレッスンは購入されていません');
+            res.redirect(`/reservation/${req.params.lesson_id}`);
         } else {
             Channel.findOne({ googleId: ls.choreographerID }, async (err, ch) => {
                 if(!ch) {
                     req.flash('error_msg', '現在所有しているチャンネルがありません。');
                     res.redirect('/users/profile');
                 } else {
-                    const choreographer = await User.findOne({ googleId : ls.choreographerID }).exec();
+                    const choreographer = await User.findOne({ googleId : ls.choreographerID }).lean().exec();
                     ch_count = 1;
                     res.render('student', {
                         userPhoto: req.session.user.userPhoto,
@@ -255,11 +248,6 @@ router.get('/student/:lesson_id', ensureAuthenticated, async (req, res) => {
                         teacherPhoto: choreographer.userPhoto,
                         teacherPhotoDef: choreographer.userPhotoDef,
                         lesson: ls,
-                        // userPhoto: req.session.passport.user.photos[0].value,
-                        // firstName: req.user.name.givenName,
-                        // lastName: req.user.name.familyName,
-                        // username: req.user._json.name,
-                        // techerPhoto: req.session.passport.user.photos[0].value,
                         count: ch_count,
                         ch_name: ls.title,
                         ch_arn: ch.arn,
@@ -273,68 +261,37 @@ router.get('/student/:lesson_id', ensureAuthenticated, async (req, res) => {
 });
 
 router.get('/edit/:id', ensureAuthenticated, async(req, res) => {
-    const lesson = await Lesson.findOne({ _id: req.params.id }).exec()
-    const user = await User.findOne({ email: req.user._json.email }).exec();
+    const lesson = await Lesson.findOne({ _id: req.params.id }).lean().exec();
     res.render("lessonsEdit", {
         id: req.params.id,
         lesson: lesson,
-        user: user,
-        userPhoto: user.userPhoto,
-        userPhotoDef: user.userPhotoDef,
+        user: req.session.user,
+        userPhoto: req.session.user.userPhoto,
+        userPhotoDef: req.session.user.userPhotoDef,
     })
 })
-
-router.post('/edit/:id', ensureAuthenticated, async(req, res) => {
-    const { id } = req.body;
-    Lesson.findByIdAndDelete(id, (err, result) => {
-        console.log(err || result);
-
-        // User.findByIdAndUpdate(follower, { $pull: { lesson: lesson } }).exec();
-
-        req.flash("success_msg", "Your lesson has been deleted");
-        res.redirect("/users/profile")
-    })
-})
-
 
 router.get('/student/details/:lesson_id', ensureAuthenticated, async (req, res) => {
-    const user = await User.findOne({ email: req.user._json.email }).exec();
-
-    // res.render()
+    const lesson = await Lesson.findOne({ _id: req.params.lesson_id }).lean().exec();
+    res.render("lessonDet", {
+        id: req.params.lesson_id,
+        lesson: lesson,
+        user: req.session.user,
+        userPhoto: req.session.user.userPhoto,
+        userPhotoDef: req.session.user.userPhotoDef,
+    })
 });
-// router.get('/student/:lesson_id', ensureAuthenticated, function (req, res) {
-
-//     Schedule.findOne({ lesson_Id: req.params.lesson_id }, (err, ls) => {
-//         if(!ls){
-//             req.flash('error_msg', '選択したレッスンの期限が切れたか情報が正しくありません。');
-//             res.redirect('/users/profile');
-//         } else {
-//             Channel.findOne({ googleId: ls.techerGoogleId }, (err, ch) => {
-//                 if(!ch) {
-//                     req.flash('error_msg', '現在所有しているチャンネルがありません。');
-//                     res.redirect('/users/profile');
-//                 } else {
-
-//                     ch_count = 1;
-//                     res.render('student', {
-//                         userPhoto: req.session.passport.user.photos[0].value,
-//                         email: req.user._json.email,
-//                         firstName: req.user.name.givenName,
-//                         lastName: req.user.name.familyName,
-//                         username: req.user._json.name,
-//                         count: ch_count,
-//                         techerPhoto: req.session.passport.user.photos[0].value,
-//                         ch_name: ls.lesson_name,
-//                         ch_arn: ch.arn,
-//                         ch_streamkey: ch.streamKey.value,
-//                         ch_playURL: ch.playbackUrl,
-//                         genres: ls.genre
-//                     })
-//                 }
-//             });
-//         }
-//     });
-    
-// });
+// add refund feature of stripe
+// add 2 hours limit feature
+router.post('/student/details/:lesson_id', ensureAuthenticated, async (req, res) => {
+    const lesson = await Lesson.findOne({ _id: req.body.id }).lean().exec();
+    User.findByIdAndUpdate(req.session.user._id, { $pull: { lesson : lesson._id } }, { upsert: true, new: true, setDefaultsOnInsert: true },
+        (err, user) => {
+            console.log(err || user);
+            req.session.user = user
+            req.flash('success_msg', 'レッスンの予約をキャンセルしました');
+            res.redirect("/users/profile");
+        });
+})
 
 module.exports = router;
