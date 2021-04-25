@@ -5594,3 +5594,4 @@
 {"v":0,"level":30,"name":"newrelic","hostname":"LAPTOP-0MTMRNE7","pid":18004,"time":"2021-04-25T13:18:37.434Z","msg":"Reporting to: https://rpm.newrelic.com/accounts/2804944/applications/467399351","component":"collector_api"}
 {"v":0,"level":30,"name":"newrelic","hostname":"LAPTOP-0MTMRNE7","pid":18004,"time":"2021-04-25T13:18:37.438Z","msg":"Valid event_harvest_config received. Updating harvest cycles. {\"report_period_ms\":5000,\"harvest_limits\":{\"error_event_data\":8,\"analytic_event_data\":833,\"custom_event_data\":83}}"}
 {"v":0,"level":30,"name":"newrelic","hostname":"LAPTOP-0MTMRNE7","pid":18004,"time":"2021-04-25T13:18:37.445Z","msg":"Agent state changed from connected to started."}
+{"v":0,"level":30,"name":"newrelic","hostname":"LAPTOP-0MTMRNE7","pid":18004,"time":"2021-04-25T13:18:38.447Z","msg":"Starting initial 1000ms harvest."}
