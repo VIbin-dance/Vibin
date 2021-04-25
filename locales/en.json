@@ -234,7 +234,8 @@
 		"PP": "Privacy Policy",
 		"News1": "Join Our Newsletter",
 		"News2": "Get the latest news from Vibin'!",
-		"Subscribe": "Subscribe"
+		"Subscribe": "Subscribe",
+		"company": "footer.company"
 	},
 	"top": "top",
 	"dashboard.search.level.": "dashboard.search.level.",
