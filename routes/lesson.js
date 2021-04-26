@@ -49,7 +49,7 @@ router.get('/', (req, res) => {
     res.render('/', { title: 'Student' });
 });
 
-router.get('/channel', ensureAuthenticated, async (req, res) => {
+router.get('/channel', ensureAuthenticated, async(req, res) => {
     let ch_count;
     // let currentUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
     // let videoCHK = currentUrl.search("aaa");
@@ -63,7 +63,7 @@ router.get('/channel', ensureAuthenticated, async (req, res) => {
             let ch_type = "";
             let ch_arn = "";
             Channel.findOne({ googleId: req.user.id }, (err, ch) => {
-                if(!ch) {
+                if (!ch) {
                     req.flash('error_msg', '現在所有しているチャンネルがありません。');
                     ch_count = 0;
                     ch_name = '';
@@ -97,12 +97,12 @@ router.get('/channel', ensureAuthenticated, async (req, res) => {
                     ch_streamkey: ch_streamkey
                 })
             })
-            
+
         }
     })
 });
 
-router.post('/create_channel', ensureAuthenticated, function (req, res) {
+router.post('/create_channel', ensureAuthenticated, function(req, res) {
     const { ch_name } = req.body;
     // console.log( "channel Name : ", ch_name );
     try {
@@ -112,7 +112,7 @@ router.post('/create_channel', ensureAuthenticated, function (req, res) {
             name: ch_name,
             type: "STANDARD"
         };
-        const CreateChannel = new CreateChannelCommand(CreateChannel_option);   //OK
+        const CreateChannel = new CreateChannelCommand(CreateChannel_option); //OK
 
         aivs_client.send(CreateChannel).then(
             (data) => {
@@ -156,12 +156,12 @@ router.post('/create_channel', ensureAuthenticated, function (req, res) {
 
 });
 
-router.post('/delete_channel', ensureAuthenticated, function (req, res) {
+router.post('/delete_channel', ensureAuthenticated, function(req, res) {
     // const { ch_name } = req.body;
     // console.log( "channel Name : ", ch_name );
     try {
         Channel.findOne({ googleId: req.user.id }, (err, ch) => {
-            if(err) {
+            if (err) {
                 req.flash('error', 'チャンネルを削除できませんでした。Fail Mongoose search');
                 res.redirect('/lesson/channel');
             }
@@ -169,7 +169,7 @@ router.post('/delete_channel', ensureAuthenticated, function (req, res) {
             const DeleteChannel_option = {
                 "arn": channel_arn
             };
-            
+
             const DeleteChannel = new DeleteChannelCommand(DeleteChannel_option);
             aivs_client.send(DeleteChannel).then(
                 () => {
@@ -183,7 +183,7 @@ router.post('/delete_channel', ensureAuthenticated, function (req, res) {
                 }
             );
             Channel.deleteOne({ googleId: req.user.id }, (err) => {
-                if(err) {
+                if (err) {
                     req.flash('error', 'チャンネルを削除できませんでした。- Fail Mongoose delete');
                     res.redirect('/lesson/channel');
                 }
@@ -197,15 +197,15 @@ router.post('/delete_channel', ensureAuthenticated, function (req, res) {
 
 });
 
-router.get('/teacher/:lesson_id', ensureAuthenticated, async (req, res) => {
+router.get('/teacher/:lesson_id', ensureAuthenticated, async(req, res) => {
     const ls = await Lesson.findOne({ _id: req.params.lesson_id }).lean().exec();
     Channel.findOne({ googleId: req.user.id }, (err, ch) => {
-        if(!ch) {
+        if (!ch) {
             req.flash('error_msg', '現在所有しているチャンネルがありません。');
             res.redirect('/lesson/channel');
         } else {
             ch_count = 1;
-            res.render('teacher', {            
+            res.render('teacher', {
                 userPhoto: req.session.user.userPhoto,
                 userPhotoDef: req.session.user.userPhotoDef,
                 email: req.session.req.user._json.email,
@@ -223,21 +223,21 @@ router.get('/teacher/:lesson_id', ensureAuthenticated, async (req, res) => {
     });
 });
 
-router.get('/student/:lesson_id', ensureAuthenticated, async (req, res) => {
+router.get('/student/:lesson_id', ensureAuthenticated, async(req, res) => {
     Lesson.findOne({ _id: req.params.lesson_id }, (err, ls) => {
-        if(!ls){
+        if (!ls) {
             req.flash('error_msg', '選択したレッスンの期限が切れたか情報が正しくありません。');
             res.redirect('/users/profile');
-        } else if (!req.session.user.lesson.includes(ls._id.toString())) { 
+        } else if (!req.session.user.lesson.includes(ls._id.toString())) {
             req.flash('error_msg', '選択したレッスンは購入されていません');
             res.redirect(`/reservation/${req.params.lesson_id}`);
         } else {
-            Channel.findOne({ googleId: ls.choreographerID }, async (err, ch) => {
-                if(!ch) {
+            Channel.findOne({ googleId: ls.choreographerID }, async(err, ch) => {
+                if (!ch) {
                     req.flash('error_msg', '現在所有しているチャンネルがありません。');
                     res.redirect('/users/profile');
                 } else {
-                    const choreographer = await User.findOne({ googleId : ls.choreographerID }).lean().exec();
+                    const choreographer = await User.findOne({ googleId: ls.choreographerID }).lean().exec();
                     ch_count = 1;
                     res.render('student', {
                         userPhoto: req.session.user.userPhoto,
@@ -257,12 +257,14 @@ router.get('/student/:lesson_id', ensureAuthenticated, async (req, res) => {
                 }
             });
         }
-    }); 
+    });
 });
 
 router.get('/edit/:id', ensureAuthenticated, async(req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.id }).lean().exec();
+    const attendee = await User.find({ lesson: lesson._id }, 'username').lean().exec();
     res.render("lessonsEdit", {
+        attendee: attendee,
         id: req.params.id,
         lesson: lesson,
         user: req.session.user,
@@ -271,7 +273,7 @@ router.get('/edit/:id', ensureAuthenticated, async(req, res) => {
     })
 })
 
-router.get('/student/details/:lesson_id', ensureAuthenticated, async (req, res) => {
+router.get('/student/details/:lesson_id', ensureAuthenticated, async(req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.lesson_id }).lean().exec();
     res.render("lessonDet", {
         id: req.params.lesson_id,
@@ -283,9 +285,9 @@ router.get('/student/details/:lesson_id', ensureAuthenticated, async (req, res) 
 });
 // add refund feature of stripe
 // add 2 hours limit feature
-router.post('/student/details/:lesson_id', ensureAuthenticated, async (req, res) => {
+router.post('/student/details/:lesson_id', ensureAuthenticated, async(req, res) => {
     const lesson = await Lesson.findOne({ _id: req.body.id }).lean().exec();
-    User.findByIdAndUpdate(req.session.user._id, { $pull: { lesson : lesson._id } }, { upsert: true, new: true, setDefaultsOnInsert: true },
+    User.findByIdAndUpdate(req.session.user._id, { $pull: { lesson: lesson._id } }, { upsert: true, new: true, setDefaultsOnInsert: true },
         (err, user) => {
             console.log(err || user);
             req.session.user = user

@@ -14,14 +14,23 @@
                         </div>
                     </div>
                     <h3>
-                        <%= lesson.title %> by <a href="/choreographer/<%= user.googleId %>">
-                            <%= user.username %>
-                        </a>
+                        <%= lesson.title %> by
+                            <a href="/choreographer/<%= user.googleId %>">
+                                <%= user.username %>
+                            </a>
                     </h3>
                     <ol class="list-unstyled">
-                        <li><%= __(`dashboard.search.level.${lesson.level[0]}`) %> | <%= __(`dashboard.search.genre.${lesson.genre[0]}`) %> | <%= __(`dashboard.search.purpose.${lesson.purpose[0]}`) %> | <%= __(`dashboard.search.mood.${lesson.mood[0]}`) %></li>
+                        <li>
+                            <%= __(`dashboard.search.level.${lesson.level[0]}`) %> |
+                                <%= __(`dashboard.search.genre.${lesson.genre[0]}`) %> |
+                                    <%= __(`dashboard.search.purpose.${lesson.purpose[0]}`) %> |
+                                        <%= __(`dashboard.search.mood.${lesson.mood[0]}`) %>
+                        </li>
                     </ol>
-                    <h4><%= lesson.price %> <%= __('dashboard.Yen') %></h4>
+                    <h4>
+                        <%= lesson.price %>
+                            <%= __('dashboard.Yen') %>
+                    </h4>
                     <hr>
                     <div class="text-center">
                         <!-- <% if (id != undefined) { %>
@@ -31,37 +40,60 @@
                         <% } %> -->
                     </div>
                 </div>
-    
+
                 <div class="p-3 mb-3 bg-light rounded">
                     <div class="text-center">
-                        <h4><%= __('reservation.choreo') %></h4>
+                        <h4>
+                            <%= __('reservation.choreo') %>
+                        </h4>
                         <% if (typeof userPhotoDef !="undefined" ) { %>
-                        <img src="data:image/<%= userPhotoDef.contentType%>;base64, <%= userPhotoDef.data.toString('base64')%>"
-                                    height="100" width="100" style="border-radius: 50%;" alt="user photo">
-                        <% } else { %>
-                        <img src="<%= userPhoto %>" height="60" width="60" style="border-radius: 50%;" alt="user photo">
-                        <% } %>
-                    </div>         
-                    <div class="text-center">
-                    <a href="/choreographer/<%= user.googleId %>" style="font-size: 22px;"><%= user.username %></a>
+                            <img src="data:image/<%= userPhotoDef.contentType%>;base64, <%= userPhotoDef.data.toString('base64')%>" height="100" width="100" style="border-radius: 50%;" alt="user photo">
+                            <% } else { %>
+                                <img src="<%= userPhoto %>" height="60" width="60" style="border-radius: 50%;" alt="user photo">
+                                <% } %>
                     </div>
-                    <br><h5 style="white-space:pre-wrap;"><%= user.bio %></h5>
-                    <p class="mb-0"><%= __('reservation.contact') %>: <a href="mailto:<%= user.email %>"><%= user.email %></a></p>
+                    <div class="text-center">
+                        <a href="/choreographer/<%= user.googleId %>" style="font-size: 22px;">
+                            <%= user.username %>
+                        </a>
+                    </div>
+                    <br>
+                    <h5 style="white-space:pre-wrap;">
+                        <%= user.bio %>
+                    </h5>
+                    <p class="mb-0">
+                        <%= __('reservation.contact') %>:
+                            <a href="mailto:<%= user.email %>">
+                                <%= user.email %>
+                            </a>
+                    </p>
                 </div>
             </div>
         </div>
-        
+
         <aside class="col-md-5 blog-sidebar">
             <div class="p-3 mb-3 bg-light rounded">
                 <div class="text-center">
                     <h4>OBS使用方法</h4>
-                </div>         
+                </div>
                 <br>
                 <ol>
                     <li>OBSをダウンロード</li>
                     <li>ご自身の<a href="/lesson/channel">チャンネル管理ページにて</a>Ingest serverとStream keyを取得</li>
                     <li>設定し、配信を開始</li>
                     <li>自身の教えるレッスン欄からアクセスしレッスンを開始</li>
+                </ol>
+            </div>
+            <div class="p-3 mb-3 bg-light rounded">
+                <div class="text-center">
+                    <h4>参加者</h4>
+                </div>
+                <ol>
+                    <% for(let i=0; i < attendee.length; i++) { %>
+                        <li>
+                            <%= attendee[i].username %>
+                        </li>
+                        <% } %>
                 </ol>
             </div>
         </aside>
