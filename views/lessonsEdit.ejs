@@ -90,11 +90,11 @@
                 </div>
                 <ol>
                     <% for(let i=0; i < attendee.length; i++) { %>
-                        <li>
-                            <%= attendee[i].username %>
-                        </li>
-                        <% } %>
+                        <li><%= attendee[i].username %></li>
+                    <% } %>
                 </ol>
+                <% const rev = attendee.length * lesson.price * 0.8 %>
+                <h5 class="text-center">予想収益：<%= rev %>円</h5>
             </div>
         </aside>
     </div>
