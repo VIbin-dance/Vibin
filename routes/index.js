@@ -16,8 +16,8 @@ const Video = require("../models/Video");
 const User = require("../models/User");
 const Lesson = require("../models/Lesson");
 
-findLesson  =  function (id) { 
-    return Lesson.find({ choreographerID: id})
+findLesson = function(id) {
+    return Lesson.find({ choreographerID: id })
 }
 
 findTicket = function(id) {
@@ -27,7 +27,7 @@ findTicket = function(id) {
 const storage = multer.memoryStorage()
 const upload = multer({ storage: storage });
 
-router.get("/", async (req, res) => { res.render("landing"); });
+router.get("/", async(req, res) => { res.render("landing"); });
 router.get("/error", (req, res) => { res.send("Login error"); });
 router.get("/privacy-policy", (req, res) => res.render("privacy-policy"));
 router.get("/terms-of-service", (req, res) => res.render("terms-of-service"));
@@ -67,7 +67,7 @@ router.get("/auth/google/callback",
 );
 
 router.get("/dashboard/:sort", ensureAuthenticated, async(req, res) => {
-    Lesson.paginate({}, {
+    Lesson.paginate({ choreographerID: { "$ne": req.session.user.googleId } }, {
         page: req.query.page,
         limit: req.query.limit,
         sort: { time: req.params.sort },
@@ -140,7 +140,7 @@ router.post("/dashboard", ensureAuthenticated, async(req, res) => {
     });
 });
 
-router.get("/results", ensureAuthenticated, (req, res) =>  res.render("results"));
+router.get("/results", ensureAuthenticated, (req, res) => res.render("results"));
 
 router.get("/choreographer/:id", ensureAuthenticated, async(req, res) => {
     // const user = await User.findOne({ email: req.user._json.email }).exec();
@@ -176,13 +176,12 @@ router.get("/calendar", ensureAuthenticated, (req, res) => {
         let run_status = [];
 
         fetch(`https://www.googleapis.com/calendar/v3/calendars/${user.email}/events?orderBy=startTime&q=vibin&singleEvents=true&key=${process.env.API_key}`, {
-            headers: {
-                Authorization: `Bearer ${user.accessToken}`,
-                    },
-                }
-            )
+                headers: {
+                    Authorization: `Bearer ${user.accessToken}`,
+                },
+            })
             .then((response) => response.json())
-            .then(async (data) => {
+            .then(async(data) => {
                 if (data.items == undefined) {
                     req.flash("error_msg", res.__("msg.error.auth"));
                     res.redirect("/");
@@ -192,12 +191,12 @@ router.get("/calendar", ensureAuthenticated, (req, res) => {
                         dateTime[i] = moment(data.items[i].start.dateTime).format('MMMM Do YYYY, h:mm a');
                         id[i] = data.items[i].description
                         idCal[i] = data.items[i].id
-        
-                        var s_date = new Date( data.items[i].start.dateTime ).getTime();
-                        var e_date = new Date( data.items[i].end.dateTime ).getTime();
+
+                        var s_date = new Date(data.items[i].start.dateTime).getTime();
+                        var e_date = new Date(data.items[i].end.dateTime).getTime();
                         var c_date = new Date().getTime();
-        
-                        if( s_date < c_date && e_date > c_date ) {
+
+                        if (s_date < c_date && e_date > c_date) {
                             run_status[i] = "( live now )"
                         } else {
                             run_status[i] = ""
@@ -207,14 +206,14 @@ router.get("/calendar", ensureAuthenticated, (req, res) => {
                     const tickets = [];
                     const choreographer = [];
                     const time2 = [];
-                    for (let i=0; i<user.lesson.length;i++) {
+                    for (let i = 0; i < user.lesson.length; i++) {
                         tickets[i] = await Lesson.findOne({ _id: user.lesson[i] }).lean().exec();
                         if (tickets.length > 0) {
                             choreographer[i] = await User.findOne({ googleId: tickets[i].choreographerID }).exec();
                             time2[i] = moment(tickets[i].time).format('MM/DD HH:mm');
                         }
                     }
-        
+
                     res.render('calendar', {
                         userPhoto: user.userPhoto,
                         userPhotoDef: user.userPhotoDef,
@@ -269,7 +268,7 @@ router.post("/calendar", ensureAuthenticated, (req, res) => {
 router.get("/reservation/:id", ensureAuthenticated, async(req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.id }).lean().exec();
     const choreographer = await User.findOne({ googleId: lesson.choreographerID }).lean().exec();
-    
+
     if (req.session.user.lesson && req.session.user.lesson.includes(lesson._id)) {
         res.render('success', {
             user: req.session.user,
@@ -352,7 +351,7 @@ router.get('/success/:id', ensureAuthenticated, async(req, res) => {
                 <p>価格：${lesson.price} Yen</p>
                 <p>${lesson.level[0]} | ${lesson.genre[0]} | ${lesson.purpose[0]} | ${lesson.mood[0]}</p>
                 <p>--------------------------------------------</p>`
-            
+
                 // sendMail(user.email, "ご予約を受付いたしました！", text);
                 // addCalendar(user, lesson.title, dateTime);
             }
@@ -494,8 +493,8 @@ router.post("/create", upload.single('thumbnail'), async(req, res) => {
                         <p>価格：${lesson.price} Yen</p>
                         <p>${lesson.level[0]} | ${lesson.genre[0]} | ${lesson.purpose[0]} | ${lesson.mood[0]}</p>
                         <p>--------------------------------------------</p>`
-                    
-                          sendMail(user.email, "レッスンの登録を受付いたしました！", text);
+
+                        sendMail(user.email, "レッスンの登録を受付いたしました！", text);
 
                         req.flash("success_msg", res.__("msg.success.schedule"));
                         res.redirect("/calendar");
