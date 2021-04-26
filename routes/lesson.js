@@ -275,10 +275,11 @@ router.get('/edit/:id', ensureAuthenticated, async(req, res) => {
 
 router.get('/student/details/:lesson_id', ensureAuthenticated, async(req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.lesson_id }).lean().exec();
+    const choreographer = await User.findOne({ googleId: lesson.choreographerID }).lean().exec();
     res.render("lessonDet", {
         id: req.params.lesson_id,
         lesson: lesson,
-        user: req.session.user,
+        choreographer: choreographer,
         userPhoto: req.session.user.userPhoto,
         userPhotoDef: req.session.user.userPhotoDef,
     })
