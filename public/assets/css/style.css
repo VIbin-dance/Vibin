@@ -1751,8 +1751,7 @@ section {
     padding: 0px;
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
     transition: all ease-in-out 0.3s;
-    min-height: 400px;
-    max-height: 500px;
+    min-height: 100%;
 }
 
 .follow .box {
@@ -1837,9 +1836,8 @@ section {
     .results .box h4,
     .follow .box h4 {
         font-size: 18px;
-        margin: 10px;
+        margin-left: 10px;
     }
-
     .results .box p,
     .follow .box p {
         font-size: 14px;

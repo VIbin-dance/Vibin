@@ -1,1544 +1,1549 @@
 @charset "UTF-8";
 .bd_red {
-  border: solid red 1px;
+    border: solid red 1px;
 }
 
 .db_blue {
-  border: solid blue 1px;
+    border: solid blue 1px;
 }
 
 @-webkit-keyframes backgroundAutomatedSpin {
-  0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  10% {
-    -webkit-transform: rotate(180deg);
-            transform: rotate(180deg);
-  }
-  20% {
-    -webkit-transform: rotate(1turn);
-            transform: rotate(1turn);
-  }
-  to {
-    -webkit-transform: rotate(1turn);
-            transform: rotate(1turn);
-  }
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    10% {
+        -webkit-transform: rotate(180deg);
+        transform: rotate(180deg);
+    }
+    20% {
+        -webkit-transform: rotate(1turn);
+        transform: rotate(1turn);
+    }
+    to {
+        -webkit-transform: rotate(1turn);
+        transform: rotate(1turn);
+    }
 }
 
 @keyframes backgroundAutomatedSpin {
-  0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  10% {
-    -webkit-transform: rotate(180deg);
-            transform: rotate(180deg);
-  }
-  20% {
-    -webkit-transform: rotate(1turn);
-            transform: rotate(1turn);
-  }
-  to {
-    -webkit-transform: rotate(1turn);
-            transform: rotate(1turn);
-  }
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    10% {
+        -webkit-transform: rotate(180deg);
+        transform: rotate(180deg);
+    }
+    20% {
+        -webkit-transform: rotate(1turn);
+        transform: rotate(1turn);
+    }
+    to {
+        -webkit-transform: rotate(1turn);
+        transform: rotate(1turn);
+    }
 }
 
 @-webkit-keyframes hoverAvatarSpin {
-  0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  50% {
-    -webkit-transform: rotate(180deg);
-            transform: rotate(180deg);
-  }
-  to {
-    -webkit-transform: rotate(1turn);
-            transform: rotate(1turn);
-  }
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    50% {
+        -webkit-transform: rotate(180deg);
+        transform: rotate(180deg);
+    }
+    to {
+        -webkit-transform: rotate(1turn);
+        transform: rotate(1turn);
+    }
 }
 
 @keyframes hoverAvatarSpin {
-  0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  50% {
-    -webkit-transform: rotate(180deg);
-            transform: rotate(180deg);
-  }
-  to {
-    -webkit-transform: rotate(1turn);
-            transform: rotate(1turn);
-  }
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    50% {
+        -webkit-transform: rotate(180deg);
+        transform: rotate(180deg);
+    }
+    to {
+        -webkit-transform: rotate(1turn);
+        transform: rotate(1turn);
+    }
 }
+
 
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
+
 body::-webkit-scrollbar {
-  width: 0;
+    width: 0;
 }
 
 body::-webkit-scrollbar-track {
-  border-radius: 10px;
+    border-radius: 10px;
 }
 
 body::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  background: #b4b4b4;
+    border-radius: 10px;
+    background: #b4b4b4;
 }
 
 #live_grid {
-  padding-bottom: 0;
+    padding-bottom: 0;
 }
 
 @media screen and (max-width: 768px) {
-  #live_grid {
-    padding: 0;
-  }
+    #live_grid {
+        padding: 0;
+    }
 }
 
 .live_grid {
-  position: relative;
-  width: 100%;
-  padding: 0 0 0;
-  overflow: hidden;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: nowrap;
-      flex-wrap: nowrap;
+    position: relative;
+    width: 100%;
+    padding: 0 0 0;
+    overflow: hidden;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
 }
 
 @media screen and (max-width: 768px) {
-  .live_grid {
-    -ms-flex-wrap: wrap;
+    .live_grid {
+        -ms-flex-wrap: wrap;
         flex-wrap: wrap;
-  }
+    }
 }
 
 .live_grid .video_grid {
-  position: relative;
-  width: calc( 100% - 350px);
-  -webkit-box-ordinal-group: 2;
-      -ms-flex-order: 1;
-          order: 1;
+    position: relative;
+    width: calc( 100% - 350px);
+    -webkit-box-ordinal-group: 2;
+    -ms-flex-order: 1;
+    order: 1;
 }
 
 @media screen and (max-width: 768px) {
-  .live_grid .video_grid {
-    width: 100%;
-  }
+    .live_grid .video_grid {
+        width: 100%;
+    }
 }
 
 .live_grid .video_grid.collapseOff {
-  width: 100%;
+    width: 100%;
 }
 
 .live_grid .video_grid .channelView {
-  position: relative;
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-  width: 100%;
-  height: auto;
-  max-height: calc(100vh - 160px);
-  overflow: hidden;
-  z-index: 1;
-  -webkit-transform: scale(1);
-          transform: scale(1);
-}
-
-.live_grid .video_grid .channelView .playback-animation {
-  pointer-events: none;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-left: -40px;
-  margin-top: -40px;
-  width: 80px;
-  height: 80px;
-  border-radius: 80px;
-  background-color: rgba(0, 0, 0, 0.6);
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  opacity: 0;
-  z-index: 110;
-}
-
-.live_grid .video_grid .channelView .video_group {
-  position: relative;
-  z-index: 100;
-  width: 100%;
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.live_grid .video_grid .channelView .video_group video {
-  position: relative;
-}
-
-.live_grid .video_grid .channelView .video_group video.camera {
-  width: 100%;
-  z-index: 10;
-}
-
-.live_grid .video_grid .channelView .video_group video.camera.selfon {
-  width: 70%;
-  -o-object-fit: cover;
-     object-fit: cover;
-}
-
-.live_grid .video_grid .channelView .video_group video.self {
-  display: none;
-  width: 30%;
-  z-index: 11;
-}
-
-.live_grid .video_grid .channelView .video_group video.self.selfon {
-  display: block;
-}
-
-.live_grid .video_grid .channelView .hidden {
-  display: none;
-}
-
-.live_grid .video_grid .channelView .video-controls {
-  position: absolute;
-  z-index: 900;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  padding: 1rem 1rem;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-transition: all 0.2s ease;
-  transition: all 0.2s ease;
-  background: -webkit-gradient(linear, left bottom, left top, color-stop(0, rgba(0, 0, 0, 0.8)), color-stop(60%, rgba(0, 0, 0, 0.35)), to(transparent));
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.8) 0, rgba(0, 0, 0, 0.35) 60%, transparent);
-}
-
-.live_grid .video_grid .channelView .video-controls.hide {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls {
-  position: relative;
-  width: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls svg {
-  width: 30px;
-  height: 30px;
-  fill: #fff;
-  cursor: pointer;
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls .hidden {
-  display: none;
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls button {
-  cursor: pointer;
-  position: relative;
-  margin-right: 7px;
-  font-size: 12px;
-  border: none;
-  outline: none;
-  background-color: transparent;
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls button * {
-  pointer-events: none;
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls button::before {
-  content: attr(data-title);
-  position: absolute;
-  display: none;
-  right: 0;
-  top: -50px;
-  background-color: rgba(0, 0, 0, 0.6);
-  color: #fff;
-  font-weight: bold;
-  padding: 4px 6px;
-  word-break: keep-all;
-  white-space: pre;
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls button:hover::before {
-  display: inline-block;
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls input[type="range"] {
-  position: relative;
-  z-index: 10;
-  width: 100px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
-  height: 8px;
-  background: transparent;
-  cursor: pointer;
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls input[type="range"]:focus {
-  outline: none;
-  border: none;
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls input[type="range"]:focus::-moz-range-track {
-  border: none;
-  background: transparent;
-  outline: none;
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls input[type="range"]:focus::-ms-track {
-  border: none;
-  background: transparent;
-  color: transparent;
-  /* don't drawn vertical reference line */
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls input[type="range"]::-webkit-slider-runnable-track {
-  width: 100%;
-  cursor: pointer;
-  border-radius: 1.3px;
-  -webkit-appearance: none;
-  -webkit-transition: all 0.4s ease;
-  transition: all 0.4s ease;
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  height: 16px;
-  width: 16px;
-  border-radius: 16px;
-  background: var(--youtube-red);
-  cursor: pointer;
-  -webkit-appearance: none;
-  margin-left: -1px;
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls input[type="range"]:focus::-webkit-slider-runnable-track {
-  background: transparent;
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls input[type="range"]::-moz-range-track {
-  width: 100%;
-  height: 8px;
-  cursor: pointer;
-  border: 1px solid transparent;
-  background: transparent;
-  border-radius: 1.3px;
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls input[type="range"]::-moz-range-thumb {
-  height: 14px;
-  width: 14px;
-  border-radius: 50px;
-  border: 1px solid var(--youtube-red);
-  background: var(--youtube-red);
-  cursor: pointer;
-  margin-top: 5px;
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls input[type="range"].volume {
-  height: 2px;
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls input[type="range"].volume::-webkit-slider-runnable-track {
-  background-color: transparent;
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls input[type="range"].volume::-webkit-slider-thumb {
-  margin-left: 0;
-  height: 12px;
-  width: 12px;
-  background: #fff;
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls input[type="range"].volume::-moz-range-thumb {
-  border: 1px solid #fff;
-  background: #fff;
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls progress[value] {
-  position: absolute;
-  right: 0;
-  z-index: 0;
-  width: 100px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  border: none;
-  height: 2px;
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls progress[value]::-webkit-progress-value {
-  background: #fff;
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls progress[value]::-moz-progress-bar {
-  background: #fff;
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls .left-controls {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  color: #fff;
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls .left-controls button::before {
-  left: 0;
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls .left-controls .volume-controls {
-  position: relative;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  margin-right: 10px;
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls .left-controls .volume-controls input {
-  width: 100px;
-  opacity: 1;
-  -webkit-transition: all 0.4s ease;
-  transition: all 0.4s ease;
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls .right-controls {
-  position: relative;
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls .right-controls .fullscreen-button {
-  margin-right: 0;
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls .right-controls .setting_window {
-  display: none;
-  position: absolute;
-  right: 1rem;
-  top: -1rem;
-  min-width: 150px;
-  width: 151px;
-  padding: 0;
-  margin: 0;
-  -webkit-transform: translateY(-100%);
-          transform: translateY(-100%);
-  overflow: hidden;
-  border-radius: 4px;
-  background: rgba(28, 28, 28, 0.9);
-  -webkit-transition: opacity 0.3s cubic-bezier(0, 0, 0.2, 1);
-  transition: opacity 0.3s cubic-bezier(0, 0, 0.2, 1);
-  list-style: none;
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls .right-controls .setting_window.viewOn {
-  display: block;
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls .right-controls .setting_window li {
-  padding: 0.5rem 1rem;
-  font-size: 0.8rem;
-  font-weight: 500;
-  line-height: 1.5;
-  color: #fff;
-  cursor: pointer;
-}
-
-.live_grid .video_grid .channelView .video-controls .bottom-controls .right-controls .setting_window li:hover {
-  background: #ffffff2f;
-}
-
-.live_grid .video_grid .channelView-ivs {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: stretch;
-      -ms-flex-pack: stretch;
-          justify-content: stretch;
-}
-
-@media screen and (max-width: 768px) {
-  .live_grid .video_grid .channelView-ivs {
-    -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
-  }
-}
-
-.live_grid .video_grid .channelView-ivs #live_screen {
-  position: relative;
-  width: 100%;
-}
-
-.live_grid .video_grid .channelView-ivs #live_screen.dualScreen {
-  width: 50%;
-  background: #000;
-}
-
-@media screen and (max-width: 768px) {
-  .live_grid .video_grid .channelView-ivs #live_screen.dualScreen {
-    width: 100%;
-    height: 55vw;
-  }
-}
-
-.live_grid .video_grid .channelView-ivs #live_screen.dualScreen #amazon-ivs-videojs {
-  position: absolute;
-  -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
-  left: 50%;
-  top: 50%;
-  width: 100%;
-  height: 100%;
-  -o-object-fit: cover;
-     object-fit: cover;
-}
-
-.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs {
-  width: 100%;
-}
-
-.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar {
-  height: 5em;
-}
-
-.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-button {
-  width: 5em;
-}
-
-.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-button .vjs-icon-placeholder::before {
-  font-size: 2.5em;
-  line-height: 2;
-}
-
-.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-button.togglePeer {
-  position: relative;
-}
-
-.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-button.togglePeer::before {
-  position: absolute;
-  content: '';
-  width: 5em;
-  height: 5em;
-  -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
-  left: 50%;
-  top: 50%;
-  background-color: #fff;
-  -webkit-mask-image: url(../img/male-solid.svg);
-          mask-image: url(../img/male-solid.svg);
-  -webkit-mask-size: 1.1em;
-          mask-size: 1.1em;
-  -webkit-mask-repeat: no-repeat;
-          mask-repeat: no-repeat;
-  -webkit-mask-position: center center;
-          mask-position: center center;
-}
-
-.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-button.togglePeer.active::before {
-  -webkit-mask-image: url(../img/people-arrows.svg);
-          mask-image: url(../img/people-arrows.svg);
-  -webkit-mask-size: 3.1em;
-          mask-size: 3.1em;
-  -webkit-mask-repeat: no-repeat;
-          mask-repeat: no-repeat;
-  -webkit-mask-position: center center;
-          mask-position: center center;
-}
-
-.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-volume-panel {
-  width: 15em;
-}
-
-.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-volume-panel .vjs-volume-control {
-  height: 5em;
-  width: 10em;
-  opacity: 1;
-}
-
-.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-volume-panel .vjs-volume-control .vjs-volume-bar {
-  margin: 2.35em 0.45em;
-}
-
-.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-volume-panel .vjs-volume-control .vjs-volume-bar.vjs-slider-horizontal {
-  width: 10em;
-}
-
-.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-current-time .vjs-current-time-display {
-  font-size: 1.5em;
-  line-height: 3.5em;
-}
-
-.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-live-display {
-  display: none;
-}
-
-.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-menu-button.vjs-subs-caps-button {
-  display: none;
-}
-
-.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-menu-button-popup .vjs-menu ul {
-  max-height: -webkit-fit-content;
-  max-height: -moz-fit-content;
-  max-height: fit-content;
-}
-
-.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-menu-button-popup .vjs-menu ul li {
-  line-height: 2.4em;
-}
-
-.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .video-js .vjs-menu-button-popup .vjs-menu {
-  left: auto;
-  right: 0;
-  top: 2em;
-}
-
-.live_grid .video_grid .channelView-ivs #self_camera {
-  position: relative;
-  display: none;
-  width: 50%;
-  height: 720px;
-}
-
-@media screen and (max-width: 768px) {
-  .live_grid .video_grid .channelView-ivs #self_camera {
-    width: 100%;
-    height: 55vw !important;
-  }
-}
-
-.live_grid .video_grid .channelView-ivs #self_camera video {
-  -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  height: 100%;
-}
-
-.live_grid .video_grid .channelView-ivs #self_camera.dualScreen {
-  display: inline-block;
-  -o-object-fit: cover;
-     object-fit: cover;
-}
-
-.live_grid .video_grid .techerView-ivs #self_techer_camera {
-  position: relative;
-  display: block;
-  width: 100%;
-  height: 100%;
-  min-height: 50vw;
-}
-
-.live_grid .video_grid .techerView-ivs #self_techer_camera video {
-  -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  height: 100%;
-  width: 100%;
-  -o-object-fit: cover;
-     object-fit: cover;
-}
-
-.live_grid .video_grid .channel_info {
-  width: 100%;
-  padding: 1rem;
-  background: #f7f7f7;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-@media screen and (max-width: 768px) {
-  .live_grid .video_grid .channel_info {
-    padding: 0.5rem;
-  }
-}
-
-@media screen and (max-width: 992px) {
-  .live_grid .video_grid .channel_info.student {
-    -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
-  }
-}
-
-@media screen and (max-width: 992px) {
-  .live_grid .video_grid .channel_info.student {
-    -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
-    padding: 0.5rem;
-  }
-  .live_grid .video_grid .channel_info.student .user_info {
-    width: 100%;
-  }
-  .live_grid .video_grid .channel_info.student .user_info .avatar.live_status .outline {
-    width: 50px;
-    height: 50px;
-  }
-  .live_grid .video_grid .channel_info.student .user_info .avatar.live_status::after {
-    bottom: -7px;
-    font-size: 10px;
-    line-height: 15px;
-  }
-  .live_grid .video_grid .channel_info.student .user_info .infor {
-    padding-right: 0;
-    overflow: hidden;
-  }
-  .live_grid .video_grid .channel_info.student .user_info .infor .name {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .live_grid .video_grid .channel_info.student .user_info .infor .category_grid {
-    display: none;
-  }
-  .live_grid .video_grid .channel_info.student .count_info {
-    width: 100%;
-    text-align: left;
-    padding-top: 1rem;
-  }
-  .live_grid .video_grid .channel_info.student .count_info .btn_grid {
+    position: relative;
     display: -webkit-inline-box;
     display: -ms-inline-flexbox;
     display: inline-flex;
-    -webkit-box-pack: start;
+    width: 100%;
+    height: auto;
+    max-height: calc(100vh - 160px);
+    overflow: hidden;
+    z-index: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+}
+
+.live_grid .video_grid .channelView .playback-animation {
+    pointer-events: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -40px;
+    margin-top: -40px;
+    width: 80px;
+    height: 80px;
+    border-radius: 80px;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    opacity: 0;
+    z-index: 110;
+}
+
+.live_grid .video_grid .channelView .video_group {
+    position: relative;
+    z-index: 100;
+    width: 100%;
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+}
+
+.live_grid .video_grid .channelView .video_group video {
+    position: relative;
+}
+
+.live_grid .video_grid .channelView .video_group video.camera {
+    width: 100%;
+    z-index: 10;
+}
+
+.live_grid .video_grid .channelView .video_group video.camera.selfon {
+    width: 70%;
+    -o-object-fit: cover;
+    object-fit: cover;
+}
+
+.live_grid .video_grid .channelView .video_group video.self {
+    display: none;
+    width: 30%;
+    z-index: 11;
+}
+
+.live_grid .video_grid .channelView .video_group video.self.selfon {
+    display: block;
+}
+
+.live_grid .video_grid .channelView .hidden {
+    display: none;
+}
+
+.live_grid .video_grid .channelView .video-controls {
+    position: absolute;
+    z-index: 900;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 1rem 1rem;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+    background: -webkit-gradient(linear, left bottom, left top, color-stop(0, rgba(0, 0, 0, 0.8)), color-stop(60%, rgba(0, 0, 0, 0.35)), to(transparent));
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.8) 0, rgba(0, 0, 0, 0.35) 60%, transparent);
+}
+
+.live_grid .video_grid .channelView .video-controls.hide {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls {
+    position: relative;
+    width: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls svg {
+    width: 30px;
+    height: 30px;
+    fill: #fff;
+    cursor: pointer;
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls .hidden {
+    display: none;
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls button {
+    cursor: pointer;
+    position: relative;
+    margin-right: 7px;
+    font-size: 12px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls button * {
+    pointer-events: none;
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls button::before {
+    content: attr(data-title);
+    position: absolute;
+    display: none;
+    right: 0;
+    top: -50px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    font-weight: bold;
+    padding: 4px 6px;
+    word-break: keep-all;
+    white-space: pre;
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls button:hover::before {
+    display: inline-block;
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls input[type="range"] {
+    position: relative;
+    z-index: 10;
+    width: 100px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+    height: 8px;
+    background: transparent;
+    cursor: pointer;
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls input[type="range"]:focus {
+    outline: none;
+    border: none;
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls input[type="range"]:focus::-moz-range-track {
+    border: none;
+    background: transparent;
+    outline: none;
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls input[type="range"]:focus::-ms-track {
+    border: none;
+    background: transparent;
+    color: transparent;
+    /* don't drawn vertical reference line */
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls input[type="range"]::-webkit-slider-runnable-track {
+    width: 100%;
+    cursor: pointer;
+    border-radius: 1.3px;
+    -webkit-appearance: none;
+    -webkit-transition: all 0.4s ease;
+    transition: all 0.4s ease;
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 16px;
+    background: var(--youtube-red);
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-left: -1px;
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls input[type="range"]:focus::-webkit-slider-runnable-track {
+    background: transparent;
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls input[type="range"]::-moz-range-track {
+    width: 100%;
+    height: 8px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    background: transparent;
+    border-radius: 1.3px;
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls input[type="range"]::-moz-range-thumb {
+    height: 14px;
+    width: 14px;
+    border-radius: 50px;
+    border: 1px solid var(--youtube-red);
+    background: var(--youtube-red);
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls input[type="range"].volume {
+    height: 2px;
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls input[type="range"].volume::-webkit-slider-runnable-track {
+    background-color: transparent;
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls input[type="range"].volume::-webkit-slider-thumb {
+    margin-left: 0;
+    height: 12px;
+    width: 12px;
+    background: #fff;
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls input[type="range"].volume::-moz-range-thumb {
+    border: 1px solid #fff;
+    background: #fff;
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls progress[value] {
+    position: absolute;
+    right: 0;
+    z-index: 0;
+    width: 100px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    height: 2px;
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls progress[value]::-webkit-progress-value {
+    background: #fff;
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls progress[value]::-moz-progress-bar {
+    background: #fff;
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls .left-controls {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    color: #fff;
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls .left-controls button::before {
+    left: 0;
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls .left-controls .volume-controls {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls .left-controls .volume-controls input {
+    width: 100px;
+    opacity: 1;
+    -webkit-transition: all 0.4s ease;
+    transition: all 0.4s ease;
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls .right-controls {
+    position: relative;
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls .right-controls .fullscreen-button {
+    margin-right: 0;
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls .right-controls .setting_window {
+    display: none;
+    position: absolute;
+    right: 1rem;
+    top: -1rem;
+    min-width: 150px;
+    width: 151px;
+    padding: 0;
+    margin: 0;
+    -webkit-transform: translateY(-100%);
+    transform: translateY(-100%);
+    overflow: hidden;
+    border-radius: 4px;
+    background: rgba(28, 28, 28, 0.9);
+    -webkit-transition: opacity 0.3s cubic-bezier(0, 0, 0.2, 1);
+    transition: opacity 0.3s cubic-bezier(0, 0, 0.2, 1);
+    list-style: none;
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls .right-controls .setting_window.viewOn {
+    display: block;
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls .right-controls .setting_window li {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    line-height: 1.5;
+    color: #fff;
+    cursor: pointer;
+}
+
+.live_grid .video_grid .channelView .video-controls .bottom-controls .right-controls .setting_window li:hover {
+    background: #ffffff2f;
+}
+
+.live_grid .video_grid .channelView-ivs {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: stretch;
+    -ms-flex-pack: stretch;
+    justify-content: stretch;
+}
+
+@media screen and (max-width: 768px) {
+    .live_grid .video_grid .channelView-ivs {
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    }
+}
+
+.live_grid .video_grid .channelView-ivs #live_screen {
+    position: relative;
+    width: 100%;
+}
+
+.live_grid .video_grid .channelView-ivs #live_screen.dualScreen {
+    width: 50%;
+    background: #000;
+}
+
+@media screen and (max-width: 768px) {
+    .live_grid .video_grid .channelView-ivs #live_screen.dualScreen {
+        width: 100%;
+        height: 55vw;
+    }
+}
+
+.live_grid .video_grid .channelView-ivs #live_screen.dualScreen #amazon-ivs-videojs {
+    position: absolute;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+    width: 100%;
+    height: 100%;
+    -o-object-fit: cover;
+    object-fit: cover;
+}
+
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs {
+    width: 100%;
+}
+
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar {
+    height: 5em;
+}
+
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-button {
+    width: 5em;
+}
+
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-button .vjs-icon-placeholder::before {
+    font-size: 2.5em;
+    line-height: 2;
+}
+
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-button.togglePeer {
+    position: relative;
+}
+
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-button.togglePeer::before {
+    position: absolute;
+    content: '';
+    width: 5em;
+    height: 5em;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+    background-color: #fff;
+    -webkit-mask-image: url(../img/male-solid.svg);
+    mask-image: url(../img/male-solid.svg);
+    -webkit-mask-size: 1.1em;
+    mask-size: 1.1em;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center center;
+    mask-position: center center;
+}
+
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-button.togglePeer.active::before {
+    -webkit-mask-image: url(../img/people-arrows.svg);
+    mask-image: url(../img/people-arrows.svg);
+    -webkit-mask-size: 3.1em;
+    mask-size: 3.1em;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center center;
+    mask-position: center center;
+}
+
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-volume-panel {
+    width: 15em;
+}
+
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-volume-panel .vjs-volume-control {
+    height: 5em;
+    width: 10em;
+    opacity: 1;
+}
+
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-volume-panel .vjs-volume-control .vjs-volume-bar {
+    margin: 2.35em 0.45em;
+}
+
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-volume-panel .vjs-volume-control .vjs-volume-bar.vjs-slider-horizontal {
+    width: 10em;
+}
+
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-current-time .vjs-current-time-display {
+    font-size: 1.5em;
+    line-height: 3.5em;
+}
+
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-live-display {
+    display: none;
+}
+
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-menu-button.vjs-subs-caps-button {
+    display: none;
+}
+
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-menu-button-popup .vjs-menu ul {
+    max-height: -webkit-fit-content;
+    max-height: -moz-fit-content;
+    max-height: fit-content;
+}
+
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .vjs-control-bar .vjs-menu-button-popup .vjs-menu ul li {
+    line-height: 2.4em;
+}
+
+.live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs .video-js .vjs-menu-button-popup .vjs-menu {
+    left: auto;
+    right: 0;
+    top: 2em;
+}
+
+.live_grid .video_grid .channelView-ivs #self_camera {
+    position: relative;
+    display: none;
+    width: 50%;
+    height: 720px;
+}
+
+@media screen and (max-width: 768px) {
+    .live_grid .video_grid .channelView-ivs #self_camera {
+        width: 100%;
+        height: 55vw !important;
+    }
+}
+
+.live_grid .video_grid .channelView-ivs #self_camera video {
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    height: 100%;
+}
+
+.live_grid .video_grid .channelView-ivs #self_camera.dualScreen {
+    display: inline-block;
+    -o-object-fit: cover;
+    object-fit: cover;
+}
+
+.live_grid .video_grid .techerView-ivs #self_techer_camera {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 50vw;
+}
+
+.live_grid .video_grid .techerView-ivs #self_techer_camera video {
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    height: 100%;
+    width: 100%;
+    -o-object-fit: cover;
+    object-fit: cover;
+}
+
+.live_grid .video_grid .channel_info {
+    width: 100%;
+    padding: 1rem;
+    background: #f7f7f7;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+@media screen and (max-width: 768px) {
+    .live_grid .video_grid .channel_info {
+        padding: 0.5rem;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .live_grid .video_grid .channel_info.student {
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .live_grid .video_grid .channel_info.student {
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        padding: 0.5rem;
+    }
+    .live_grid .video_grid .channel_info.student .user_info {
+        width: 100%;
+    }
+    .live_grid .video_grid .channel_info.student .user_info .avatar.live_status .outline {
+        width: 50px;
+        height: 50px;
+    }
+    .live_grid .video_grid .channel_info.student .user_info .avatar.live_status::after {
+        bottom: -7px;
+        font-size: 10px;
+        line-height: 15px;
+    }
+    .live_grid .video_grid .channel_info.student .user_info .infor {
+        padding-right: 0;
+        overflow: hidden;
+    }
+    .live_grid .video_grid .channel_info.student .user_info .infor .name {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .live_grid .video_grid .channel_info.student .user_info .infor .category_grid {
+        display: none;
+    }
+    .live_grid .video_grid .channel_info.student .count_info {
+        width: 100%;
+        text-align: left;
+        padding-top: 1rem;
+    }
+    .live_grid .video_grid .channel_info.student .count_info .btn_grid {
+        display: -webkit-inline-box;
+        display: -ms-inline-flexbox;
+        display: inline-flex;
+        -webkit-box-pack: start;
         -ms-flex-pack: start;
-            justify-content: flex-start;
-  }
-  .live_grid .video_grid .channel_info.student .count_info .channel_status {
-    display: inline;
-  }
+        justify-content: flex-start;
+    }
+    .live_grid .video_grid .channel_info.student .count_info .channel_status {
+        display: inline;
+    }
 }
 
 .live_grid .video_grid .channel_info .user_info {
-  width: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+    width: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
 }
 
 .live_grid .video_grid .channel_info .user_info a.avatar {
-  position: relative;
+    position: relative;
 }
 
 .live_grid .video_grid .channel_info .user_info a.avatar .outline {
-  position: relative;
-  width: 72px;
-  height: 72px;
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(80%, #FFB3C8), to(#9147ff));
-  background: linear-gradient(180deg, #FFB3C8 80%, #9147ff);
-  -webkit-animation: backgroundAutomatedSpin 5s linear 2s infinite;
-          animation: backgroundAutomatedSpin 5s linear 2s infinite;
-  border-radius: 10rem;
+    position: relative;
+    width: 72px;
+    height: 72px;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(80%, #FFB3C8), to(#9147ff));
+    background: linear-gradient(180deg, #FFB3C8 80%, #9147ff);
+    -webkit-animation: backgroundAutomatedSpin 5s linear 2s infinite;
+    animation: backgroundAutomatedSpin 5s linear 2s infinite;
+    border-radius: 10rem;
 }
 
 .live_grid .video_grid .channel_info .user_info a.avatar .inner_img {
-  position: absolute;
-  -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
-  left: 50%;
-  top: 50%;
-  background: #fff;
-  width: calc( 100% - 4px);
-  height: calc( 100% - 4px);
-  padding: 2px;
-  border-radius: 10rem;
+    position: absolute;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+    background: #fff;
+    width: calc( 100% - 4px);
+    height: calc( 100% - 4px);
+    padding: 2px;
+    border-radius: 10rem;
 }
 
 .live_grid .video_grid .channel_info .user_info a.avatar .inner_img figure {
-  width: 100%;
-  height: 100%;
-  border-radius: 10rem;
-  margin: 0;
-  overflow: hidden;
+    width: 100%;
+    height: 100%;
+    border-radius: 10rem;
+    margin: 0;
+    overflow: hidden;
 }
 
 .live_grid .video_grid .channel_info .user_info a.avatar .inner_img figure img {
-  width: 100%;
-  height: 100%;
-  -o-object-fit: cover;
-     object-fit: cover;
+    width: 100%;
+    height: 100%;
+    -o-object-fit: cover;
+    object-fit: cover;
 }
 
 .live_grid .video_grid .channel_info .user_info a.avatar.live_status::after {
-  position: absolute;
-  display: inline-block;
-  content: 'LIVE';
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-  left: 50%;
-  bottom: -5px;
-  background: #e91916;
-  border: solid #fff 2px;
-  border-radius: 6px;
-  padding: 0px 5px;
-  font-size: 13px;
-  line-height: 20px;
-  color: #fff;
+    position: absolute;
+    display: inline-block;
+    content: 'LIVE';
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    left: 50%;
+    bottom: -5px;
+    background: #e91916;
+    border: solid #fff 2px;
+    border-radius: 6px;
+    padding: 0px 5px;
+    font-size: 13px;
+    line-height: 20px;
+    color: #fff;
 }
 
 .live_grid .video_grid .channel_info .user_info a.avatar:hover .outline {
-  -webkit-animation: hoverAvatarSpin 1s linear 0s infinite;
-          animation: hoverAvatarSpin 1s linear 0s infinite;
+    -webkit-animation: hoverAvatarSpin 1s linear 0s infinite;
+    animation: hoverAvatarSpin 1s linear 0s infinite;
 }
 
 .live_grid .video_grid .channel_info .user_info .infor {
-  padding: 0 1rem;
+    padding: 0 1rem;
 }
 
 .live_grid .video_grid .channel_info .user_info .infor p.name {
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 700;
-  line-height: 2;
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 2;
 }
 
 .live_grid .video_grid .channel_info .user_info .infor p.level {
-  margin: 0;
-  font-size: 0.8rem;
-  line-height: 1.5;
+    margin: 0;
+    font-size: 0.8rem;
+    line-height: 1.5;
 }
 
 .live_grid .video_grid .channel_info .user_info .category_grid {
-  padding: 1rem 0 0;
-  margin: 0;
-  list-style: none;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
+    padding: 1rem 0 0;
+    margin: 0;
+    list-style: none;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
 }
 
 .live_grid .video_grid .channel_info .user_info .category_grid li {
-  padding: 0 1rem;
-  margin-right: 0.5rem;
-  margin-bottom: 0.5rem;
-  background: #fff;
-  border-radius: 10rem;
-  font-size: 0.7rem;
-  line-height: 1.3;
+    padding: 0 1rem;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    background: #fff;
+    border-radius: 10rem;
+    font-size: 0.7rem;
+    line-height: 1.3;
 }
 
 .live_grid .video_grid .channel_info .count_info {
-  text-align: right;
-  width: 35rem;
+    text-align: right;
+    width: 35rem;
 }
 
 @media screen and (max-width: 768px) {
-  .chinfo {
-    display: none;
-  }
+    .chinfo {
+        display: none;
+    }
 }
 
 @media screen and (max-width: 768px) {
-  .live_grid .video_grid .channel_info .count_info {
-    width: 60%;
-  }
+    .live_grid .video_grid .channel_info .count_info {
+        width: 60%;
+    }
 }
 
 .live_grid .video_grid .channel_info .count_info .btn_grid {
-  padding-bottom: 0.5rem;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: end;
-      -ms-flex-pack: end;
-          justify-content: flex-end;
+    padding-bottom: 0.5rem;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
 }
 
 .live_grid .video_grid .channel_info .count_info .btn_grid button {
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  border-radius: 4px;
-  height: 2rem;
-  border: none;
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    border-radius: 4px;
+    height: 2rem;
+    border: none;
 }
 
 .live_grid .video_grid .channel_info .count_info .btn_grid button:focus {
-  outline: none;
+    outline: none;
 }
 
 .live_grid .video_grid .channel_info .count_info .btn_grid button.favorite {
-  background: #3a3a3a;
-  margin-right: 0.5rem;
+    background: #3a3a3a;
+    margin-right: 0.5rem;
 }
 
 .live_grid .video_grid .channel_info .count_info .btn_grid button.favorite img {
-  -webkit-transform: translateX(0px) scale(1);
-          transform: translateX(0px) scale(1);
-  -webkit-transition: -webkit-transform 0.3s;
-  transition: -webkit-transform 0.3s;
-  transition: transform 0.3s;
-  transition: transform 0.3s, -webkit-transform 0.3s;
-  width: 20px;
+    -webkit-transform: translateX(0px) scale(1);
+    transform: translateX(0px) scale(1);
+    -webkit-transition: -webkit-transform 0.3s;
+    transition: -webkit-transform 0.3s;
+    transition: transform 0.3s;
+    transition: transform 0.3s, -webkit-transform 0.3s;
+    width: 20px;
 }
 
 .live_grid .video_grid .channel_info .count_info .btn_grid button.favorite:hover img {
-  -webkit-transform: translateX(0px) scale(1.07);
-          transform: translateX(0px) scale(1.07);
-  -webkit-transition: -webkit-transform 0.3s;
-  transition: -webkit-transform 0.3s;
-  transition: transform 0.3s;
-  transition: transform 0.3s, -webkit-transform 0.3s;
+    -webkit-transform: translateX(0px) scale(1.07);
+    transform: translateX(0px) scale(1.07);
+    -webkit-transition: -webkit-transform 0.3s;
+    transition: -webkit-transform 0.3s;
+    transition: transform 0.3s;
+    transition: transform 0.3s, -webkit-transform 0.3s;
 }
 
 .live_grid .video_grid .channel_info .count_info .btn_grid button.follow {
-  padding: 0 2rem;
-  background: #eb5160;
-  font-size: 0.8rem;
-  color: #fff;
+    padding: 0 2rem;
+    background: #eb5160;
+    font-size: 0.8rem;
+    color: #fff;
 }
 
 .live_grid .video_grid .channel_info .count_info .btn_grid button.follow:hover {
-  -webkit-transition: all 0.3s;
-  transition: all 0.3s;
-  background: #eb51608f;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+    background: #eb51608f;
 }
 
 .live_grid .video_grid .channel_info .count_info a.exit_channel {
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  border-radius: 4px;
-  height: 2rem;
-  border: none;
-  padding: 0 2rem;
-  background: #eb5160;
-  font-size: 0.8rem;
-  color: #fff;
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    border-radius: 4px;
+    height: 2rem;
+    border: none;
+    padding: 0 2rem;
+    background: #eb5160;
+    font-size: 0.8rem;
+    color: #fff;
 }
 
 .live_grid .video_grid .channel_info .count_info a.exit_channel:hover {
-  -webkit-transition: all 0.3s;
-  transition: all 0.3s;
-  background: #eb51608f;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+    background: #eb51608f;
 }
 
 .live_grid .video_grid .channel_info .count_info a.exit_channel:focus {
-  outline: none;
+    outline: none;
 }
 
 .live_grid .video_grid .channel_info .count_info p {
-  display: inline-block;
-  margin: 0;
-  font-size: 0.8rem;
-  line-height: 2;
+    display: inline-block;
+    margin: 0;
+    font-size: 0.8rem;
+    line-height: 2;
 }
 
 .live_grid .video_grid .channel_info .count_info p.login_users {
-  margin-right: 1rem;
+    margin-right: 1rem;
 }
 
 .live_grid .video_grid .channel_info .count_info p.login_users::before {
-  position: relative;
-  content: '視聴者数 :';
-  font-size: 0.8rem;
-  font-weight: bold;
-  margin-right: 0.5rem;
+    position: relative;
+    content: '視聴者数 :';
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-right: 0.5rem;
 }
 
 .live_grid .video_grid .channel_info .count_info p.live_time::before {
-  position: relative;
-  content: 'ライブ時間 :';
-  font-size: 0.8rem;
-  font-weight: bold;
-  margin-right: 0.5rem;
+    position: relative;
+    content: 'ライブ時間 :';
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-right: 0.5rem;
 }
 
 .live_grid .chat_grid {
-  position: relative;
-  width: 0;
-  height: 92%;
-  background: #fff;
-  -webkit-box-ordinal-group: 3;
-      -ms-flex-order: 2;
-          order: 2;
-  padding: 0 0 0;
-  border: none;
+    position: relative;
+    width: 0;
+    height: 100%;
+    background: #fff;
+    -webkit-box-ordinal-group: 3;
+    -ms-flex-order: 2;
+    order: 2;
+    padding: 0 0 0;
+    border: none;
 }
 
 .live_grid .chat_grid.collapseOn {
-  width: 350px;
-  border-left: solid #0000001f 1px;
-  position: fixed;
-  right: 0;
+    width: 350px;
+    border-left: solid #0000001f 1px;
+    position: fixed;
+    right: 0;
 }
 
 @media screen and (max-width: 768px) {
-  .live_grid .chat_grid.collapseOn {
-    width: 100%;
-    height: 40vh;
-    position: unset;
-    right: unset;
-  }
+    .live_grid .chat_grid.collapseOn {
+        width: 100%;
+        height: 40vh;
+        position: unset;
+        right: unset;
+    }
 }
 
 @media screen and (max-width: 768px) {
-  .live_grid .chat_grid {
-    width: 100%;
-    height: 40vh;
-  }
+    .live_grid .chat_grid {
+        width: 100%;
+        height: 40vh;
+    }
 }
 
 .live_grid .chat_grid .contain {
-  height: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+    height: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
 }
 
 .live_grid .chat_grid .contain .chat_header {
-  width: 100%;
-  height: 4rem;
-  left: 0;
-  top: 0;
-  z-index: 99;
-  padding: 1rem 0;
-  text-align: center;
-  font-size: 1rem;
-  font-weight: bold;
-  border-bottom: solid #0000001f 1px;
+    width: 100%;
+    height: 4rem;
+    left: 0;
+    top: 0;
+    z-index: 99;
+    padding: 1rem 0;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: bold;
+    border-bottom: solid #0000001f 1px;
 }
 
 @media screen and (max-width: 768px) {
-  .live_grid .chat_grid .contain .chat_header {
-    display: none;
-  }
+    .live_grid .chat_grid .contain .chat_header {
+        display: none;
+    }
 }
 
 .live_grid .chat_grid .contain .input_wrap {
-  position: relative;
-  z-index: 100;
-  width: 100%;
-  padding: 1rem;
-  background: #fff;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: end;
-      -ms-flex-align: end;
-          align-items: flex-end;
+    position: relative;
+    z-index: 100;
+    width: 100%;
+    padding: 1rem;
+    background: #fff;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: end;
+    -ms-flex-align: end;
+    align-items: flex-end;
 }
 
 @media screen and (max-width: 768px) {
-  .live_grid .chat_grid .contain .input_wrap {
-    padding: 0.5rem 1rem;
-  }
+    .live_grid .chat_grid .contain .input_wrap {
+        padding: 0.5rem 1rem;
+    }
 }
 
 .live_grid .chat_grid .contain .input_wrap button {
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  border-radius: 4px;
-  height: 2rem;
-  border: none;
-  height: 36px;
-  width: 3rem;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    border-radius: 4px;
+    height: 2rem;
+    border: none;
+    height: 36px;
+    width: 3rem;
 }
 
 .live_grid .chat_grid .contain .input_wrap button:focus {
-  outline: none;
+    outline: none;
 }
 
 .live_grid .chat_grid .contain .input_wrap button.btn1 {
-  background: #eb5160;
-  font-size: 0.8rem;
-  color: #fff;
-  width: 5rem;
+    background: #eb5160;
+    font-size: 0.8rem;
+    color: #fff;
+    width: 5rem;
 }
 
 .live_grid .chat_grid .contain .input_wrap button.btn1:hover {
-  -webkit-transition: all 0.3s;
-  transition: all 0.3s;
-  background: #eb51608f;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+    background: #eb51608f;
 }
 
 .live_grid .chat_grid .contain .input_wrap button.send_btn {
-  background: none;
+    background: none;
 }
 
 .live_grid .chat_grid .contain .input_wrap button.send_btn img {
-  width: 1rem;
+    width: 1rem;
 }
 
 .live_grid .chat_grid .contain .input_wrap button.send_btn:hover {
-  -webkit-transition: all 0.3s;
-  transition: all 0.3s;
-  background: #DDDDDD;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+    background: #DDDDDD;
 }
 
 .live_grid .chat_grid .contain .input_wrap textarea {
-  display: block;
-  width: 100%;
-  background: #F8F8F8;
-  border: solid #DDDDDD 1px;
-  border-radius: 4px;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
-  padding: 0.5rem 0.5rem;
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
-  font-size: 0.8rem;
-  line-height: 1.5;
+    display: block;
+    width: 100%;
+    background: #F8F8F8;
+    border: solid #DDDDDD 1px;
+    border-radius: 4px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 0.5rem 0.5rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    font-size: 0.8rem;
+    line-height: 1.5;
 }
 
 .live_grid .chat_grid .contain .input_wrap textarea:focus {
-  outline: none;
-  border: solid #eb5160 2px;
-  background: #fff;
+    outline: none;
+    border: solid #eb5160 2px;
+    background: #fff;
 }
 
 .live_grid .chat_grid .contain .message_wrap {
-  width: 100%;
-  height: 100%;
-  overflow: auto;
+    width: 100%;
+    height: 80%;
+    overflow: auto;
 }
 
 .live_grid .chat_grid .contain .message_wrap::-webkit-scrollbar {
-  width: 0.4rem;
+    width: 0.4rem;
 }
 
 .live_grid .chat_grid .contain .message_wrap::-webkit-scrollbar-track {
-  border-radius: 10px;
+    border-radius: 10px;
 }
 
 .live_grid .chat_grid .contain .message_wrap::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  background: #b4b4b4;
+    border-radius: 10px;
+    background: #b4b4b4;
 }
 
 .live_grid .chat_grid .contain .message_wrap ul {
-  list-style: none;
-  padding: 0 1rem;
-  margin: 0;
+    list-style: none;
+    padding: 0 1rem;
+    margin: 0;
 }
 
 .live_grid .chat_grid .contain .message_wrap ul li {
-  width: 100%;
-  padding: 0.5rem 0;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+    width: 100%;
+    padding: 0.5rem 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
 }
 
 @media screen and (max-width: 768px) {
-  .live_grid .chat_grid .contain .message_wrap ul li {
-    padding-bottom: 0;
-  }
+    .live_grid .chat_grid .contain .message_wrap ul li {
+        padding-bottom: 0;
+    }
 }
 
 .live_grid .chat_grid .contain .message_wrap ul li .avatar {
-  margin: 0;
-  width: 3rem;
-  height: 3rem;
-  margin-right: 1rem;
-  border-radius: 10rem;
+    margin: 0;
+    width: 3rem;
+    height: 3rem;
+    margin-right: 1rem;
+    border-radius: 10rem;
 }
 
 .live_grid .chat_grid .contain .message_wrap ul li .avatar img {
-  width: 100%;
-  height: 100%;
-  border-radius: 10rem;
-  margin: 0;
-  overflow: hidden;
+    width: 100%;
+    height: 100%;
+    border-radius: 10rem;
+    margin: 0;
+    overflow: hidden;
 }
 
 .live_grid .chat_grid .contain .message_wrap ul li .message {
-  width: calc( 100% - 4rem);
-  padding: 0.5rem 1.3rem;
-  background: #eb5160;
-  border-radius: 0 1rem 1rem;
-  font-size: 0.8rem;
-  color: #fff;
-  word-break: break-all;
+    width: calc( 100% - 4rem);
+    padding: 0.5rem 1.3rem;
+    background: #eb5160;
+    border-radius: 0 1rem 1rem;
+    font-size: 0.8rem;
+    color: #fff;
+    word-break: break-all;
 }
 
 @media screen and (max-width: 768px) {
-  .live_grid .chat_grid .contain .message_wrap ul li .message {
-    border-radius: 0 0.5rem 0.5rem;
-  }
+    .live_grid .chat_grid .contain .message_wrap ul li .message {
+        border-radius: 0 0.5rem 0.5rem;
+    }
 }
 
 .live_grid .chat_grid .contain .message_wrap ul li .message .time {
-  display: block;
-  padding-top: 0.5rem;
-  width: 100%;
-  font-size: 0.6rem;
-  line-height: 2;
-  color: #FFB3C8;
+    display: block;
+    padding-top: 0.5rem;
+    width: 100%;
+    font-size: 0.6rem;
+    line-height: 2;
+    color: #FFB3C8;
 }
 
 @media screen and (max-width: 768px) {
-  .live_grid .chat_grid .contain .message_wrap ul li .message .time {
-    padding: 0;
-  }
+    .live_grid .chat_grid .contain .message_wrap ul li .message .time {
+        padding: 0;
+    }
 }
 
 .live_grid .toggle_chat_btn {
-  position: fixed;
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  top: 4.5rem;
-  right: 300px;
-  z-index: 900;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 4px;
-  border: none;
-  -webkit-transition: all 0.2s;
-  transition: all 0.2s;
+    position: fixed;
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    top: 4.5rem;
+    right: 300px;
+    z-index: 900;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 4px;
+    border: none;
+    -webkit-transition: all 0.2s;
+    transition: all 0.2s;
 }
 
 @media screen and (max-width: 768px) {
-  .live_grid .toggle_chat_btn {
-    display: none;
-  }
+    .live_grid .toggle_chat_btn {
+        display: none;
+    }
 }
 
 .live_grid .toggle_chat_btn.collapseOff {
-  right: 1rem;
-  -webkit-transition: all 0.2s;
-  transition: all 0.2s;
+    right: 1rem;
+    -webkit-transition: all 0.2s;
+    transition: all 0.2s;
 }
 
 .live_grid .toggle_chat_btn.collapseOff svg path {
-  d: path("M16 16V4h2v12h-2zM6 9l2.501-2.5-1.5-1.5-5 5 5 5 1.5-1.5-2.5-2.5h8V9H6z");
+    d: path("M16 16V4h2v12h-2zM6 9l2.501-2.5-1.5-1.5-5 5 5 5 1.5-1.5-2.5-2.5h8V9H6z");
 }
 
 .live_grid .toggle_chat_btn:focus {
-  outline: none;
+    outline: none;
 }
 
 .live_grid .toggle_chat_btn:hover {
-  background: #858585;
+    background: #858585;
 }
 
 .live_grid .toggle_chat_btn:hover svg {
-  color: #fff;
+    color: #fff;
 }
 
 #results {
-  position: relative;
-  width: 100%;
-  min-height: calc( 100vh - 35rem);
-  padding: 0 16px 5rem;
+    position: relative;
+    width: 100%;
+    min-height: calc( 100vh - 35rem);
+    padding: 0 16px 5rem;
 }
+
 
 /* #results .container {
   padding: 7rem 0 0;
 } */
 
 #results .bold {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 #results .channel_usage {
-  position: relative;
-  width: 100%;
+    position: relative;
+    width: 100%;
 }
 
 #results .channel_usage .lg_label {
-  width: 100%;
-  font-size: 1rem;
-  font-weight: bold;
+    width: 100%;
+    font-size: 1rem;
+    font-weight: bold;
 }
 
 #results .channel_usage .channel_item {
-  color: inherit;
+    color: inherit;
 }
 
 #results .channel_usage .channel_item span {
-  display: block;
-  font-size: 1rem;
-  line-height: 2;
-  color: #5f5f5f;
+    display: block;
+    font-size: 1rem;
+    line-height: 2;
+    color: #5f5f5f;
 }
 
 #results .channel_usage .channel_item a {
-  color: #fff;
+    color: #fff;
 }
 
 #results .channel_usage .no_channel {
-  width: 100%;
+    width: 100%;
 }
 
 #results .channel_usage .no_channel .warning_label {
-  width: 100%;
-  position: relative;
-  font-size: 0.8rem;
-  color: #eb5160;
+    width: 100%;
+    position: relative;
+    font-size: 0.8rem;
+    color: #eb5160;
 }
 
 #results .channel_usage .no_channel .channel_form {
-  width: 100%;
+    width: 100%;
 }
 
 #results .channel_usage .no_channel .channel_form .channel_infor {
-  width: 100%;
-  padding: 0.5rem 0;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+    width: 100%;
+    padding: 0.5rem 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
 }
 
 #results .channel_usage .no_channel .channel_form .channel_infor .label {
-  max-width: 15%;
-  width: 100%;
-  font-size: 0.8rem;
-  font-weight: bold;
+    max-width: 15%;
+    width: 100%;
+    font-size: 0.8rem;
+    font-weight: bold;
 }
 
 #results .channel_usage .no_channel .channel_form .channel_infor .content {
-  width: 100%;
-  max-width: 85%;
+    width: 100%;
+    max-width: 85%;
 }
 
 #results .channel_usage .no_channel .channel_form .channel_infor .content input {
-  padding: 0 0.5rem;
-  width: 100%;
-  font-size: 0.8rem;
-  line-height: 1.5rem;
+    padding: 0 0.5rem;
+    width: 100%;
+    font-size: 0.8rem;
+    line-height: 1.5rem;
 }
 
 #results .channel_usage .no_channel .channel_form .btn_box {
-  width: 100%;
-  text-align: right;
+    width: 100%;
+    text-align: right;
 }
 
 #results .channel_control_panel {
-  position: relative;
-  width: 100%;
-  padding: 1rem;
-  margin-top: 1rem;
-  background: #f7f7f7;
+    position: relative;
+    width: 100%;
+    padding: 1rem;
+    margin-top: 1rem;
+    background: #f7f7f7;
 }
 
 #results .channel_control_panel .layer {
-  width: 100%;
-  padding: 0.5rem 0;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+    width: 100%;
+    padding: 0.5rem 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
 }
 
 #results .channel_control_panel .layer input[type="text"] {
-  width: 70%;
+    width: 70%;
 }
 
 #results .channel_control_panel .layer .status_line {
-  width: 100%;
-  font-size: 0.8rem;
-  line-height: 1.5;
+    width: 100%;
+    font-size: 0.8rem;
+    line-height: 1.5;
 }
 
 #channel_grid .block_label {
-  font-size: 1rem;
-  font-weight: bold;
+    font-size: 1rem;
+    font-weight: bold;
 }
 
 #channel_grid .channel_infor {
-  width: 100%;
-  padding: 2rem 0 0 2rem;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+    width: 100%;
+    padding: 2rem 0 0 2rem;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
 }
 
 @media screen and (max-width: 768px) {
-  #channel_grid .channel_infor {
-    padding: 0;
-  }
+    #channel_grid .channel_infor {
+        padding: 0;
+    }
 }
 
 #channel_grid .channel_infor .label {
-  width: 10rem;
-  font-weight: bold;
-  line-height: 2.5;
+    width: 10rem;
+    font-weight: bold;
+    line-height: 2.5;
 }
 
 #channel_grid .channel_infor .content {
-  width: calc( 100% - 10rem);
-  line-height: 2.5;
+    width: calc( 100% - 10rem);
+    line-height: 2.5;
 }
 
 @media screen and (max-width: 768px) {
-  #channel_grid .channel_infor .content {
-    width: 100%;
-    line-height: 1.5;
-    word-break: break-all;
-  }
+    #channel_grid .channel_infor .content {
+        width: 100%;
+        line-height: 1.5;
+        word-break: break-all;
+    }
 }
 
 #channel_grid .channel_infor .content .ch_infor {
-  max-width: 32rem;
-  width: 100%;
-  border: none;
+    max-width: 32rem;
+    width: 100%;
+    border: none;
 }
 
 #channel_grid .channel_infor .content .ch_infor:focus {
-  outline: none;
+    outline: none;
 }
 
 #channel_grid .channel_infor .copy_btn {
-  border: none;
-  background: none;
-  margin-left: 1rem;
+    border: none;
+    background: none;
+    margin-left: 1rem;
 }
 
 #channel_grid .channel_infor .copy_btn:focus {
-  outline: none;
+    outline: none;
 }
 
 #channel_grid .channel_infor .copy_btn img {
-  width: 1rem;
+    width: 1rem;
 }
 
 #channel_grid .channel_infor .btn_grid {
-  width: 100%;
-  padding-top: 2rem;
+    width: 100%;
+    padding-top: 2rem;
 }
 
 #channel_grid .channel_box .desc {
-  width: 100%;
+    width: 100%;
 }
 
 #channel_grid .channel_box .input_line {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  padding: 0.5rem 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    padding: 0.5rem 0;
 }
 
 #channel_grid .channel_box .input_line label {
-  width: 100%;
-  max-width: 8rem;
+    width: 100%;
+    max-width: 8rem;
 }
 
 #channel_grid .channel_box .input_line input {
-  width: calc( 100% - 8rem);
+    width: calc( 100% - 8rem);
 }
 
 #channel_grid .channel_box .btn_line {
-  width: 100%;
-  text-align: right;
+    width: 100%;
+    text-align: right;
 }
 
 .ticket_block {
-  width: 100%;
-  padding: 0;
-  list-style: none;
+    width: 100%;
+    padding: 0;
+    list-style: none;
 }
 
 .ticket_block li {
-  width: 100%;
-  margin-bottom: 2rem;
+    width: 100%;
+    margin-bottom: 2rem;
 }
 
 .ticket_block li a {
-  margin-bottom: 1rem;
+    margin-bottom: 1rem;
 }
 
 .ticket_block li .desc {
-  width: 100%;
+    width: 100%;
 }
 
 .ticket_block li .desc p {
-  margin: 0;
-  width: 100%;
-  color: #888888;
-  font-size: 0.9rem;
-  line-height: 1.4;
+    margin: 0;
+    width: 100%;
+    color: #888888;
+    font-size: 0.9rem;
+    line-height: 1.4;
 }
+
+
 /*# sourceMappingURL=style_live.css.map */
