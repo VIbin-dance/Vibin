@@ -1,9 +1,9 @@
-
 // Initialize - Digital Stopwatch
-(function () {
+(function() {
     'use strict';
 
-    let TimeHolder = 0, stopTime = 0;
+    let TimeHolder = 0,
+        stopTime = 0;
     let cur_startTime = Math.floor(Date.now() / 1000);
     const live_time = document.querySelector(".live_time");
     // const ch_playTime = document.querySelector("#ch_playTime");
@@ -68,8 +68,6 @@
 
     // connect socket and join in chat room
     socket.on("connect", () => {
-        // console.log("chat server connected.");
-
         if (user_name.value != '' && chat_room_id.value != '' && channel_arn.value != '') {
             let u_name = user_name.value;
             let room_id = chat_room_id.value;
@@ -115,7 +113,7 @@
     // ///////////////////////////////////////////////////////////////
     // click send Button
     send_btn.addEventListener('click', () => {
-        if (chat_msg.value.length > 0) {
+        if (chat_msg.value.length > 0 && chat_msg.value.trim()) {
             sendMsg();
         } else {
             // console.log('message is empty...')
@@ -125,7 +123,7 @@
     // keydown Enter in input box
     chat_msg.addEventListener('keydown', (e) => {
         if (e.keyCode == 13) {
-            if (chat_msg.value.length > 0) {
+            if (chat_msg.value.length > 0 && chat_msg.value.trim()) {
                 sendMsg();
             } else {
                 // console.log('message is empty...')
@@ -138,10 +136,9 @@
         let convert_msg = chat_msg.value.replace(/\n/g, "<br>");
         let src;
 
-        if (typeof user_photoDefData !="undefined" ) {
+        if (typeof user_photoDefData != "undefined") {
             src = `data:image/${user_photoDefType};base64, ${user_photoDefData}`
-
-        } else if (typeof user_photo !="undefined" ) {
+        } else if (typeof user_photo != "undefined") {
             src = `${user_photo.value}`
         }
 
@@ -161,14 +158,12 @@
         const li = document.createElement("li");
         let src;
 
-        if (typeof user_photoDef !="undefined" ) {
-            console.log("yeet" + user_photoDef.data)
+        if (typeof user_photoDef != "undefined") {
             const data = user_photoDef.data.toString('base64')
             src = `data:image/${user_photoDef.contentType};base64, ${data}`
-        } else if (typeof user_photo !="undefined" ) {
+        } else if (typeof user_photo != "undefined") {
             src = `${user_photo}`
         }
-        console.log(src);
 
         li.innerHTML = `<figure class="avatar">
                             <img src="${src}" alt="">

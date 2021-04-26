@@ -1134,7 +1134,7 @@ body::-webkit-scrollbar-thumb {
     background: #DDDDDD;
 }
 
-.live_grid .chat_grid .contain .input_wrap textarea {
+.live_grid .chat_grid .contain .input_wrap input {
     display: block;
     width: 100%;
     background: #F8F8F8;
@@ -1149,7 +1149,7 @@ body::-webkit-scrollbar-thumb {
     line-height: 1.5;
 }
 
-.live_grid .chat_grid .contain .input_wrap textarea:focus {
+.live_grid .chat_grid .contain .input_wrap input:focus {
     outline: none;
     border: solid #eb5160 2px;
     background: #fff;
