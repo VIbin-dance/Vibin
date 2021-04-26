@@ -34,6 +34,7 @@ const {
     // ListPlaybackKeyPairsCommand,
     // DeletePlaybackKeyPairCommand
 } = require("@aws-sdk/client-ivs");
+const moment = require('moment');
 
 // AIVS Authentication, Define AIVS Obj from SDK
 const aivs_client = new IvsClient({
@@ -288,13 +289,20 @@ router.get('/student/details/:lesson_id', ensureAuthenticated, async(req, res) =
 // add 2 hours limit feature
 router.post('/student/details/:lesson_id', ensureAuthenticated, async(req, res) => {
     const lesson = await Lesson.findOne({ _id: req.body.id }).lean().exec();
-    User.findByIdAndUpdate(req.session.user._id, { $pull: { lesson: lesson._id } }, { upsert: true, new: true, setDefaultsOnInsert: true },
-        (err, user) => {
-            console.log(err || user);
-            req.session.user = user
-            req.flash('success_msg', 'レッスンの予約をキャンセルしました');
-            res.redirect("/users/profile");
-        });
+    const time = moment(lesson.time).subtract(2, 'hours')
+
+    if (moment().isAfter(time)) {
+        req.flash('error_msg', 'キャンセル可能時刻を過ぎています');
+        res.redirect("/users/profile");
+    } else {
+        User.findByIdAndUpdate(req.session.user._id, { $pull: { lesson: lesson._id } }, { upsert: true, new: true, setDefaultsOnInsert: true },
+            (err, user) => {
+                console.log(err || user);
+                req.session.user = user
+                req.flash('success_msg', 'レッスンの予約をキャンセルしました');
+                res.redirect("/users/profile");
+            });
+    }
 })
 
 module.exports = router;
