@@ -269,7 +269,7 @@ router.get("/reservation/:id", ensureAuthenticated, async(req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.id }).lean().exec();
     const choreographer = await User.findOne({ googleId: lesson.choreographerID }).lean().exec();
 
-    if (req.session.user.lesson && req.session.user.lesson.includes(lesson._id)) {
+    if (req.session.user.lesson && req.session.user.lesson.includes(lesson._id.toString()) === true) {
         res.render('success', {
             user: req.session.user,
             params: req.params.id,
@@ -331,13 +331,14 @@ router.get('/success/:id', ensureAuthenticated, async(req, res) => {
         session = await stripe.checkout.sessions.retrieve(req.query.session_id);
     }
 
-    if (req.session.user.lesson && req.session.user.lesson.includes(lesson.id)) {
+    if (req.session.user.lesson && req.session.user.lesson.includes(lesson._id.toString()) === true) {
         console.log('already done')
-    } else if (lesson.price === 0 || session.payment_status == 'paid') {
-        User.findOneAndUpdate({ email: req.user._json.email }, { $push: { lesson: [lesson._id] } }, { upsert: true, new: true, setDefaultsOnInsert: true },
+    } else if (lesson.price === 0 || (session != undefined && session.payment_status == 'paid')) {
+        User.findByIdAndUpdate(req.session.user._id, { $push: { lesson: lesson._id } }, { upsert: true, new: true, setDefaultsOnInsert: true },
             (err, user) => {
                 console.log(err || user);
-                req.session.user = user
+                console.log(session);
+                req.session.user.lesson = user.lesson
 
                 const text = `
                 <p>この度はレッスンのご予約をいただきまして、誠にありがとうございます。</p>
@@ -354,20 +355,22 @@ router.get('/success/:id', ensureAuthenticated, async(req, res) => {
 
                 // sendMail(user.email, "ご予約を受付いたしました！", text);
                 // addCalendar(user, lesson.title, dateTime);
+                res.redirect(`/success/${req.params.id}`);
             }
         );
     } else {
         res.redirect(`/reservation/${req.params.id}`)
     }
 
-    res.render('success', {
-        lesson: lesson,
-        dateTime: dateTime,
-        choreographer: choreographer,
-        user: user,
-        userPhoto: user.userPhoto,
-        userPhotoDef: user.userPhotoDef,
-    });
+    // res.render('success', {
+    //     user: req.session.user,
+    //     params: req.params.id,
+    //     lesson: lesson,
+    //     choreographer: choreographer,
+    //     moment: moment,
+    //     userPhoto: req.session.user.userPhoto,
+    //     userPhotoDef: req.session.user.userPhotoDef,
+    // })
 })
 
 router.get("/create", ensureAuthenticated, async(req, res) => {

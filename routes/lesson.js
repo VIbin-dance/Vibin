@@ -15,6 +15,7 @@ const Lesson = require('../models/Lesson');
 const {
     IvsClient,
     CreateChannelCommand,
+    CreateRecordingConfigurationCommand,
     // GetChannelCommand,
     // BatchGetChannelCommand,
     // ListChannelsCommand,
@@ -103,21 +104,33 @@ router.get('/channel', ensureAuthenticated, async(req, res) => {
     })
 });
 
-router.post('/create_channel', ensureAuthenticated, function(req, res) {
+router.post('/create_channel', ensureAuthenticated, (req, res) => {
     const { ch_name } = req.body;
-    // console.log( "channel Name : ", ch_name );
+
     try {
         const CreateChannel_option = {
             authorized: false,
-            latencyMode: "NORMAL",
+            latencyMode: "LOW",
             name: ch_name,
             type: "STANDARD"
         };
-        const CreateChannel = new CreateChannelCommand(CreateChannel_option); //OK
+
+        const CreateRecord_option = {
+            destinationConfiguration: {
+               s3: {
+                  bucketName: ch_name
+               }
+            },
+            name: ch_name,
+         }
+
+        const CreateChannel = new CreateChannelCommand(CreateChannel_option);
+        const CreateRecord = new CreateRecordingConfigurationCommand(CreateRecord_option);
 
         aivs_client.send(CreateChannel).then(
-            (data) => {
-                // console.log( data );
+            async (data) => {
+                const record = await aivs_client.send(CreateRecord);
+                console.log(record)
                 Channel.findOneAndUpdate({
                     googleId: req.user.id
                 }, {
@@ -136,21 +149,17 @@ router.post('/create_channel', ensureAuthenticated, function(req, res) {
                     }
                 }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, ch) => {
                     if (err) {
+                        console.log(err)
                         req.flash('error_msg', 'チャンネルが作成されませんでした。');
                     } else {
                         req.flash('success_msg', 'チャンネルが作成されました。');
                     }
                     res.redirect('/lesson/channel');
                 });
-            },
-            (error) => {
-                // error handling.
-                req.flash('error', 'チャンネルが作成されませんでした。');
-                res.redirect('/lesson/channel');
             }
         );
     } catch (error) {
-        // error handling.
+        console.log(error)
         req.flash('error', 'チャンネルが作成されませんでした。');
         res.redirect('/lesson/channel');
     }
@@ -285,8 +294,8 @@ router.get('/student/details/:lesson_id', ensureAuthenticated, async(req, res) =
         userPhotoDef: req.session.user.userPhotoDef,
     })
 });
+
 // add refund feature of stripe
-// add 2 hours limit feature
 router.post('/student/details/:lesson_id', ensureAuthenticated, async(req, res) => {
     const lesson = await Lesson.findOne({ _id: req.body.id }).lean().exec();
     const time = moment(lesson.time).subtract(2, 'hours')
