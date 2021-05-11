@@ -118,7 +118,7 @@ router.post('/create_channel', ensureAuthenticated, (req, res) => {
         const CreateRecord_option = {
             destinationConfiguration: {
                s3: {
-                  bucketName: ch_name
+                  bucketName: `vibin-${req.session.user.googleId}`
                }
             },
             name: ch_name,
@@ -129,8 +129,8 @@ router.post('/create_channel', ensureAuthenticated, (req, res) => {
 
         aivs_client.send(CreateChannel).then(
             async (data) => {
-                const record = await aivs_client.send(CreateRecord);
-                console.log(record)
+                // const record = await aivs_client.send(CreateRecord);
+                // console.log(record)
                 Channel.findOneAndUpdate({
                     googleId: req.user.id
                 }, {
