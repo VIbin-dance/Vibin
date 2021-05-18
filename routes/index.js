@@ -443,8 +443,6 @@ router.post("/create", upload.single('thumbnail'), async(req, res) => {
             loginLink: loginLink,
             userPhoto: user.userPhoto,
             userPhotoDef: user.userPhotoDef,
-            API_key: process.env.API_key,
-            CLIENT_id: process.env.ZOOM_CLIENT_ID,
             title,
             language,
             choreographer: user.username,
@@ -462,7 +460,7 @@ router.post("/create", upload.single('thumbnail'), async(req, res) => {
             contentType: req.file.mimetype,
         };
 
-        Lesson.findOne({ title: title }).then(async(lesson) => {
+        Lesson.findOne({ title: title }).then((lesson) => {
             if (lesson) {
                 errors.push({ msg: res.__("msg.error.dupl") });
                 res.render("create", {
@@ -475,14 +473,12 @@ router.post("/create", upload.single('thumbnail'), async(req, res) => {
                     CLIENT_id: process.env.ZOOM_CLIENT_ID,
                 });
             } else {
-                const dateTime = moment(time).format("YYYY-MM-DDTHH:mm");
-
-                addCalendar(user, title, dateTime);
-
                 const newLesson = new Lesson({ title, thumbnail, language, choreographerID, time, price, level, genre, purpose, mood });
                 newLesson
                     .save()
-                    .then(async function(lesson) {
+                    .then((lesson) => {
+                        const dateTime = moment(time).format("YYYY-MM-DDTHH:mm");
+                        addCalendar(user, title, dateTime);
 
                         const text = `
                         <p>この度はレッスンをご登録いただきまして、誠にありがとうございます。</p>

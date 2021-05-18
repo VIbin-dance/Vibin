@@ -3,7 +3,7 @@ var router = express.Router();
 const nodemailer = require('nodemailer');
 const passport = require('passport');
 const { ensureAuthenticated } = require('../config/auth');
-
+const { createChannel, createRecording } = require('../config/aws/channel');
 
 const User = require('../models/User');
 const Video = require('../models/Video');
@@ -15,7 +15,6 @@ const Lesson = require('../models/Lesson');
 const {
     IvsClient,
     CreateChannelCommand,
-    GetRecordingConfigurationCommand,
     CreateRecordingConfigurationCommand,
     DeleteChannelCommand,
 } = require("@aws-sdk/client-ivs");
@@ -91,70 +90,11 @@ router.get('/channel', ensureAuthenticated, async(req, res) => {
 
 router.post('/create_channel', ensureAuthenticated, async (req, res) => {
     const { ch_name } = req.body;
-
-    const CreateRecord_option = {
-        destinationConfiguration: {
-            s3: {
-                bucketName: `testvibin-${req.session.user.googleId}`
-            }
-        },
-    };
-
-    const CreateRecord = new CreateRecordingConfigurationCommand(CreateRecord_option);
-    
-    aivs_client.send(CreateRecord)
-        .then((data) => {
-            Channel.findOneAndUpdate({ googleId: req.user.id }, {
-                googleId: req.user.id,
-                ch_name: data.channel.name,
-                arn: data.channel.arn,
-            })
-        })
-
-    // const CreateChannel_option = {
-    //     authorized: false,
-    //     latencyMode: "LOW",
-    //     name: ch_name,
-    //     type: "STANDARD"
-    // };
-
-    // const CreateChannel = new CreateChannelCommand(CreateChannel_option);
-
-    // aivs_client
-    //     .send(CreateChannel)
-    //     .then((data) => {
-    //         Channel.findOneAndUpdate({ googleId: req.user.id }, {
-    //             googleId: req.user.id,
-    //             ch_name: data.channel.name,
-    //             authorized: data.channel.authorized,
-    //             ingestEndpoint: data.channel.ingestEndpoint,
-    //             latencyMode: data.channel.latencyMode,
-    //             playbackUrl: data.channel.playbackUrl,
-    //             type: data.channel.type,
-    //             streamKey: {
-    //                 arn: data.streamKey.arn,
-    //                 channelArn: data.streamKey.channelArn,
-    //                 value: data.streamKey.value
-    //             }
-    //         }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, ch) => {
-    //             if (err) {
-    //                 console.log(err)
-    //                 req.flash('error_msg', 'チャンネルが作成されませんでした。');
-    //             } else {
-    //                 req.flash('success_msg', 'チャンネルが作成されました。');
-    //             }
-    //             res.redirect('/lesson/channel');
-    //         });
-    //     }).catch((error) => {
-    //         console.log(error)
-    //         req.flash('error', 'チャンネルが作成されませんでした。');
-    //         res.redirect('/lesson/channel');
-    //     })
+    createRecording(req, res);
+    createChannel(req, res, ch_name);
 });
 
 router.post('/delete_channel', ensureAuthenticated, function(req, res) {
-    // const { ch_name } = req.body;
-    // console.log( "channel Name : ", ch_name );
     try {
         Channel.findOne({ googleId: req.user.id }, (err, ch) => {
             if (err) {
