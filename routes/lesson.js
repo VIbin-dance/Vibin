@@ -3,7 +3,7 @@ var router = express.Router();
 const nodemailer = require('nodemailer');
 const passport = require('passport');
 const { ensureAuthenticated } = require('../config/auth');
-const { createChannel, createRecording } = require('../config/aws/channel');
+const { createChannel, createRecording, deleteChannel } = require('../config/aws/channel');
 
 const User = require('../models/User');
 const Video = require('../models/Video');
@@ -90,47 +90,12 @@ router.get('/channel', ensureAuthenticated, async(req, res) => {
 
 router.post('/create_channel', ensureAuthenticated, async (req, res) => {
     const { ch_name } = req.body;
-    createRecording(req, res);
+    // createRecording(req, res);
     createChannel(req, res, ch_name);
 });
 
 router.post('/delete_channel', ensureAuthenticated, function(req, res) {
-    try {
-        Channel.findOne({ googleId: req.user.id }, (err, ch) => {
-            if (err) {
-                req.flash('error', 'チャンネルを削除できませんでした。Fail Mongoose search');
-                res.redirect('/lesson/channel');
-            }
-            let channel_arn = ch.arn;
-            const DeleteChannel_option = {
-                "arn": channel_arn
-            };
-
-            const DeleteChannel = new DeleteChannelCommand(DeleteChannel_option);
-            aivs_client.send(DeleteChannel).then(
-                () => {
-                    req.flash('success_msg', 'チャンネルを削除しました。');
-                    res.redirect('/lesson/channel');
-                },
-                (error) => {
-                    // error handling.
-                    req.flash('error', 'チャンネルを削除できませんでした。- AIVS');
-                    res.redirect('/lesson/channel');
-                }
-            );
-            Channel.deleteOne({ googleId: req.user.id }, (err) => {
-                if (err) {
-                    req.flash('error', 'チャンネルを削除できませんでした。- Fail Mongoose delete');
-                    res.redirect('/lesson/channel');
-                }
-            });
-        });
-    } catch (error) {
-        // error handling.
-        req.flash('error', 'チャンネルを削除できませんでした。');
-        res.redirect('/lesson/channel');
-    }
-
+    deleteChannel(req, res);
 });
 
 router.get('/teacher/:lesson_id', ensureAuthenticated, async(req, res) => {
