@@ -35,7 +35,7 @@ router.get('/', (req, res) => {
     res.render('/', { title: 'Student' });
 });
 
-router.get('/channel', ensureAuthenticated, async(req, res) => {
+router.get('/channel', ensureAuthenticated, async (req, res) => {
     let ch_count;
     // let currentUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
     // let videoCHK = currentUrl.search("aaa");
@@ -94,11 +94,11 @@ router.post('/create_channel', ensureAuthenticated, async (req, res) => {
     createChannel(req, res, ch_name);
 });
 
-router.post('/delete_channel', ensureAuthenticated, function(req, res) {
+router.post('/delete_channel', ensureAuthenticated, function (req, res) {
     deleteChannel(req, res);
 });
 
-router.get('/teacher/:lesson_id', ensureAuthenticated, async(req, res) => {
+router.get('/teacher/:lesson_id', ensureAuthenticated, async (req, res) => {
     const ls = await Lesson.findOne({ _id: req.params.lesson_id }).lean().exec();
     Channel.findOne({ googleId: req.user.id }, (err, ch) => {
         if (!ch) {
@@ -124,7 +124,7 @@ router.get('/teacher/:lesson_id', ensureAuthenticated, async(req, res) => {
     });
 });
 
-router.get('/student/:lesson_id', ensureAuthenticated, async(req, res) => {
+router.get('/student/:lesson_id', ensureAuthenticated, async (req, res) => {
     Lesson.findOne({ _id: req.params.lesson_id }, (err, ls) => {
         if (!ls) {
             req.flash('error_msg', '選択したレッスンの期限が切れたか情報が正しくありません。');
@@ -133,7 +133,7 @@ router.get('/student/:lesson_id', ensureAuthenticated, async(req, res) => {
             req.flash('error_msg', '選択したレッスンは購入されていません');
             res.redirect(`/reservation/${req.params.lesson_id}`);
         } else {
-            Channel.findOne({ googleId: ls.choreographerID }, async(err, ch) => {
+            Channel.findOne({ googleId: ls.choreographerID }, async (err, ch) => {
                 if (!ch) {
                     req.flash('error_msg', '現在所有しているチャンネルがありません。');
                     res.redirect('/users/profile');
@@ -161,7 +161,7 @@ router.get('/student/:lesson_id', ensureAuthenticated, async(req, res) => {
     });
 });
 
-router.get('/edit/:id', ensureAuthenticated, async(req, res) => {
+router.get('/edit/:id', ensureAuthenticated, async (req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.id }).lean().exec();
     const attendee = await User.find({ lesson: lesson._id }, 'username').lean().exec();
     res.render("lessonsEdit", {
@@ -174,7 +174,39 @@ router.get('/edit/:id', ensureAuthenticated, async(req, res) => {
     })
 })
 
-router.get('/student/details/:lesson_id', ensureAuthenticated, async(req, res) => {
+// add refund feature of stripe
+router.post('/edit/:id', ensureAuthenticated, async (req, res) => {
+    const lesson = await Lesson.findOne({ _id: req.body.id }).lean().exec();
+    const time = moment(lesson.time).subtract(2, 'hours')
+
+    // Lesson.deleteOne({ _id: req.body.id }, (err, lesson) => {
+    //     console.log(err || lesson);
+    User.updateMany({ lesson: lesson._id }, { $pull: { lesson: lesson._id } }, { upsert: true, new: true, setDefaultsOnInsert: true },
+        (err, user) => {
+            console.log(err || user);
+            Lesson.deleteOne({ _id: req.body.id }, (err, lesson) => {
+                console.log(err || lesson);
+                req.flash('success_msg', 'レッスンの予約をキャンセルしました');
+                res.redirect("/users/profile");
+            })
+        })
+    // })
+
+    // if (moment().isAfter(time)) {
+    //     req.flash('error_msg', 'キャンセル可能時刻を過ぎています');
+    //     res.redirect("/users/profile");
+    // } else {
+    // User.findByIdAndUpdate(req.session.user._id, { $pull: { lesson: lesson._id } }, { upsert: true, new: true, setDefaultsOnInsert: true },
+    //     (err, user) => {
+    //         console.log(err || user);
+    //         req.session.user = user
+    //         req.flash('success_msg', 'レッスンの予約をキャンセルしました');
+    //         res.redirect("/users/profile");
+    //     });
+    // }
+})
+
+router.get('/student/details/:lesson_id', ensureAuthenticated, async (req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.lesson_id }).lean().exec();
     const choreographer = await User.findOne({ googleId: lesson.choreographerID }).lean().exec();
     res.render("lessonDet", {
@@ -187,7 +219,7 @@ router.get('/student/details/:lesson_id', ensureAuthenticated, async(req, res) =
 });
 
 // add refund feature of stripe
-router.post('/student/details/:lesson_id', ensureAuthenticated, async(req, res) => {
+router.post('/student/details/:lesson_id', ensureAuthenticated, async (req, res) => {
     const lesson = await Lesson.findOne({ _id: req.body.id }).lean().exec();
     const time = moment(lesson.time).subtract(2, 'hours')
 

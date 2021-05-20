@@ -74,6 +74,18 @@
         <aside class="col-md-5 blog-sidebar">
             <div class="p-3 mb-3 bg-light rounded">
                 <div class="text-center">
+                    <h4>参加者</h4>
+                </div>
+                <ol>
+                    <% for(let i=0; i < attendee.length; i++) { %>
+                        <li><%= attendee[i].username %></li>
+                    <% } %>
+                </ol>
+                <% const rev = attendee.length * lesson.price * 0.8 %>
+                <h5 class="text-center">予想収益：<%= rev %>円</h5>
+            </div>
+            <div class="p-3 mb-3 bg-light rounded">
+                <div class="text-center">
                     <h4>OBS使用方法</h4>
                 </div>
                 <br>
@@ -86,15 +98,21 @@
             </div>
             <div class="p-3 mb-3 bg-light rounded">
                 <div class="text-center">
-                    <h4>参加者</h4>
+                    <h4>キャンセル事項</h4>
                 </div>
+                <br>
                 <ol>
-                    <% for(let i=0; i < attendee.length; i++) { %>
-                        <li><%= attendee[i].username %></li>
-                    <% } %>
+                    <li>キャンセルはレッスンの2時間前まで可能です</li>
+                    <li>キャンセルした場合、レッスン料金は全額返金されますが、キャンセルに発生する手数料を支払い必要があります</li>
+                    <li>レッスンに遅れたり、欠席した場合もレッスン料は返金されません</li>
                 </ol>
-                <% const rev = attendee.length * lesson.price * 0.8 %>
-                <h5 class="text-center">予想収益：<%= rev %>円</h5>
+                <form action="/lesson/edit/:id" method="POST" style="margin-top: 3%;">
+                    <div class="text-center" style="margin:3%;">
+                        <p>上記を踏まえて</p>
+                        <input type="id" id="id" name="id" class="form-control" value="<%= typeof id != 'undefined' ? id : '' %>" hidden/>
+                        <button class="btn btn-danger btn-lg" type="submit">キャンセルする</button>
+                    </div>
+                </form>
             </div>
         </aside>
     </div>

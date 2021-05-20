@@ -333,6 +333,7 @@ router.get('/success/:id', ensureAuthenticated, async(req, res) => {
 
     if (req.session.user.lesson && req.session.user.lesson.includes(lesson._id.toString()) === true) {
         console.log('already done')
+        res.redirect(`/reservation/${req.params.id}`);
     } else if (lesson.price === 0 || (session != undefined && session.payment_status == 'paid')) {
         User.findByIdAndUpdate(req.session.user._id, { $push: { lesson: lesson._id } }, { upsert: true, new: true, setDefaultsOnInsert: true },
             (err, user) => {
@@ -340,37 +341,27 @@ router.get('/success/:id', ensureAuthenticated, async(req, res) => {
                 console.log(session);
                 req.session.user.lesson = user.lesson
 
-                const text = `
-                <p>この度はレッスンのご予約をいただきまして、誠にありがとうございます。</p>
-                <p>▼ご予約内容▼</p>
-                <p>--------------------------------------------</p>
-                <p>${lesson.title}</p>
-                <a href="/reservation/<%= lesson.id %>">
-                <img src="data:image/<%=lesson.thumbnail.contentType%>;base64, <%=lesson.thumbnail.data.toString('base64')%>" alt="thumbnail">
-                </a>
-                <p>日時：${dateTime}</p>
-                <p>価格：${lesson.price} Yen</p>
-                <p>${lesson.level[0]} | ${lesson.genre[0]} | ${lesson.purpose[0]} | ${lesson.mood[0]}</p>
-                <p>--------------------------------------------</p>`
+                // const text = `
+                // <p>この度はレッスンのご予約をいただきまして、誠にありがとうございます。</p>
+                // <p>▼ご予約内容▼</p>
+                // <p>--------------------------------------------</p>
+                // <p>${lesson.title}</p>
+                // <a href="/reservation/<%= lesson.id %>">
+                // <img src="data:image/<%=lesson.thumbnail.contentType%>;base64, <%=lesson.thumbnail.data.toString('base64')%>" alt="thumbnail">
+                // </a>
+                // <p>日時：${dateTime}</p>
+                // <p>価格：${lesson.price} Yen</p>
+                // <p>${lesson.level[0]} | ${lesson.genre[0]} | ${lesson.purpose[0]} | ${lesson.mood[0]}</p>
+                // <p>--------------------------------------------</p>`
 
                 // sendMail(user.email, "ご予約を受付いたしました！", text);
                 // addCalendar(user, lesson.title, dateTime);
-                res.redirect(`/success/${req.params.id}`);
+                res.redirect(`/reservation/${req.params.id}`);
             }
         );
     } else {
         res.redirect(`/reservation/${req.params.id}`)
     }
-
-    // res.render('success', {
-    //     user: req.session.user,
-    //     params: req.params.id,
-    //     lesson: lesson,
-    //     choreographer: choreographer,
-    //     moment: moment,
-    //     userPhoto: req.session.user.userPhoto,
-    //     userPhotoDef: req.session.user.userPhotoDef,
-    // })
 })
 
 router.get("/create", ensureAuthenticated, async(req, res) => {
@@ -393,9 +384,9 @@ router.get("/create", ensureAuthenticated, async(req, res) => {
         render.account = account;
         render.loginLink = loginLink;
     }
-
     res.render("create", render);
 });
+
 // not yet
 router.post("/create", upload.single('thumbnail'), async(req, res) => {
     const { title, language, time, price, level, genre, purpose, mood } = req.body;
@@ -425,7 +416,6 @@ router.post("/create", upload.single('thumbnail'), async(req, res) => {
                     console.log(err || user);
                 });
             res.redirect(loginLink.url);
-
         } catch (err) {
             res.status(500).send({
                 error: err.message,
@@ -474,8 +464,7 @@ router.post("/create", upload.single('thumbnail'), async(req, res) => {
                 });
             } else {
                 const newLesson = new Lesson({ title, thumbnail, language, choreographerID, time, price, level, genre, purpose, mood });
-                newLesson
-                    .save()
+                newLesson.save()
                     .then((lesson) => {
                         const dateTime = moment(time).format("YYYY-MM-DDTHH:mm");
                         addCalendar(user, title, dateTime);
