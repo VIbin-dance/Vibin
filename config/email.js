@@ -7,6 +7,7 @@ const sendMail = (to, subject, html) => {
         subject: `${subject}`,
         html: `${html}`,
     };
+    console.log(transporter.transporter.options);
 
     transporter.sendMail(message, async(err, response) => {
         console.log(err || response);

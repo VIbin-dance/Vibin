@@ -10,8 +10,7 @@ transporter = nodemailer.createTransport({
         clientId: process.env.CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         refreshToken: process.env.EMAIL_REFRESH_TOKEN,
-        expires: 1484314697598
-    },
+    }
 });
 
 module.exports.transporter = transporter;

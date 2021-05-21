@@ -11,23 +11,25 @@ const stripe = require("stripe")("sk_test_51Hfnh4BHyna8CK9qjfFDuXjt1pmBPnPMoGflp
 const { ensureAuthenticated } = require("../config/auth");
 const { sendMail } = require("../config/email");
 const { addCalendar } = require("../config/calendar");
+const { createChannel, createRecording, deleteChannel } = require('../config/aws/channel');
 
 const Video = require("../models/Video");
 const User = require("../models/User");
 const Lesson = require("../models/Lesson");
+const Channel = require("../models/Channel");
 
-findLesson = function(id) {
+findLesson = function (id) {
     return Lesson.find({ choreographerID: id })
 }
 
-findTicket = function(id) {
+findTicket = function (id) {
     return Lesson.find({ _id: id })
 }
 
 const storage = multer.memoryStorage()
 const upload = multer({ storage: storage });
 
-router.get("/", async(req, res) => { res.render("landing"); });
+router.get("/", async (req, res) => { res.render("landing"); });
 router.get("/error", (req, res) => { res.send("Login error"); });
 router.get("/privacy-policy", (req, res) => res.render("privacy-policy"));
 router.get("/terms-of-service", (req, res) => res.render("terms-of-service"));
@@ -53,7 +55,7 @@ router.get("/auth/google/callback",
     passport.authenticate("google", {
         failureRedirect: "/error",
         session: true,
-    }), async(req, res) => {
+    }), async (req, res) => {
         const user = await User.findOne({ email: req.user._json.email }).lean().exec();
         req.session.user = user
         if (req.session.user.loginCount == 1) {
@@ -66,12 +68,12 @@ router.get("/auth/google/callback",
     }
 );
 
-router.get("/dashboard/:sort", ensureAuthenticated, async(req, res) => {
+router.get("/dashboard/:sort", ensureAuthenticated, async (req, res) => {
     Lesson.paginate({ choreographerID: { "$ne": req.session.user.googleId } }, {
         page: req.query.page,
         limit: req.query.limit,
         sort: { time: req.params.sort },
-    }, async(err, lesson) => {
+    }, async (err, lesson) => {
         const choreographer = [];
         for (let i = 0; i < lesson.docs.length; i++) {
             choreographer[i] = await User.findOne({ googleId: lesson.docs[i].choreographerID.toString() }, 'username').lean().exec();
@@ -93,7 +95,7 @@ router.get("/dashboard/:sort", ensureAuthenticated, async(req, res) => {
     });
 });
 
-router.post("/dashboard", ensureAuthenticated, async(req, res) => {
+router.post("/dashboard", ensureAuthenticated, async (req, res) => {
     const { language, level, genre, purpose, mood, search } = req.body;
     const searchQuery = new RegExp(escapeRegex(search), "gi");
     // const user = await User.findOne({ email: req.user._json.email }).exec();
@@ -114,7 +116,7 @@ router.post("/dashboard", ensureAuthenticated, async(req, res) => {
     Lesson.paginate(query, {
         page: req.query.page,
         limit: 100,
-    }, async(err, lesson) => {
+    }, async (err, lesson) => {
         if (!lesson.docs.length) {
             req.flash("error_msg", res.__("msg.error.video"));
             res.redirect("/dashboard/-1?page=1&limit=15");
@@ -142,13 +144,13 @@ router.post("/dashboard", ensureAuthenticated, async(req, res) => {
 
 router.get("/results", ensureAuthenticated, (req, res) => res.render("results"));
 
-router.get("/choreographer/:id", ensureAuthenticated, async(req, res) => {
+router.get("/choreographer/:id", ensureAuthenticated, async (req, res) => {
     // const user = await User.findOne({ email: req.user._json.email }).exec();
 
     Lesson.paginate({ choreographerID: req.params.id }, {
         page: req.query.page,
         limit: req.query.limit,
-    }, async(err, lesson) => {
+    }, async (err, lesson) => {
         const choreographer = await User.findOne({ googleId: req.params.id }).lean().exec();
 
         res.render("choreographer", {
@@ -176,12 +178,12 @@ router.get("/calendar", ensureAuthenticated, (req, res) => {
         let run_status = [];
 
         fetch(`https://www.googleapis.com/calendar/v3/calendars/${user.email}/events?orderBy=startTime&q=vibin&singleEvents=true&key=${process.env.API_key}`, {
-                headers: {
-                    Authorization: `Bearer ${user.accessToken}`,
-                },
-            })
+            headers: {
+                Authorization: `Bearer ${user.accessToken}`,
+            },
+        })
             .then((response) => response.json())
-            .then(async(data) => {
+            .then(async (data) => {
                 if (data.items == undefined) {
                     req.flash("error_msg", res.__("msg.error.auth"));
                     res.redirect("/");
@@ -237,22 +239,22 @@ router.get("/calendar", ensureAuthenticated, (req, res) => {
 // not yet
 router.post("/calendar", ensureAuthenticated, (req, res) => {
     User.findOne({
-            email: req.user._json.email,
-        },
+        email: req.user._json.email,
+    },
         (err, user) => {
             const { idCal } = req.body;
 
             let result = fetch(
                 `https://www.googleapis.com/calendar/v3/calendars/${user.email}/events/${idCal}?key=${process.env.API_key}`, {
-                    method: "DELETE",
-                    headers: {
-                        Authorization: `Bearer ${user.accessToken}`,
-                        Accept: "application/json",
-                    },
-                }
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${user.accessToken}`,
+                    Accept: "application/json",
+                },
+            }
             );
 
-            result.then(function(result) {
+            result.then(function (result) {
                 if (result.status == 404) {
                     req.flash("error", res.__("msg.error.video"));
                     res.redirect("/calendar");
@@ -265,7 +267,7 @@ router.post("/calendar", ensureAuthenticated, (req, res) => {
     );
 });
 
-router.get("/reservation/:id", ensureAuthenticated, async(req, res) => {
+router.get("/reservation/:id", ensureAuthenticated, async (req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.id }).lean().exec();
     const choreographer = await User.findOne({ googleId: lesson.choreographerID }).lean().exec();
 
@@ -321,7 +323,7 @@ router.get("/reservation/:id", ensureAuthenticated, async(req, res) => {
     }
 });
 
-router.get('/success/:id', ensureAuthenticated, async(req, res) => {
+router.get('/success/:id', ensureAuthenticated, async (req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.id }).lean().exec();
     const choreographer = await User.findOne({ googleId: lesson.choreographerID }).lean().exec();
     const dateTime = moment(lesson.time).format('MM/DD HH:mm');
@@ -364,7 +366,7 @@ router.get('/success/:id', ensureAuthenticated, async(req, res) => {
     }
 })
 
-router.get("/create", ensureAuthenticated, async(req, res) => {
+router.get("/create", ensureAuthenticated, async (req, res) => {
     let render = {
         choreographer: req.session.user.username,
         userPhoto: req.session.user.userPhoto,
@@ -388,17 +390,13 @@ router.get("/create", ensureAuthenticated, async(req, res) => {
 });
 
 // not yet
-router.post("/create", upload.single('thumbnail'), async(req, res) => {
+router.post("/create", upload.single('thumbnail'), async (req, res) => {
     const { title, language, time, price, level, genre, purpose, mood } = req.body;
     const user = await User.findOne({ email: req.user._json.email }).lean().exec();
     const choreographerID = user.googleId;
     let errors = [];
     let account;
     let loginLink;
-
-    if (title == "" || req.file == undefined || language == "" || time == "" || price == "" || level == undefined || genre == undefined || purpose == undefined || mood == undefined) {
-        errors.push({ msg: res.__("msg.error.fill") });
-    }
 
     if (user.stripeID == undefined) {
         try {
@@ -426,6 +424,16 @@ router.post("/create", upload.single('thumbnail'), async(req, res) => {
         loginLink = await stripe.accounts.createLoginLink(user.stripeID);
     }
 
+    if (title == "" || req.file == undefined || language == "" || time == "" || price == "" || level == undefined || genre == undefined || purpose == undefined || mood == undefined) {
+        errors.push({ msg: res.__("msg.error.fill") });
+    }
+
+    Lesson.findOne({ title: title }).then((lesson) => {
+        if (lesson) {
+            errors.push({ msg: res.__("msg.error.dupl") });
+        }
+    });
+
     if (errors.length > 0) {
         res.render("create", {
             errors,
@@ -450,46 +458,38 @@ router.post("/create", upload.single('thumbnail'), async(req, res) => {
             contentType: req.file.mimetype,
         };
 
-        Lesson.findOne({ title: title }).then((lesson) => {
-            if (lesson) {
-                errors.push({ msg: res.__("msg.error.dupl") });
-                res.render("create", {
-                    errors,
-                    account: account,
-                    loginLink: loginLink,
-                    userPhoto: user.userPhoto,
-                    userPhotoDef: user.userPhotoDef,
-                    API_key: process.env.API_key,
-                    CLIENT_id: process.env.ZOOM_CLIENT_ID,
+        const newLesson = new Lesson({ title, thumbnail, language, choreographerID, time, price, level, genre, purpose, mood });
+        newLesson.save()
+            .then((lesson) => {
+                const dateTime = moment(time).format("YYYY-MM-DDTHH:mm");
+                addCalendar(user, title, dateTime);
+
+                Channel.findOne({ googleId: choreographerID }).then((channel) => {
+                    if (!channel) {
+                        const ch_name = choreographerID
+                        createChannel(req, res, ch_name);
+                    }
                 });
-            } else {
-                const newLesson = new Lesson({ title, thumbnail, language, choreographerID, time, price, level, genre, purpose, mood });
-                newLesson.save()
-                    .then((lesson) => {
-                        const dateTime = moment(time).format("YYYY-MM-DDTHH:mm");
-                        addCalendar(user, title, dateTime);
 
-                        const text = `
-                        <p>この度はレッスンをご登録いただきまして、誠にありがとうございます。</p>
-                        <p>▼登録内容▼</p>
-                        <p>--------------------------------------------</p>
-                        <p>${lesson.title}</p>
-                        <a href="/reservation/<%= lesson.id %>">
-                        <img src="data:image/<%=lesson.thumbnail.contentType%>;base64, <%=lesson.thumbnail.data.toString('base64')%>" alt="thumbnail">
-                        </a>
-                        <p>日時：${dateTime}</p>
-                        <p>価格：${lesson.price} Yen</p>
-                        <p>${lesson.level[0]} | ${lesson.genre[0]} | ${lesson.purpose[0]} | ${lesson.mood[0]}</p>
-                        <p>--------------------------------------------</p>`
+                const text = `
+                <p>この度はレッスンをご登録いただきまして、誠にありがとうございます。</p>
+                <p>▼登録内容▼</p>
+                <p>--------------------------------------------</p>
+                <p>${lesson.title}</p>
+                <a href="/reservation/<%= lesson.id %>">
+                <img src="data:image/<%=lesson.thumbnail.contentType%>;base64, <%=lesson.thumbnail.data.toString('base64')%>" alt="thumbnail">
+                </a>
+                <p>日時：${dateTime}</p>
+                <p>価格：${lesson.price} Yen</p>
+                <p>${lesson.level[0]} | ${lesson.genre[0]} | ${lesson.purpose[0]} | ${lesson.mood[0]}</p>
+                <p>--------------------------------------------</p>`
 
-                        sendMail(user.email, "レッスンの登録を受付いたしました！", text);
+                sendMail(user.email, "レッスンの登録を受付いたしました！", text);
 
-                        req.flash("success_msg", res.__("msg.success.schedule"));
-                        res.redirect("/calendar");
-                    })
-                    .catch((err) => console.log(err));
-            }
-        });
+                req.flash("success_msg", res.__("msg.success.schedule"));
+                res.redirect(`/lesson/edit/${lesson._id}`);
+            })
+            .catch((err) => console.log(err));
     }
     Lesson.updateMany({}, {
         $addToSet: {
@@ -526,7 +526,7 @@ router.post("/webhook", (req, res) => {
             // Then define and call a method to handle the successful attachment of a PaymentMethod.
             // handlePaymentMethodAttached(paymentMethod);
             break;
-            // ... handle other event types
+        // ... handle other event types
         default:
             console.log(`Unhandled event type ${event.type}`);
     }
