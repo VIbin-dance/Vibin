@@ -3,7 +3,7 @@ var router = express.Router();
 const nodemailer = require('nodemailer');
 const passport = require('passport');
 const { ensureAuthenticated } = require('../config/auth');
-const { createChannel, createRecording, deleteChannel } = require('../config/aws/channel');
+const { createChannel, createRecording, deleteChannel, updateChannel } = require('../config/aws/channel');
 
 const User = require('../models/User');
 const Video = require('../models/Video');

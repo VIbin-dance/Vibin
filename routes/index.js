@@ -11,7 +11,7 @@ const stripe = require("stripe")("sk_test_51Hfnh4BHyna8CK9qjfFDuXjt1pmBPnPMoGflp
 const { ensureAuthenticated } = require("../config/auth");
 const { sendMail } = require("../config/email");
 const { addCalendar } = require("../config/calendar");
-const { createChannel, createRecording, deleteChannel } = require('../config/aws/channel');
+const { createChannel, createRecording, deleteChannel, updateChannel } = require('../config/aws/channel');
 
 const Video = require("../models/Video");
 const User = require("../models/User");
@@ -29,7 +29,9 @@ findTicket = function (id) {
 const storage = multer.memoryStorage()
 const upload = multer({ storage: storage });
 
-router.get("/", async (req, res) => { res.render("landing"); });
+router.get("/", async (req, res) => {
+    res.render("landing");
+});
 router.get("/error", (req, res) => { res.send("Login error"); });
 router.get("/privacy-policy", (req, res) => res.render("privacy-policy"));
 router.get("/terms-of-service", (req, res) => res.render("terms-of-service"));

@@ -5,6 +5,7 @@ const {
   CreateChannelCommand,
   CreateRecordingConfigurationCommand,
   DeleteChannelCommand,
+  UpdateChannelCommand,
 } = require("@aws-sdk/client-ivs");
 
 const aivs_client = new IvsClient({
@@ -55,15 +56,51 @@ const createChannel = (req, res, ch_name) => {
     .catch((error) => {
       console.log(error);
       req.flash("error", "チャンネルが作成されませんでした。");
-      res.redirect("/lesson/channel");
     });
 };
 
+
+const updateChannel = (req, res) => {
+  Channel.findOne({ googleId: "104469553908975005172" }, (err, ch) => {
+    const arn = ch.arn
+
+    const UpdateChannel_option = {
+      arn: arn,
+      // name: "asdf",
+      recordingConfigurationArn: 'arn:aws:ivs:us-west-2:401352423179:recording-configuration/yrW4uzLmqWQD'
+    };
+
+    const UpdateChannel = new UpdateChannelCommand(UpdateChannel_option);
+
+    aivs_client.send(UpdateChannel)
+    .then((data) => {
+      console.log(data)
+      Channel.findOneAndUpdate({ googleId: req.user.id }, {
+        arn: data.channel.arn,
+      }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, ch) => {
+        if (err) {
+          console.log(err);
+          req.flash("error_msg", "チャンネルが作成されませんでした。");
+        } else {
+          req.flash("success_msg", "チャンネルが作成されました。");
+        }
+      }
+      );
+    })
+    .catch((error) => {
+      console.log(error);
+      req.flash("error", "チャンネルが作成されませんでした。");
+    });
+  })
+};
+
+// recordingConfigurationArn: "arn:aws:ivs:us-west-2:401352423179:recording-configuration/qNqpDksNXI9a",
+
 const createRecording = (req, res) => {
   const CreateRecord_option = {
-    destinationConfiguration: {
-      s3: {
-        bucketName: `testvibin-${req.session.user.googleId}`
+    "destinationConfiguration": {
+      "s3": {
+        "bucketName": "asdlfkjjasdflkvibin11324"
       }
     },
   };
@@ -81,9 +118,9 @@ const createRecording = (req, res) => {
     }).catch((error) => {
       console.log(error)
       req.flash('error', 'チャンネルが作成されませんでした。');
-      res.redirect('/lesson/channel');
     })
 };
+
 
 const deleteChannel = (req, res) => {
   Channel.findOne({ googleId: req.user.id }, (err, ch) => {
@@ -118,4 +155,4 @@ const deleteChannel = (req, res) => {
   });
 };
 
-module.exports = { createChannel, createRecording, deleteChannel };
+module.exports = { createChannel, createRecording, deleteChannel, updateChannel };
