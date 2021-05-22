@@ -11,12 +11,16 @@ const upload = multer({ storage: storage });
 const User = require('../models/User');
 const Lesson = require('../models/Lesson');
 
-findLesson  = (id) => { 
+findLesson  = (id) => {
     return Lesson.find({ choreographerID: id}, null, {sort: { time: -1 }}).lean()
 }
 
 findTicket = (id) => {
     return Lesson.find({ _id: id }, null, {sort: { time: -1 }}).lean()
+}
+
+findUser = (id) => {
+    return User.findOne({ _id: id }).lean()
 }
 
 router.get('/register', (req, res) => res.render('register'));
@@ -63,11 +67,12 @@ router.post('/preference', ensureAuthenticated, async(req, res) => {
 })
 
 router.get('/profile', ensureAuthenticated, async (req, res) => {
-    const [lesson, tickets] = await Promise.all([findLesson(req.session.user.googleId), findTicket(req.session.user.lesson)]); 
+    const [lesson, tickets, user] = await Promise.all([findLesson(req.session.user.googleId), findTicket(req.session.user.lesson), findUser(req.session.user._id)]);
+    req.session.user = user;
     const choreographer = [];
 
-    if (req.session.user.lesson) {
-        for (let i=0; i<req.session.user.lesson.length;i++) {
+    if (user.lesson) {
+        for (let i=0; i<user.lesson.length;i++) {
             choreographer[i] = await User.findOne({ googleId: tickets[i].choreographerID }, 'username').lean().exec();
         }
     }

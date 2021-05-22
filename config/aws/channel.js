@@ -49,7 +49,6 @@ const createChannel = (req, res, ch_name) => {
         } else {
           req.flash("success_msg", "チャンネルが作成されました。");
         }
-        res.redirect("/lesson/channel");
       }
       );
     })
