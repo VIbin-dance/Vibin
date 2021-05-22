@@ -50,7 +50,7 @@
     "passport": "^0.4.1",
     "passport-google-oauth20": "^2.0.0",
     "request": "^2.88.2",
-    "sharp": "^0.27.2",
+    "sharp": "^0.28.2",
     "socket.io": "^4.0.0",
     "stripe": "^8.140.0",
     "video.js": "^7.7.4"
