@@ -5,7 +5,7 @@
     <h1 class="text-center mb-3"><i class="fas fa-user-plus"></i><%= __('create.create') %></h1>
     <%- include ('partials/messages') %>
 
-        <% if (typeof account !="undefined" ) { %>
+        <% if (typeof account !="undefined" && typeof account.data !="undefined") { %>
             <div class="card">
                 <div class="card-body">
                     <h3 class="card-title"><%= __('create.bank') %></h3>
@@ -24,7 +24,15 @@
                     <a class="btn btn-danger" href="<%= loginLink.url %>" target="_blank" role="button"><%= __('create.stripe') %></a>
                 </div>
             </div>
+            <% } else if (typeof account !="undefined") { %>
+                <div class="card">
+                    <div class="card-body">
+                        <p>まだ口座設定が完了していません。下のボタンから設定をしてください</p>
+                        <a class="btn btn-danger" href="<%= loginLink.url %>" target="_blank" role="button"><%= __('create.stripe') %></a>
+                    </div>
+                </div>
             <% } %>
+
 
                 <form action="/create" method="POST" enctype="multipart/form-data" style="margin-top: 3%;">
 

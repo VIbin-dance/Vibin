@@ -60,13 +60,13 @@ router.get("/auth/google/callback",
     }), async (req, res) => {
         const user = await User.findOne({ email: req.user._json.email }).lean().exec();
         req.session.user = user
-        if (req.session.user.loginCount == 1) {
-            req.flash("success_msg", res.__("msg.success.preference"));
-            res.redirect("/users/preference");
-        } else {
+        // if (req.session.user.loginCount == 1) {
+        //     req.flash("success_msg", res.__("msg.success.preference"));
+        //     res.redirect("/users/preference");
+        // } else {
             req.flash("success_msg", res.__("msg.success.login"));
             res.redirect("/dashboard/-1?page=1&limit=15");
-        }
+        // }
     }
 );
 
@@ -294,6 +294,7 @@ router.get("/reservation/:id", ensureAuthenticated, async (req, res) => {
             userPhotoDef: req.session.user.userPhotoDef,
         })
     } else {
+        const host = req.get('host');
         const account = await stripe.accounts.retrieve(choreographer.stripeID);
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ["card"],
@@ -310,8 +311,8 @@ router.get("/reservation/:id", ensureAuthenticated, async (req, res) => {
                     destination: account.id,
                 },
             },
-            success_url: `http://localhost:5000/success/${req.params.id}` + '?session_id={CHECKOUT_SESSION_ID}',
-            cancel_url: `http://localhost:5000/reservation/${req.params.id}`,
+            success_url: `https://${host}/success/${req.params.id}` + '?session_id={CHECKOUT_SESSION_ID}',
+            cancel_url: `https://${host}/reservation/${req.params.id}`,
         });
 
         res.render("reservation", {
@@ -376,12 +377,14 @@ router.get("/create", ensureAuthenticated, async (req, res) => {
         CLIENT_id: process.env.ZOOM_CLIENT_ID,
     };
 
+    const host = req.get('host');
+
     if (req.session.user.stripeID) {
         const account = await stripe.accounts.retrieve(req.session.user.stripeID);
         const loginLink = await stripe.accountLinks.create({
             account: account.id,
-            refresh_url: "https://localhost:5000/create",
-            return_url: "http://localhost:5000/create",
+            refresh_url: `https://${host}/create`,
+            return_url: `https://${host}/create`,
             type: "account_onboarding",
         });
 
@@ -399,6 +402,7 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
     let errors = [];
     let account;
     let loginLink;
+    const host = req.get('host');
 
     if (user.stripeID == undefined) {
         try {
@@ -406,14 +410,15 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
             console.log(account)
             const loginLink = await stripe.accountLinks.create({
                 account: account.id,
-                refresh_url: "https://localhost:5000/create",
-                return_url: "http://localhost:5000/create",
+                refresh_url: `https://${host}/create`,
+                return_url: `https://${host}/create`,
                 type: "account_onboarding",
             });
 
             User.findOneAndUpdate({ email: req.user._json.email }, { stripeID: account.id }, { upsert: true, new: true, setDefaultsOnInsert: true },
                 (err, user) => {
                     console.log(err || user);
+                    req.session.user = user;
                 });
             res.redirect(loginLink.url);
         } catch (err) {
