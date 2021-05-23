@@ -8,7 +8,6 @@
     var cam_geight = 480;
 
     var initWebcam = function () {
-        
         switch (webcamType) {
             case 0:     //other wireless Camera
             cam_geight = 480;
@@ -26,6 +25,11 @@
         Webcam.set({
             width: '50%',
             height: cam_geight,
+            // width: { min: 1024, ideal: 1280, max: 1920 },
+            // height: { min: 576, ideal: 720, max: 1080 }
+            // audio: true, video: { facingMode: "user" },     //smartphone front camera
+            // audio: true, video: { facingMode: { exact: "environment" } },   //smartphone backend phone
+            // video: { deviceId: { exact: myExactCameraOrBustDeviceId } }     //require special camera
         });
         Webcam.attach('#self_camera');
     };
@@ -35,10 +39,10 @@
         if (webcamList.length > 0) {
             // Start video with the first device on the list
             Webcam.reset();
-            enumerateMediaDevices();
         } else {
             console.log('Webcam not found.');
         }
+        enumerateMediaDevices();
     };
 
     var getUserMediaError = function (e) {

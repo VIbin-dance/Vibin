@@ -54,10 +54,10 @@ app.set('view engine', 'ejs');
 app.use(session({
     secret: process.env.SESSIN_SECRET,
     resave: false,
-    httpOnly: true,
+    // httpOnly: true,
     saveUninitialized: true,
     cookie: {
-        maxAge: null
+        maxAge: 24 * 60 * 60 * 365 * 1000
     }
 }));
 

@@ -10,7 +10,7 @@
                             <li>下記のメールアドレスに詳細を送りました: <b><%= user.email %></b></li><br>
                             <li>参加方法</li>
                             <li>1. ご自身の<a href="/users/profile">プロフィール</a>または<a href="/calendar">カレンダー</a>ページにてご購入したレッスンを参照してください。</li>
-                            <li>2. 予定の時刻：<%= dateTime %>にレッスンをクリック、先生がライブ配信を開始します</li>
+                            <li>2. 予定の時刻：<%= moment(lesson.time).format('MM/DD HH:mm'); %>にレッスンをクリック、先生がライブ配信を開始します</li>
                             <li>エラー・不具合等の問題が発生した場合、先生またはVibin'にご連絡ください。</li>
                         </ol>
                         <!-- <a href="#">
@@ -34,7 +34,7 @@
                 <ol class="list-unstyled">
                     <li><%= __(`dashboard.search.level.${lesson.level[0]}`) %> | <%= __(`dashboard.search.genre.${lesson.genre[0]}`) %> | <%= __(`dashboard.search.purpose.${lesson.purpose[0]}`) %> | <%= __(`dashboard.search.mood.${lesson.mood[0]}`) %></li>
                 </ol>
-                <h4><%= lesson.price %> <%= __('dashboard.Yen') %></h4>
+                <h4><%= lesson.price %> <%= __('dashboard.Yen') %> | <%= moment(lesson.time).format('MM/DD HH:mm'); %></h4>
                 <hr>
                 <div class="text-center">
                         <!-- <button class="btn btn-danger btn-lg btn-block" id="checkout-button"><%= __('reservation.purchase') %></button> -->

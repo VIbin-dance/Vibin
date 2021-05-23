@@ -24,7 +24,7 @@
                 <ol class="list-unstyled">
                     <li><%= __(`dashboard.search.level.${lesson.level[0]}`) %> | <%= __(`dashboard.search.genre.${lesson.genre[0]}`) %> | <%= __(`dashboard.search.purpose.${lesson.purpose[0]}`) %> | <%= __(`dashboard.search.mood.${lesson.mood[0]}`) %></li>
                 </ol>
-                <h4><%= lesson.price %> <%= __('dashboard.Yen') %></h4>
+                <h4><%= lesson.price %> <%= __('dashboard.Yen') %> | <%=  moment(lesson.time).format('MM/DD HH:mm'); %></h4>
                 <hr>
                 <div class="text-center">
                     <% if (id != undefined) { %>

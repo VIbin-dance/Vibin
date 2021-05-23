@@ -1,6 +1,6 @@
 <div class="top-space"></div>
 <section id="results" class="results">
-  <div class="container">
+  <div class="">
     <%- include ('partials/messages') %>
     <div class="p-3 mb-3 bg-light rounded">
       <div class="text-center">
@@ -23,7 +23,7 @@
     <h3><%= choreographer.username %>'s videos &#128064;</h3>
     <div class="row">
       <% for(let i=0; i < lesson.docs.length; i++) { %>
-        <div class="col-lg-4 col-xs-6">
+        <div class="col-lg-3 col-xs-6 pad">
           <div class="box">
             <a href="/reservation/<%= lesson.docs[i].id %>">
               <img src="data:image/<%=lesson.docs[i].thumbnail.contentType%>;base64, <%=lesson.docs[i].thumbnail.data.toString('base64')%>" alt="thumbnail">
@@ -34,7 +34,7 @@
             <a class="special" href="/choreographer/<%= choreographer.googleId %>">
               <%= choreographer.username %>
             </a>
-            <p><%= lesson.docs[i].price %> <%= __('dashboard.Yen') %> | <%= time[i] %></p>
+            <p><%= lesson.docs[i].price %> <%= __('dashboard.Yen') %> | <%= moment(lesson.docs[i].time).format('MM/DD HH:mm'); %></p>
             <p class="mb-0">
                 <%= __(`dashboard.search.level.${lesson.docs[i].level[0]}`) %> | <%= __(`dashboard.search.genre.${lesson.docs[i].genre[0]}`) %> | <%= __(`dashboard.search.purpose.${lesson.docs[i].purpose[0]}`) %> | <%= __(`dashboard.search.mood.${lesson.docs[i].mood[0]}`) %>
             </p>

@@ -1,5 +1,12 @@
 <head>
     <link href="/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+    <!-- by ymzk -->
+    <!-- <script src="/assets/vendor/jquery/jquery.min.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.6.6/video-js.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.6.6/video.min.js"></script>
+    <script src="https://player.live-video.net/1.2.0/amazon-ivs-videojs-tech.min.js"></script>
+    <script src="https://player.live-video.net/1.2.0/amazon-ivs-quality-plugin.min.js"></script>
 </head>
 <!-- live video & chat section -->
 
@@ -8,62 +15,68 @@
     <input type="hidden" name="ch_playTime" id="ch_playTime" value="">
     <input type="hidden" name="ch_arn" id="ch_arn" value="<%= ch_arn %>">
     <input type="hidden" name="username" id="username" value="<%= username %>">
-    <input type="hidden" name="userphoto" id="userphoto" value="<%= userPhoto %>">
-    <input type="hidden" name="userphotoDefData" id="userphotoDefData" value="<%= userPhotoDef.data.toString('base64')%>">
-    <input type="hidden" name="userphotoDefType" id="userphotoDefType" value="<%= userPhotoDef.contentType %>">
-    <input type="hidden" name="chat_room_id" id="chat_room_id" value="<%= ch_streamkey %>">
-    <div class="live_grid">
-        <div class="video_grid ">
-            <%- include ('partials/messages') %>
+    <% if (typeof userPhotoDef != "undefined" ) { %>
+        <input type="hidden" name="userphotoDefData" id="userphotoDefData" value="<%= userPhotoDef.data.toString('base64')%>">
+        <input type="hidden" name="userphotoDefType" id="userphotoDefType" value="<%= userPhotoDef.contentType %>">
+        <% } else if (typeof userPhoto !="undefined" ) { %>
+            <input type="hidden" name="userphoto" id="userphoto" value="<%= userPhoto %>">
+            <% } %>
+                <input type="hidden" name="chat_room_id" id="chat_room_id" value="<%= ch_streamkey %>">
+                <div class="live_grid">
+                    <div class="video_grid ">
+                        <%- include ('partials/messages') %>
 
-            <div class="channelView-ivs">
+                            <div class="channelView-ivs">
 
-                <!-- vjs-theme-fantasy -->
-                <!-- vjs-theme-city -->
-                <!-- vjs-theme-forest -->
-                <!-- vjs-theme-sea -->
-                <video id="amazon-ivs-videojs" class="video-js vjs-fluid vjs-fill vjs-big-play-centered" preload="auto"
-                    controls autoplay playsinline></video>
-                <!-- <div id="self_techer_camera" autoplay="true"></div> -->
-            </div>
+                                <!-- vjs-theme-fantasy -->
+                                <!-- vjs-theme-city -->
+                                <!-- vjs-theme-forest -->
+                                <!-- vjs-theme-sea -->
+                                <video id="amazon-ivs-videojs" class="video-js vjs-fluid vjs-fill vjs-big-play-centered" preload="auto" controls autoplay playsinline></video>
+                                <!-- <div id="self_techer_camera" autoplay="true"></div> -->
+                            </div>
 
 
-            <div class="channel_info">
+                            <div class="channel_info">
 
-                <div class="user_info">
-                    <a href="" class="avatar live_status">
-                        <div class="outline"></div>
-                        <div class="inner_img">
-                            <figure>
-                                <% if (typeof userPhotoDef !="undefined" ) { %>
-                                <img src="data:image/<%=userPhotoDef.contentType%>;base64, <%=userPhotoDef.data.toString('base64')%>" alt="user photo">
-                                <% } else if (typeof userPhoto !="undefined" ) { %>
-                                <img src="<%= userPhoto %>" alt="user photo">
-                                <% } %>
-                            </figure>
-                        </div>
-                    </a>
-                    <div class="infor">
-                        <p class="name"><%= ch_name %></p>
-                        <p class="level">先生 : <%= username %></p>
+                                <div class="user_info">
+                                    <a href="" class="avatar live_status">
+                                        <div class="outline"></div>
+                                        <div class="inner_img">
+                                            <figure>
+                                                <% if (typeof userPhotoDef !="undefined" ) { %>
+                                                    <img src="data:image/<%=userPhotoDef.contentType%>;base64, <%=userPhotoDef.data.toString('base64')%>" alt="user photo">
+                                                    <% } else if (typeof userPhoto !="undefined" ) { %>
+                                                        <img src="<%= userPhoto %>" alt="user photo">
+                                                        <% } %>
+                                            </figure>
+                                        </div>
+                                    </a>
+                                    <div class="infor">
+                                        <p class="name">
+                                            <%= ch_name %>
+                                        </p>
+                                        <p class="level">先生 :
+                                            <%= username %>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="count_info">
+                                    <a href="/lesson/channel" class="exit_channel">配信を終了</a>
+                                    <p class="login_users">1,399</p>
+                                    <p class="live_time">6:40:17</p>
+                                </div>
+                            </div>
+
                     </div>
-                </div>
 
-                <div class="count_info">
-                    <a href="/lesson/channel" class="exit_channel">配信を終了</a>
-                    <p class="login_users">1,399</p>
-                    <p class="live_time">6:40:17</p>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="chat_grid collapseOn">
-            <div class="contain">
-                <div class="chat_header">CHAT</div>
-                <div class="message_wrap">
-                    <ul class="message_list">
-                        <!-- <li>
+                    <div class="chat_grid collapseOn">
+                        <div class="contain">
+                            <div class="chat_header">CHAT</div>
+                            <div class="message_wrap">
+                                <ul class="message_list">
+                                    <!-- <li>
                             <figure class="avatar">
                                 <img src="/assets/img/profile/user01.png" alt="">
                             </figure>
@@ -72,17 +85,17 @@
                                 <span class="time">7:24 AM</span>
                             </div>
                         </li> -->
-                    </ul>
-                </div>
-                <div class="input_wrap">
-                    <!-- <button class="btn1">投げ銭</button> -->
-                    <textarea name="" id="chat_msg" placeholder="コメントする"></textarea>
-                    <button class="send_btn"><img src="/assets/img/send.png" alt=""></button>
-                </div>
-            </div>
-        </div>
+                                </ul>
+                            </div>
+                            <div class="input_wrap">
+                                <!-- <button class="btn1">投げ銭</button> -->
+                                <input name="" id="chat_msg" placeholder="コメントする"></input>
+                                <button class="send_btn"><img src="/assets/img/send.png" alt=""></button>
+                            </div>
+                        </div>
+                    </div>
 
-        <button class="toggle_chat_btn" id="toggle_chat_btn">
+                    <button class="toggle_chat_btn" id="toggle_chat_btn">
             <svg width="100%" height="100%" version="1.1" viewBox="0 0 20 20" x="0px" y="0px"
                 class="ScIconSVG-sc-1bgeryd-1 cMQeyU">
                 <g>
@@ -90,7 +103,7 @@
                 </g>
             </svg>
         </button>
-    </div>
+                </div>
 </section>
 
 <!-- autoresize textarea -->

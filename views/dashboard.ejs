@@ -154,13 +154,13 @@
 
     <% if (lesson.docs.length) { %>
         <section id="results" class="results">
-            <div class="container">
+            <div class="">
                 <%- include ('partials/messages') %>
                     <h3><%= __('dashboard.Future vibes') %>&#10024;</h3>
                     <div class="row">
                         <% for(let i=0; i < lesson.docs.length; i++) { %>
                             <% if(moment(lesson.docs[i].time).isAfter(moment())) { %>
-                                <div class="col-lg-4 col-xs-6">
+                                <div class="col-lg-3 col-xs-6">
                                     <div class="box">
                                         <a href="/reservation/<%= lesson.docs[i].id %>">
                                         <img src="data:image/<%=lesson.docs[i].thumbnail.contentType%>;base64, <%=lesson.docs[i].thumbnail.data.toString('base64')%>" alt="thumbnail">
@@ -168,13 +168,13 @@
                                         <h4 id="title<%= i %>">
                                             <%= lesson.docs[i].title %>
                                         </h4>
-                                        <a class="special" href="/choreographer/<%= choreographer[i].googleId %>">
+                                        <a class="special" href="/choreographer/<%= lesson.docs[i].choreographerID %>">
                                             <%= choreographer[i].username %>
                                         </a>
                                         <p>
                                             <%= lesson.docs[i].price %>
                                                 <%= __('dashboard.Yen') %> |
-                                                    <%= time[i] %>
+                                                    <%= moment(lesson.docs[i].time).format('MM/DD HH:mm'); %>
                                         </p>
                                         <p class="mb-0">
                                             <%= __(`dashboard.search.level.${lesson.docs[i].level[0]}`) %> |
@@ -193,12 +193,12 @@
 
             <% if (lesson.docs.length) { %>
                 <section id="results" class="results">
-                    <div class="container">
+                    <div class="">
                         <h3><%= __('dashboard.Past vibes') %>&#10024;</h3>
                         <div class="row">
                             <% for(let i=0; i < lesson.docs.length; i++) { %>
                                 <% if(moment(lesson.docs[i].time).isBefore(moment())) { %>
-                                    <div class="col-lg-4 col-xs-6">
+                                    <div class="col-lg-3 col-xs-6 pad">
                                         <div class="box">
                                             <a href="/reservation/<%= lesson.docs[i].id %>">
                                         <img src="data:image/<%=lesson.docs[i].thumbnail.contentType%>;base64, <%=lesson.docs[i].thumbnail.data.toString('base64')%>" alt="thumbnail">
@@ -206,13 +206,13 @@
                                             <h4 id="title<%= i %>">
                                                 <%= lesson.docs[i].title %>
                                             </h4>
-                                            <a class="special" href="/choreographer/<%= choreographer[i]._id %>">
+                                            <a class="special" href="/choreographer/<%= lesson.docs[i].choreographerID %>">
                                                 <%= choreographer[i].username %>
                                             </a>
                                             <p>
                                                 <%= lesson.docs[i].price %>
                                                     <%= __('dashboard.Yen') %> |
-                                                        <%= time[i] %>
+                                                        <%= moment(lesson.docs[i].time).format('MM/DD HH:mm'); %>
                                             </p>
                                             <p class="mb-0">
                                                 <%= __(`dashboard.search.level.${lesson.docs[i].level[0]}`) %> |
