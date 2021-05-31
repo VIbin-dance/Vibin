@@ -159,7 +159,6 @@
         let src;
 
         if (typeof user_photoDef != "undefined") {
-            const data = user_photoDef.data.toString('base64')
             src = `data:image/${user_photoDef.contentType};base64, ${data}`
         } else if (typeof user_photo != "undefined") {
             src = `${user_photo}`
