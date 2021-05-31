@@ -21,9 +21,9 @@
     <% if (typeof userPhotoDef != "undefined" ) { %>
         <input type="hidden" name="userphotoDefData" id="userphotoDefData" value="<%= userPhotoDef.data.toString('base64')%>">
         <input type="hidden" name="userphotoDefType" id="userphotoDefType" value="<%= userPhotoDef.contentType %>">
-        <% } else if (typeof userPhoto !="undefined" ) { %>
-            <input type="hidden" name="userphoto" id="userphoto" value="<%= userPhoto %>">
-            <% } %>
+    <% } else if (typeof userPhoto !="undefined" ) { %>
+        <input type="hidden" name="userphoto" id="userphoto" value="<%= userPhoto %>">
+    <% } %>
                 <input type="hidden" name="chat_room_id" id="chat_room_id" value="<%= ch_streamkey %>">
                 <div class="live_grid">
                     <div class="video_grid ">
