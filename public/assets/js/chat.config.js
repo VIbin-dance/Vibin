@@ -65,7 +65,8 @@
     const chat_list = document.querySelector(".message_list");
     const chat_msg = document.querySelector("#chat_msg");
     const send_btn = document.querySelector(".send_btn");
-
+    const temp_btn = document.querySelector(".temp_btn");
+    
     // connect socket and join in chat room
     socket.on("connect", () => {
         if (user_name.value != '' && chat_room_id.value != '' && channel_arn.value != '') {
@@ -108,13 +109,30 @@
 
 
 
+    // temp_btn.addEventListener('click', () => {        
+        // if (temp_btn.value.length > 0 && temp_btn.value.trim()) {
+        //     const chat_msg = temp_btn
+        //     sendMsg(chat_msg);
+        // } else {
+    //         // console.log('message is empty...')
+    //     }
+    // })
 
+    document.addEventListener('click', (e) => {
+        if(e.target && e.target.id == 'temp_btn'){
+            if (e.target.value.length > 0 && e.target.value.trim()) {
+                const chat_msg = e.target
+                sendMsg(chat_msg);
+            }
+        }
+     });
 
-    // ///////////////////////////////////////////////////////////////
     // click send Button
     send_btn.addEventListener('click', () => {
         if (chat_msg.value.length > 0 && chat_msg.value.trim()) {
-            sendMsg();
+            sendMsg(chat_msg);
+            chat_msg.value = '';
+            chat_msg.focus();
         } else {
             // console.log('message is empty...')
         }
@@ -124,7 +142,9 @@
     chat_msg.addEventListener('keydown', (e) => {
         if (e.keyCode == 13) {
             if (chat_msg.value.length > 0 && chat_msg.value.trim()) {
-                sendMsg();
+                sendMsg(chat_msg);
+                chat_msg.value = '';
+                chat_msg.focus();
             } else {
                 // console.log('message is empty...')
             }
@@ -132,7 +152,7 @@
     })
 
     // send Message
-    function sendMsg() {
+    function sendMsg(chat_msg) {
         let convert_msg = chat_msg.value.replace(/\n/g, "<br>");
         let src;
 
@@ -148,8 +168,6 @@
             chat_msg: convert_msg
         }
         socket.emit("server_message", param_message);
-        chat_msg.value = '';
-        chat_msg.focus();
     }
 
     // receive Message

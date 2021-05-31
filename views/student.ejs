@@ -17,7 +17,6 @@
     <input type="hidden" name="ch_playTime" id="ch_playTime" value="">
     <input type="hidden" name="ch_arn" id="ch_arn" value="<%= ch_arn %>">
     <input type="hidden" name="username" id="username" value="<%= username %>">
-    <p><%= typeof userPhoto %></p>
     <% if (typeof userPhotoDef != "undefined" ) { %>
         <input type="hidden" name="userphotoDefData" id="userphotoDefData" value="<%= userPhotoDef.data.toString('base64')%>">
         <input type="hidden" name="userphotoDefType" id="userphotoDefType" value="<%= userPhotoDef.contentType %>">
@@ -143,6 +142,9 @@
                             <div class="message_wrap">
                                 <ul class="message_list"></ul>
                             </div>
+                            <button id="temp_btn" class="btn btn-light" value="わからない！">わからない！</button>
+                            <button id="temp_btn" class="btn btn-light" value="わかった！">わかった！</button>
+                            <button id="temp_btn" class="btn btn-light" value="もう一回！">もう一回！</button>
                             <div class="input_wrap">
                                 <!-- <button class="btn1">投げ銭</button> -->
                                 <input name="" id="chat_msg" placeholder="コメントする"></input>
