@@ -11,24 +11,7 @@ const Channel = require('../models/Channel');
 const Schedule = require('../models/Schedule');
 const Lesson = require('../models/Lesson');
 
-// import & setting AIVS module
-const {
-    IvsClient,
-    CreateChannelCommand,
-    CreateRecordingConfigurationCommand,
-    DeleteChannelCommand,
-} = require("@aws-sdk/client-ivs");
-
 const moment = require('moment');
-
-// AIVS Authentication, Define AIVS Obj from SDK
-const aivs_client = new IvsClient({
-    credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    },
-    region: process.env.AWS_REGION
-});
 
 // Routes
 router.get('/', (req, res) => {
@@ -101,28 +84,33 @@ router.post('/delete_channel', ensureAuthenticated, function (req, res) {
 
 router.get('/teacher/:lesson_id', ensureAuthenticated, async (req, res) => {
     const ls = await Lesson.findOne({ _id: req.params.lesson_id }).lean().exec();
-    Channel.findOne({ googleId: req.user.id }, (err, ch) => {
-        if (!ch) {
-            req.flash('error_msg', '現在所有しているチャンネルがありません。');
-            res.redirect('/lesson/channel');
-        } else {
-            ch_count = 1;
-            res.render('teacher', {
-                userPhoto: req.session.user.userPhoto,
-                userPhotoDef: req.session.user.userPhotoDef,
-                email: req.session.req.user._json.email,
-                username: req.session.user.username,
-                count: ch_count,
-                ch_name: ls.title,
-                ch_latency: ch.latencyMode,
-                ch_type: ch.type,
-                ch_arn: ch.arn,
-                ch_ingest: "rtmps://" + ch.ingestEndpoint + ":443/app/",
-                ch_streamkey: ch.streamKey.value,
-                ch_playURL: ch.playbackUrl
-            })
-        }
-    });
+    if (ls.choreographerID === req.session.user.googleId) {
+        Channel.findOne({ googleId: req.user.id }, (err, ch) => {
+            if (!ch) {
+                req.flash('error_msg', '現在所有しているチャンネルがありません。');
+                res.redirect('/lesson/channel');
+            } else {
+                ch_count = 1;
+                res.render('teacher', {
+                    userPhoto: req.session.user.userPhoto,
+                    userPhotoDef: req.session.user.userPhotoDef,
+                    email: req.session.req.user._json.email,
+                    username: req.session.user.username,
+                    count: ch_count,
+                    ch_name: ls.title,
+                    ch_latency: ch.latencyMode,
+                    ch_type: ch.type,
+                    ch_arn: ch.arn,
+                    ch_ingest: "rtmps://" + ch.ingestEndpoint + ":443/app/",
+                    ch_streamkey: ch.streamKey.value,
+                    ch_playURL: ch.playbackUrl
+                })
+            }
+        });
+    } else {
+        req.flash('error_msg', 'アカウント情報が正しくありません。');
+        res.redirect('/users/profile');
+    }
 });
 
 router.get('/student/:lesson_id', ensureAuthenticated, async (req, res) => {
@@ -162,10 +150,10 @@ router.get('/student/:lesson_id', ensureAuthenticated, async (req, res) => {
     });
 });
 
-router.get('/edit/:id', ensureAuthenticated, async (req, res) => {
+router.get('/contact/:id', ensureAuthenticated, async (req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.id }).lean().exec();
     const attendee = await User.find({ lesson: lesson._id }, 'username').lean().exec();
-    res.render("lessonsEdit", {
+    res.render("lessonEmail", {
         attendee: attendee,
         id: req.params.id,
         lesson: lesson,
@@ -173,6 +161,25 @@ router.get('/edit/:id', ensureAuthenticated, async (req, res) => {
         userPhoto: req.session.user.userPhoto,
         userPhotoDef: req.session.user.userPhotoDef,
     })
+})
+
+router.get('/edit/:id', ensureAuthenticated, async (req, res) => {
+    const lesson = await Lesson.findOne({ _id: req.params.id }).lean().exec();
+
+    if (lesson.choreographerID === req.session.user.googleId) {
+        const attendee = await User.find({ lesson: lesson._id }, 'username').lean().exec();
+        res.render("lessonsEdit", {
+            attendee: attendee,
+            id: req.params.id,
+            lesson: lesson,
+            user: req.session.user,
+            userPhoto: req.session.user.userPhoto,
+            userPhotoDef: req.session.user.userPhotoDef,
+        })
+    } else {
+        req.flash('error_msg', 'アカウント情報が正しくありません。');
+        res.redirect('/users/profile');
+    }
 })
 
 // add refund feature of stripe
@@ -209,14 +216,19 @@ router.post('/edit/:id', ensureAuthenticated, async (req, res) => {
 
 router.get('/student/details/:lesson_id', ensureAuthenticated, async (req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.lesson_id }).lean().exec();
-    const choreographer = await User.findOne({ googleId: lesson.choreographerID }).lean().exec();
-    res.render("lessonDet", {
-        id: req.params.lesson_id,
-        lesson: lesson,
-        choreographer: choreographer,
-        userPhoto: req.session.user.userPhoto,
-        userPhotoDef: req.session.user.userPhotoDef,
-    })
+    if (req.session.user.lesson.includes(lesson._id.toString())) {
+        const choreographer = await User.findOne({ googleId: lesson.choreographerID }).lean().exec();
+        res.render("lessonDet", {
+            id: req.params.lesson_id,
+            lesson: lesson,
+            choreographer: choreographer,
+            userPhoto: req.session.user.userPhoto,
+            userPhotoDef: req.session.user.userPhotoDef,
+        })
+    } else {
+        req.flash('error_msg', 'アカウント情報が正しくありません。');
+        res.redirect('/users/profile');
+    }
 });
 
 // add refund feature of stripe

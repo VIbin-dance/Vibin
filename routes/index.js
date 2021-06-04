@@ -71,6 +71,8 @@ router.get("/auth/google/callback",
 );
 
 router.get("/dashboard/:sort", ensureAuthenticated, async (req, res) => {
+    // createRecording(req, res);
+
     Lesson.paginate({ choreographerID: { "$ne": req.session.user.googleId } }, {
         page: req.query.page,
         limit: req.query.limit,

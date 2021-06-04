@@ -22,6 +22,7 @@ const createChannel = (req, res, ch_name) => {
     latencyMode: "LOW",
     name: ch_name,
     type: "STANDARD",
+    recordingConfigurationArn: "arn:aws:ivs:us-east-1:401352423179:recording-configuration/8tDgMPjT1Vty",
   };
 
   const CreateChannel = new CreateChannelCommand(CreateChannel_option);
@@ -42,6 +43,9 @@ const createChannel = (req, res, ch_name) => {
           arn: data.streamKey.arn,
           channelArn: data.streamKey.channelArn,
           value: data.streamKey.value,
+        },
+        s3: {
+          arn: data.channel.recordingConfigurationArn 
         },
       }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, ch) => {
         if (err) {
@@ -98,9 +102,9 @@ const updateChannel = (req, res) => {
 
 const createRecording = (req, res) => {
   const CreateRecord_option = {
-    "destinationConfiguration": {
-      "s3": {
-        "bucketName": "asdlfkjjasdflkvibin11324"
+    destinationConfiguration: {
+      s3: {
+        bucketName: "aws-us-east-1-401352423179-vibin-pipe" //this is replace dwith the pre-made s3 bucket name in the same region as us-east-1
       }
     },
   };
@@ -111,9 +115,9 @@ const createRecording = (req, res) => {
     .then((data) => {
       console.log(data);
       Channel.findOneAndUpdate({ googleId: req.user.id }, {
-        googleId: req.user.id,
-        ch_name: data.channel.name,
-        arn: data.channel.arn,
+        s3: {
+          state: data.recordingConfiguration.state,
+        },
       })
     }).catch((error) => {
       console.log(error)
