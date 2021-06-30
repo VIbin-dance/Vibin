@@ -39,7 +39,7 @@ const ChannelSchema = new mongoose.Schema({
         require: true
     },
     s3: {
-        state: {
+        arn: {
             type: String
         }
     },
