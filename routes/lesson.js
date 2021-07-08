@@ -73,7 +73,6 @@ router.get('/channel', ensureAuthenticated, async (req, res) => {
 
 router.post('/create_channel', ensureAuthenticated, async (req, res) => {
     const { ch_name } = req.body;
-    // createRecording(req, res);
     createChannel(req, res, ch_name);
     res.redirect("/lesson/channel");
 });

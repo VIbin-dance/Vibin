@@ -17,94 +17,71 @@ const aivs_client = new IvsClient({
 });
 
 const createChannel = (req, res, ch_name) => {
-  const CreateChannel_option = {
-    authorized: false,
-    latencyMode: "LOW",
-    name: ch_name,
-    type: "STANDARD",
-    recordingConfigurationArn: "arn:aws:ivs:us-east-1:401352423179:recording-configuration/8tDgMPjT1Vty",
+  const CreateRecord_option = {
+    destinationConfiguration: {
+      s3: {
+        bucketName: "aws-us-east-1-401352423179-vibin-pipe"
+      }
+    },
   };
 
-  const CreateChannel = new CreateChannelCommand(CreateChannel_option);
+  const CreateRecord = new CreateRecordingConfigurationCommand(CreateRecord_option);
 
-  aivs_client.send(CreateChannel)
-    .then((data) => {
-      console.log(data)
-      Channel.findOneAndUpdate({ googleId: req.user.id }, {
-        googleId: req.user.id,
-        ch_name: data.channel.name,
-        arn: data.channel.arn,
-        authorized: data.channel.authorized,
-        ingestEndpoint: data.channel.ingestEndpoint,
-        latencyMode: data.channel.latencyMode,
-        playbackUrl: data.channel.playbackUrl,
-        type: data.channel.type,
-        streamKey: {
-          arn: data.streamKey.arn,
-          channelArn: data.streamKey.channelArn,
-          value: data.streamKey.value,
-        },
-        s3: {
-          arn: data.channel.recordingConfigurationArn 
-        },
-      }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, ch) => {
-        if (err) {
-          console.log(err);
-          req.flash("error_msg", "チャンネルが作成されませんでした。");
-        } else {
-          req.flash("success_msg", "チャンネルが作成されました。");
-        }
-      }
-      );
+  aivs_client.send(CreateRecord)
+    .then((record) => {
+      console.log(record);
+      console.log(record.recordingConfiguration.arn);
+
+      const CreateChannel_option = {
+        authorized: false,
+        latencyMode: "LOW",
+        name: ch_name,
+        type: "STANDARD",
+        recordingConfigurationArn: record.recordingConfiguration.arn,
+      };
+    
+      const CreateChannel = new CreateChannelCommand(CreateChannel_option);
+
+      aivs_client.send(CreateChannel)
+      .then((data) => {
+        console.log(data)
+        Channel.findOneAndUpdate({ googleId: req.user.id }, {
+          googleId: req.user.id,
+          ch_name: data.channel.name,
+          arn: data.channel.arn,
+          authorized: data.channel.authorized,
+          ingestEndpoint: data.channel.ingestEndpoint,
+          latencyMode: data.channel.latencyMode,
+          playbackUrl: data.channel.playbackUrl,
+          type: data.channel.type,
+          streamKey: {
+            arn: data.streamKey.arn,
+            channelArn: data.streamKey.channelArn,
+            value: data.streamKey.value,
+          },
+          s3: {
+            arn: data.channel.recordingConfigurationArn 
+          },
+        }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, ch) => {
+          if (err) {
+            console.log(err);
+            req.flash("error_msg", "チャンネルが作成されませんでした。");
+          } else {
+            req.flash("success_msg", "チャンネルが作成されました。");
+          }
+        });
+      })
+    }).catch((error) => {
+      console.log(error)
+      req.flash('error', 'チャンネルが作成されませんでした。');
     })
-    .catch((error) => {
-      console.log(error);
-      req.flash("error", "チャンネルが作成されませんでした。");
-    });
 };
-
-
-const updateChannel = (req, res) => {
-  Channel.findOne({ googleId: "104469553908975005172" }, (err, ch) => {
-    const arn = ch.arn
-
-    const UpdateChannel_option = {
-      arn: arn,
-      // name: "asdf",
-      recordingConfigurationArn: 'arn:aws:ivs:us-west-2:401352423179:recording-configuration/yrW4uzLmqWQD'
-    };
-
-    const UpdateChannel = new UpdateChannelCommand(UpdateChannel_option);
-
-    aivs_client.send(UpdateChannel)
-    .then((data) => {
-      console.log(data)
-      Channel.findOneAndUpdate({ googleId: req.user.id }, {
-        arn: data.channel.arn,
-      }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, ch) => {
-        if (err) {
-          console.log(err);
-          req.flash("error_msg", "チャンネルが作成されませんでした。");
-        } else {
-          req.flash("success_msg", "チャンネルが作成されました。");
-        }
-      }
-      );
-    })
-    .catch((error) => {
-      console.log(error);
-      req.flash("error", "チャンネルが作成されませんでした。");
-    });
-  })
-};
-
-// recordingConfigurationArn: "arn:aws:ivs:us-west-2:401352423179:recording-configuration/qNqpDksNXI9a",
 
 const createRecording = (req, res) => {
   const CreateRecord_option = {
     destinationConfiguration: {
       s3: {
-        bucketName: "aws-us-east-1-401352423179-vibin-pipe" //this is replace dwith the pre-made s3 bucket name in the same region as us-east-1
+        bucketName: "aws-us-east-1-401352423179-vibin-pipe"
       }
     },
   };
@@ -114,11 +91,6 @@ const createRecording = (req, res) => {
   aivs_client.send(CreateRecord)
     .then((data) => {
       console.log(data);
-      Channel.findOneAndUpdate({ googleId: req.user.id }, {
-        s3: {
-          state: data.recordingConfiguration.state,
-        },
-      })
     }).catch((error) => {
       console.log(error)
       req.flash('error', 'チャンネルが作成されませんでした。');
@@ -159,4 +131,4 @@ const deleteChannel = (req, res) => {
   });
 };
 
-module.exports = { createChannel, createRecording, deleteChannel, updateChannel };
+module.exports = { createChannel, createRecording, deleteChannel };
