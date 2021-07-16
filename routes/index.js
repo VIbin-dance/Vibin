@@ -11,7 +11,7 @@ const stripe = require("stripe")("sk_test_51Hfnh4BHyna8CK9qjfFDuXjt1pmBPnPMoGflp
 const { ensureAuthenticated } = require("../config/auth");
 const { sendMail } = require("../config/email");
 const { addCalendar } = require("../config/calendar");
-const { createChannel, createRecording, deleteChannel, updateChannel } = require('../config/aws/channel');
+const { createChannel, deleteChannel } = require('../config/aws/channel');
 
 const Video = require("../models/Video");
 const User = require("../models/User");

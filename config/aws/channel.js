@@ -5,7 +5,7 @@ const {
   CreateChannelCommand,
   CreateRecordingConfigurationCommand,
   DeleteChannelCommand,
-  UpdateChannelCommand,
+  GetRecordingConfigurationCommand
 } = require("@aws-sdk/client-ivs");
 
 const aivs_client = new IvsClient({
@@ -68,6 +68,7 @@ const createChannel = (req, res, ch_name) => {
             req.flash("error_msg", "チャンネルが作成されませんでした。");
           } else {
             req.flash("success_msg", "チャンネルが作成されました。");
+            res.redirect("/lesson/channel")
           }
         });
       })
@@ -77,26 +78,30 @@ const createChannel = (req, res, ch_name) => {
     })
 };
 
-const createRecording = (req, res) => {
-  const CreateRecord_option = {
-    destinationConfiguration: {
-      s3: {
-        bucketName: "aws-us-east-1-401352423179-vibin-pipe"
-      }
-    },
-  };
+const getRecording = (req, res) => {
+  Channel.findOne({ googleId: req.user.id }, (err, ch) => {
+    if (err) {
+      req.flash('error', 'チャンネルを探せませんでした。Failed Mongoose search');
+      res.redirect('/lesson/channel');
+    }
 
-  const CreateRecord = new CreateRecordingConfigurationCommand(CreateRecord_option);
+    let channel_arn = ch.arn;
+    const GetRecording_option = {
+      "arn" : channel_arn
+    };
 
-  aivs_client.send(CreateRecord)
+    const GetRecording = new GetRecordingConfigurationCommand(GetRecording_option);
+
+    aivs_client.send(GetRecording)
     .then((data) => {
-      console.log(data);
+        console.log(data);
+        req.flash('success_msg', 'チャンネルを削除しました。');
     }).catch((error) => {
-      console.log(error)
-      req.flash('error', 'チャンネルが作成されませんでした。');
-    })
+        console.log(error)
+        req.flash('error', 'チャンネルが削除されませんでした。');
+    });
+  });
 };
-
 
 const deleteChannel = (req, res) => {
   Channel.findOne({ googleId: req.user.id }, (err, ch) => {
@@ -131,4 +136,4 @@ const deleteChannel = (req, res) => {
   });
 };
 
-module.exports = { createChannel, createRecording, deleteChannel };
+module.exports = { createChannel, getRecording, deleteChannel };

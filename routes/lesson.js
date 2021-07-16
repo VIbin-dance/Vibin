@@ -2,8 +2,9 @@ var express = require('express');
 var router = express.Router();
 const nodemailer = require('nodemailer');
 const passport = require('passport');
+const moment = require('moment');
 const { ensureAuthenticated } = require('../config/auth');
-const { createChannel, createRecording, deleteChannel, updateChannel } = require('../config/aws/channel');
+const { createChannel, getRecording, deleteChannel } = require('../config/aws/channel');
 
 const User = require('../models/User');
 const Video = require('../models/Video');
@@ -11,7 +12,6 @@ const Channel = require('../models/Channel');
 const Schedule = require('../models/Schedule');
 const Lesson = require('../models/Lesson');
 
-const moment = require('moment');
 
 // Routes
 router.get('/', (req, res) => {
@@ -90,6 +90,16 @@ router.get('/teacher/:lesson_id', ensureAuthenticated, async (req, res) => {
                 res.redirect('/lesson/channel');
             } else {
                 ch_count = 1;
+                // let url;
+
+                if (moment().isAfter(ls.time)) {
+                    console.log('iz after bitch')
+                    // url = 
+                    getRecording(req, res)
+                } else {
+                    url = ch.playbackUrl
+                }
+
                 res.render('teacher', {
                     userPhoto: req.session.user.userPhoto,
                     userPhotoDef: req.session.user.userPhotoDef,
