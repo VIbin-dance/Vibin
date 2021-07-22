@@ -296,6 +296,14 @@ router.get("/reservation/:id", ensureAuthenticated, async (req, res) => {
             userPhotoDef: req.session.user.userPhotoDef,
         })
     } else {
+        let price;
+
+        if (!req.session.user.lesson && lesson.price != 0) {
+            price = 0
+        } else {
+            price = lesson.price
+        }
+
         const host = req.get('host');
         const account = await stripe.accounts.retrieve(choreographer.stripeID);
         const session = await stripe.checkout.sessions.create({
@@ -320,8 +328,10 @@ router.get("/reservation/:id", ensureAuthenticated, async (req, res) => {
         res.render("reservation", {
             id: session.id,
             lesson: lesson,
+            price: price,
             choreographer: choreographer,
             moment: moment,
+            userLesson: req.session.user.lesson,
             userPhoto: req.session.user.userPhoto,
             userPhotoDef: req.session.user.userPhotoDef,
         });
