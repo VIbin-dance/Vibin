@@ -11,9 +11,8 @@ const stripe = require("stripe")("sk_test_51Hfnh4BHyna8CK9qjfFDuXjt1pmBPnPMoGflp
 const { ensureAuthenticated } = require("../config/auth");
 const { sendMail } = require("../config/email");
 const { addCalendar } = require("../config/calendar");
-const { createChannel, deleteChannel } = require('../config/aws/channel');
+const { createChannel } = require('../config/aws/channel');
 
-const Video = require("../models/Video");
 const User = require("../models/User");
 const Lesson = require("../models/Lesson");
 const Channel = require("../models/Channel");
@@ -292,6 +291,7 @@ router.get("/reservation/:id", ensureAuthenticated, async (req, res) => {
             lesson: lesson,
             choreographer: choreographer,
             moment: moment,
+            userLesson: req.session.user.lesson,
             userPhoto: req.session.user.userPhoto,
             userPhotoDef: req.session.user.userPhotoDef,
         })
