@@ -213,6 +213,7 @@ app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
 app.use('/lesson', require('./routes/lesson'));
 app.use('/company', require('./routes/company'));
+app.use('/page', require('./routes/page'));
 
 const PORT = process.env.PORT || 5000;
 
