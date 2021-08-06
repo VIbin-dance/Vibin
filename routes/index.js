@@ -7,7 +7,9 @@ const moment = require("moment");
 const multer = require('multer');
 const sharp = require('sharp');
 const stripe = require("stripe")("sk_test_51Hfnh4BHyna8CK9qjfFDuXjt1pmBPnPMoGflpvhPIet1ytDmqDZD3sayrbLnHbIQXnLBIZ8UWxSe62EaNZuw2oDO00b2zFDdno");
+// stripe key should be env variable
 
+// get the config functions all at once
 const { ensureAuthenticated } = require("../config/auth");
 const { sendMail } = require("../config/email");
 const { addCalendar } = require("../config/calendar");
@@ -17,6 +19,7 @@ const User = require("../models/User");
 const Lesson = require("../models/Lesson");
 const Channel = require("../models/Channel");
 
+// put these functions in one folder and reference to use more than once
 findLesson = function (id) {
     return Lesson.find({ choreographerID: id })
 }
@@ -28,12 +31,8 @@ findTicket = function (id) {
 const storage = multer.memoryStorage()
 const upload = multer({ storage: storage });
 
-router.get("/", async (req, res) => {
-    res.render("landing");
-});
-router.get("/error", (req, res) => { res.send("Login error"); });
-router.get("/privacy-policy", (req, res) => res.render("privacy-policy"));
-router.get("/terms-of-service", (req, res) => res.render("terms-of-service"));
+router.get("/", async (req, res) => res.render("landing"));
+router.get("/error", (req, res) => res.send("Login error"));
 
 router.get("/logout", (req, res) => {
     req.logout();
@@ -57,27 +56,23 @@ router.get("/auth/google/callback",
         failureRedirect: "/error",
         session: true,
     }), async (req, res) => {
-        const user = await User.findOne({ email: req.user._json.email }).lean().exec();
-        req.session.user = user
-        // if (req.session.user.loginCount == 1) {
-        //     req.flash("success_msg", res.__("msg.success.preference"));
-        //     res.redirect("/users/preference");
-        // } else {
+        User.findOne({ email: req.user._json.email }, (err, user) => {
+            req.session.user = user
             req.flash("success_msg", res.__("msg.success.login"));
             res.redirect("/dashboard/-1?page=1&limit=15");
-        // }
+        })
     }
 );
 
 router.get("/dashboard/:sort", ensureAuthenticated, async (req, res) => {
-    // createRecording(req, res);
-
     Lesson.paginate({ choreographerID: { "$ne": req.session.user.googleId } }, {
         page: req.query.page,
         limit: req.query.limit,
         sort: { time: req.params.sort },
     }, async (err, lesson) => {
         const choreographer = [];
+
+        // find a better way to iterate pushing into choreographer array
         for (let i = 0; i < lesson.docs.length; i++) {
             choreographer[i] = await User.findOne({ googleId: lesson.docs[i].choreographerID.toString() }, 'username').lean().exec();
         }
@@ -101,7 +96,6 @@ router.get("/dashboard/:sort", ensureAuthenticated, async (req, res) => {
 router.post("/dashboard", ensureAuthenticated, async (req, res) => {
     const { language, level, genre, purpose, mood, search } = req.body;
     const searchQuery = new RegExp(escapeRegex(search), "gi");
-    // const user = await User.findOne({ email: req.user._json.email }).exec();
     const query = {
         $and: [
             { language: language },
@@ -148,25 +142,23 @@ router.post("/dashboard", ensureAuthenticated, async (req, res) => {
 router.get("/results", ensureAuthenticated, (req, res) => res.render("results"));
 
 router.get("/choreographer/:id", ensureAuthenticated, async (req, res) => {
-    // const user = await User.findOne({ email: req.user._json.email }).exec();
-
     Lesson.paginate({ choreographerID: req.params.id }, {
         page: req.query.page,
         limit: req.query.limit,
     }, async (err, lesson) => {
-        const choreographer = await User.findOne({ googleId: req.params.id }).lean().exec();
-
-        res.render("choreographer", {
-            userPhoto: req.session.user.userPhoto,
-            userPhotoDef: req.session.user.userPhotoDef,
-            count: lesson.length,
-            choreographer: choreographer,
-            lesson: lesson,
-            moment: moment,
-            currentPage: lesson.page,
-            pageCount: lesson.pages,
-            pages: paginate.getArrayPages(req)(3, lesson.pages, req.query.page),
-        });
+        User.findOne({ googleId: req.params.id }, (err, user) => {
+            res.render("choreographer", {
+                userPhoto: req.session.user.userPhoto,
+                userPhotoDef: req.session.user.userPhotoDef,
+                count: lesson.length,
+                choreographer: user,
+                lesson: lesson,
+                moment: moment,
+                currentPage: lesson.page,
+                pageCount: lesson.pages,
+                pages: paginate.getArrayPages(req)(3, lesson.pages, req.query.page),
+            });
+        })
     });
 });
 
@@ -274,7 +266,7 @@ router.get("/reservation/:id", ensureAuthenticated, async (req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.id }).lean().exec();
     const choreographer = await User.findOne({ googleId: lesson.choreographerID }).lean().exec();
 
-    if (req.session.user.lesson && req.session.user.lesson.includes(lesson._id.toString()) === true) {
+    if (req.session.user.lesson && req.session.user.lesson.id.includes(lesson._id.toString()) === true) {
         res.render('success', {
             user: req.session.user,
             params: req.params.id,
@@ -352,7 +344,7 @@ router.get('/success/:id', ensureAuthenticated, async (req, res) => {
         console.log('already done')
         res.redirect(`/reservation/${req.params.id}`);
     } else if (lesson.price === 0 || (session != undefined && session.payment_status == 'paid')) {
-        User.findByIdAndUpdate(req.session.user._id, { $push: { lesson: lesson._id } }, { upsert: true, new: true, setDefaultsOnInsert: true },
+        User.findByIdAndUpdate(req.session.user._id, { $push: {lesson: { id: lesson._id, session: session.id }}}, { upsert: true, new: true, setDefaultsOnInsert: true },
             (err, user) => {
                 console.log(err || user);
                 console.log(session);
