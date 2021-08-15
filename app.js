@@ -2,6 +2,7 @@ const express = require('express');
 const http = require('http');
 const expressLayouts = require('express-ejs-layouts');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const mongoose = require('mongoose');
 const path = require('path');
 const flash = require('connect-flash');
@@ -11,6 +12,9 @@ const helmet = require('helmet');
 const compression = require('compression');
 const minify = require('express-minify');
 require('newrelic');
+const cors = require('cors');
+var logger = require('morgan');
+const socketio = require('socket.io');
 const { I18n } = require('i18n');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
@@ -28,20 +32,12 @@ const {
     getCurrentLivetime
 } = require('./config/chat');
 
-// by ymzk
-const cors = require('cors');
-var logger = require('morgan');
-const socketio = require('socket.io');
-// -----------------------------------
-
 const app = express();
 const Server = http.createServer(app);
 
-// // by ymzk
 const io = socketio(Server);
-// require('newrelic');
-// by ymzk
 app.use(cors());
+// require('newrelic');
 // app.use(logger('dev'));
 
 app.use(helmet());
@@ -54,11 +50,8 @@ app.set('view engine', 'ejs');
 app.use(session({
     secret: process.env.SESSIN_SECRET,
     resave: false,
-    httpOnly: true,
-    saveUninitialized: true,
-    cookie: {
-        maxAge: null
-    }
+    saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: process.env.MongoURI })
 }));
 
 app.use(passport.initialize());
@@ -125,13 +118,6 @@ passport.use(new GoogleStrategy({
         }
     }
 ));
-
-
-// var loginTime = function (req, res, next) {
-//     console.log("LOGGED - ///" + Date.now() + " /// " + process.env.PORT);
-//     next();
-// };
-// app.use(loginTime);
 
 // Connect to Mongo
 const db = process.env.MongoURI;
@@ -227,6 +213,7 @@ app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
 app.use('/lesson', require('./routes/lesson'));
 app.use('/company', require('./routes/company'));
+app.use('/page', require('./routes/page'));
 
 const PORT = process.env.PORT || 5000;
 

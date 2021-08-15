@@ -8,7 +8,7 @@ autosize(document.querySelector("#chat_msg"));
     const temp = document.querySelector("#ch_playurl");
     let STREAM_PLAY_URL = temp.value;
     // STREAM_PLAY_URL = "https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.DmumNckWFTqz.m3u8";
-    // STREAM_PLAY_URL = "";
+    // STREAM_PLAY_URL = "https://vibin-archive-recordingconfig.s3-us-west-2.amazonaws.com/2021-05-23+15-00-57.mkv";
 
     // Set up IVS playback tech and quality plugin
     registerIVSTech(videojs);

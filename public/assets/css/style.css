@@ -1748,15 +1748,14 @@ section {
 .follow .box {
     width: 100%;
     margin-top: 20px;
-    padding: 0px;
+    padding: 0;
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
     transition: all ease-in-out 0.3s;
-    min-height: 500px;
-    max-height: 500px;
+    min-height: 100%;
 }
 
 .follow .box {
-    padding: 2px;
+    padding: 0;
 }
 
 .results .icon-box {
@@ -1827,6 +1826,31 @@ section {
 .results .pagination p,
 .results .pagination a {
     margin: 2%;
+}
+
+@media (max-width: 1023px) {
+    .results .box,
+    .follow .box {
+        margin-top: 0px;
+    }
+    .results .box h4,
+    .follow .box h4 {
+        font-size: 18px;
+        margin-left: 10px;
+    }
+    .results .box p,
+    .follow .box p {
+        font-size: 14px;
+        margin: 10px;
+    }
+    .results .box .special,
+    .follow .box .special {
+        font-size: 14px;
+        margin: 10px;
+    }
+    .pad {
+        padding: 0;
+    }
 }
 
 .top-space {

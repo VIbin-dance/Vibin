@@ -21,24 +21,8 @@
     <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/assets/vendor/boxicons/css/boxicons.css" rel="stylesheet">
 
-    <!-- Template Main CSS File -->
-    <link href="/assets/css/style.css" rel="stylesheet">
-    <link href="/assets/css/style_live.css" rel="stylesheet">
-
-    <!-- Amazon IVS Player -->
-    <!-- <script src="https://player.live-video.net/1.2.0/amazon-ivs-player.min.js"></script> -->
-
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://apis.google.com/js/api.js" async defer></script>
-
-    <!-- by ymzk -->
-    <!-- <script src="/assets/vendor/jquery/jquery.min.js"></script> -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.6.6/video-js.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.6.6/video.min.js"></script>
-    <script src="https://player.live-video.net/1.2.0/amazon-ivs-videojs-tech.min.js"></script>
-    <script src="https://player.live-video.net/1.2.0/amazon-ivs-quality-plugin.min.js"></script>
 
     <!-- Video.js base CSS -->
     <!-- <link href="https://unpkg.com/video.js@7/dist/video-js.min.css" rel="stylesheet"> -->
@@ -67,6 +51,10 @@
         <%- body %>
     </div>
 
+    <!-- Template Main CSS File -->
+    <link href="/assets/css/style.css" rel="stylesheet">
+    <link href="/assets/css/style_live.css" rel="stylesheet">
+
     <!-- Google Fonts -->
     <link
         href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
@@ -76,6 +64,18 @@
     <script src="/assets/vendor/jquery/jquery.min.js"></script>
     <!-- Template Main JS File -->
     <script src="/assets/js/main.js"></script>
+
+    <% if (typeof userPhoto == "undefined" ) { %>
+        <header id="header" class="fixed-top">
+            <div class="container d-flex align-items-center justify-content-between">
+                <h1 class="logo"><a href="/dashboard/-1?page=1&limit=15">Vibin'</a></h1>
+                    <div>
+                        <a href="/users/register" class="get-started-btn scrollto"><%= __('header.Register') %></a>
+                        <a href="/users/login" class="get-started-btn scrollto"><%= __('header.Login') %></a>
+                    </div>
+            </div>
+        </header>
+    <% } %>
 
     <% if (typeof userPhoto != "undefined" ) { %>
     <header id="header" class="fixed-top">
@@ -216,28 +216,22 @@
                                 </a>
                             </li>
                             <li><i class="bx bx-chevron-right"></i>
-                                <a href="/terms-of-service">
+                                <a href="/company/about">
+                                    <%= __('footer.company') %>
+                                </a>
+                            </li>
+                            <li><i class="bx bx-chevron-right"></i>
+                                <a href="/company/terms-of-service">
                                     <%= __('footer.TOS') %>
                                 </a>
                             </li>
                             <li><i class="bx bx-chevron-right"></i>
-                                <a href="/privacy-policy">
+                                <a href="/company/privacy-policy">
                                     <%= __('footer.PP') %>
                                 </a>
                             </li>
                         </ul>
                     </div>
-                    <!-- <div class="col-lg-4 col-md-6 footer-newsletter">
-                        <h4>
-                            <%= __('footer.News1') %>
-                        </h4>
-                        <p>
-                            <%= __('footer.News2') %>
-                        </p>
-                        <form action="" method="post">
-                            <input type="email" name="email"><input type="submit" value="<%= __('footer.Subscribe') %>">
-                        </form>
-                    </div> -->
                     <div class="social-links text-center text-md-right pt-3 pt-md-0">
                         <a href="https://www.facebook.com/Vibin-107436974343750" class="facebook" target="_blank"><i
                                 class="bx bxl-facebook"></i></a>

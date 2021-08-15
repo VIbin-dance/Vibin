@@ -1,9 +1,9 @@
-
 // Initialize - Digital Stopwatch
-(function () {
+(function() {
     'use strict';
 
-    let TimeHolder = 0, stopTime = 0;
+    let TimeHolder = 0,
+        stopTime = 0;
     let cur_startTime = Math.floor(Date.now() / 1000);
     const live_time = document.querySelector(".live_time");
     // const ch_playTime = document.querySelector("#ch_playTime");
@@ -65,11 +65,10 @@
     const chat_list = document.querySelector(".message_list");
     const chat_msg = document.querySelector("#chat_msg");
     const send_btn = document.querySelector(".send_btn");
-
+    const temp_btn = document.querySelector(".temp_btn");
+    
     // connect socket and join in chat room
     socket.on("connect", () => {
-        // console.log("chat server connected.");
-
         if (user_name.value != '' && chat_room_id.value != '' && channel_arn.value != '') {
             let u_name = user_name.value;
             let room_id = chat_room_id.value;
@@ -110,13 +109,30 @@
 
 
 
+    // temp_btn.addEventListener('click', () => {        
+        // if (temp_btn.value.length > 0 && temp_btn.value.trim()) {
+        //     const chat_msg = temp_btn
+        //     sendMsg(chat_msg);
+        // } else {
+    //         // console.log('message is empty...')
+    //     }
+    // })
 
+    document.addEventListener('click', (e) => {
+        if(e.target && e.target.id == 'temp_btn'){
+            if (e.target.value.length > 0 && e.target.value.trim()) {
+                const chat_msg = e.target
+                sendMsg(chat_msg);
+            }
+        }
+     });
 
-    // ///////////////////////////////////////////////////////////////
     // click send Button
     send_btn.addEventListener('click', () => {
-        if (chat_msg.value.length > 0) {
-            sendMsg();
+        if (chat_msg.value.length > 0 && chat_msg.value.trim()) {
+            sendMsg(chat_msg);
+            chat_msg.value = '';
+            chat_msg.focus();
         } else {
             // console.log('message is empty...')
         }
@@ -125,8 +141,10 @@
     // keydown Enter in input box
     chat_msg.addEventListener('keydown', (e) => {
         if (e.keyCode == 13) {
-            if (chat_msg.value.length > 0) {
-                sendMsg();
+            if (chat_msg.value.length > 0 && chat_msg.value.trim()) {
+                sendMsg(chat_msg);
+                chat_msg.value = '';
+                chat_msg.focus();
             } else {
                 // console.log('message is empty...')
             }
@@ -134,14 +152,13 @@
     })
 
     // send Message
-    function sendMsg() {
+    function sendMsg(chat_msg) {
         let convert_msg = chat_msg.value.replace(/\n/g, "<br>");
         let src;
 
-        if (typeof user_photoDefData !="undefined" ) {
+        if (typeof user_photoDefData != "undefined") {
             src = `data:image/${user_photoDefType};base64, ${user_photoDefData}`
-
-        } else if (typeof user_photo !="undefined" ) {
+        } else if (typeof user_photo != "undefined") {
             src = `${user_photo.value}`
         }
 
@@ -151,8 +168,6 @@
             chat_msg: convert_msg
         }
         socket.emit("server_message", param_message);
-        chat_msg.value = '';
-        chat_msg.focus();
     }
 
     // receive Message
@@ -161,14 +176,11 @@
         const li = document.createElement("li");
         let src;
 
-        if (typeof user_photoDef !="undefined" ) {
-            console.log("yeet" + user_photoDef.data)
-            const data = user_photoDef.data.toString('base64')
+        if (typeof user_photoDef != "undefined") {
             src = `data:image/${user_photoDef.contentType};base64, ${data}`
-        } else if (typeof user_photo !="undefined" ) {
+        } else if (typeof user_photo != "undefined") {
             src = `${user_photo}`
         }
-        console.log(src);
 
         li.innerHTML = `<figure class="avatar">
                             <img src="${src}" alt="">

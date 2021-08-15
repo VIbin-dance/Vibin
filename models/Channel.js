@@ -38,6 +38,11 @@ const ChannelSchema = new mongoose.Schema({
         type: String,
         require: true
     },
+    s3: {
+        arn: {
+            type: String
+        }
+    },
     streamKey: {
         arn: {
             type: String,

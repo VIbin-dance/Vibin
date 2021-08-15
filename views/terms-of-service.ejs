@@ -1,17 +1,20 @@
-<header id="header" class="fixed-top ">
+<head>
+    <link href="/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  </head>
+  <header id="header" class="fixed-top ">
     <div class="container d-flex align-items-center justify-content-between">
-        <h1 class="logo"><a href="/">Vibin'</a></h1>
-        <nav class="nav-menu d-none d-lg-block">
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li class="active"><a href="#results">Terms of Service</a></li>
-                <li><a href="#footer">Contact</a></li>
-            </ul>
-        </nav>
-        <div>
-            <a href="/users/register" class="get-started-btn scrollto">Register</a>
-            <a href="/users/login" class="get-started-btn scrollto">Login</a>
-        </div>
+      <h1 class="logo"><a href="/">Vibin'</a></h1>
+      <nav class="nav-menu d-none d-lg-block">
+        <!-- <ul>
+          <li class="active"><a href="/"><%= __('header.Home') %></a></li>
+          <li><a href="#about"><%= __('header.About') %></a></li>
+          <li><a href="#footer"><%= __('header.Contact') %></a></li>
+        </ul> -->
+      </nav>
+      <div>
+        <a href="/users/register" class="get-started-btn scrollto"><%= __('header.Register') %></a>
+        <a href="/users/login" class="get-started-btn scrollto"><%= __('header.Login') %></a>
+      </div>
     </div>
 </header>
 

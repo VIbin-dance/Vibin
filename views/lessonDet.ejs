@@ -15,8 +15,8 @@
                     </div>
                     <h3>
                         <%= lesson.title %> by
-                            <a href="/choreographer/<%= user.googleId %>">
-                                <%= user.username %>
+                            <a href="/choreographer/<%= choreographer.googleId %>">
+                                <%= choreographer.username %>
                             </a>
                     </h3>
                     <ol class="list-unstyled">
@@ -32,13 +32,6 @@
                             <%= __('dashboard.Yen') %>
                     </h4>
                     <hr>
-                    <div class="text-center">
-                        <!-- <% if (id != undefined) { %>
-                            <button class="btn btn-danger btn-lg btn-block" id="checkout-button"><%= __('reservation.purchase') %></button>
-                        <% } else { %>
-                            <a href="/success/<%= params %>" class="btn btn-danger btn-lg btn-block"><%= __('reservation.purchase') %></a>
-                        <% } %> -->
-                    </div>
                 </div>
 
                 <div class="p-3 mb-3 bg-light rounded">
@@ -46,22 +39,23 @@
                         <h4>
                             <%= __('reservation.choreo') %>
                         </h4>
-                        <% if (typeof userPhotoDef !="undefined" ) { %>
-                            <img src="data:image/<%= userPhotoDef.contentType%>;base64, <%= userPhotoDef.data.toString('base64')%>" height="100" width="100" style="border-radius: 50%;" alt="user photo">
+                        <% if (typeof choreographer.userPhotoDef !="undefined" ) { %>
+                            <img src="data:image/<%= choreographer.userPhotoDef.contentType%>;base64, <%= choreographer.userPhotoDef.data.toString('base64')%>" height="100" width="100" style="border-radius: 50%;" alt="user photo">
                             <% } else { %>
-                                <img src="<%= userPhoto %>" height="60" width="60" style="border-radius: 50%;" alt="user photo">
+                                <img src="<%= choreographer.userPhoto %>" height="60" width="60" style="border-radius: 50%;" alt="user photo">
                                 <% } %>
                     </div>
                     <div class="text-center">
-                        <a href="/choreographer/<%= user.googleId %>" style="font-size: 22px;">
-                            <%= user.username %>
+                        <a href="/choreographer/<%= choreographer.googleId %>" style="font-size: 22px;">
+                            <%= choreographer.username %>
                         </a>
                         <br>
-                        <h5 style="white-space:pre-wrap;"><%= user.bio %></h5>
+                        <br>
+                        <h5 style="white-space:pre-wrap;"><%= choreographer.bio %></h5>
                         <p class="mb-0">
                             <%= __('reservation.contact') %>:
-                                <a href="mailto:<%= user.email %>">
-                                    <%= user.email %>
+                                <a href="mailto:<%= choreographer.email %>">
+                                    <%= choreographer.email %>
                                 </a>
                         </p>
                     </div>
@@ -72,44 +66,15 @@
         <aside class="col-md-5 blog-sidebar">
             <div class="p-3 mb-3 bg-light rounded">
                 <div class="text-center">
-                    <h4>参加者</h4>
-                </div>
-                <ol>
-                    <% for(let i=0; i < attendee.length; i++) { %>
-                        <li><%= attendee[i].username %></li>
-                    <% } %>
-                </ol>
-                <% const rev = attendee.length * lesson.price * 0.8 %>
-                <div class="text-center">
-                    <h5>予想収益：<%= rev %>円</h5>
-                    <a class="btn btn-light" href="/lesson/contact/<%= id %>">生徒に一斉メールする</a>
-                </div>
-
-            </div>
-            <div class="p-3 mb-3 bg-light rounded">
-                <div class="text-center">
-                    <h4>OBS使用方法</h4>
-                </div>
-                <br>
-                <ol>
-                    <li>OBSをダウンロード</li>
-                    <li>ご自身の<a href="/lesson/channel">チャンネル管理ページ</a>にてIngest serverとStream keyを取得</li>
-                    <li>OBSの設定画面に上記の2つを入力し、配信を開始</li>
-                    <li>自身の教えるレッスン欄からアクセスしレッスンを開始</li>
-                </ol>
-            </div>
-            <div class="p-3 mb-3 bg-light rounded">
-                <div class="text-center">
                     <h4>キャンセル事項</h4>
                 </div>
                 <br>
                 <ol>
                     <li>キャンセルはレッスンの2時間前まで可能です</li>
-                    <li>キャンセルした場合、レッスン料金は生徒様に全額返金されます、またキャンセルに発生する手数料を支払い必要があります。</li>
-                    <li>レッスンに15分以上遅れたり、欠席した場合もレッスン料は生徒様に全額返金されます。</li>
-                    <li>無断欠席や遅刻を3回以上繰り返すと、アカウントは凍結されます。</li>
+                    <li>キャンセルした場合、レッスン料金は全額返金されますが、キャンセルに発生する手数料を支払い必要があります</li>
+                    <li>レッスンに遅れたり、欠席した場合もレッスン料は返金されません</li>
                 </ol>
-                <form action="/lesson/edit/:id" method="POST" style="margin-top: 3%;">
+                <form action="/lesson/student/details/:lesson_id" method="POST" style="margin-top: 3%;">
                     <div class="text-center" style="margin:3%;">
                         <p>上記を踏まえて</p>
                         <input type="id" id="id" name="id" class="form-control" value="<%= typeof id != 'undefined' ? id : '' %>" hidden/>

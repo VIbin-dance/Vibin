@@ -1,9 +1,13 @@
 <main role="main" class="container col-md-10 col-sm-10" style="margin-top:10%; margin-bottom: 5%;">
     <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
+    <%- include ('partials/messages') %>
     <div class="row">
         <div class="col-md-7 blog-main">
             <div class="blog-post">
                 <div class="card-deck">
+                    <% if (!userLesson && lesson.price != 0) { %>
+                        <h3>今なら初回無料！<%= lesson.price %> <%= __('dashboard.Yen') %>が<%= price %> <%= __('dashboard.Yen') %>で！</h3>
+                    <% } %>
                     <div class="card mb-3" style="min-width: 47vh; max-width: 80vh; margin-top: 30px;">
                         <a href="#">
                             <img style="height: 100%; width: 100%; display: block;" src="data:image/<%=lesson.thumbnail.contentType%>;base64, <%=lesson.thumbnail.data.toString('base64')%>"
@@ -24,7 +28,7 @@
                 <ol class="list-unstyled">
                     <li><%= __(`dashboard.search.level.${lesson.level[0]}`) %> | <%= __(`dashboard.search.genre.${lesson.genre[0]}`) %> | <%= __(`dashboard.search.purpose.${lesson.purpose[0]}`) %> | <%= __(`dashboard.search.mood.${lesson.mood[0]}`) %></li>
                 </ol>
-                <h4><%= lesson.price %> <%= __('dashboard.Yen') %></h4>
+                <h4><%= lesson.price %> <%= __('dashboard.Yen') %> | <%=  moment(lesson.time).format('MM/DD HH:mm'); %></h4>
                 <hr>
                 <div class="text-center">
                     <% if (id != undefined) { %>
@@ -56,7 +60,7 @@
 </main>
 
 <script>
-    const stripe = Stripe('pk_test_51Hfnh4BHyna8CK9qTj8LQtd4eXIMABQaBcg0js1jz7p7v7hOqiZGp4lLo56EpDRPTLpBaWyLIUAjPM4HZDnaNeEa00ZvYK3VNA');
+    const stripe = Stripe('pk_live_51Hfnh4BHyna8CK9qeNlkE0iiyVzlUsRVjFMXyhWXDQWQDQoQEERKXlXRty3zM4dRL9DmZAUJ1CSkr4ECbXnO5LeA004BRIZMIT');
     const checkoutButton = document.getElementById('checkout-button');
 
     checkoutButton.addEventListener('click', () => {
