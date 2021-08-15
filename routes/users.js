@@ -67,14 +67,13 @@ router.get('/login', (req, res) => res.render('login'));
 // })
 
 router.get('/profile', ensureAuthenticated, async (req, res) => {
-    const [lesson, tickets, user] = await Promise.all([findLesson(req.session.user.googleId), findTicket(req.session.user.lesson.id), findUser(req.session.user._id)]);
+    const [lesson, tickets, user] = await Promise.all([findLesson(req.session.user.googleId), findTicket(req.session.user.lesson), findUser(req.session.user._id)]);
     req.session.user = user;
     const choreographer = [];
 
 
     if (user.lesson) {
-        console.log(user.lesson.id.length)
-        for (let i=0; i<user.lesson.id.length;i++) {
+        for (let i=0; i<user.lesson.length;i++) {
             choreographer[i] = await User.findOne({ googleId: tickets[i].choreographerID }, 'username').lean().exec();
         }
     }

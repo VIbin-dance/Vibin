@@ -6,8 +6,7 @@ const fetch = require("node-fetch");
 const moment = require("moment");
 const multer = require('multer');
 const sharp = require('sharp');
-const stripe = require("stripe")("sk_test_51Hfnh4BHyna8CK9qjfFDuXjt1pmBPnPMoGflpvhPIet1ytDmqDZD3sayrbLnHbIQXnLBIZ8UWxSe62EaNZuw2oDO00b2zFDdno");
-// stripe key should be env variable
+const stripe = require("stripe")(process.env.stripekey);
 
 // get the config functions all at once
 const { ensureAuthenticated } = require("../config/auth");
@@ -266,7 +265,7 @@ router.get("/reservation/:id", ensureAuthenticated, async (req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.id }).lean().exec();
     const choreographer = await User.findOne({ googleId: lesson.choreographerID }).lean().exec();
 
-    if (req.session.user.lesson && req.session.user.lesson.id.includes(lesson._id.toString()) === true) {
+    if (req.session.user.lesson && req.session.user.lesson.includes(lesson._id.toString()) === true) {
         res.render('success', {
             user: req.session.user,
             params: req.params.id,
@@ -332,8 +331,8 @@ router.get("/reservation/:id", ensureAuthenticated, async (req, res) => {
 
 router.get('/success/:id', ensureAuthenticated, async (req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.id }).lean().exec();
-    const choreographer = await User.findOne({ googleId: lesson.choreographerID }).lean().exec();
-    const dateTime = moment(lesson.time).format('MM/DD HH:mm');
+    // const choreographer = await User.findOne({ googleId: lesson.choreographerID }).lean().exec();
+    // const dateTime = moment(lesson.time).format('MM/DD HH:mm');
 
     let session;
     if (req.query.session_id) {
@@ -344,7 +343,7 @@ router.get('/success/:id', ensureAuthenticated, async (req, res) => {
         console.log('already done')
         res.redirect(`/reservation/${req.params.id}`);
     } else if (lesson.price === 0 || (session != undefined && session.payment_status == 'paid')) {
-        User.findByIdAndUpdate(req.session.user._id, { $push: {lesson: { id: lesson._id, session: session.id }}}, { upsert: true, new: true, setDefaultsOnInsert: true },
+        User.findByIdAndUpdate(req.session.user._id, {$push: { lesson: lesson._id }}, { upsert: true, new: true, setDefaultsOnInsert: true },
             (err, user) => {
                 console.log(err || user);
                 console.log(session);

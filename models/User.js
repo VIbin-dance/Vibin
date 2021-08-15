@@ -80,13 +80,13 @@ const UserSchema = new mongoose.Schema({
         require: false,
     },
     lesson: {
-        // type: Array
-        id: {
-            type: String,
-        },
-        session: {
-            type: String,
-        }
+        type: Array,
+        // id: {
+        //     type: String,
+        // },
+        // session: {
+        //     type: String,
+        // }
     },
     zoom: {
         id: {

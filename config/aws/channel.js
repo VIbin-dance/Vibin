@@ -4,6 +4,7 @@ const {
   IvsClient,
   CreateChannelCommand,
   CreateRecordingConfigurationCommand,
+  DeleteRecordingConfigurationCommand,
   DeleteChannelCommand,
   GetRecordingConfigurationCommand
 } = require("@aws-sdk/client-ivs");
@@ -29,9 +30,6 @@ const createChannel = (req, res, ch_name) => {
 
   aivs_client.send(CreateRecord)
     .then((record) => {
-      console.log(record);
-      console.log(record.recordingConfiguration.arn);
-
       const CreateChannel_option = {
         authorized: false,
         latencyMode: "LOW",
@@ -66,9 +64,10 @@ const createChannel = (req, res, ch_name) => {
           if (err) {
             console.log(err);
             req.flash("error_msg", "チャンネルが作成されませんでした。");
+            res.redirect('/lesson/channel');
           } else {
             req.flash("success_msg", "チャンネルが作成されました。");
-            res.redirect("/lesson/channel")
+            res.redirect('/lesson/channel');
           }
         });
       })
@@ -110,17 +109,24 @@ const deleteChannel = (req, res) => {
       res.redirect('/lesson/channel');
     }
 
-    let channel_arn = ch.arn;
-    const DeleteChannel_option = {
-      "arn": channel_arn
+    const DeleteRecording_option = {
+      "arn": ch.s3.arn
     };
 
+    const DeleteChannel_option = {
+      "arn": ch.arn
+    };
+
+    const DeleteRecording = new DeleteRecordingConfigurationCommand(DeleteRecording_option);
     const DeleteChannel = new DeleteChannelCommand(DeleteChannel_option);
 
     aivs_client.send(DeleteChannel)
-    .then((data) => {
-        req.flash('success_msg', 'チャンネルを削除しました。');
-        res.redirect('/lesson/channel');
+    .then((cha) => {
+      aivs_client.send(DeleteRecording)
+        .then((rec) => {
+          req.flash('success_msg', 'チャンネルを削除しました。');
+          res.redirect('/lesson/channel');
+        })
     }).catch((error) => {
       console.log(error)
       req.flash('error', 'チャンネルが削除されませんでした。');
