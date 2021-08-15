@@ -267,7 +267,6 @@ router.get("/reservation/:id", ensureAuthenticated, async (req, res) => {
 
     if (req.session.user.lesson && req.session.user.lesson.includes(lesson._id.toString()) === true) {
         res.render('success', {
-            stripeid: req.session.user.stripeID,
             user: req.session.user,
             params: req.params.id,
             lesson: lesson,
@@ -278,7 +277,6 @@ router.get("/reservation/:id", ensureAuthenticated, async (req, res) => {
         })
     } else if (lesson.price === 0) {
         res.render('reservation', {
-            stripeid: req.session.user.stripeID,
             id: undefined,
             params: req.params.id,
             lesson: lesson,
@@ -319,7 +317,6 @@ router.get("/reservation/:id", ensureAuthenticated, async (req, res) => {
         });
 
         res.render("reservation", {
-            stripeid: req.session.user.stripeID,
             id: session.id,
             lesson: lesson,
             price: price,
