@@ -60,7 +60,7 @@
 </main>
 
 <script>
-    const stripe = Stripe('pk_test_51Hfnh4BHyna8CK9qTj8LQtd4eXIMABQaBcg0js1jz7p7v7hOqiZGp4lLo56EpDRPTLpBaWyLIUAjPM4HZDnaNeEa00ZvYK3VNA');
+    const stripe = Stripe('<%= stripeid %>');
     const checkoutButton = document.getElementById('checkout-button');
 
     checkoutButton.addEventListener('click', () => {
