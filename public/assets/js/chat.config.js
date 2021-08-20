@@ -58,8 +58,13 @@
     const channel_arn = document.querySelector("#ch_arn");
     const user_name = document.querySelector("#username");
     const user_photo = document.querySelector("#userphoto");
-    const user_photoDefData = document.getElementById("userphotoDefData").value
-    const user_photoDefType = document.getElementById("userphotoDefType").value
+    let user_photoDefData;
+    let user_photoDefType;
+
+    if (typeof user_photoDefData != "undefined") {
+        user_photoDefData = document.getElementById("userphotoDefData").value
+        user_photoDefType = document.getElementById("userphotoDefType").value
+    }
 
     const chat_wrap = document.querySelector(".message_wrap");
     const chat_list = document.querySelector(".message_list");

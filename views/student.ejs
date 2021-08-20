@@ -20,6 +20,7 @@
     <% if (typeof userPhotoDef != "undefined" ) { %>
         <input type="hidden" name="userphotoDefData" id="userphotoDefData" value="<%= userPhotoDef.data.toString('base64')%>">
         <input type="hidden" name="userphotoDefType" id="userphotoDefType" value="<%= userPhotoDef.contentType %>">
+        <% console.log("yeet") %>
     <% } else if (typeof userPhoto !="undefined" ) { %>
         <input type="hidden" name="userphoto" id="userphoto" value="<%= userPhoto %>">
     <% } %>
