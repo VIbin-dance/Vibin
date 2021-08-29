@@ -30,7 +30,27 @@ findTicket = function (id) {
 const storage = multer.memoryStorage()
 const upload = multer({ storage: storage });
 
-router.get("/", async (req, res) => res.render("landing"));
+router.get("/", async (req, res) => {
+    Lesson.paginate({}, { sort: { time: -1 }},async (err, lesson) => {
+        const choreographer = [];
+
+        for (let i = 0; i < lesson.docs.length; i++) {
+            choreographer[i] = await User.findOne({ googleId: lesson.docs[i].choreographerID.toString() }, 'username').lean().exec();
+        }
+  
+            res.render("landing", {
+                user: undefined,
+                username: undefined,
+                lesson: lesson,
+                choreographer: choreographer,
+                moment: moment,
+                currentSort: req.params.sort,
+                currentPage: lesson.page,
+                pageCount: lesson.pages,
+                pages: paginate.getArrayPages(req)(3, lesson.pages, req.query.page),
+            })
+    });
+});
 router.get("/error", (req, res) => res.send("Login error"));
 
 router.get("/logout", (req, res) => {
@@ -64,7 +84,7 @@ router.get("/auth/google/callback",
 );
 
 router.get("/dashboard/:sort", ensureAuthenticated, async (req, res) => {
-    Lesson.paginate({ choreographerID: { "$ne": req.session.user.googleId } }, {
+    Lesson.paginate({}, {
         page: req.query.page,
         limit: req.query.limit,
         sort: { time: req.params.sort },
@@ -75,20 +95,20 @@ router.get("/dashboard/:sort", ensureAuthenticated, async (req, res) => {
         for (let i = 0; i < lesson.docs.length; i++) {
             choreographer[i] = await User.findOne({ googleId: lesson.docs[i].choreographerID.toString() }, 'username').lean().exec();
         }
-
-        res.render("dashboard", {
-            user: req.session.user,
-            userPhoto: req.session.user.userPhoto,
-            userPhotoDef: req.session.user.userPhotoDef,
-            username: req.session.user.username,
-            lesson: lesson,
-            choreographer: choreographer,
-            moment: moment,
-            currentSort: req.params.sort,
-            currentPage: lesson.page,
-            pageCount: lesson.pages,
-            pages: paginate.getArrayPages(req)(3, lesson.pages, req.query.page),
-        });
+  
+            res.render("dashboard", {
+                user: req.session.user,
+                userPhoto: req.session.user.userPhoto,
+                userPhotoDef: req.session.user.userPhotoDef,
+                username: req.session.user.username,
+                lesson: lesson,
+                choreographer: choreographer,
+                moment: moment,
+                currentSort: req.params.sort,
+                currentPage: lesson.page,
+                pageCount: lesson.pages,
+                pages: paginate.getArrayPages(req)(3, lesson.pages, req.query.page),
+            })
     });
 });
 
