@@ -26,50 +26,51 @@ findUser = (id) => {
 router.get('/register', (req, res) => res.render('register'));
 router.get('/login', (req, res) => res.render('login'));
 
-router.get('/preference', ensureAuthenticated, (req, res) => {
-    res.render('preference', {
-        userPhoto: req.session.user.userPhoto,
-        userPhotoDef: req.session.user.userPhotoDef,
-    })
-})
+// router.get('/preference', ensureAuthenticated, (req, res) => {
+//     res.render('preference', {
+//         userPhoto: req.session.user.userPhoto,
+//         userPhotoDef: req.session.user.userPhotoDef,
+//     })
+// })
 // not yet
-router.post('/preference', ensureAuthenticated, async(req, res) => {
-    const { level, purpose, genre } = req.body;
-    let errors = [];
+// router.post('/preference', ensureAuthenticated, async(req, res) => {
+//     const { level, purpose, genre } = req.body;
+//     let errors = [];
 
-    const query = {
-        tags: {
-            level: level,
-            purpose: purpose,
-            genre: genre
-        }
-    }
+//     const query = {
+//         tags: {
+//             level: level,
+//             purpose: purpose,
+//             genre: genre
+//         }
+//     }
 
-    User.findOneAndUpdate({ email: req.user._json.email }, query, (err, user) => {
+//     User.findOneAndUpdate({ email: req.user._json.email }, query, (err, user) => {
 
-        if (!user) {
-            errors.push({ msg: res.__('msg.error.noUser') });
-        }
+//         if (!user) {
+//             errors.push({ msg: res.__('msg.error.noUser') });
+//         }
 
-        if (errors.length > 0) {
-            res.render('preference', {
-                errors,
-                userPhoto: user.userPhoto,
-                userPhotoDef: user.userPhotoDef,
-                level,
-                purpose
-            });
-        } else {
-            req.flash('success_msg', res.__('msg.success.tags'));
-            res.redirect('/dashboard/-1?page=1&limit=15');
-        }
-    })
-})
+//         if (errors.length > 0) {
+//             res.render('preference', {
+//                 errors,
+//                 userPhoto: user.userPhoto,
+//                 userPhotoDef: user.userPhotoDef,
+//                 level,
+//                 purpose
+//             });
+//         } else {
+//             req.flash('success_msg', res.__('msg.success.tags'));
+//             res.redirect('/dashboard/-1?page=1&limit=15');
+//         }
+//     })
+// })
 
 router.get('/profile', ensureAuthenticated, async (req, res) => {
     const [lesson, tickets, user] = await Promise.all([findLesson(req.session.user.googleId), findTicket(req.session.user.lesson), findUser(req.session.user._id)]);
     req.session.user = user;
     const choreographer = [];
+
 
     if (user.lesson) {
         for (let i=0; i<user.lesson.length;i++) {

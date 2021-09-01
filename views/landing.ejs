@@ -1,203 +1,216 @@
 <head>
   <link href="/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
 </head>
-<header id="header" class="fixed-top ">
-  <div class="container d-flex align-items-center justify-content-between">
-    <h1 class="logo"><a href="/">Vibin'</a></h1>
-    <nav class="nav-menu d-none d-lg-block">
-      <!-- <ul>
-        <li class="active"><a href="/"><%= __('header.Home') %></a></li>
-        <li><a href="#about"><%= __('header.About') %></a></li>
-        <li><a href="#footer"><%= __('header.Contact') %></a></li>
-      </ul> -->
-    </nav>
-    <div>
-      <a href="/users/register" class="get-started-btn scrollto"><%= __('header.Register') %></a>
-      <a href="/users/login" class="get-started-btn scrollto"><%= __('header.Login') %></a>
-    </div>
-  </div>
-</header>
-
 <section id="hero" class="d-flex align-items-center">
   <div class="container">
     <%- include ('partials/messages') %>
-    <div class="row">
-      <div class="col-lg-6 pt-2 pt-lg-0 order-2 order-lg-1 d-flex flex-column justify-content-center">
-        <h1><strong><%= __('landing.hero.top') %></strong></h1>
-        <ul>
-          <li><i class="ri-check-line"></i> <%= __('landing.hero.reason1') %></li>
-          <li><i class="ri-check-line"></i> <%= __('landing.hero.reason2') %></li>
-          <li><i class="ri-check-line"></i> <%= __('landing.hero.reason3') %></li>
-        </ul>
-        <div class="mt-3">
-          <a href="/auth/google" class="btn-get-started scrollto"><%= __('landing.hero.Get started') %></a>
+      <div class="row">
+        <div class="col-lg-6 pt-2 pt-lg-0 order-2 order-lg-1 d-flex flex-column justify-content-center">
+          <h1><strong>
+              <%= __('landing.hero.top') %>
+            </strong></h1>
+          <ul>
+            <li><i class="ri-check-line"></i>
+              <%= __('landing.hero.reason1') %>
+            </li>
+            <li><i class="ri-check-line"></i>
+              <%= __('landing.hero.reason2') %>
+            </li>
+            <li><i class="ri-check-line"></i>
+              <%= __('landing.hero.reason3') %>
+            </li>
+          </ul>
+          <div class="mt-3">
+            <a href="/auth/google" class="btn-get-started scrollto">
+              <%= __('landing.hero.Get started') %>
+            </a>
+          </div>
+        </div>
+        <div class="col-lg-6 order-1 order-lg-2 hero-img">
+          <img src="assets/img/image_2.jpg" class="img-fluid" alt="">
         </div>
       </div>
-      <div class="col-lg-6 order-1 order-lg-2 hero-img">
-        <img src="assets/img/image_2.jpg" class="img-fluid" alt="">
-      </div>
-    </div>
   </div>
 </section>
 
-<section id="services" class="services">
-  <div class="container">
-    <div class="section-title">
-      <h2>全てを簡単に</h2>
-      <p>従来のzoom等を使うよりもワンクリックで面倒なことをスキップ！好きな時に好きなダンスをできるように。</p>
-    </div>
-
-    <div class="row">
-      <div class="col-xl-4">
-        <div class="icon-boxes d-flex flex-column justify-content-center">
-          <div class="row">
-
-            <div class="col-lg-12 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
-              <div class="icon-box iconbox-blue">
-                <div class="icon">
-                  <svg width="100" height="100" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke="none" stroke-width="0" fill="#f5f5f5"
-                      d="M300,582.0697525312426C382.5290701553225,586.8405444964366,449.9789794690241,525.3245884688669,502.5850820975895,461.55621195738473C556.606425686781,396.0723002908107,615.8543463187945,314.28637112970534,586.6730223649479,234.56875336149918C558.9533121215079,158.8439757836574,454.9685369536778,164.00468322053177,381.49747125262974,130.76875717737553C312.15926192815925,99.40240125094834,248.97055460311594,18.661163978235184,179.8680185752513,50.54337015887873C110.5421016452524,82.52863877960104,119.82277516462835,180.83849132639028,109.12597500060166,256.43424936330496C100.08760227029461,320.3096726198365,92.17705696193138,384.0621239912766,124.79988738764834,439.7174275375508C164.83382741302287,508.01625554203684,220.96474134820875,577.5009287672846,300,582.0697525312426">
-                    </path>
-                  </svg>
-                  <i class="bx bx-file"></i>
-                </div>
-                <h4><a href="">収益化</a></h4>
-                <p>ダンスレッスンをライブ配信して自分のダンススキルを収益化</p>
-              </div>
+        <section id="services" class="services">
+          <div class="container">
+            <div class="section-title">
+              <h2>全てを簡単に</h2>
+              <p>従来のzoom等を使うよりもワンクリックで面倒なことをスキップ！好きな時に好きなダンスをできるように。</p>
             </div>
-            <div class="col-lg-12 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="200">
-              <div class="icon-box iconbox-orange">
-                <div class="icon">
-                  <svg width="100" height="100" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke="none" stroke-width="0" fill="#f5f5f5"
-                      d="M300,582.0697525312426C382.5290701553225,586.8405444964366,449.9789794690241,525.3245884688669,502.5850820975895,461.55621195738473C556.606425686781,396.0723002908107,615.8543463187945,314.28637112970534,586.6730223649479,234.56875336149918C558.9533121215079,158.8439757836574,454.9685369536778,164.00468322053177,381.49747125262974,130.76875717737553C312.15926192815925,99.40240125094834,248.97055460311594,18.661163978235184,179.8680185752513,50.54337015887873C110.5421016452524,82.52863877960104,119.82277516462835,180.83849132639028,109.12597500060166,256.43424936330496C100.08760227029461,320.3096726198365,92.17705696193138,384.0621239912766,124.79988738764834,439.7174275375508C164.83382741302287,508.01625554203684,220.96474134820875,577.5009287672846,300,582.0697525312426">
-                    </path>
-                  </svg>
-                  <i class="bx bx-file"></i>
+
+            <div class="row">
+              <div class="col-xl-4">
+                <div class="icon-boxes d-flex flex-column justify-content-center">
+                  <div class="row">
+
+                    <div class="col-lg-12 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
+                      <div class="icon-box iconbox-blue">
+                        <div class="icon">
+                          <svg width="100" height="100" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke="none" stroke-width="0" fill="#f5f5f5"
+                              d="M300,582.0697525312426C382.5290701553225,586.8405444964366,449.9789794690241,525.3245884688669,502.5850820975895,461.55621195738473C556.606425686781,396.0723002908107,615.8543463187945,314.28637112970534,586.6730223649479,234.56875336149918C558.9533121215079,158.8439757836574,454.9685369536778,164.00468322053177,381.49747125262974,130.76875717737553C312.15926192815925,99.40240125094834,248.97055460311594,18.661163978235184,179.8680185752513,50.54337015887873C110.5421016452524,82.52863877960104,119.82277516462835,180.83849132639028,109.12597500060166,256.43424936330496C100.08760227029461,320.3096726198365,92.17705696193138,384.0621239912766,124.79988738764834,439.7174275375508C164.83382741302287,508.01625554203684,220.96474134820875,577.5009287672846,300,582.0697525312426">
+                            </path>
+                          </svg>
+                          <i class="bx bx-file"></i>
+                        </div>
+                        <h4><a href="">収益化</a></h4>
+                        <p>ダンスレッスンをライブ配信して自分のダンススキルを収益化</p>
+                      </div>
+                    </div>
+                    <div class="col-lg-12 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="200">
+                      <div class="icon-box iconbox-orange">
+                        <div class="icon">
+                          <svg width="100" height="100" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke="none" stroke-width="0" fill="#f5f5f5"
+                              d="M300,582.0697525312426C382.5290701553225,586.8405444964366,449.9789794690241,525.3245884688669,502.5850820975895,461.55621195738473C556.606425686781,396.0723002908107,615.8543463187945,314.28637112970534,586.6730223649479,234.56875336149918C558.9533121215079,158.8439757836574,454.9685369536778,164.00468322053177,381.49747125262974,130.76875717737553C312.15926192815925,99.40240125094834,248.97055460311594,18.661163978235184,179.8680185752513,50.54337015887873C110.5421016452524,82.52863877960104,119.82277516462835,180.83849132639028,109.12597500060166,256.43424936330496C100.08760227029461,320.3096726198365,92.17705696193138,384.0621239912766,124.79988738764834,439.7174275375508C164.83382741302287,508.01625554203684,220.96474134820875,577.5009287672846,300,582.0697525312426">
+                            </path>
+                          </svg>
+                          <i class="bx bx-file"></i>
+                        </div>
+                        <h4><a href="">一括</a></h4>
+                        <p>面倒なレッスン立ち上げから決済まで、全部Vibin'内で完結</p>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
-                <h4><a href="">一括</a></h4>
-                <p>面倒なレッスン立ち上げから決済まで、全部Vibin'内で完結</p>
+              </div>
+
+              <div class="content col-xl-4 d-flex flex-column justify-content-center">
+                <img src="assets/img/feature.jpg" class="img-fluid" alt="">
+              </div>
+
+              <div class="col-xl-4">
+                <div class="icon-boxes d-flex flex-column justify-content-center">
+                  <div class="row">
+
+                    <div class="col-lg-12 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
+                      <div class="icon-box iconbox-blue">
+                        <div class="icon">
+                          <svg width="100" height="100" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke="none" stroke-width="0" fill="#f5f5f5"
+                              d="M300,582.0697525312426C382.5290701553225,586.8405444964366,449.9789794690241,525.3245884688669,502.5850820975895,461.55621195738473C556.606425686781,396.0723002908107,615.8543463187945,314.28637112970534,586.6730223649479,234.56875336149918C558.9533121215079,158.8439757836574,454.9685369536778,164.00468322053177,381.49747125262974,130.76875717737553C312.15926192815925,99.40240125094834,248.97055460311594,18.661163978235184,179.8680185752513,50.54337015887873C110.5421016452524,82.52863877960104,119.82277516462835,180.83849132639028,109.12597500060166,256.43424936330496C100.08760227029461,320.3096726198365,92.17705696193138,384.0621239912766,124.79988738764834,439.7174275375508C164.83382741302287,508.01625554203684,220.96474134820875,577.5009287672846,300,582.0697525312426">
+                            </path>
+                          </svg>
+                          <i class="bx bx-file"></i>
+                        </div>
+                        <h4><a href="">誰でも、どこでも、いつでも</a></h4>
+                        <p>好きなダンサーのライブ配信にいつでも、どこでも参加できる</p>
+                      </div>
+                    </div>
+                    <div class="col-lg-12 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="200">
+                      <div class="icon-box iconbox-orange">
+                        <div class="icon">
+                          <svg width="100" height="100" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke="none" stroke-width="0" fill="#f5f5f5"
+                              d="M300,582.0697525312426C382.5290701553225,586.8405444964366,449.9789794690241,525.3245884688669,502.5850820975895,461.55621195738473C556.606425686781,396.0723002908107,615.8543463187945,314.28637112970534,586.6730223649479,234.56875336149918C558.9533121215079,158.8439757836574,454.9685369536778,164.00468322053177,381.49747125262974,130.76875717737553C312.15926192815925,99.40240125094834,248.97055460311594,18.661163978235184,179.8680185752513,50.54337015887873C110.5421016452524,82.52863877960104,119.82277516462835,180.83849132639028,109.12597500060166,256.43424936330496C100.08760227029461,320.3096726198365,92.17705696193138,384.0621239912766,124.79988738764834,439.7174275375508C164.83382741302287,508.01625554203684,220.96474134820875,577.5009287672846,300,582.0697525312426">
+                            </path>
+                          </svg>
+                          <i class="bx bx-file"></i>
+                        </div>
+                        <h4><a href="">安心</a></h4>
+                        <p>１レッスンから購入できるから安心して、自分のタイミングで楽しめる</p>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <section id="why-us" class="why-us">
+          <div class="container-fluid">
+            <div class="section-title">
+              <h2>Vibinの使い方</h2>
+              <p></p>
+            </div>
+            <div class="row">
+              <div class="col-lg-4">
+                <div class="box">
+                  <span class="text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="5em" height="5em" fill="currentColor"
+                      class="bi bi-person" viewBox="0 0 16 16">
+                      <path
+                        d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
+                    </svg>
+                  </span>
+                  <h4>Step 1</h4>
+                  <p>Google アカウントの連携により、Vibin'アカウントを作成</p>
+                </div>
+              </div>
+
+              <div class="col-lg-4 mt-4 mt-lg-0">
+                <div class="box">
+                  <span class="text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="5em" height="5em" fill="currentColor"
+                      class="bi bi-cash-stack" viewBox="0 0 16 16">
+                      <path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1H1zm7 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
+                      <path
+                        d="M0 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V5zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V7a2 2 0 0 1-2-2H3z" />
+                    </svg>
+                  </span>
+                  <h4>Step 2</h4>
+                  <p>開催予定のライブレッスンから参加したいレッスンを購入</p>
+                </div>
+              </div>
+
+              <div class="col-lg-4 mt-4 mt-lg-0">
+                <div class="box">
+                  <span class="text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="5em" height="5em" fill="currentColor"
+                      class="bi bi-sunglasses" viewBox="0 0 16 16">
+                      <path
+                        d="M3 5a2 2 0 0 0-2 2v.5H.5a.5.5 0 0 0 0 1H1V9a2 2 0 0 0 2 2h1a3 3 0 0 0 3-3 1 1 0 1 1 2 0 3 3 0 0 0 3 3h1a2 2 0 0 0 2-2v-.5h.5a.5.5 0 0 0 0-1H15V7a2 2 0 0 0-2-2h-2a2 2 0 0 0-1.888 1.338A1.99 1.99 0 0 0 8 6a1.99 1.99 0 0 0-1.112.338A2 2 0 0 0 5 5H3zm0 1h.941c.264 0 .348.356.112.474l-.457.228a2 2 0 0 0-.894.894l-.228.457C2.356 8.289 2 8.205 2 7.94V7a1 1 0 0 1 1-1z" />
+                    </svg>
+                  </span>
+                  <h4>Step 3</h4>
+                  <p>レッスンに参加して、ダンススキルを磨こう！</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- <section id="about" class="about">
+          <div class="container">
+            <div class="row content">
+              <div class="col-lg-6">
+                <h1><strong>
+                    <%= __('landing.about.top') %>
+                  </strong></h1>
+                <p class="lead">
+                  <%= __('landing.about.sub') %><br><br>
+                </p>
+                <p>
+                  <%= __('landing.about.desc') %>
+                </p>
+              </div>
+              <div class="col-lg-6 pt-4 pt-lg-0">
+                <h3>
+                  <%= __('landing.about.prob') %>
+                </h3>
+                <ul>
+                  <li><i class="ri-check-double-line"></i>
+                    <%= __('landing.about.prob1') %>
+                  </li>
+                  <li><i class="ri-check-double-line"></i>
+                    <%= __('landing.about.prob2') %>
+                  </li>
+                  <li><i class="ri-check-double-line"></i>
+                    <%= __('landing.about.prob3') %>
+                  </li>
+                </ul>
+                <p>
+                  <%= __('landing.about.prob4') %>
+                </p>
               </div>
             </div>
           </div>
-
-        </div>
-      </div>
-
-      <div class="content col-xl-4 d-flex flex-column justify-content-center">
-        <img src="assets/img/feature.jpg" class="img-fluid" alt="">
-      </div>
-
-      <div class="col-xl-4">
-        <div class="icon-boxes d-flex flex-column justify-content-center">
-          <div class="row">
-
-            <div class="col-lg-12 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
-              <div class="icon-box iconbox-blue">
-                <div class="icon">
-                  <svg width="100" height="100" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke="none" stroke-width="0" fill="#f5f5f5"
-                      d="M300,582.0697525312426C382.5290701553225,586.8405444964366,449.9789794690241,525.3245884688669,502.5850820975895,461.55621195738473C556.606425686781,396.0723002908107,615.8543463187945,314.28637112970534,586.6730223649479,234.56875336149918C558.9533121215079,158.8439757836574,454.9685369536778,164.00468322053177,381.49747125262974,130.76875717737553C312.15926192815925,99.40240125094834,248.97055460311594,18.661163978235184,179.8680185752513,50.54337015887873C110.5421016452524,82.52863877960104,119.82277516462835,180.83849132639028,109.12597500060166,256.43424936330496C100.08760227029461,320.3096726198365,92.17705696193138,384.0621239912766,124.79988738764834,439.7174275375508C164.83382741302287,508.01625554203684,220.96474134820875,577.5009287672846,300,582.0697525312426">
-                    </path>
-                  </svg>
-                  <i class="bx bx-file"></i>
-                </div>
-                <h4><a href="">誰でも、どこでも、いつでも</a></h4>
-                <p>好きなダンサーのライブ配信にいつでも、どこでも参加できる</p>
-              </div>
-            </div>
-            <div class="col-lg-12 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="200">
-              <div class="icon-box iconbox-orange">
-                <div class="icon">
-                  <svg width="100" height="100" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke="none" stroke-width="0" fill="#f5f5f5"
-                      d="M300,582.0697525312426C382.5290701553225,586.8405444964366,449.9789794690241,525.3245884688669,502.5850820975895,461.55621195738473C556.606425686781,396.0723002908107,615.8543463187945,314.28637112970534,586.6730223649479,234.56875336149918C558.9533121215079,158.8439757836574,454.9685369536778,164.00468322053177,381.49747125262974,130.76875717737553C312.15926192815925,99.40240125094834,248.97055460311594,18.661163978235184,179.8680185752513,50.54337015887873C110.5421016452524,82.52863877960104,119.82277516462835,180.83849132639028,109.12597500060166,256.43424936330496C100.08760227029461,320.3096726198365,92.17705696193138,384.0621239912766,124.79988738764834,439.7174275375508C164.83382741302287,508.01625554203684,220.96474134820875,577.5009287672846,300,582.0697525312426">
-                    </path>
-                  </svg>
-                  <i class="bx bx-file"></i>
-                </div>
-                <h4><a href="">安心</a></h4>
-                <p>１レッスンから購入できるから安心して、自分のタイミングで楽しめる</p>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<section id="why-us" class="why-us">
-  <div class="container-fluid">
-    <div class="section-title">
-      <h2>Vibinの使い方</h2>
-      <p></p>
-    </div>
-    <div class="row">
-      <div class="col-lg-4">
-        <div class="box">
-          <span class="text-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="5em" height="5em" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
-              <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
-            </svg>
-          </span>
-          <h4>Step 1</h4>
-          <p>Google アカウントの連携により、Vibin'アカウントを作成</p>
-        </div>
-      </div>
-
-      <div class="col-lg-4 mt-4 mt-lg-0">
-        <div class="box">
-          <span class="text-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="5em" height="5em" fill="currentColor" class="bi bi-cash-stack" viewBox="0 0 16 16">
-              <path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1H1zm7 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
-              <path d="M0 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V5zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V7a2 2 0 0 1-2-2H3z"/>
-            </svg>
-          </span>
-          <h4>Step 2</h4>
-          <p>開催予定のライブレッスンから参加したいレッスンを購入</p>
-        </div>
-      </div>
-
-      <div class="col-lg-4 mt-4 mt-lg-0">
-        <div class="box">
-          <span class="text-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="5em" height="5em" fill="currentColor" class="bi bi-sunglasses" viewBox="0 0 16 16">
-              <path d="M3 5a2 2 0 0 0-2 2v.5H.5a.5.5 0 0 0 0 1H1V9a2 2 0 0 0 2 2h1a3 3 0 0 0 3-3 1 1 0 1 1 2 0 3 3 0 0 0 3 3h1a2 2 0 0 0 2-2v-.5h.5a.5.5 0 0 0 0-1H15V7a2 2 0 0 0-2-2h-2a2 2 0 0 0-1.888 1.338A1.99 1.99 0 0 0 8 6a1.99 1.99 0 0 0-1.112.338A2 2 0 0 0 5 5H3zm0 1h.941c.264 0 .348.356.112.474l-.457.228a2 2 0 0 0-.894.894l-.228.457C2.356 8.289 2 8.205 2 7.94V7a1 1 0 0 1 1-1z"/>
-            </svg>
-          </span>
-          <h4>Step 3</h4>
-          <p>レッスンに参加して、ダンススキルを磨こう！</p>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<section id="about" class="about">
-  <div class="container">
-    <div class="row content">
-      <div class="col-lg-6">
-        <h1><strong><%= __('landing.about.top') %></strong></h1>
-        <p class="lead"><%= __('landing.about.sub') %><br><br></p>
-        <p><%= __('landing.about.desc') %></p>
-      </div>
-      <div class="col-lg-6 pt-4 pt-lg-0">
-        <h3>
-          <%= __('landing.about.prob') %>
-        </h3>
-        <ul>
-          <li><i class="ri-check-double-line"></i> <%= __('landing.about.prob1') %></li>
-          <li><i class="ri-check-double-line"></i> <%= __('landing.about.prob2') %></li>
-          <li><i class="ri-check-double-line"></i> <%= __('landing.about.prob3') %></li>
-        </ul>
-        <p><%= __('landing.about.prob4') %></p>
-      </div>
-    </div>
-  </div>
-</section>
+        </section> -->
