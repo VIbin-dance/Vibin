@@ -10,6 +10,7 @@ const stripe = require("stripe")(process.env.stripekey);
 
 // get the config functions all at once
 const { ensureAuthenticated } = require("../config/auth");
+const { checkSession } = require("../config/session");
 const { sendMail } = require("../config/email");
 const { addCalendar } = require("../config/calendar");
 const { createChannel } = require('../config/aws/channel');
@@ -30,27 +31,7 @@ findTicket = function (id) {
 const storage = multer.memoryStorage()
 const upload = multer({ storage: storage });
 
-router.get("/", async (req, res) => {
-    Lesson.paginate({}, { sort: { time: -1 }},async (err, lesson) => {
-        const choreographer = [];
-
-        for (let i = 0; i < lesson.docs.length; i++) {
-            choreographer[i] = await User.findOne({ googleId: lesson.docs[i].choreographerID.toString() }, 'username').lean().exec();
-        }
-  
-            res.render("landing", {
-                user: undefined,
-                username: undefined,
-                lesson: lesson,
-                choreographer: choreographer,
-                moment: moment,
-                currentSort: req.params.sort,
-                currentPage: lesson.page,
-                pageCount: lesson.pages,
-                pages: paginate.getArrayPages(req)(3, lesson.pages, req.query.page),
-            })
-    });
-});
+router.get("/about", async (req, res) => res.render("landing"));
 router.get("/error", (req, res) => res.send("Login error"));
 
 router.get("/logout", (req, res) => {
@@ -64,7 +45,7 @@ router.get("/auth/google",
         scope: [
             "https://www.googleapis.com/auth/userinfo.profile",
             "https://www.googleapis.com/auth/userinfo.email",
-            "https://www.googleapis.com/auth/youtube.readonly",
+            // "https://www.googleapis.com/auth/youtube.readonly",
             "https://www.googleapis.com/auth/calendar.events",
         ],
     })
@@ -78,16 +59,16 @@ router.get("/auth/google/callback",
         User.findOne({ email: req.user._json.email }, (err, user) => {
             req.session.user = user
             req.flash("success_msg", res.__("msg.success.login"));
-            res.redirect("/dashboard/-1?page=1&limit=15");
+            res.redirect("/");
         })
     }
 );
 
-router.get("/dashboard/:sort", ensureAuthenticated, async (req, res) => {
+router.get("/", checkSession, async (req, res) => {
     Lesson.paginate({}, {
         page: req.query.page,
         limit: req.query.limit,
-        sort: { time: req.params.sort },
+        sort: { time: -1 },
     }, async (err, lesson) => {
         const choreographer = [];
 
@@ -95,12 +76,9 @@ router.get("/dashboard/:sort", ensureAuthenticated, async (req, res) => {
         for (let i = 0; i < lesson.docs.length; i++) {
             choreographer[i] = await User.findOne({ googleId: lesson.docs[i].choreographerID.toString() }, 'username').lean().exec();
         }
-  
+
             res.render("dashboard", {
-                user: req.session.user,
-                userPhoto: req.session.user.userPhoto,
-                userPhotoDef: req.session.user.userPhotoDef,
-                username: req.session.user.username,
+                user: user,
                 lesson: lesson,
                 choreographer: choreographer,
                 moment: moment,
@@ -112,7 +90,7 @@ router.get("/dashboard/:sort", ensureAuthenticated, async (req, res) => {
     });
 });
 
-router.post("/dashboard", ensureAuthenticated, async (req, res) => {
+router.post("/", checkSession, async (req, res) => {
     const { language, level, genre, purpose, mood, search } = req.body;
     const searchQuery = new RegExp(escapeRegex(search), "gi");
     const query = {
@@ -132,10 +110,11 @@ router.post("/dashboard", ensureAuthenticated, async (req, res) => {
     Lesson.paginate(query, {
         page: req.query.page,
         limit: 100,
+        sort: { time: -1 }
     }, async (err, lesson) => {
         if (!lesson.docs.length) {
             req.flash("error_msg", res.__("msg.error.video"));
-            res.redirect("/dashboard/-1?page=1&limit=15");
+            res.redirect("/");
         } else {
             const choreographer = [];
             for (let i = 0; i < lesson.docs.length; i++) {
@@ -143,10 +122,7 @@ router.post("/dashboard", ensureAuthenticated, async (req, res) => {
             }
 
             res.render("results", {
-                user: req.session.user,
-                userPhoto: req.session.user.userPhoto,
-                userPhotoDef: req.session.user.userPhotoDef,
-                username: req.session.user.username,
+                user: user,
                 lesson: lesson,
                 choreographer: choreographer,
                 moment: moment,
@@ -158,19 +134,19 @@ router.post("/dashboard", ensureAuthenticated, async (req, res) => {
     });
 });
 
-router.get("/results", ensureAuthenticated, (req, res) => res.render("results"));
+router.get("/results", (req, res) => res.render("results"));
 
-router.get("/choreographer/:id", ensureAuthenticated, async (req, res) => {
+router.get("/choreographer/:id", checkSession, async (req, res) => {
     Lesson.paginate({ choreographerID: req.params.id }, {
         page: req.query.page,
         limit: req.query.limit,
+        sort: { time: -1 }
     }, async (err, lesson) => {
-        User.findOne({ googleId: req.params.id }, (err, user) => {
+        User.findOne({ googleId: req.params.id }, (err, choreo) => {
             res.render("choreographer", {
-                userPhoto: req.session.user.userPhoto,
-                userPhotoDef: req.session.user.userPhotoDef,
+                user: user,
                 count: lesson.length,
-                choreographer: user,
+                choreographer: choreo,
                 lesson: lesson,
                 moment: moment,
                 currentPage: lesson.page,
@@ -281,19 +257,19 @@ router.post("/calendar", ensureAuthenticated, (req, res) => {
     );
 });
 
-router.get("/reservation/:id", ensureAuthenticated, async (req, res) => {
+router.get("/reservation/:id", checkSession, async (req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.id }).lean().exec();
     const choreographer = await User.findOne({ googleId: lesson.choreographerID }).lean().exec();
 
-    if (req.session.user.lesson && req.session.user.lesson.includes(lesson._id.toString()) === true) {
+    if (moment().isAfter(lesson.time) && lesson.price === 0) {
+        res.redirect(`/lesson/student/${req.params.id}`)
+    } else if (user.lesson && user.lesson.includes(lesson._id.toString()) === true) {
         res.render('success', {
-            user: req.session.user,
+            user: user,
             params: req.params.id,
             lesson: lesson,
             choreographer: choreographer,
             moment: moment,
-            userPhoto: req.session.user.userPhoto,
-            userPhotoDef: req.session.user.userPhotoDef,
         })
     } else if (lesson.price === 0) {
         res.render('reservation', {
@@ -302,9 +278,7 @@ router.get("/reservation/:id", ensureAuthenticated, async (req, res) => {
             lesson: lesson,
             choreographer: choreographer,
             moment: moment,
-            userLesson: req.session.user.lesson,
-            userPhoto: req.session.user.userPhoto,
-            userPhotoDef: req.session.user.userPhotoDef,
+            user: user,
         })
     } else {
         const host = req.get('host');
@@ -317,7 +291,7 @@ router.get("/reservation/:id", ensureAuthenticated, async (req, res) => {
                 currency: "jpy",
                 quantity: 1,
             }],
-            customer_email: req.session.user.email,
+            customer_email: user.email,
             payment_intent_data: {
                 application_fee_amount: lesson.price * 0.2,
                 transfer_data: {
@@ -333,9 +307,7 @@ router.get("/reservation/:id", ensureAuthenticated, async (req, res) => {
             lesson: lesson,
             choreographer: choreographer,
             moment: moment,
-            userLesson: req.session.user.lesson,
-            userPhoto: req.session.user.userPhoto,
-            userPhotoDef: req.session.user.userPhotoDef,
+            user: user,
         });
     }
 });

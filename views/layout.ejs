@@ -7,10 +7,10 @@
     <meta name="format-detection" content="telephone=no">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Vibin ベータ版</title>
+    <title>Vibin'</title>
     <meta name="keywords" content="Dance">
     <meta name="description"
-        content="Vibin is an online dancing platform providing efficient searching system for Youtube videos with simple user interface.">
+        content="Vibin' is an online dancing platform providing efficient searching system for Youtube videos with simple user interface.">
     <meta name="author" content="Vibin'">
 
     <!-- Favicons -->
@@ -65,10 +65,10 @@
     <!-- Template Main JS File -->
     <script src="/assets/js/main.js"></script>
 
-    <% if (typeof userPhoto == "undefined" ) { %>
+    <% if (typeof user.userPhoto == "undefined" ) { %>
         <header id="header" class="fixed-top">
             <div class="container d-flex align-items-center justify-content-between">
-                <h1 class="logo"><a href="/dashboard/-1?page=1&limit=15">Vibin'</a></h1>
+                <h1 class="logo"><a href="/">Vibin'</a></h1>
                     <div>
                         <a href="/users/register" class="get-started-btn scrollto"><%= __('header.Register') %></a>
                         <a href="/users/login" class="get-started-btn scrollto"><%= __('header.Login') %></a>
@@ -77,13 +77,13 @@
         </header>
     <% } %>
 
-    <% if (typeof userPhoto != "undefined" ) { %>
+    <% if (typeof user.userPhoto != "undefined" ) { %>
     <header id="header" class="fixed-top">
         <div class="container d-flex align-items-center justify-content-between">
-            <h1 class="logo"><a href="/dashboard/-1?page=1&limit=15">Vibin'</a></h1>
+            <h1 class="logo"><a href="/">Vibin'</a></h1>
             <nav class="nav-menu d-none d-lg-block">
                 <ul>
-                    <li><a href="/dashboard/-1?page=1&limit=15">
+                    <li><a href="/">
                             <%= __('header.Home') %>
                         </a></li>
                     <li><a href="/calendar">
@@ -97,11 +97,11 @@
             <nav class="nav-menu d-none d-lg-block">
                 <ul>
                     <li class="drop-down">
-                        <% if (typeof userPhotoDef != "undefined" ) { %>
-                            <img src="data:image/<%=userPhotoDef.contentType%>;base64, <%=userPhotoDef.data.toString('base64')%>"
+                        <% if (typeof user.userPhotoDef != "undefined" ) { %>
+                            <img src="data:image/<%=user.userPhotoDef.contentType%>;base64, <%=user.userPhotoDef.data.toString('base64')%>"
                                 height="40" width="40" style="border-radius: 50%;" alt="user photo">
-                            <% } else if (typeof userPhoto !="undefined" ) { %>
-                                <img src="<%= userPhoto %>" height="40" width="40" style="border-radius: 50%;"
+                            <% } else if (typeof user.userPhoto !="undefined" ) { %>
+                                <img src="<%= user.userPhoto %>" height="40" width="40" style="border-radius: 50%;"
                                     alt="user photo">
                                 <% } %>
                                     <ul>
@@ -119,12 +119,12 @@
     </header>
     <% } %>
 
-    <% if (typeof userPhoto !="undefined" ) { %>
+    <% if (typeof user.userPhoto !="undefined" ) { %>
     <div class="container">
         <nav class="navbar fixed-bottom navbar-dark bg-light justify-content-center">
             <ul>
                 <li>
-                    <a href="/dashboard/-1?page=1&limit=15">
+                    <a href="/">
                         <svg width="2.0em" height="2.0em" viewBox="0 0 16 16" class="bi bi-house" fill="currentColor"
                             xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd"
@@ -161,11 +161,11 @@
                 </li>
                 <li>
                     <a href="/users/profile">
-                        <% if (typeof userPhotoDef !="undefined" ) { %>
-                            <img src="data:image/<%=userPhotoDef.contentType%>;base64, <%=userPhotoDef.data.toString('base64')%>"
+                        <% if (typeof user.userPhotoDef !="undefined" ) { %>
+                            <img src="data:image/<%=user.userPhotoDef.contentType%>;base64, <%=user.userPhotoDef.data.toString('base64')%>"
                                 height="27" width="27" style="border-radius: 50%;" alt="user photo">
-                            <% } else if (typeof userPhoto !="undefined" ) { %>
-                                <img src="<%= userPhoto %>" height="27" width="27" style="border-radius: 50%;"
+                            <% } else if (typeof user.userPhoto !="undefined" ) { %>
+                                <img src="<%= user.userPhoto %>" height="27" width="27" style="border-radius: 50%;"
                                     alt="user photo">
                                 <% } %>
                     </a>
@@ -201,7 +201,7 @@
                                 </a>
                             </li>
                             <li><i class="bx bx-chevron-right"></i>
-                                <a href="/dashboard/-1?page=1&limit=15">
+                                <a href="/">
                                     <%= __('footer.Home') %>
                                 </a>
                             </li>
