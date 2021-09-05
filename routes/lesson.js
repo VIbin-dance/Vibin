@@ -82,13 +82,13 @@ router.get('/teacher/:lesson_id', ensureAuthenticated, async (req, res) => {
 
                 if (moment().isAfter(ls.time)) {
                     console.log('iz after bitch')
-                    // url = 
                     getRecording(req, res)
                 } else {
                     url = ch.playbackUrl
                 }
 
                 res.render('teacher', {
+                    user: req.session.user,
                     userPhoto: req.session.user.userPhoto,
                     userPhotoDef: req.session.user.userPhotoDef,
                     email: req.session.req.user._json.email,

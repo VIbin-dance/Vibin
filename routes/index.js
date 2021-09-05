@@ -77,16 +77,16 @@ router.get("/", checkSession, async (req, res) => {
             choreographer[i] = await User.findOne({ googleId: lesson.docs[i].choreographerID.toString() }, 'username').lean().exec();
         }
 
-            res.render("dashboard", {
-                user: user,
-                lesson: lesson,
-                choreographer: choreographer,
-                moment: moment,
-                currentSort: req.params.sort,
-                currentPage: lesson.page,
-                pageCount: lesson.pages,
-                pages: paginate.getArrayPages(req)(3, lesson.pages, req.query.page),
-            })
+        res.render("dashboard", {
+            user: user,
+            lesson: lesson,
+            choreographer: choreographer,
+            moment: moment,
+            currentSort: req.params.sort,
+            currentPage: lesson.page,
+            pageCount: lesson.pages,
+            pages: paginate.getArrayPages(req)(3, lesson.pages, req.query.page),
+        })
     });
 });
 
@@ -157,105 +157,88 @@ router.get("/choreographer/:id", checkSession, async (req, res) => {
     });
 });
 
-// not yet
 router.get("/calendar", ensureAuthenticated, (req, res) => {
-    User.findOne({ email: req.user._json.email }, (err, user) => {
-        let time = encodeURIComponent(moment().format());
-        let summary = [];
-        let dateTime = [];
-        let id = [];
-        let idCal = [];
-        let run_status = [];
+    fetch(`https://www.googleapis.com/calendar/v3/calendars/${req.session.user.email}/events?orderBy=startTime&q=vibin&singleEvents=true&key=${process.env.API_key}`, {
+        headers: {
+            Authorization: `Bearer ${req.session.user.accessToken}`,
+        },
+    })
+        .then((response) => response.json())
+        .then(async (data) => {
+            if (data.items == undefined) {
+                req.flash("error_msg", res.__("msg.error.auth"));
+                res.redirect("/");
+            } else {
+                // for (i = 0; i < data.items.length; i++) {
+                //     summary[i] = data.items[i].summary
+                //     dateTime[i] = moment(data.items[i].start.dateTime).format('MMMM Do YYYY, h:mm a');
+                //     id[i] = data.items[i].description
+                //     idCal[i] = data.items[i].id
 
-        fetch(`https://www.googleapis.com/calendar/v3/calendars/${user.email}/events?orderBy=startTime&q=vibin&singleEvents=true&key=${process.env.API_key}`, {
-            headers: {
-                Authorization: `Bearer ${user.accessToken}`,
-            },
-        })
-            .then((response) => response.json())
-            .then(async (data) => {
-                if (data.items == undefined) {
-                    req.flash("error_msg", res.__("msg.error.auth"));
-                    res.redirect("/");
-                } else {
-                    for (i = 0; i < data.items.length; i++) {
-                        summary[i] = data.items[i].summary
-                        dateTime[i] = moment(data.items[i].start.dateTime).format('MMMM Do YYYY, h:mm a');
-                        id[i] = data.items[i].description
-                        idCal[i] = data.items[i].id
+                //     var s_date = new Date(data.items[i].start.dateTime).getTime();
+                //     var e_date = new Date(data.items[i].end.dateTime).getTime();
+                //     var c_date = new Date().getTime();
 
-                        var s_date = new Date(data.items[i].start.dateTime).getTime();
-                        var e_date = new Date(data.items[i].end.dateTime).getTime();
-                        var c_date = new Date().getTime();
+                //     if (s_date < c_date && e_date > c_date) {
+                //         run_status[i] = "( live now )"
+                //     } else {
+                //         run_status[i] = ""
+                //     }
+                // }
 
-                        if (s_date < c_date && e_date > c_date) {
-                            run_status[i] = "( live now )"
-                        } else {
-                            run_status[i] = ""
-                        }
+
+                const [tickets] = await Promise.all([findTicket(req.session.user.lesson)]);
+
+                const choreographer = [];
+                if (req.session.user.lesson) {
+                    for (let i = 0; i < req.session.user.lesson.length; i++) {
+                        choreographer[i] = await User.findOne({ googleId: tickets[i].choreographerID }, 'username').lean().exec();
                     }
-
-                    const tickets = [];
-                    const choreographer = [];
-                    const time2 = [];
-                    for (let i = 0; i < user.lesson.length; i++) {
-                        tickets[i] = await Lesson.findOne({ _id: user.lesson[i] }).lean().exec();
-                        if (tickets.length > 0) {
-                            choreographer[i] = await User.findOne({ googleId: tickets[i].choreographerID }).exec();
-                            time2[i] = moment(tickets[i].time).format('MM/DD HH:mm');
-                        }
-                    }
-
-                    res.render('calendar', {
-                        userPhoto: user.userPhoto,
-                        userPhotoDef: user.userPhotoDef,
-                        count: data.items.length,
-                        API_key: process.env.API_key,
-                        CALENDAR_ID: user.email,
-                        accessToken: user.accessToken,
-                        summary: summary,
-                        dateTime: dateTime,
-                        id: id,
-                        idCal: idCal,
-                        run_status: run_status,
-                        tickets: tickets,
-                        choreographer: choreographer,
-                        time2: time2,
-                    });
                 }
-            });
-    });
+
+                res.render('calendar', {
+                    user: req.session.user,
+                    userPhoto: req.session.user.userPhoto,
+                    userPhotoDef: req.session.user.userPhotoDef,
+                    moment: moment,
+                    API_key: process.env.API_key,
+                    CALENDAR_ID: req.session.user.email,
+                    tickets: tickets,
+                    choreographer: choreographer,
+                });
+            }
+        });
 });
 // not yet
-router.post("/calendar", ensureAuthenticated, (req, res) => {
-    User.findOne({
-        email: req.user._json.email,
-    },
-        (err, user) => {
-            const { idCal } = req.body;
+// router.post("/calendar", ensureAuthenticated, (req, res) => {
+//     User.findOne({
+//         email: req.user._json.email,
+//     },
+//         (err, user) => {
+//             const { idCal } = req.body;
 
-            let result = fetch(
-                `https://www.googleapis.com/calendar/v3/calendars/${user.email}/events/${idCal}?key=${process.env.API_key}`, {
-                method: "DELETE",
-                headers: {
-                    Authorization: `Bearer ${user.accessToken}`,
-                    Accept: "application/json",
-                },
-            }
-            );
+//             let result = fetch(
+//                 `https://www.googleapis.com/calendar/v3/calendars/${user.email}/events/${idCal}?key=${process.env.API_key}`, {
+//                 method: "DELETE",
+//                 headers: {
+//                     Authorization: `Bearer ${user.accessToken}`,
+//                     Accept: "application/json",
+//                 },
+//             }
+//             );
 
-            result.then(function (result) {
-                if (result.status == 404) {
-                    req.flash("error", res.__("msg.error.video"));
-                    res.redirect("/calendar");
-                } else if (result.status == 200 || 204) {
-                    req.flash("success_msg", res.__("msg.success.dance_del"));
-                    res.redirect("/calendar");
-                }
-            });
-        }
-    );
-});
+//             result.then(function (result) {
+//                 if (result.status == 404) {
+//                     req.flash("error", res.__("msg.error.video"));
+//                     res.redirect("/calendar");
+//                 } else if (result.status == 200 || 204) {
+//                     req.flash("success_msg", res.__("msg.success.dance_del"));
+//                     res.redirect("/calendar");
+//                 }
+//             });
+//         }
+//     );
+// });
 
 router.get("/reservation/:id", checkSession, async (req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.id }).lean().exec();
@@ -326,7 +309,7 @@ router.get('/success/:id', ensureAuthenticated, async (req, res) => {
         console.log('already done')
         res.redirect(`/reservation/${req.params.id}`);
     } else if (lesson.price === 0 || (session != undefined && session.payment_status == 'paid')) {
-        User.findByIdAndUpdate(req.session.user._id, {$push: { lesson: lesson._id }}, { upsert: true, new: true, setDefaultsOnInsert: true },
+        User.findByIdAndUpdate(req.session.user._id, { $push: { lesson: lesson._id } }, { upsert: true, new: true, setDefaultsOnInsert: true },
             (err, user) => {
                 console.log(err || user);
                 console.log(session);
