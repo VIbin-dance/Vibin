@@ -36,10 +36,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="bio"><%= __('profile.bio') %> (140字)</label>
-                    <textarea rows="4" type="bio" id="bio" name="bio" class="form-control" placeholder="Enter Your Bio" maxlength="140"><%= typeof bio != 'undefined' ? bio : '' %></textarea>
-                    <!-- <input type="bio" id="bio" name="bio" class="form-control" placeholder="Enter Your Bio"
-                        value="<%= typeof bio != 'undefined' ? bio : '' %>" /> -->
+                    <label for="bio"><%= __('profile.bio') %> (<span id="count"></span>/140字)</label>
+                    <textarea rows="4" type="bio" id="bio" name="bio" class="form-control" placeholder="Enter Your Bio" maxlength="140" onchange="textCount(event)"><%= typeof bio != 'undefined' ? bio : '' %></textarea>
                 </div>
 
                 <div class="form-group" id="levelDrop">
@@ -189,4 +187,19 @@
         console.log("width: " + image.naturalWidth);
         console.log("height: " + image.naturalHeight);
     };
+
+    const textarea = document.querySelector("textarea");
+
+    textarea.addEventListener("input", event => {
+        const target = event.currentTarget;
+        const maxLength = target.getAttribute("maxlength");
+        const currentLength = target.value.length;
+
+        if (currentLength >= maxLength) {
+            return console.log("You have reached the maximum number of characters.");
+        }
+
+        document.getElementById('count').innerHTML = currentLength
+    });
+
 </script>

@@ -71,7 +71,7 @@
     const chat_msg = document.querySelector("#chat_msg");
     const send_btn = document.querySelector(".send_btn");
     const temp_btn = document.querySelector(".temp_btn");
-    
+
     // connect socket and join in chat room
     socket.on("connect", () => {
         if (user_name.value != '' && chat_room_id.value != '' && channel_arn.value != '') {
@@ -114,7 +114,7 @@
 
 
 
-    // temp_btn.addEventListener('click', () => {        
+    // temp_btn.addEventListener('click', () => {
         // if (temp_btn.value.length > 0 && temp_btn.value.trim()) {
         //     const chat_msg = temp_btn
         //     sendMsg(chat_msg);
@@ -161,12 +161,15 @@
         let convert_msg = chat_msg.value.replace(/\n/g, "<br>");
         let src;
 
+        console.log(user_name, user_photo, user_photoDefData, user_photoDefType);
+
         if (typeof user_photoDefData != "undefined") {
             src = `data:image/${user_photoDefType};base64, ${user_photoDefData}`
         } else if (typeof user_photo != "undefined") {
             src = `${user_photo.value}`
         }
 
+        console.log("sendmsg");
         const param_message = {
             user_name: user_name.value,
             user_photo: src,
@@ -185,8 +188,13 @@
             src = `data:image/${user_photoDef.contentType};base64, ${data}`
         } else if (typeof user_photo != "undefined") {
             src = `${user_photo}`
+        } else {
+            src = "https://img.icons8.com/pastel-glyph/2x/person-male.png"
         }
 
+        console.log(user_name, user_photo, user_photoDefData, user_photoDefType);
+
+        console.log("client_msg");
         li.innerHTML = `<figure class="avatar">
                             <img src="${src}" alt="">
                             <p style="font-size:12px; text-align: center;">${user_name}</p>
