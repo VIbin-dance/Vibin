@@ -5,8 +5,8 @@
         <div class="col-md-7 blog-main">
             <div class="blog-post">
                 <div class="card-deck">
-                    <% if (!userLesson && lesson.price != 0) { %>
-                        <h3>今なら初回無料！<%= lesson.price %> <%= __('dashboard.Yen') %>が<%= price %> <%= __('dashboard.Yen') %>で！</h3>
+                    <% if (!user.lesson && lesson.price != 0) { %>
+                        <h3>今なら初回無料！<%= lesson.price %><%= __('dashboard.Yen') %>が0<%= __('dashboard.Yen') %>で！</h3>
                     <% } %>
                     <div class="card mb-3" style="min-width: 47vh; max-width: 80vh; margin-top: 30px;">
                         <a href="#">

@@ -7,21 +7,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.6.6/video.min.js"></script>
     <script src="https://player.live-video.net/1.2.0/amazon-ivs-videojs-tech.min.js"></script>
     <script src="https://player.live-video.net/1.2.0/amazon-ivs-quality-plugin.min.js"></script>
-
 </head>
-
 <!-- live video & chat section -->
 
 <section id="live_grid">
     <input type="hidden" name="ch_playurl" id="ch_playurl" value="<%= ch_playURL %>">
     <input type="hidden" name="ch_playTime" id="ch_playTime" value="">
     <input type="hidden" name="ch_arn" id="ch_arn" value="<%= ch_arn %>">
-    <input type="hidden" name="username" id="username" value="<%= username %>">
-    <% if (typeof userPhotoDef != "undefined" ) { %>
-        <input type="hidden" name="userphotoDefData" id="userphotoDefData" value="<%= userPhotoDef.data.toString('base64')%>">
-        <input type="hidden" name="userphotoDefType" id="userphotoDefType" value="<%= userPhotoDef.contentType %>">
-    <% } else if (typeof userPhoto !="undefined" ) { %>
-        <input type="hidden" name="userphoto" id="userphoto" value="<%= userPhoto %>">
+    <input type="hidden" name="username" id="username" value="<%= user.username %>">
+    <% if (typeof user.userPhotoDef != "undefined" ) { %>
+        <input type="hidden" name="userphotoDefData" id="userphotoDefData" value="<%= user.userPhotoDef.data.toString('base64')%>">
+        <input type="hidden" name="userphotoDefType" id="userphotoDefType" value="<%= user.userPhotoDef.contentType %>">
+    <% } else if (typeof user.userPhoto !="undefined" ) { %>
+        <input type="hidden" name="userphoto" id="userphoto" value="<%= user.userPhoto %>">
     <% } %>
                 <input type="hidden" name="chat_room_id" id="chat_room_id" value="<%= ch_streamkey %>">
                 <div class="live_grid">
@@ -142,6 +140,14 @@
                             <div class="message_wrap">
                                 <ul class="message_list"></ul>
                             </div>
+                            <% if (!user._id) { %>
+                            <div class="text-center" style="margin:20p;">
+                                <h5>チャットしたいですか？<br>
+                                    <a href="/users/login">ログイン</a>してリアルタイムのレッスンに参加しましょう。<br>
+                                    1. 他の視聴者と一緒に踊りましょう<br>
+                                    2. チャットして話したり質問しましょう</h5>
+                            </div>
+                            <% } else { %>
                             <button id="temp_btn" class="btn btn-light" value="わからない！">わからない！</button>
                             <button id="temp_btn" class="btn btn-light" value="わかった！">わかった！</button>
                             <button id="temp_btn" class="btn btn-light" value="もう一回！">もう一回！</button>
@@ -150,6 +156,7 @@
                                 <input name="" id="chat_msg" placeholder="コメントする"></input>
                                 <button class="send_btn"><img src="/assets/img/send.png" alt=""></button>
                             </div>
+                            <% } %>
                         </div>
                     </div>
 

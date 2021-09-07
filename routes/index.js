@@ -10,6 +10,7 @@ const stripe = require("stripe")(process.env.stripekey);
 
 // get the config functions all at once
 const { ensureAuthenticated } = require("../config/auth");
+const { checkSession } = require("../config/session");
 const { sendMail } = require("../config/email");
 const { addCalendar } = require("../config/calendar");
 const { createChannel } = require('../config/aws/channel');
@@ -30,7 +31,7 @@ findTicket = function (id) {
 const storage = multer.memoryStorage()
 const upload = multer({ storage: storage });
 
-router.get("/", async (req, res) => res.render("landing"));
+router.get("/about", async (req, res) => res.render("landing"));
 router.get("/error", (req, res) => res.send("Login error"));
 
 router.get("/logout", (req, res) => {
@@ -44,7 +45,7 @@ router.get("/auth/google",
         scope: [
             "https://www.googleapis.com/auth/userinfo.profile",
             "https://www.googleapis.com/auth/userinfo.email",
-            "https://www.googleapis.com/auth/youtube.readonly",
+            // "https://www.googleapis.com/auth/youtube.readonly",
             "https://www.googleapis.com/auth/calendar.events",
         ],
     })
@@ -58,16 +59,16 @@ router.get("/auth/google/callback",
         User.findOne({ email: req.user._json.email }, (err, user) => {
             req.session.user = user
             req.flash("success_msg", res.__("msg.success.login"));
-            res.redirect("/dashboard/-1?page=1&limit=15");
+            res.redirect("/");
         })
     }
 );
 
-router.get("/dashboard/:sort", ensureAuthenticated, async (req, res) => {
-    Lesson.paginate({ choreographerID: { "$ne": req.session.user.googleId } }, {
+router.get("/", checkSession, async (req, res) => {
+    Lesson.paginate({}, {
         page: req.query.page,
         limit: req.query.limit,
-        sort: { time: req.params.sort },
+        sort: { time: -1 },
     }, async (err, lesson) => {
         const choreographer = [];
 
@@ -77,10 +78,7 @@ router.get("/dashboard/:sort", ensureAuthenticated, async (req, res) => {
         }
 
         res.render("dashboard", {
-            user: req.session.user,
-            userPhoto: req.session.user.userPhoto,
-            userPhotoDef: req.session.user.userPhotoDef,
-            username: req.session.user.username,
+            user: user,
             lesson: lesson,
             choreographer: choreographer,
             moment: moment,
@@ -88,11 +86,11 @@ router.get("/dashboard/:sort", ensureAuthenticated, async (req, res) => {
             currentPage: lesson.page,
             pageCount: lesson.pages,
             pages: paginate.getArrayPages(req)(3, lesson.pages, req.query.page),
-        });
+        })
     });
 });
 
-router.post("/dashboard", ensureAuthenticated, async (req, res) => {
+router.post("/", checkSession, async (req, res) => {
     const { language, level, genre, purpose, mood, search } = req.body;
     const searchQuery = new RegExp(escapeRegex(search), "gi");
     const query = {
@@ -112,10 +110,11 @@ router.post("/dashboard", ensureAuthenticated, async (req, res) => {
     Lesson.paginate(query, {
         page: req.query.page,
         limit: 100,
+        sort: { time: -1 }
     }, async (err, lesson) => {
         if (!lesson.docs.length) {
             req.flash("error_msg", res.__("msg.error.video"));
-            res.redirect("/dashboard/-1?page=1&limit=15");
+            res.redirect("/");
         } else {
             const choreographer = [];
             for (let i = 0; i < lesson.docs.length; i++) {
@@ -123,10 +122,7 @@ router.post("/dashboard", ensureAuthenticated, async (req, res) => {
             }
 
             res.render("results", {
-                user: req.session.user,
-                userPhoto: req.session.user.userPhoto,
-                userPhotoDef: req.session.user.userPhotoDef,
-                username: req.session.user.username,
+                user: user,
                 lesson: lesson,
                 choreographer: choreographer,
                 moment: moment,
@@ -138,19 +134,19 @@ router.post("/dashboard", ensureAuthenticated, async (req, res) => {
     });
 });
 
-router.get("/results", ensureAuthenticated, (req, res) => res.render("results"));
+router.get("/results", (req, res) => res.render("results"));
 
-router.get("/choreographer/:id", ensureAuthenticated, async (req, res) => {
+router.get("/choreographer/:id", checkSession, async (req, res) => {
     Lesson.paginate({ choreographerID: req.params.id }, {
         page: req.query.page,
         limit: req.query.limit,
+        sort: { time: -1 }
     }, async (err, lesson) => {
-        User.findOne({ googleId: req.params.id }, (err, user) => {
+        User.findOne({ googleId: req.params.id }, (err, choreo) => {
             res.render("choreographer", {
-                userPhoto: req.session.user.userPhoto,
-                userPhotoDef: req.session.user.userPhotoDef,
+                user: user,
                 count: lesson.length,
-                choreographer: user,
+                choreographer: choreo,
                 lesson: lesson,
                 moment: moment,
                 currentPage: lesson.page,
@@ -161,119 +157,102 @@ router.get("/choreographer/:id", ensureAuthenticated, async (req, res) => {
     });
 });
 
-// not yet
 router.get("/calendar", ensureAuthenticated, (req, res) => {
-    User.findOne({ email: req.user._json.email }, (err, user) => {
-        let time = encodeURIComponent(moment().format());
-        let summary = [];
-        let dateTime = [];
-        let id = [];
-        let idCal = [];
-        let run_status = [];
+    fetch(`https://www.googleapis.com/calendar/v3/calendars/${req.session.user.email}/events?orderBy=startTime&q=vibin&singleEvents=true&key=${process.env.API_key}`, {
+        headers: {
+            Authorization: `Bearer ${req.session.user.accessToken}`,
+        },
+    })
+        .then((response) => response.json())
+        .then(async (data) => {
+            if (data.items == undefined) {
+                req.flash("error_msg", res.__("msg.error.auth"));
+                res.redirect("/");
+            } else {
+                // for (i = 0; i < data.items.length; i++) {
+                //     summary[i] = data.items[i].summary
+                //     dateTime[i] = moment(data.items[i].start.dateTime).format('MMMM Do YYYY, h:mm a');
+                //     id[i] = data.items[i].description
+                //     idCal[i] = data.items[i].id
 
-        fetch(`https://www.googleapis.com/calendar/v3/calendars/${user.email}/events?orderBy=startTime&q=vibin&singleEvents=true&key=${process.env.API_key}`, {
-            headers: {
-                Authorization: `Bearer ${user.accessToken}`,
-            },
-        })
-            .then((response) => response.json())
-            .then(async (data) => {
-                if (data.items == undefined) {
-                    req.flash("error_msg", res.__("msg.error.auth"));
-                    res.redirect("/");
-                } else {
-                    for (i = 0; i < data.items.length; i++) {
-                        summary[i] = data.items[i].summary
-                        dateTime[i] = moment(data.items[i].start.dateTime).format('MMMM Do YYYY, h:mm a');
-                        id[i] = data.items[i].description
-                        idCal[i] = data.items[i].id
+                //     var s_date = new Date(data.items[i].start.dateTime).getTime();
+                //     var e_date = new Date(data.items[i].end.dateTime).getTime();
+                //     var c_date = new Date().getTime();
 
-                        var s_date = new Date(data.items[i].start.dateTime).getTime();
-                        var e_date = new Date(data.items[i].end.dateTime).getTime();
-                        var c_date = new Date().getTime();
+                //     if (s_date < c_date && e_date > c_date) {
+                //         run_status[i] = "( live now )"
+                //     } else {
+                //         run_status[i] = ""
+                //     }
+                // }
 
-                        if (s_date < c_date && e_date > c_date) {
-                            run_status[i] = "( live now )"
-                        } else {
-                            run_status[i] = ""
-                        }
+
+                const [tickets] = await Promise.all([findTicket(req.session.user.lesson)]);
+
+                const choreographer = [];
+                if (req.session.user.lesson) {
+                    for (let i = 0; i < req.session.user.lesson.length; i++) {
+                        choreographer[i] = await User.findOne({ googleId: tickets[i].choreographerID }, 'username').lean().exec();
                     }
-
-                    const tickets = [];
-                    const choreographer = [];
-                    const time2 = [];
-                    for (let i = 0; i < user.lesson.length; i++) {
-                        tickets[i] = await Lesson.findOne({ _id: user.lesson[i] }).lean().exec();
-                        if (tickets.length > 0) {
-                            choreographer[i] = await User.findOne({ googleId: tickets[i].choreographerID }).exec();
-                            time2[i] = moment(tickets[i].time).format('MM/DD HH:mm');
-                        }
-                    }
-
-                    res.render('calendar', {
-                        userPhoto: user.userPhoto,
-                        userPhotoDef: user.userPhotoDef,
-                        count: data.items.length,
-                        API_key: process.env.API_key,
-                        CALENDAR_ID: user.email,
-                        accessToken: user.accessToken,
-                        summary: summary,
-                        dateTime: dateTime,
-                        id: id,
-                        idCal: idCal,
-                        run_status: run_status,
-                        tickets: tickets,
-                        choreographer: choreographer,
-                        time2: time2,
-                    });
                 }
-            });
-    });
+
+                res.render('calendar', {
+                    user: req.session.user,
+                    userPhoto: req.session.user.userPhoto,
+                    userPhotoDef: req.session.user.userPhotoDef,
+                    moment: moment,
+                    API_key: process.env.API_key,
+                    CALENDAR_ID: req.session.user.email,
+                    tickets: tickets,
+                    choreographer: choreographer,
+                });
+            }
+        });
 });
 // not yet
-router.post("/calendar", ensureAuthenticated, (req, res) => {
-    User.findOne({
-        email: req.user._json.email,
-    },
-        (err, user) => {
-            const { idCal } = req.body;
+// router.post("/calendar", ensureAuthenticated, (req, res) => {
+//     User.findOne({
+//         email: req.user._json.email,
+//     },
+//         (err, user) => {
+//             const { idCal } = req.body;
 
-            let result = fetch(
-                `https://www.googleapis.com/calendar/v3/calendars/${user.email}/events/${idCal}?key=${process.env.API_key}`, {
-                method: "DELETE",
-                headers: {
-                    Authorization: `Bearer ${user.accessToken}`,
-                    Accept: "application/json",
-                },
-            }
-            );
+//             let result = fetch(
+//                 `https://www.googleapis.com/calendar/v3/calendars/${user.email}/events/${idCal}?key=${process.env.API_key}`, {
+//                 method: "DELETE",
+//                 headers: {
+//                     Authorization: `Bearer ${user.accessToken}`,
+//                     Accept: "application/json",
+//                 },
+//             }
+//             );
 
-            result.then(function (result) {
-                if (result.status == 404) {
-                    req.flash("error", res.__("msg.error.video"));
-                    res.redirect("/calendar");
-                } else if (result.status == 200 || 204) {
-                    req.flash("success_msg", res.__("msg.success.dance_del"));
-                    res.redirect("/calendar");
-                }
-            });
-        }
-    );
-});
+//             result.then(function (result) {
+//                 if (result.status == 404) {
+//                     req.flash("error", res.__("msg.error.video"));
+//                     res.redirect("/calendar");
+//                 } else if (result.status == 200 || 204) {
+//                     req.flash("success_msg", res.__("msg.success.dance_del"));
+//                     res.redirect("/calendar");
+//                 }
+//             });
+//         }
+//     );
+// });
 
-router.get("/reservation/:id", ensureAuthenticated, async (req, res) => {
+router.get("/reservation/:id", checkSession, async (req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.id }).lean().exec();
     const choreographer = await User.findOne({ googleId: lesson.choreographerID }).lean().exec();
 
-    if (req.session.user.lesson && req.session.user.lesson.includes(lesson._id.toString()) === true) {
+    if (moment().isAfter(lesson.time) && lesson.price === 0) {
+        res.redirect(`/lesson/student/${req.params.id}`)
+    } else if (user.lesson && user.lesson.includes(lesson._id.toString()) === true) {
         res.render('success', {
-            user: req.session.user,
+            user: user,
             params: req.params.id,
             lesson: lesson,
             choreographer: choreographer,
             moment: moment,
-            userPhoto: req.session.user.userPhoto,
-            userPhotoDef: req.session.user.userPhotoDef,
         })
     } else if (lesson.price === 0) {
         res.render('reservation', {
@@ -282,19 +261,9 @@ router.get("/reservation/:id", ensureAuthenticated, async (req, res) => {
             lesson: lesson,
             choreographer: choreographer,
             moment: moment,
-            userLesson: req.session.user.lesson,
-            userPhoto: req.session.user.userPhoto,
-            userPhotoDef: req.session.user.userPhotoDef,
+            user: user,
         })
     } else {
-        let price;
-
-        if (!req.session.user.lesson && lesson.price != 0) {
-            price = 0
-        } else {
-            price = lesson.price
-        }
-
         const host = req.get('host');
         const account = await stripe.accounts.retrieve(choreographer.stripeID);
         const session = await stripe.checkout.sessions.create({
@@ -305,7 +274,7 @@ router.get("/reservation/:id", ensureAuthenticated, async (req, res) => {
                 currency: "jpy",
                 quantity: 1,
             }],
-            customer_email: req.session.user.email,
+            customer_email: user.email,
             payment_intent_data: {
                 application_fee_amount: lesson.price * 0.2,
                 transfer_data: {
@@ -319,12 +288,9 @@ router.get("/reservation/:id", ensureAuthenticated, async (req, res) => {
         res.render("reservation", {
             id: session.id,
             lesson: lesson,
-            price: price,
             choreographer: choreographer,
             moment: moment,
-            userLesson: req.session.user.lesson,
-            userPhoto: req.session.user.userPhoto,
-            userPhotoDef: req.session.user.userPhotoDef,
+            user: user,
         });
     }
 });
@@ -343,7 +309,7 @@ router.get('/success/:id', ensureAuthenticated, async (req, res) => {
         console.log('already done')
         res.redirect(`/reservation/${req.params.id}`);
     } else if (lesson.price === 0 || (session != undefined && session.payment_status == 'paid')) {
-        User.findByIdAndUpdate(req.session.user._id, {$push: { lesson: lesson._id }}, { upsert: true, new: true, setDefaultsOnInsert: true },
+        User.findByIdAndUpdate(req.session.user._id, { $push: { lesson: lesson._id } }, { upsert: true, new: true, setDefaultsOnInsert: true },
             (err, user) => {
                 console.log(err || user);
                 console.log(session);

@@ -15,11 +15,11 @@
     <input type="hidden" name="ch_playTime" id="ch_playTime" value="">
     <input type="hidden" name="ch_arn" id="ch_arn" value="<%= ch_arn %>">
     <input type="hidden" name="username" id="username" value="<%= username %>">
-    <% if (typeof userPhotoDef != "undefined" ) { %>
-        <input type="hidden" name="userphotoDefData" id="userphotoDefData" value="<%= userPhotoDef.data.toString('base64')%>">
-        <input type="hidden" name="userphotoDefType" id="userphotoDefType" value="<%= userPhotoDef.contentType %>">
-    <% } else if (typeof userPhoto !="undefined" ) { %>
-        <input type="hidden" name="userphoto" id="userphoto" value="<%= userPhoto %>">
+    <% if (typeof user.userPhotoDef != "undefined" ) { %>
+        <input type="hidden" name="userphotoDefData" id="userphotoDefData" value="<%= user.userPhotoDef.data.toString('base64')%>">
+        <input type="hidden" name="userphotoDefType" id="userphotoDefType" value="<%= user.userPhotoDef.contentType %>">
+    <% } else if (typeof user.userPhoto !="undefined" ) { %>
+        <input type="hidden" name="userphoto" id="userphoto" value="<%= user.userPhoto %>">
     <% } %>
                 <input type="hidden" name="chat_room_id" id="chat_room_id" value="<%= ch_streamkey %>">
                 <div class="live_grid">

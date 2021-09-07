@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const moment = require('moment');
 const { ensureAuthenticated } = require('../config/auth');
+const { checkSession } = require("../config/session");
 const { createChannel, getRecording, deleteChannel } = require('../config/aws/channel');
 
 const User = require('../models/User');
@@ -81,13 +82,13 @@ router.get('/teacher/:lesson_id', ensureAuthenticated, async (req, res) => {
 
                 if (moment().isAfter(ls.time)) {
                     console.log('iz after bitch')
-                    // url = 
                     getRecording(req, res)
                 } else {
                     url = ch.playbackUrl
                 }
 
                 res.render('teacher', {
+                    user: req.session.user,
                     userPhoto: req.session.user.userPhoto,
                     userPhotoDef: req.session.user.userPhotoDef,
                     email: req.session.req.user._json.email,
@@ -109,12 +110,13 @@ router.get('/teacher/:lesson_id', ensureAuthenticated, async (req, res) => {
     }
 });
 
-router.get('/student/:lesson_id', ensureAuthenticated, async (req, res) => {
+router.get('/student/:lesson_id', checkSession, async (req, res) => {
     Lesson.findOne({ _id: req.params.lesson_id }, (err, ls) => {
         if (!ls) {
-            req.flash('error_msg', '選択したレッスンの期限が切れたか情報が正しくありません。');
+            req.flash('error_msg', '選択したレッスンの情報が正しくありません。');
             res.redirect('/users/profile');
-        } else if (!req.session.user.lesson || !req.session.user.lesson.includes(ls._id.toString())) {
+        } else if (ls.price != 0) {
+            // && !user.lesson.includes(ls._id.toString())
             req.flash('error_msg', '選択したレッスンは購入されていません');
             res.redirect(`/reservation/${req.params.lesson_id}`);
         } else {
@@ -126,10 +128,8 @@ router.get('/student/:lesson_id', ensureAuthenticated, async (req, res) => {
                     const choreographer = await User.findOne({ googleId: ls.choreographerID }).lean().exec();
                     ch_count = 1;
                     res.render('student', {
-                        userPhoto: req.session.user.userPhoto,
-                        userPhotoDef: req.session.user.userPhotoDef,
+                        user: user,
                         email: req.session.email,
-                        username: req.session.user.username,
                         choreographer: choreographer,
                         teacherPhoto: choreographer.userPhoto,
                         teacherPhotoDef: choreographer.userPhotoDef,
