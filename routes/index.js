@@ -254,7 +254,7 @@ router.get("/reservation/:id", checkSession, async (req, res) => {
             choreographer: choreographer,
             moment: moment,
         })
-    } else if (lesson.price === 0) {
+    } else if (lesson.price === 0 || !req.session.user) {
         res.render('reservation', {
             id: undefined,
             params: req.params.id,
@@ -340,10 +340,8 @@ router.get('/success/:id', ensureAuthenticated, async (req, res) => {
 
 router.get("/create", ensureAuthenticated, async (req, res) => {
     let render = {
+        user: req.session.user,
         choreographer: req.session.user.username,
-        userPhoto: req.session.user.userPhoto,
-        userPhotoDef: req.session.user.userPhotoDef,
-        CLIENT_id: process.env.ZOOM_CLIENT_ID,
     };
 
     const host = req.get('host');
@@ -373,10 +371,9 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
     let loginLink;
     const host = req.get('host');
 
-    if (user.stripeID == undefined) {
+    if (req.session.user.stripeID == undefined) {
         try {
             const account = await stripe.accounts.create({ type: "express" });
-            console.log(account)
             const loginLink = await stripe.accountLinks.create({
                 account: account.id,
                 refresh_url: `https://${host}/create`,
@@ -396,8 +393,8 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
             });
         }
     } else {
-        account = await stripe.accounts.retrieve(user.stripeID);
-        loginLink = await stripe.accounts.createLoginLink(user.stripeID);
+        account = await stripe.accounts.retrieve(req.session.user.stripeID);
+        loginLink = await stripe.accounts.createLoginLink(req.session.user.stripeID);
     }
 
     if (title == "" || req.file == undefined || language == "" || time == "" || price == "" || level == undefined || genre == undefined || purpose == undefined || mood == undefined) {
@@ -415,11 +412,11 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
             errors,
             account: account,
             loginLink: loginLink,
-            userPhoto: user.userPhoto,
-            userPhotoDef: user.userPhotoDef,
+            userPhoto: req.session.user.userPhoto,
+            userPhotoDef: req.session.user.userPhotoDef,
             title,
             language,
-            choreographer: user.username,
+            choreographer: req.session.user.username,
             price,
             level,
             genre,
