@@ -254,7 +254,7 @@ router.get("/reservation/:id", checkSession, async (req, res) => {
             choreographer: choreographer,
             moment: moment,
         })
-    } else if (lesson.price === 0) {
+    } else if (lesson.price === 0 || !req.session.user) {
         res.render('reservation', {
             id: undefined,
             params: req.params.id,
@@ -339,44 +339,34 @@ router.get('/success/:id', ensureAuthenticated, async (req, res) => {
 })
 
 router.get("/create", ensureAuthenticated, async (req, res) => {
-    let render = {
-        choreographer: req.session.user.username,
-        userPhoto: req.session.user.userPhoto,
-        userPhotoDef: req.session.user.userPhotoDef,
-        CLIENT_id: process.env.ZOOM_CLIENT_ID,
-    };
-
     const host = req.get('host');
+    let render = {
+        user: req.session.user,
+        choreographer: req.session.user.username,
+    };
 
     if (req.session.user.stripeID) {
         const account = await stripe.accounts.retrieve(req.session.user.stripeID);
-        const loginLink = await stripe.accountLinks.create({
-            account: account.id,
-            refresh_url: `https://${host}/create`,
-            return_url: `https://${host}/create`,
-            type: "account_onboarding",
-        });
+        let loginLink;
+
+        if (account.external_accounts.data.length === 0) {
+            loginLink = await stripe.accountLinks.create({
+                account: account.id,
+                refresh_url: `https://${host}/create`,
+                return_url: `https://${host}/create`,
+                type: "account_onboarding",
+            });
+        } else {
+            console.log(account.external_accounts)
+            loginLink = await stripe.accounts.createLoginLink(account.id);
+        }
 
         render.account = account;
         render.loginLink = loginLink;
-    }
-    res.render("create", render);
-});
 
-// not yet
-router.post("/create", upload.single('thumbnail'), async (req, res) => {
-    const { title, language, time, price, level, genre, purpose, mood } = req.body;
-    const user = await User.findOne({ email: req.user._json.email }).lean().exec();
-    const choreographerID = user.googleId;
-    let errors = [];
-    let account;
-    let loginLink;
-    const host = req.get('host');
-
-    if (user.stripeID == undefined) {
+    } else if (!req.session.user.stripeID) {
         try {
             const account = await stripe.accounts.create({ type: "express" });
-            console.log(account)
             const loginLink = await stripe.accountLinks.create({
                 account: account.id,
                 refresh_url: `https://${host}/create`,
@@ -389,16 +379,41 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
                     console.log(err || user);
                     req.session.user = user;
                 });
-            res.redirect(loginLink.url);
+            render.loginLink = loginLink;
         } catch (err) {
             res.status(500).send({
                 error: err.message,
             });
         }
-    } else {
-        account = await stripe.accounts.retrieve(user.stripeID);
-        loginLink = await stripe.accounts.createLoginLink(user.stripeID);
     }
+
+    res.render("create", render);
+});
+
+router.post("/create", upload.single('thumbnail'), async (req, res) => {
+    const { title, language, time, price, level, genre, purpose, mood } = req.body;
+    const user = await User.findOne({ email: req.user._json.email }).lean().exec();
+    const choreographerID = user.googleId;
+    const host = req.get('host');
+    let errors = [];
+    let loginLink;
+
+    const account = await stripe.accounts.retrieve(req.session.user.stripeID);
+
+    if (account.external_accounts.data.length === 0) {
+        loginLink = await stripe.accountLinks.create({
+            account: account.id,
+            refresh_url: `https://${host}/create`,
+            return_url: `https://${host}/create`,
+            type: "account_onboarding",
+        });
+    } else {
+        loginLink = await stripe.accounts.createLoginLink(account.id);
+    }
+
+    if (account.external_accounts.data.length === 0) {
+        errors.push({ msg: res.__("銀行口座の情報を設定してください。") });
+    } 
 
     if (title == "" || req.file == undefined || language == "" || time == "" || price == "" || level == undefined || genre == undefined || purpose == undefined || mood == undefined) {
         errors.push({ msg: res.__("msg.error.fill") });
@@ -415,11 +430,10 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
             errors,
             account: account,
             loginLink: loginLink,
-            userPhoto: user.userPhoto,
-            userPhotoDef: user.userPhotoDef,
+            user: req.session.user,
             title,
             language,
-            choreographer: user.username,
+            choreographer: req.session.user.username,
             price,
             level,
             genre,

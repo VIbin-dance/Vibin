@@ -115,7 +115,7 @@ router.get('/student/:lesson_id', checkSession, async (req, res) => {
         if (!ls) {
             req.flash('error_msg', '選択したレッスンの情報が正しくありません。');
             res.redirect('/users/profile');
-        } else if (ls.price != 0) {
+        } else if (ls.price != 0 && !req.session.user.lesson.includes(ls._id.toString())) {
             // && !user.lesson.includes(ls._id.toString())
             req.flash('error_msg', '選択したレッスンは購入されていません');
             res.redirect(`/reservation/${req.params.lesson_id}`);

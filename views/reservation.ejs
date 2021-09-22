@@ -6,7 +6,7 @@
             <div class="blog-post">
                 <div class="card-deck">
                     <% if (!user.lesson && lesson.price != 0) { %>
-                        <h3>今なら初回無料！<%= lesson.price %><%= __('dashboard.Yen') %>が0<%= __('dashboard.Yen') %>で！</h3>
+                        <!-- <h3>今なら初回無料！<%= lesson.price %><%= __('dashboard.Yen') %>が0<%= __('dashboard.Yen') %>で！</h3> -->
                     <% } %>
                     <div class="card mb-3" style="min-width: 47vh; max-width: 80vh; margin-top: 30px;">
                         <a href="#">
@@ -17,7 +17,7 @@
                 </div>
             </div>
         </div>
-        
+
         <aside class="col-md-5 blog-sidebar">
             <div class="p-3">
                 <h1>
@@ -42,25 +42,23 @@
             <div class="p-3 mb-3 bg-light rounded">
                 <div class="text-center">
                     <h4><%= __('reservation.choreo') %></h4>
+                    <a href="/choreographer/<%= choreographer.googleId %>" style="font-size: 22px;">
                     <% if (typeof choreographer.userPhotoDef !="undefined" ) { %>
                     <img src="data:image/<%= choreographer.userPhotoDef.contentType%>;base64, <%= choreographer.userPhotoDef.data.toString('base64')%>"
                                 height="100" width="100" style="border-radius: 50%;" alt="user photo">
                     <% } else { %>
                     <img src="<%= choreographer.userPhoto %>" height="60" width="60" style="border-radius: 50%;" alt="user photo">
                     <% } %>
-                </div>         
-                <div class="text-center">
-                <a href="/choreographer/<%= choreographer.googleId %>" style="font-size: 22px;"><%= choreographer.username %></a>
+                    <br><%= choreographer.username %></a>
+                    <br><h5 style="white-space:pre-wrap;"><%= choreographer.bio %></h5>
+                    <p class="mb-0"><%= __('reservation.contact') %>: <a href="mailto:<%= choreographer.email %>"><%= choreographer.email %></a></p>
                 </div>
-                <br><h5 style="white-space:pre-wrap;"><%= choreographer.bio %></h5>
-                <p class="mb-0"><%= __('reservation.contact') %>: <a href="mailto:<%= choreographer.email %>"><%= choreographer.email %></a></p>
-            </div>
         </aside>
     </div>
 </main>
 
 <script>
-    const stripe = Stripe('pk_live_51Hfnh4BHyna8CK9qeNlkE0iiyVzlUsRVjFMXyhWXDQWQDQoQEERKXlXRty3zM4dRL9DmZAUJ1CSkr4ECbXnO5LeA004BRIZMIT');
+    const stripe = Stripe('pk_test_51JZFVIAJfw8ehZPn4THHWQQVVCz8QuXDFhhX627qPpQnHqOXHznTqnQaHQTBZJKwiJZy1D8sd5ZoUh0k6lB3Z2Uz00OhpsdamX');
     const checkoutButton = document.getElementById('checkout-button');
 
     checkoutButton.addEventListener('click', () => {

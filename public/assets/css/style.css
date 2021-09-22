@@ -1832,24 +1832,45 @@ section {
     .results .box,
     .follow .box {
         margin-top: 0px;
+        box-shadow: 0px 0px 0px rgba(255, 255, 255, 0);
     }
     .results .box h4,
     .follow .box h4 {
-        font-size: 18px;
-        margin-left: 10px;
+        font-size: 14px;
+        margin: 0px 10px;
+        margin-top: 10px;
     }
     .results .box p,
     .follow .box p {
-        font-size: 14px;
-        margin: 10px;
+        font-size: 12px;
+        margin: 0px 10px;
+        margin-bottom: 15px;
     }
     .results .box .special,
     .follow .box .special {
-        font-size: 14px;
-        margin: 10px;
+        font-size: 12px;
+        margin: 0px 10px;
     }
     .pad {
         padding: 0;
+    }
+    .results .box:hover {
+        background: none;
+        padding: 0px;
+        box-shadow: 0px 0px 0px rgba(255, 255, 255, 0);
+    }
+
+    .results .box:hover h4 {
+        color: #545454;
+    }
+
+    .results .box:hover a {
+        color: #686868;
+    }
+
+    .results .box:hover p,
+    .results .box:hover span {
+        color: #aaaaaa;
     }
 }
 

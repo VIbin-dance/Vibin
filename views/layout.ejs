@@ -8,31 +8,24 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
     <title>Vibin'</title>
-    <meta name="keywords" content="Dance">
+    <meta name="keywords" content="オンラインダンス　ダンス">
     <meta name="description"
-        content="Vibin' is an online dancing platform providing efficient searching system for Youtube videos with simple user interface.">
+        content="Vibin'は誰でも簡単に使えるオンラインダンスプラットフォームです">
     <meta name="author" content="Vibin'">
 
     <!-- Favicons -->
     <link href="/assets/img/favicon.png" rel="icon">
     <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
-    <!-- Vendor CSS Files -->
-    <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/assets/vendor/boxicons/css/boxicons.css" rel="stylesheet">
-
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <script src="https://apis.google.com/js/api.js" async defer></script>
-
     <!-- Video.js base CSS -->
     <!-- City -->
-    <link href="https://unpkg.com/@videojs/themes@1/dist/city/index.css" rel="stylesheet">
+    <!-- <link href="https://unpkg.com/@videojs/themes@1/dist/city/index.css" rel="stylesheet"> -->
     <!-- Fantasy -->
-    <link href="https://unpkg.com/@videojs/themes@1/dist/fantasy/index.css" rel="stylesheet">
+    <!-- <link href="https://unpkg.com/@videojs/themes@1/dist/fantasy/index.css" rel="stylesheet"> -->
     <!-- Forest -->
-    <link href="https://unpkg.com/@videojs/themes@1/dist/forest/index.css" rel="stylesheet">
+    <!-- <link href="https://unpkg.com/@videojs/themes@1/dist/forest/index.css" rel="stylesheet"> -->
     <!-- Sea -->
-    <link href="https://unpkg.com/@videojs/themes@1/dist/sea/index.css" rel="stylesheet">
+    <!-- <link href="https://unpkg.com/@videojs/themes@1/dist/sea/index.css" rel="stylesheet"> -->
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171652786-1"></script>
@@ -49,7 +42,9 @@
     <div>
         <%- body %>
     </div>
-
+    <!-- Vendor CSS Files -->
+    <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/vendor/boxicons/css/boxicons.css" rel="stylesheet">
     <!-- Template Main CSS File -->
     <link href="/assets/css/style.css" rel="stylesheet">
     <link href="/assets/css/style_live.css" rel="stylesheet">
@@ -59,17 +54,18 @@
         href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
         rel="stylesheet">
 
-    <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
-    <script src="/assets/vendor/jquery/jquery.min.js"></script>
+    <!-- <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script> -->
+    <script defer src="https://apis.google.com/js/platform.js"></script>
+    <script defer src="https://apis.google.com/js/api.js"></script>
+    <script defer src="/assets/vendor/jquery/jquery.min.js"></script>
     <!-- Template Main JS File -->
-    <script src="/assets/js/main.js"></script>
+    <script defer src="/assets/js/main.js"></script>
 
     <% if (typeof user.userPhoto == "undefined" ) { %>
         <header id="header" class="fixed-top">
             <div class="container d-flex align-items-center justify-content-between">
                 <h1 class="logo"><a href="/">Vibin'</a></h1>
                     <div>
-                        <!-- <a href="/users/register" class="get-started-btn scrollto"><%= __('header.Register') %></a> -->
                         <a href="/users/login" class="get-started-btn scrollto">
                             <svg xmlns="http://www.w3.org/2000/svg" width="2.0em" height="2.0em" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
                                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>

@@ -1,10 +1,7 @@
-<body>
-    <link rel="canonical" href="https://www.vibin.tokyo/dashboard/-1?page=1&limit=15">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
     <section id="searchBar" class="searchBar">
         <div class="search-bar">
             <form action="/" method="POST">
-                <h4 class="user">現在このサービスはベータテスト段階です。不具合や問題が発生した場合、info@vibin.tokyoまでご連絡ください。</h4>
+                <!-- <h4 class="user">現在このサービスはベータテスト段階です。不具合や問題が発生した場合、info@vibin.tokyoまでご連絡ください。</h4> -->
                 <h2 class="user">
                     <%= __('dashboard.welcome.welcome') %>
                     <% if (user != undefined) { %>
@@ -165,24 +162,22 @@
                                 <div class="col-lg-3 col-xs-6">
                                     <div class="box">
                                         <a href="/reservation/<%= lesson.docs[i].id %>">
-                                        <img src="data:image/<%=lesson.docs[i].thumbnail.contentType%>;base64, <%=lesson.docs[i].thumbnail.data.toString('base64')%>" alt="thumbnail">
-                                    </a>
+                                            <img src="data:image/<%=lesson.docs[i].thumbnail.contentType%>;base64, <%=lesson.docs[i].thumbnail.data.toString('base64')%>" alt="thumbnail">
+                                        </a>
                                         <h4 id="title<%= i %>">
                                             <%= lesson.docs[i].title %>
                                         </h4>
-                                        <a class="special" href="/choreographer/<%= lesson.docs[i].choreographerID %>">
-                                            <%= choreographer[i].username %>
-                                        </a>
                                         <p>
+                                            <a class="special" href="/choreographer/<%= lesson.docs[i].choreographerID %>">
+                                                <%= choreographer[i].username %>
+                                            </a>
+                                            <a href="/reservation/<%= lesson.docs[i].id %>">
                                             <%= lesson.docs[i].price %>
-                                                <%= __('dashboard.Yen') %> |
-                                                    <%= moment(lesson.docs[i].time).format('MM/DD HH:mm'); %>
-                                        </p>
-                                        <p class="mb-0">
+                                            <%= __('dashboard.Yen') %> |
+                                            <%= moment(lesson.docs[i].time).format('MM/DD HH:mm'); %> |
                                             <%= __(`dashboard.search.level.${lesson.docs[i].level[0]}`) %> |
-                                                <%= __(`dashboard.search.genre.${lesson.docs[i].genre[0]}`) %> |
-                                                    <%= __(`dashboard.search.purpose.${lesson.docs[i].purpose[0]}`) %> |
-                                                        <%= __(`dashboard.search.mood.${lesson.docs[i].mood[0]}`) %>
+                                            <%= __(`dashboard.search.genre.${lesson.docs[i].genre[0]}`) %>
+                                            </a>
                                         </p>
                                     </div>
                                 </div>
@@ -213,14 +208,10 @@
                                             </a>
                                             <p>
                                                 <%= lesson.docs[i].price %>
-                                                    <%= __('dashboard.Yen') %> |
-                                                        <%= moment(lesson.docs[i].time).format('MM/DD HH:mm'); %>
-                                            </p>
-                                            <p class="mb-0">
+                                                <%= __('dashboard.Yen') %> |
+                                                <%= moment(lesson.docs[i].time).format('MM/DD HH:mm'); %> |
                                                 <%= __(`dashboard.search.level.${lesson.docs[i].level[0]}`) %> |
-                                                    <%= __(`dashboard.search.genre.${lesson.docs[i].genre[0]}`) %> |
-                                                        <%= __(`dashboard.search.purpose.${lesson.docs[i].purpose[0]}`) %> |
-                                                            <%= __(`dashboard.search.mood.${lesson.docs[i].mood[0]}`) %>
+                                                <%= __(`dashboard.search.genre.${lesson.docs[i].genre[0]}`) %>
                                             </p>
                                         </div>
                                     </div>
@@ -273,7 +264,7 @@
                     </div>
                     </div>
                     </section>
-</body>
+
 <script>
     function charCut() {
         for (let i = 0; i < 15; i++) {
