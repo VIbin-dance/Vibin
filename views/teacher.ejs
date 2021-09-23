@@ -14,7 +14,7 @@
     <input type="hidden" name="ch_playurl" id="ch_playurl" value="https://aws-us-east-1-401352423179-vibin-pipe.s3.amazonaws.com/ivs/v1/401352423179/4zWzBxMdwzHB/2021/7/9/9/48/emNVbuQBAFFw/media/hls/720p30/playlist.m3u8">
     <input type="hidden" name="ch_playTime" id="ch_playTime" value="">
     <input type="hidden" name="ch_arn" id="ch_arn" value="<%= ch_arn %>">
-    <input type="hidden" name="username" id="username" value="<%= username %>">
+    <input type="hidden" name="username" id="username" value="<%= user.username %>">
     <% if (typeof user.userPhotoDef != "undefined" ) { %>
         <input type="hidden" name="userphotoDefData" id="userphotoDefData" value="<%= user.userPhotoDef.data.toString('base64')%>">
         <input type="hidden" name="userphotoDefType" id="userphotoDefType" value="<%= user.userPhotoDef.contentType %>">
@@ -44,11 +44,11 @@
                                         <div class="outline"></div>
                                         <div class="inner_img">
                                             <figure>
-                                                <% if (typeof userPhotoDef !="undefined" ) { %>
-                                                    <img src="data:image/<%=userPhotoDef.contentType%>;base64, <%=userPhotoDef.data.toString('base64')%>" alt="user photo">
-                                                    <% } else if (typeof userPhoto !="undefined" ) { %>
-                                                        <img src="<%= userPhoto %>" alt="user photo">
-                                                        <% } %>
+                                                <% if (typeof user.userPhotoDef !="undefined" ) { %>
+                                                <img src="data:image/<%=user.userPhotoDef.contentType%>;base64, <%=user.userPhotoDef.data.toString('base64')%>" alt="user photo">
+                                                <% } else if (typeof user.userPhoto !="undefined" ) { %>
+                                                <img src="<%= user.userPhoto %>" alt="user photo">
+                                                <% } %>
                                             </figure>
                                         </div>
                                     </a>
@@ -57,7 +57,7 @@
                                             <%= ch_name %>
                                         </p>
                                         <p class="level">先生 :
-                                            <%= username %>
+                                            <%= user.username %>
                                         </p>
                                     </div>
                                 </div>

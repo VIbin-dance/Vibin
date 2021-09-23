@@ -77,28 +77,20 @@ router.get('/teacher/:lesson_id', ensureAuthenticated, async (req, res) => {
                 req.flash('error_msg', '現在所有しているチャンネルがありません。');
                 res.redirect('/lesson/channel');
             } else {
-                ch_count = 1;
+                // ch_count = 1;
                 // let url;
 
-                if (moment().isAfter(ls.time)) {
-                    console.log('iz after bitch')
-                    getRecording(req, res)
-                } else {
-                    url = ch.playbackUrl
-                }
+                // if (moment().isAfter(ls.time)) {
+                //     console.log('iz after bitch')
+                //     getRecording(req, res)
+                // } else {
+                //     url = ch.playbackUrl
+                // }
 
                 res.render('teacher', {
                     user: req.session.user,
-                    userPhoto: req.session.user.userPhoto,
-                    userPhotoDef: req.session.user.userPhotoDef,
-                    email: req.session.req.user._json.email,
-                    username: req.session.user.username,
-                    count: ch_count,
                     ch_name: ls.title,
-                    ch_latency: ch.latencyMode,
-                    ch_type: ch.type,
                     ch_arn: ch.arn,
-                    ch_ingest: "rtmps://" + ch.ingestEndpoint + ":443/app/",
                     ch_streamkey: ch.streamKey.value,
                     ch_playURL: ch.playbackUrl
                 })
@@ -117,24 +109,21 @@ router.get('/student/:lesson_id', checkSession, async (req, res) => {
             res.redirect('/users/profile');
         } else if (ls.price != 0 && !req.session.user.lesson.includes(ls._id.toString())) {
             // && !user.lesson.includes(ls._id.toString())
-            req.flash('error_msg', '選択したレッスンは購入されていません');
+            req.flash('error_msg', '選択したレッスンは購入されていません。');
             res.redirect(`/reservation/${req.params.lesson_id}`);
         } else {
             Channel.findOne({ googleId: ls.choreographerID }, async (err, ch) => {
                 if (!ch) {
-                    req.flash('error_msg', '現在所有しているチャンネルがありません。');
+                    req.flash('error_msg', '先生側の配信に何か問題が起きました。');
                     res.redirect('/users/profile');
                 } else {
                     const choreographer = await User.findOne({ googleId: ls.choreographerID }).lean().exec();
-                    ch_count = 1;
                     res.render('student', {
-                        user: user,
-                        email: req.session.email,
+                        user: req.session.user,
                         choreographer: choreographer,
                         teacherPhoto: choreographer.userPhoto,
                         teacherPhotoDef: choreographer.userPhotoDef,
                         lesson: ls,
-                        count: ch_count,
                         ch_name: ls.title,
                         ch_arn: ch.arn,
                         ch_streamkey: ch.streamKey.value,
