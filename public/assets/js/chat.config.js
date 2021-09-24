@@ -6,8 +6,6 @@
         stopTime = 0;
     let cur_startTime = Math.floor(Date.now() / 1000);
     const live_time = document.querySelector(".live_time");
-    // const ch_playTime = document.querySelector("#ch_playTime");
-    // TimeHolder = Date.now() - ch_playTime.value;
 
     function resetTimer() {
         TimeHolder = 0;
@@ -46,25 +44,14 @@
 
 
     update_time();
-    // })();
-
-
-    // Initialize LiveChat
-    // (function () {
-    // 'use strict';
 
     const socket = io();
     const chat_room_id = document.querySelector("#chat_room_id");
     const channel_arn = document.querySelector("#ch_arn");
-    const user_name = document.querySelector("#username");
+    const user_name = document.querySelector("#username").value;
     const user_photo = document.querySelector("#userphoto");
-    let user_photoDefData;
-    let user_photoDefType;
-
-    if (typeof user_photoDefData != "undefined") {
-        user_photoDefData = document.getElementById("userphotoDefData").value
-        user_photoDefType = document.getElementById("userphotoDefType").value
-    }
+    const userphotoDefData = document.getElementById("userphotoDefData").value;
+    const userphotoDefType = document.getElementById("userphotoDefType").value;
 
     const chat_wrap = document.querySelector(".message_wrap");
     const chat_list = document.querySelector(".message_list");
@@ -91,8 +78,6 @@
                 const { live_time } = data;
                 display_times(live_time);
             });
-        } else {
-            // console.log("chat Room don't open...")
         }
     });
 
@@ -109,17 +94,13 @@
             stopTime = 1;
             TimeHolder = cur_startTime - param;
         }
-        // console.log("stopTime ", stopTime);
     }
-
-
 
     // temp_btn.addEventListener('click', () => {
         // if (temp_btn.value.length > 0 && temp_btn.value.trim()) {
         //     const chat_msg = temp_btn
         //     sendMsg(chat_msg);
         // } else {
-    //         // console.log('message is empty...')
     //     }
     // })
 
@@ -138,8 +119,6 @@
             sendMsg(chat_msg);
             chat_msg.value = '';
             chat_msg.focus();
-        } else {
-            // console.log('message is empty...')
         }
     })
 
@@ -150,8 +129,6 @@
                 sendMsg(chat_msg);
                 chat_msg.value = '';
                 chat_msg.focus();
-            } else {
-                // console.log('message is empty...')
             }
         }
     })
@@ -161,17 +138,16 @@
         let convert_msg = chat_msg.value.replace(/\n/g, "<br>");
         let src;
 
-        console.log(user_name, user_photo, user_photoDefData, user_photoDefType);
-
-        if (typeof user_photoDefData != "undefined") {
-            src = `data:image/${user_photoDefType};base64, ${user_photoDefData}`
-        } else if (typeof user_photo != "undefined") {
-            src = `${user_photo.value}`
+        if (typeof userphotoDefData != "undefined") {
+            src = `data:image/${userphotoDefType};base64, ${userphotoDefData}`
+        } else {
+            src = `${user_photo}`
+            console.log(user_photo);
         }
 
         console.log("sendmsg");
         const param_message = {
-            user_name: user_name.value,
+            user_name: user_name,
             user_photo: src,
             chat_msg: convert_msg
         }
@@ -180,19 +156,16 @@
 
     // receive Message
     socket.on("client_message", (data) => {
-        const { user_name, user_photo, user_photoDef, chat_msg, chat_time } = data;
+        const { user_name, user_photo, userphotoDefType, userphotoDefData, chat_msg, chat_time } = data;
         const li = document.createElement("li");
         let src;
 
-        if (typeof user_photoDef != "undefined") {
-            src = `data:image/${user_photoDef.contentType};base64, ${data}`
-        } else if (typeof user_photo != "undefined") {
-            src = `${user_photo}`
+        if (typeof userphotoDefData != "undefined") {
+            src = `data:image/${userphotoDefType};base64, ${userphotoDefData}`
         } else {
-            src = "https://img.icons8.com/pastel-glyph/2x/person-male.png"
+            console.log(user_photo);
+            src = `${user_photo}`
         }
-
-        console.log(user_name, user_photo, user_photoDefData, user_photoDefType);
 
         console.log("client_msg");
         li.innerHTML = `<figure class="avatar">

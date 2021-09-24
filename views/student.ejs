@@ -14,12 +14,17 @@
     <input type="hidden" name="ch_playurl" id="ch_playurl" value="<%= ch_playURL %>">
     <input type="hidden" name="ch_playTime" id="ch_playTime" value="">
     <input type="hidden" name="ch_arn" id="ch_arn" value="<%= ch_arn %>">
-    <input type="hidden" name="username" id="username" value="<%= user.username %>">
+    <% if (typeof user.username != "undefined" ) { %>
+        <input type="hidden" name="username" id="username" value="<%= user.username %>">
+    <% } else { %>
+        <input type="hidden" name="username" id="username" value="empty">
+    <% } %>
+
     <% if (typeof user.userPhotoDef != "undefined" ) { %>
         <input type="hidden" name="userphotoDefData" id="userphotoDefData" value="<%= user.userPhotoDef.data.toString('base64')%>">
         <input type="hidden" name="userphotoDefType" id="userphotoDefType" value="<%= user.userPhotoDef.contentType %>">
-    <% } else if (typeof user.userPhoto !="undefined" ) { %>
-        <input type="hidden" name="userphoto" id="userphoto" value="<%= user.userPhoto %>">
+    <% } else { %>
+        <input type="" name="userphoto" id="userphoto" value="<%= user.userPhoto %>">
     <% } %>
                 <input type="hidden" name="chat_room_id" id="chat_room_id" value="<%= ch_streamkey %>">
                 <div class="live_grid">
@@ -147,6 +152,8 @@
                                     1. 他の視聴者と一緒に踊りましょう<br>
                                     2. チャットして話したり質問しましょう</h5>
                             </div>
+                            <p id="chat_msg"></p>
+                            <p class="send_btn"></p>
                             <% } else { %>
                             <button id="temp_btn" class="btn btn-light" value="わからない！">わからない！</button>
                             <button id="temp_btn" class="btn btn-light" value="わかった！">わかった！</button>

@@ -119,7 +119,7 @@ router.get('/student/:lesson_id', checkSession, async (req, res) => {
                 } else {
                     const choreographer = await User.findOne({ googleId: ls.choreographerID }).lean().exec();
                     res.render('student', {
-                        user: req.session.user,
+                        user: user,
                         choreographer: choreographer,
                         teacherPhoto: choreographer.userPhoto,
                         teacherPhotoDef: choreographer.userPhotoDef,
