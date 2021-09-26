@@ -165,10 +165,10 @@
 
     const li = document.createElement("li");
     li.innerHTML = `<figure class="avatar">
-                            <img src="${user_photo}" alt="">
-                            <p style="font-size:12px; text-align: center;">${user_name}</p>
-                        </figure>
-                        <div class="message">${chat_msg}<span class="time">${chat_time}</span></div>`;
+                        <img src="${user_photo}" alt="">
+                        <p>${user_name}</p>
+                    </figure>
+                    <div class="message">${chat_msg}<span class="time">${chat_time}</span></div>`;
     chat_list.appendChild(li);
     chat_wrap.scrollTo(0, chat_wrap.scrollHeight);
   });
