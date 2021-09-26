@@ -4,6 +4,7 @@
     <div class="container">
         <%- include ('partials/messages') %>
             <p class="block_label">チャンネル一覧</p>
+            <p>詳しいOBSの使用方法の説明は<a href="https://vibin.notion.site/OBS-ec51a2f21ae2460280870017a1b38a06" target="blank">こちら</a></p>
             <form action="/lesson/delete_channel" method="post">
                 <% if (count !=0) { %>
                     <div class="channel_infor">
@@ -29,7 +30,7 @@
             </form>
 
             <% if (count==0) { %>
-                <p class="block_label">チャンネル設定</p>
+                <!-- <p class="block_label">チャンネル設定</p> -->
                 <div class="channel_box">
                     <form action="/lesson/create_channel" method="post">
                         <p class="desc">新規チャンネルを登録するには「チャンネル新規作成」ボタンをクリックしてください。</p>

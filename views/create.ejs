@@ -3,13 +3,14 @@
 <div class="top-space"></div>
 <div class="col-lg-8 m-auto">
     <h1 class="text-center mb-3"><i class="fas fa-user-plus"></i><%= __('create.create') %></h1>
+    <p class="text-center mb-3">詳しい作成方法の説明は<a href="https://vibin.notion.site/66792233892f49cfa4e5b198c93fec1a" target="blank">こちら</a></p>
     <%- include ('partials/messages') %>
 
         <% if (typeof account == "undefined" || account.external_accounts.data.length === 0) { %>
             <div class="card">
                 <div class="card-body">
                     <p>レッスンを作成するには、口座設定を完了してください。下のボタンから設定をしてください</p>
-                    <a class="btn btn-danger" href="<%= loginLink.url %>" target="_blank" role="button"><%= __('create.stripe') %></a>
+                    <a class="btn btn-danger" href="<%= loginLink.url %>" target="_blank" role="button">Stripeで口座の設定をする</a>
                 </div>
             </div>
         <% } else if (typeof account != "undefined"  && account.external_accounts.data.length != 0) { %>

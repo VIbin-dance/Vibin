@@ -1695,6 +1695,10 @@ section {
     #footer .social-links {
         padding-left: 20px;
     }
+    #footer .footer-top {
+        padding: 0px 0 30px 0;
+        background: #fff;
+    }
 }
 
 
@@ -2031,6 +2035,8 @@ section {
 
 .navbar {
     visibility: hidden;
+    margin:0;
+    padding: 3px;
 }
 
 @media (max-width: 1023px) {
