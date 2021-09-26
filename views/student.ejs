@@ -24,8 +24,12 @@
         <input type="hidden" name="userphotoDefData" id="userphotoDefData" value="<%= user.userPhotoDef.data.toString('base64')%>">
         <input type="hidden" name="userphotoDefType" id="userphotoDefType" value="<%= user.userPhotoDef.contentType %>">
     <% } else { %>
-        <input type="" name="userphoto" id="userphoto" value="<%= user.userPhoto %>">
+        <input type="hidden" name="userphotoDefData" id="userphotoDefData" value="undefined">
+        <input type="hidden" name="userphotoDefType" id="userphotoDefType" value="undefined">
     <% } %>
+
+    <input type="hidden" name="userphoto" id="userphoto" value="<%= user.userPhoto %>">
+    
                 <input type="hidden" name="chat_room_id" id="chat_room_id" value="<%= ch_streamkey %>">
                 <div class="live_grid">
                     <div class="video_grid ">
@@ -152,14 +156,14 @@
                                 <ul class="message_list"></ul>
                             </div>
                             <% if (!user._id) { %>
-                            <div class="text-center" style="margin:20p;">
-                                <h5>チャットしたいですか？<br>
+                            <div class="text-center" style="padding:15px;">
+                                <h6>チャットしたいですか？<br>
                                     <a href="/users/login">ログイン</a>してリアルタイムのレッスンに参加しましょう。<br>
                                     1. 他の視聴者と一緒に踊りましょう<br>
-                                    2. チャットして話したり質問しましょう</h5>
+                                    2. チャットして話したり質問しましょう</h6>
                             </div>
-                            <p id="chat_msg"></p>
-                            <p class="send_btn"></p>
+                            <p hidden id="chat_msg"></p>
+                            <p hidden class="send_btn"></p>
                             <% } else { %>
                             <button id="temp_btn" class="btn btn-light" value="わからない！">わからない！</button>
                             <button id="temp_btn" class="btn btn-light" value="わかった！">わかった！</button>
