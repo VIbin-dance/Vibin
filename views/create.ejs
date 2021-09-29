@@ -261,7 +261,14 @@
                             </div>
                     </div>
 
-                    <div class="text-center" style="margin:3%;"><button class="btn btn-danger btn-lg" type="submit"><%= __('create.create') %></button>
+                    <div class="text-center" style="margin:3%;">
+                        <p>レッスンを作成することで
+                            <a href="/privacy-policy"><%= __('register.sub2') %></a> 
+                            <%= __('register.sub3') %> 
+                            <a href="/terms-of-service"><%= __('register.sub4') %></a>
+                            に同意したものとみなします。<br>
+                            また、<%= user.email %>があなたの連絡先として公開されます。</p>
+                            <button class="btn btn-danger btn-lg" type="submit"><%= __('create.create') %></button>
                     </div>
                 </div>
             </form>
