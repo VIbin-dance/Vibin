@@ -78,8 +78,7 @@ h6 {
 #header {
     transition: all 0.5s;
     z-index: 997;
-    padding: 4px 0;
-    background: #fff;
+    background:#fff;
 }
 
 #header.header-scrolled,
@@ -89,7 +88,7 @@ h6 {
 }
 
 #header .logo {
-    font-size: 32px;
+    font-size: 28px;
     margin: 0;
     padding: 0;
     line-height: 1;
@@ -143,7 +142,7 @@ h6 {
 .nav-menu>ul>li {
     position: relative;
     white-space: nowrap;
-    padding: 10px 0 10px 28px;
+    padding: 5px 0 5px 28px;
 }
 
 .nav-menu a {
@@ -151,7 +150,7 @@ h6 {
     position: relative;
     color: #545454;
     transition: 0.3s;
-    font-size: 15px;
+    font-size: 14px;
     font-family: "Open Sans", sans-serif;
 }
 

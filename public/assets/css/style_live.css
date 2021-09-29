@@ -779,6 +779,7 @@ body::-webkit-scrollbar-thumb {
 
 .live_grid .video_grid .channel_info .user_info a.avatar {
     position: relative;
+    /* top:-20px */
 }
 
 .live_grid .video_grid .channel_info .user_info a.avatar .outline {

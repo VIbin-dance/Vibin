@@ -227,5 +227,8 @@
 		"News1": "ニュースレターを受け取る",
 		"News2": "Vibin'の最新のニュースをお届けします!",
 		"Subscribe": "登録"
-	}
+	},
+	"銀行口座の情報を設定してください。": "銀行口座の情報を設定してください。",
+	"dashboard.search.level.": "dashboard.search.level.",
+	"dashboard.search.purpose.": "dashboard.search.purpose."
 }
