@@ -10,7 +10,7 @@
                             <%= __('dashboard.Quote.top') %> <span id="random"></span>
                 </h2><br>
 
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <select class="form-control chosen-value" type="language" id="language" name="language">
                         <option selected="null" value="any">
                             <%= __('dashboard.search.language.top') %>
@@ -28,7 +28,7 @@
                             <%= __('dashboard.search.language.Spanish') %>
                         </option>
                     </select>
-                </div>
+                </div> -->
 
                 <div class="form-group">
                     <select class="form-control chosen-value" type="level" id="level" name="level">
@@ -79,7 +79,7 @@
                     </select>
                 </div>
 
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <select class="form-control chosen-value" type="purpose" id="purpose" name="purpose">
                         <option selected="null" value="any">
                             <%= __('dashboard.search.purpose.top') %>
@@ -94,7 +94,7 @@
                             <%= __('dashboard.search.purpose.Entertainment') %>
                         </option>
                     </select>
-                </div>
+                </div> -->
 
                 <div class="form-group">
                     <select class="form-control chosen-value" type="mood" id="mood" name="mood">
@@ -167,17 +167,15 @@
                                         <h4 id="title<%= i %>">
                                             <%= lesson.docs[i].title %>
                                         </h4>
+                                        <a class="special" href="/choreographer/<%= lesson.docs[i].choreographerID %>">
+                                            <%= choreographer[i].username %>
+                                        </a>
                                         <p>
-                                            <a class="special" href="/choreographer/<%= lesson.docs[i].choreographerID %>">
-                                                <%= choreographer[i].username %>
-                                            </a>
-                                            <a href="/reservation/<%= lesson.docs[i].id %>">
                                             <%= lesson.docs[i].price %>
                                             <%= __('dashboard.Yen') %> |
                                             <%= moment(lesson.docs[i].time).format('MM/DD HH:mm'); %> |
                                             <%= __(`dashboard.search.level.${lesson.docs[i].level[0]}`) %> |
                                             <%= __(`dashboard.search.genre.${lesson.docs[i].genre[0]}`) %>
-                                            </a>
                                         </p>
                                     </div>
                                 </div>

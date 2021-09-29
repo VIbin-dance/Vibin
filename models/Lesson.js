@@ -15,7 +15,7 @@ const LessonSchema = new mongoose.Schema({
     },
     language: {
         type: Array,
-        required: true,
+        required: false,
     },
     choreographerID: {
         type: String,
@@ -39,7 +39,7 @@ const LessonSchema = new mongoose.Schema({
     },
     purpose: {
         type: Array,
-        required: true
+        required: false
     },
     mood: {
         type: Array,
