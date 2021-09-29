@@ -91,14 +91,12 @@ router.get("/", checkSession, async (req, res) => {
 });
 
 router.post("/", checkSession, async (req, res) => {
-    const { language, level, genre, purpose, mood, search } = req.body;
+    const { level, genre, mood, search } = req.body;
     const searchQuery = new RegExp(escapeRegex(search), "gi");
     const query = {
         $and: [
-            { language: language },
             { level: level },
             { genre: genre },
-            { purpose: purpose },
             { mood: mood },
         ],
         $or: [
@@ -391,7 +389,7 @@ router.get("/create", ensureAuthenticated, async (req, res) => {
 });
 
 router.post("/create", upload.single('thumbnail'), async (req, res) => {
-    const { title, language, time, price, level, genre, purpose, mood } = req.body;
+    const { title, time, price, level, genre, mood } = req.body;
     const user = await User.findOne({ email: req.user._json.email }).lean().exec();
     const choreographerID = user.googleId;
     const host = req.get('host');
@@ -415,7 +413,7 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
         errors.push({ msg: res.__("銀行口座の情報を設定してください。") });
     } 
 
-    if (title == "" || req.file == undefined || language == "" || time == "" || price == "" || level == undefined || genre == undefined || purpose == undefined || mood == undefined) {
+    if (title == "" || req.file == undefined || time == "" || price == "" || level == undefined || genre == undefined || mood == undefined) {
         errors.push({ msg: res.__("msg.error.fill") });
     }
 
@@ -432,12 +430,10 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
             loginLink: loginLink,
             user: req.session.user,
             title,
-            language,
             choreographer: req.session.user.username,
             price,
             level,
             genre,
-            purpose,
             mood,
         });
     } else {
@@ -448,7 +444,7 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
             contentType: req.file.mimetype,
         };
 
-        const newLesson = new Lesson({ title, thumbnail, language, choreographerID, time, price, level, genre, purpose, mood });
+        const newLesson = new Lesson({ title, thumbnail, choreographerID, time, price, level, genre, mood });
         newLesson.save()
             .then((lesson) => {
                 const dateTime = moment(time).format("YYYY-MM-DDTHH:mm");
@@ -471,7 +467,7 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
                 </a>
                 <p>日時：${dateTime}</p>
                 <p>価格：${lesson.price} Yen</p>
-                <p>${lesson.level[0]} | ${lesson.genre[0]} | ${lesson.purpose[0]} | ${lesson.mood[0]}</p>
+                <p>${lesson.level[0]} | ${lesson.genre[0]} | ${lesson.mood[0]}</p>
                 <p>--------------------------------------------</p>`
 
                 sendMail(user.email, "レッスンの登録を受付いたしました！", text);
@@ -483,10 +479,10 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
     }
     Lesson.updateMany({}, {
         $addToSet: {
-            language: ["any"],
+            // language: ["any"],
             level: ["any"],
             genre: ["any"],
-            purpose: ["any"],
+            // purpose: ["any"],
             mood: ["any"],
         }
     }, (err, result) => {

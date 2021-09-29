@@ -46,13 +46,11 @@
                                 <%= user.username %>
                             </a>
                             <p>
-                                <%= lesson[i].price %> Yen | <%= moment(lesson[i].time).format('MM/DD HH:mm'); %>
-                            </p>
-                            <p class="mb-0">
-                                <%= __(`dashboard.search.level.${lesson[i].level[0]}`) %> | <%=
-                                __(`dashboard.search.genre.${lesson[i].genre[0]}`) %> | <%=
-                                __(`dashboard.search.purpose.${lesson[i].purpose[0]}`) %> | <%=
-                                __(`dashboard.search.mood.${lesson[i].mood[0]}`) %>
+                                <%= lesson[i].price %>
+                                <%= __('dashboard.Yen') %> |
+                                <%= moment(lesson[i].time).format('MM/DD HH:mm'); %> |
+                                <%= __(`dashboard.search.level.${lesson[i].level[0]}`) %> |
+                                <%= __(`dashboard.search.genre.${lesson[i].genre[0]}`) %>
                             </p>
                         </div>
                     </div>
@@ -87,7 +85,6 @@
                             <p class="mb-0">
                                 <%= __(`dashboard.search.level.${tickets[i].level[0]}`) %> | 
                                 <%= __(`dashboard.search.genre.${tickets[i].genre[0]}`) %> | 
-                                <%= __(`dashboard.search.purpose.${tickets[i].purpose[0]}`) %> | 
                                 <%= __(`dashboard.search.mood.${tickets[i].mood[0]}`) %>
                             </p>
                         </div>

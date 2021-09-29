@@ -103,7 +103,8 @@
 				"top": "難易度",
 				"Beginner": "初心者",
 				"Intermediate": "中級者",
-				"Advanced": "上級者"
+				"Advanced": "上級者",
+				"Intermediate,any": "dashboard.search.level.Intermediate,any"
 			},
 			"genre": {
 				"top": "ジャンル",
@@ -121,7 +122,8 @@
 				"top": "目的",
 				"Skill Improvements": "上達",
 				"Health and Exercise": "健康",
-				"Entertainment": "鑑賞"
+				"Entertainment": "鑑賞",
+				"undefined": "dashboard.search.purpose.undefined"
 			},
 			"mood": {
 				"top": "ムード・特徴",

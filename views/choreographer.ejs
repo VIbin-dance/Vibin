@@ -34,10 +34,13 @@
             <a class="special" href="/choreographer/<%= choreographer.googleId %>">
               <%= choreographer.username %>
             </a>
-            <p><%= lesson.docs[i].price %> <%= __('dashboard.Yen') %> | <%= moment(lesson.docs[i].time).format('MM/DD HH:mm'); %></p>
-            <p class="mb-0">
-                <%= __(`dashboard.search.level.${lesson.docs[i].level[0]}`) %> | <%= __(`dashboard.search.genre.${lesson.docs[i].genre[0]}`) %> | <%= __(`dashboard.search.purpose.${lesson.docs[i].purpose[0]}`) %> | <%= __(`dashboard.search.mood.${lesson.docs[i].mood[0]}`) %>
-            </p>
+            <p>
+              <%= lesson.docs[i].price %>
+              <%= __('dashboard.Yen') %> |
+              <%= moment(lesson.docs[i].time).format('MM/DD HH:mm'); %> |
+              <%= __(`dashboard.search.level.${lesson.docs[i].level[0]}`) %> |
+              <%= __(`dashboard.search.genre.${lesson.docs[i].genre[0]}`) %>
+          </p>
           </div>
         </div>
         <% } %>
