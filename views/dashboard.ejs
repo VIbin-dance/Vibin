@@ -1,7 +1,6 @@
     <section id="searchBar" class="searchBar">
         <div class="search-bar">
             <form action="/" method="POST">
-                <!-- <h4 class="user">現在このサービスはベータテスト段階です。不具合や問題が発生した場合、info@vibin.tokyoまでご連絡ください。</h4> -->
                 <h2 class="user">
                     <%= __('dashboard.welcome.welcome') %>
                     <% if (user != undefined) { %>
@@ -9,27 +8,6 @@
                     <% } %>
                             <%= __('dashboard.Quote.top') %> <span id="random"></span>
                 </h2><br>
-
-                <!-- <div class="form-group">
-                    <select class="form-control chosen-value" type="language" id="language" name="language">
-                        <option selected="null" value="any">
-                            <%= __('dashboard.search.language.top') %>
-                        </option>
-                        <option value="ja">
-                            <%= __('dashboard.search.language.Japanese') %>
-                        </option>
-                        <option value="en">
-                            <%= __('dashboard.search.language.English') %>
-                        </option>
-                        <option value="ko">
-                            <%= __('dashboard.search.language.Korean') %>
-                        </option>
-                        <option value="es">
-                            <%= __('dashboard.search.language.Spanish') %>
-                        </option>
-                    </select>
-                </div> -->
-
                 <div class="form-group">
                     <select class="form-control chosen-value" type="level" id="level" name="level">
                         <option selected="null" value="any">
@@ -78,24 +56,6 @@
                         </option>
                     </select>
                 </div>
-
-                <!-- <div class="form-group">
-                    <select class="form-control chosen-value" type="purpose" id="purpose" name="purpose">
-                        <option selected="null" value="any">
-                            <%= __('dashboard.search.purpose.top') %>
-                        </option>
-                        <option value="Skill Improvements">
-                            <%= __('dashboard.search.purpose.Skill Improvements') %>
-                        </option>
-                        <option value="Health and Exercise">
-                            <%= __('dashboard.search.purpose.Health and Exercise') %>
-                        </option>
-                        <option value="Entertainment">
-                            <%= __('dashboard.search.purpose.Entertainment') %>
-                        </option>
-                    </select>
-                </div> -->
-
                 <div class="form-group">
                     <select class="form-control chosen-value" type="mood" id="mood" name="mood">
                         <option selected="null" value="any">
