@@ -135,24 +135,22 @@ router.post("/", checkSession, async (req, res) => {
 router.get("/results", (req, res) => res.render("results"));
 
 router.get("/choreographer/:id", checkSession, async (req, res) => {
-    Lesson.paginate({ choreographerID: req.params.id }, {
-        page: req.query.page,
-        limit: req.query.limit,
+    Lesson.find({ choreographerID: req.params.id }, null, {
+        // page: req.query.page,
+        // limit: req.query.limit,
         sort: { time: -1 }
     }, async (err, lesson) => {
         User.findOne({ googleId: req.params.id }, (err, choreo) => {
             res.render("choreographer", {
-                user: user,
-                count: lesson.length,
                 choreographer: choreo,
                 lesson: lesson,
                 moment: moment,
-                currentPage: lesson.page,
-                pageCount: lesson.pages,
-                pages: paginate.getArrayPages(req)(3, lesson.pages, req.query.page),
+                // currentPage: lesson.page,
+                // pageCount: lesson.pages,
+                // pages: paginate.getArrayPages(req)(3, lesson.pages, req.query.page),
             });
-        })
-    });
+        }).lean();
+    }).lean();
 });
 
 router.get("/calendar", ensureAuthenticated, (req, res) => {
