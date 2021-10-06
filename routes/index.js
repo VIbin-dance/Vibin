@@ -390,7 +390,6 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
     const { title, time, price, level, genre, mood } = req.body;
     const user = await User.findOne({ email: req.user._json.email }).lean().exec();
     const choreographerID = user.googleId;
-    conTime = moment(time).format('MM/DD HH:mm');
     const host = req.get('host');
     let errors = [];
     let loginLink;
@@ -443,7 +442,7 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
             contentType: req.file.mimetype,
         };
 
-        const newLesson = new Lesson({ title, thumbnail, choreographerID, time: conTime, price, level, genre, mood });
+        const newLesson = new Lesson({ title, thumbnail, choreographerID, time, price, level, genre, mood });
         newLesson.save()
             .then((lesson) => {
                 const dateTime = moment(time).format("YYYY-MM-DDTHH:mm");
