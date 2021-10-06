@@ -443,7 +443,7 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
             contentType: req.file.mimetype,
         };
 
-        const newLesson = new Lesson({ title, thumbnail, choreographerID, contTime, price, level, genre, mood });
+        const newLesson = new Lesson({ title, thumbnail, choreographerID, conTime, price, level, genre, mood });
         newLesson.save()
             .then((lesson) => {
                 const dateTime = moment(time).format("YYYY-MM-DDTHH:mm");
