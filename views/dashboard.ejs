@@ -118,7 +118,7 @@
                     <h3><%= __('dashboard.Future vibes') %>&#10024;</h3>
                     <div class="row">
                         <% for(let i=0; i < lesson.docs.length; i++) { %>
-                            <% if(moment(lesson.docs[i].time).isAfter(moment())) { %>
+                            <% if(moment(lesson.docs[i].time).isAfter(moment().format('MM/DD HH:mm'))) { %>
                                 <div class="col-lg-3 col-xs-6">
                                     <div class="box">
                                         <a href="/reservation/<%= lesson.docs[i].id %>">
@@ -152,7 +152,7 @@
                         <h3><%= __('dashboard.Past vibes') %>&#10024;</h3>
                         <div class="row">
                             <% for(let i=0; i < lesson.docs.length; i++) { %>
-                                <% if(moment(lesson.docs[i].time).isBefore(moment())) { %>
+                                <% if(moment(lesson.docs[i].time).isBefore(moment().format('MM/DD HH:mm'))) { %>
                                     <div class="col-lg-3 col-xs-6 pad">
                                         <div class="box">
                                             <a href="/reservation/<%= lesson.docs[i].id %>">
