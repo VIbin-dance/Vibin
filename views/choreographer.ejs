@@ -37,7 +37,7 @@
             <p>
               <%= lesson[i].price %>
               <%= __('dashboard.Yen') %> |
-              <%= moment(lesson[i].time).format('MM/DD HH:mm'); %> |
+              <%= lesson[i].time %> |
               <%= __(`dashboard.search.level.${lesson[i].level[0]}`) %> |
               <%= __(`dashboard.search.genre.${lesson[i].genre[0]}`) %>
           </p>
