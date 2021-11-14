@@ -394,22 +394,20 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
     let errors = [];
     let loginLink;
 
-    if (req.session.user.stripeID) {
-        const account = await stripe.accounts.retrieve(req.session.user.stripeID);
-    }
-
-    if (account.external_accounts.data.length === 0) {
+    const account = await stripe.accounts.retrieve(req.session.user.stripeID);
+    
+    if (account.external_accounts.total_count > 0) {
+        loginLink = await stripe.accounts.createLoginLink(account.id);
+    } else {
         loginLink = await stripe.accountLinks.create({
             account: account.id,
             refresh_url: `https://${host}/create`,
             return_url: `https://${host}/create`,
             type: "account_onboarding",
         });
-    } else {
-        loginLink = await stripe.accounts.createLoginLink(account.id);
     }
 
-    if (account.external_accounts.data.length === 0) {
+    if (account.external_accounts.total_count > 0) {
         errors.push({ msg: res.__("銀行口座の情報を設定してください。") });
     } 
 
