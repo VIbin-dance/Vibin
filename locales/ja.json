@@ -104,7 +104,8 @@
 				"Beginner": "初心者",
 				"Intermediate": "中級者",
 				"Advanced": "上級者",
-				"Intermediate,any": "dashboard.search.level.Intermediate,any"
+				"Intermediate,any": "dashboard.search.level.Intermediate,any",
+				"undefined": "dashboard.search.level.undefined"
 			},
 			"genre": {
 				"top": "ジャンル",

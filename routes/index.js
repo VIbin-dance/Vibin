@@ -341,20 +341,20 @@ router.get("/create", ensureAuthenticated, async (req, res) => {
         choreographer: req.session.user.username,
     };
 
+    
     if (req.session.user.stripeID) {
         const account = await stripe.accounts.retrieve(req.session.user.stripeID);
         let loginLink;
 
-        if (account.external_accounts.data.length === 0) {
+        if (account.external_accounts.total_count > 0) {
+            loginLink = await stripe.accounts.createLoginLink(account.id);
+        } else {
             loginLink = await stripe.accountLinks.create({
                 account: account.id,
                 refresh_url: `https://${host}/create`,
                 return_url: `https://${host}/create`,
                 type: "account_onboarding",
             });
-        } else {
-            console.log(account.external_accounts)
-            loginLink = await stripe.accounts.createLoginLink(account.id);
         }
 
         render.account = account;
@@ -394,7 +394,9 @@ router.post("/create", upload.single('thumbnail'), async (req, res) => {
     let errors = [];
     let loginLink;
 
-    const account = await stripe.accounts.retrieve(req.session.user.stripeID);
+    if (req.session.user.stripeID) {
+        const account = await stripe.accounts.retrieve(req.session.user.stripeID);
+    }
 
     if (account.external_accounts.data.length === 0) {
         loginLink = await stripe.accountLinks.create({
