@@ -8,7 +8,6 @@ const multer = require('multer');
 const sharp = require('sharp');
 const stripe = require("stripe")(process.env.stripekey);
 
-// get the config functions all at once
 const { ensureAuthenticated } = require("../config/auth");
 const { checkSession } = require("../config/session");
 const { sendMail } = require("../config/email");

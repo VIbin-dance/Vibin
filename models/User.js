@@ -45,18 +45,18 @@ const UserSchema = new mongoose.Schema({
         type: String,
         require: true
     },
-    subscription: {
-        type: Boolean,
-        require: false
-    },
-    following: {
-        type: Array,
-        require: false,
-    },
-    follower: {
-        type: Array,
-        require: false,
-    },
+    // subscription: {
+    //     type: Boolean,
+    //     require: false
+    // },
+    // following: {
+    //     type: Array,
+    //     require: false,
+    // },
+    // follower: {
+    //     type: Array,
+    //     require: false,
+    // },
     tags: {
         level: {
             type: String,
@@ -88,30 +88,30 @@ const UserSchema = new mongoose.Schema({
         //     type: String,
         // }
     },
-    zoom: {
-        id: {
-            type: String,
-            require: false,
-        },
-        accessToken: {
-            type: String,
-            require: false,
-        },
-        refreshToken: {
-            type: String,
-            require: false,
-        }
-    },
-    like: [{
-        id: {
-            type: String,
-            require: false
-        },
-        date: {
-            type: Date,
-            default: Date.now
-        },
-    }]
+    // zoom: {
+    //     id: {
+    //         type: String,
+    //         require: false,
+    //     },
+    //     accessToken: {
+    //         type: String,
+    //         require: false,
+    //     },
+    //     refreshToken: {
+    //         type: String,
+    //         require: false,
+    //     }
+    // },
+    // like: [{
+    //     id: {
+    //         type: String,
+    //         require: false
+    //     },
+    //     date: {
+    //         type: Date,
+    //         default: Date.now
+    //     },
+    // }]
 });
 
 const User = mongoose.model('User', UserSchema);
