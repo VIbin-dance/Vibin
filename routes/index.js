@@ -145,27 +145,27 @@ router.post("/", checkSession, async (req, res) => {
 router.get("/results", (req, res) => res.render("results"));
 
 router.get("/choreographer/:id", checkSession, async (req, res) => {
-  Lesson.find(
+  Lesson.paginate(
     { choreographerID: req.params.id },
-    null,
     {
-      // page: req.query.page,
-      // limit: req.query.limit,
+      page: req.query.page,
+      limit: req.query.limit,
       sort: { time: -1 },
     },
     async (err, lesson) => {
-      User.findOne({ googleId: req.params.id }, (err, choreo) => {
+      User.findOne({ googleId: req.params.id }, (err, choreographer) => {
         res.render("choreographer", {
-          choreographer: choreo,
+          user: user,
           lesson: lesson,
-          // moment: moment,
-          // currentPage: lesson.page,
-          // pageCount: lesson.pages,
-          // pages: paginate.getArrayPages(req)(3, lesson.pages, req.query.page),
+          choreographer: choreographer,
+          moment: moment,
+          currentPage: lesson.page,
+          pageCount: lesson.pages,
+          pages: paginate.getArrayPages(req)(3, lesson.pages, req.query.page),
         });
       }).lean();
     }
-  ).lean();
+  );
 });
 
 router.get("/calendar", ensureAuthenticated, (req, res) => {
@@ -364,7 +364,7 @@ router.get("/success/:id", ensureAuthenticated, async (req, res) => {
         <p>日時：${dateTime}</p>
         <p>価格：${lesson.price} Yen</p>
         <p>${lesson.level[0]} | ${lesson.genre[0]} | ${lesson.purpose[0]} | ${lesson.mood[0]}</p>
-        <p>--------------------------------------------</p>`
+        <p>--------------------------------------------</p>`;
 
         sendMail(user.email, "ご予約を受付いたしました！", text);
         // addCalendar(user, lesson.title, dateTime);
