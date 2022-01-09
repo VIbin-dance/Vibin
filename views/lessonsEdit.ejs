@@ -23,7 +23,7 @@
                         <li>
                             <%= __(`dashboard.search.level.${lesson.level[0]}`) %> |
                                 <%= __(`dashboard.search.genre.${lesson.genre[0]}`) %> |
-                                        <%= __(`dashboard.search.mood.${lesson.mood[0]}`) %>
+                                    <%= __(`dashboard.search.mood.${lesson.mood[0]}`) %>
                         </li>
                     </ol>
                     <h4>
@@ -45,18 +45,16 @@
                         <h4>
                             <%= __('reservation.choreo') %>
                         </h4>
-                        <% if (typeof userPhotoDef !="undefined" ) { %>
-                            <img src="data:image/<%= userPhotoDef.contentType%>;base64, <%= userPhotoDef.data.toString('base64')%>" height="100" width="100" style="border-radius: 50%;" alt="user photo">
-                            <% } else { %>
-                                <img src="<%= userPhoto %>" height="60" width="60" style="border-radius: 50%;" alt="user photo">
-                                <% } %>
+                        <img src="<%= user.userPhoto.url %>" height="100" width="100" style="border-radius: 50%;" alt="user photo">
                     </div>
                     <div class="text-center">
                         <a href="/choreographer/<%= user.googleId %>" style="font-size: 22px;">
                             <%= user.username %>
                         </a>
                         <br>
-                        <h5 style="white-space:pre-wrap;"><%= user.bio %></h5>
+                        <h5 style="white-space:pre-wrap;">
+                            <%= user.bio %>
+                        </h5>
                         <p class="mb-0">
                             <%= __('reservation.contact') %>:
                                 <a href="mailto:<%= user.email %>">
@@ -75,14 +73,17 @@
                 </div>
                 <ol>
                     <% for(let i=0; i < attendee.length; i++) { %>
-                        <li><%= attendee[i].username %></li>
-                    <% } %>
+                        <li>
+                            <%= attendee[i].username %>
+                        </li>
+                        <% } %>
                 </ol>
                 <% const rev = attendee.length * lesson.price * 0.8 %>
-                <div class="text-center">
-                    <h5>予想収益：<%= rev %>円</h5>
-                    <!-- <a class="btn btn-light" href="/lesson/contact/<%= id %>">生徒に一斉メールする</a> -->
-                </div>
+                    <div class="text-center">
+                        <h5>予想収益：
+                            <%= rev %>円</h5>
+                        <!-- <a class="btn btn-light" href="/lesson/contact/<%= id %>">生徒に一斉メールする</a> -->
+                    </div>
 
             </div>
             <div class="p-3 mb-3 bg-light rounded">

@@ -124,7 +124,8 @@
 				"Skill Improvements": "上達",
 				"Health and Exercise": "健康",
 				"Entertainment": "鑑賞",
-				"undefined": "dashboard.search.purpose.undefined"
+				"undefined": "dashboard.search.purpose.undefined",
+				"null": "dashboard.search.purpose.null"
 			},
 			"mood": {
 				"top": "ムード・特徴",

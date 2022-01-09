@@ -1,16 +1,21 @@
-const { S3Client, ListBucketsCommand } = require("@aws-sdk/client-s3");
+// const Aws = require("aws-sdk");
 
-const s3_client = new S3Client({
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  },
-  region: process.env.AWS_REGION,
-});
+// const s3 = new Aws.S3({
+//     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+//     secretAccessKey: process.env.AWS_ACCESS_KEY_SECRET,
+// });
 
-const run = async () => {
-  const data = await s3_client.send(new ListBucketsCommand({}));
-  console.log("Success", data.Buckets);
-};
 
-run();
+// const uploadObject = async(key) => {
+//     const params = {
+//         Bucket: process.env.AWS_BUCKET_NAME,
+//         Key: req.session.user._id,
+//         Body: buffer,
+//         ACL: "public-read-write",
+//         ContentType: "image/jpeg",
+//     };
+
+//     const image = await s3.upload(params).promise();
+// }
+
+// module.exports = { uploadObject };

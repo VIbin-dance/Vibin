@@ -1,174 +1,136 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const moment = require('moment');
-const { ensureAuthenticated } = require('../config/auth');
-const multer = require('multer');
-const sharp = require('sharp');
+const moment = require("moment");
+const { ensureAuthenticated } = require("../config/auth");
+const Aws = require("aws-sdk");
+const multer = require("multer");
+const sharp = require("sharp");
 
-const storage = multer.memoryStorage()
+const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-const User = require('../models/User');
-const Lesson = require('../models/Lesson');
+const User = require("../models/User");
+const Lesson = require("../models/Lesson");
 
-findLesson  = (id) => {
-    return Lesson.find({ choreographerID: id}, null, {sort: { time: -1 }}).lean()
-}
+const s3 = new Aws.S3({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_ACCESS_KEY_SECRET,
+});
+
+findLesson = (id) => {
+    return Lesson.find({ choreographerID: id }, null, {
+        sort: { time: -1 },
+    }).lean();
+};
 
 findTicket = (id) => {
-    return Lesson.find({ _id: id }, null, {sort: { time: -1 }}).lean()
-}
+    return Lesson.find({ _id: id }, null, { sort: { time: -1 } }).lean();
+};
 
 findUser = (id) => {
-    return User.findOne({ _id: id }).lean()
-}
+    return User.findOne({ _id: id }).lean();
+};
 
-router.get('/register', (req, res) => res.render('register'));
-router.get('/login', (req, res) => res.render('login'));
+router.get("/register", (req, res) => res.render("register"));
+router.get("/login", (req, res) => res.render("login"));
 
-// router.get('/preference', ensureAuthenticated, (req, res) => {
-//     res.render('preference', {
-//         userPhoto: req.session.user.userPhoto,
-//         userPhotoDef: req.session.user.userPhotoDef,
-//     })
-// })
-// not yet
-// router.post('/preference', ensureAuthenticated, async(req, res) => {
-//     const { level, purpose, genre } = req.body;
-//     let errors = [];
+router.get("/profile", ensureAuthenticated, async(req, res) => {
+    const [lesson, tickets, user] = await Promise.all([
+        findLesson(req.session.user.googleId),
+        findTicket(req.session.user.lesson),
+        findUser(req.session.user._id),
+    ]);
 
-//     const query = {
-//         tags: {
-//             level: level,
-//             purpose: purpose,
-//             genre: genre
-//         }
-//     }
-
-//     User.findOneAndUpdate({ email: req.user._json.email }, query, (err, user) => {
-
-//         if (!user) {
-//             errors.push({ msg: res.__('msg.error.noUser') });
-//         }
-
-//         if (errors.length > 0) {
-//             res.render('preference', {
-//                 errors,
-//                 userPhoto: user.userPhoto,
-//                 userPhotoDef: user.userPhotoDef,
-//                 level,
-//                 purpose
-//             });
-//         } else {
-//             req.flash('success_msg', res.__('msg.success.tags'));
-//             res.redirect('/dashboard/-1?page=1&limit=15');
-//         }
-//     })
-// })
-
-router.get('/profile', ensureAuthenticated, async (req, res) => {
-    const [lesson, tickets, user] = await Promise.all([findLesson(req.session.user.googleId), findTicket(req.session.user.lesson), findUser(req.session.user._id)]);
     req.session.user = user;
     const choreographer = [];
 
-
     if (user.lesson) {
-        for (let i=0; i<user.lesson.length;i++) {
-            choreographer[i] = await User.findOne({ googleId: tickets[i].choreographerID }, 'username').lean().exec();
+        for (let i = 0; i < user.lesson.length; i++) {
+            choreographer[i] = await User.findOne({ googleId: tickets[i].choreographerID },
+                    "username"
+                )
+                .lean()
+                .exec();
         }
     }
 
-    res.render('profile', {
+    res.render("profile", {
         user: req.session.user,
         bio: req.session.user.bio,
         userPhoto: req.session.user.userPhoto,
-        userPhotoDef: req.session.user.userPhotoDef,
         lesson: lesson,
         tickets: tickets,
         choreographer: choreographer,
         moment: moment,
-    })
-})
+    });
+});
 
-router.get('/profile/edit', ensureAuthenticated, (req, res) => {
+router.get("/profile/edit", ensureAuthenticated, (req, res) => {
     if (!req.session.user) {
-        req.flash('error_msg', res.__('msg.error.noUser'));
-        res.redirect('/dashboard/-1?page=1&limit=15');
+        req.flash("error_msg", res.__("msg.error.noUser"));
+        res.redirect("/dashboard/-1?page=1&limit=15");
     } else {
-        res.render('profileEdit', {
+        res.render("profileEdit", {
             user: req.session.user,
             bio: req.session.user.bio,
             userPhoto: req.session.user.userPhoto,
             userPhotoDef: req.session.user.userPhotoDef,
             email: req.session.user.email,
-            username: req.session.user.username
-            })
-        }
-})
+            username: req.session.user.username,
+        });
+    }
+});
 
-router.post('/profile/edit', ensureAuthenticated, upload.single('userPhotoDef'), async(req, res) => {
-    const user = await User.findOne({ email: req.user._json.email }).lean().exec();
-
-    const { username, bio, level, purpose, genre } = req.body;
-    let userPhotoDef = {};
-    let query = {};
+router.post("/profile/edit", ensureAuthenticated, upload.single("userPhoto"), async(req, res) => {
+    const { username, bio, level, genre } = req.body;
     let errors = [];
 
-    if (req.file != undefined) {
-        const buffer = await sharp(req.file.buffer).resize(300, 300).toBuffer()
-        userPhotoDef = {
-            data: buffer,
-            originalname: req.file.originalname,
-            contentType: req.file.mimetype
+    const query = {
+        $set: {
+            username: username,
+            bio: bio,
+            tags: { level: level, genre: genre },
+        }
+    };
+
+    if (req.file) {
+        const buffer = await sharp(req.file.buffer).resize(320, 320, { fit: "inside" }).toBuffer()
+
+        const params = {
+            Bucket: process.env.AWS_BUCKET_NAME,
+            Key: req.session.user._id,
+            Body: buffer,
+            ACL: "public-read-write",
+            ContentType: "image/jpeg",
         };
 
-        query = {
-            $set: {
-                userPhotoDef: userPhotoDef,
-                username: username,
-                bio: bio,
-                tags: { level: level, purpose: purpose, genre: genre },
-            }
-        }
-    } else if (req.file == undefined) {
-        query = {
-            $set: {
-                username: username,
-                bio: bio,
-                tags: { level: level, purpose: purpose, genre: genre },
-            }
-        }
+        const userPhoto = await s3.upload(params).promise();
+        query.$set.userPhoto = userPhoto
+        query.$set.userPhoto.url = userPhoto.Location
+        query.$set.userPhoto.key = userPhoto.key
     }
 
-    if (!user) {
-        errors.push({ msg: res.__('msg.error.noUser') });
-    }
-
-    if (username == '') {
-        errors.push({ msg: res.__('msg.error.username') });
+    if (username == "") {
+        errors.push({ msg: res.__("msg.error.username") });
     }
 
     if (errors.length > 0) {
-        res.render('profileEdit', {
+        res.render("profileEdit", {
             errors,
-            userPhoto: user.userPhoto,
-            userPhotoDef: user.userPhotoDef,
-            email: user.email,
-            user,
-            username,
-            curUsername: user.username,
+            user: req.session.user,
+            curUsername: req.session.user.username,
             bio,
             level,
-            purpose,
-            genre
+            genre,
         });
     } else {
-        await User.findOneAndUpdate({ email: req.user._json.email }, query).lean().exec()
-        const user = await User.findOne({ email: req.user._json.email }).lean().exec();
-        req.session.user = user
-        req.flash('success_msg', res.__('msg.success.profile'));
-        res.redirect('/users/profile');
+        User.findOneAndUpdate({ email: req.user._json.email }, query, (err, user) => {
+            req.session.user = user;
+        }).lean();
+
+        req.flash("success_msg", res.__("msg.success.profile"));
+        res.redirect("/users/profile");
     }
-})
+});
 
 module.exports = router;

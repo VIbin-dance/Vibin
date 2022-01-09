@@ -11,21 +11,18 @@ const UserSchema = new mongoose.Schema({
         type: String,
         require: true
     },
-    userPhotoDef: {
-        type: Object,
-        data: Buffer,
-        originalname: String,
-        contentType: String,
-        require: false
-    },
     loginCount: {
         type: Number,
         require: true,
         default: 0
     },
     userPhoto: {
-        type: String,
-        require: true
+        url: {
+            type: String,
+        },
+        key: {
+            type: String,
+        }
     },
     name: {
         familyName: {

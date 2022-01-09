@@ -1,60 +1,76 @@
 <main role="main" class="container col-md-10 col-sm-10" style="margin-top:10%; margin-bottom: 5%;">
     <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
     <%- include ('partials/messages') %>
-    <div class="row">
-        <div class="col-md-7 blog-main">
-            <div class="blog-post">
-                <div class="card-deck">
-                    <% if (!user.lesson && lesson.price != 0) { %>
-                        <!-- <h3>今なら初回無料！<%= lesson.price %><%= __('dashboard.Yen') %>が0<%= __('dashboard.Yen') %>で！</h3> -->
-                    <% } %>
-                    <div class="card mb-3" style="min-width: 47vh; max-width: 80vh; margin-top: 30px;">
-                        <a href="#">
+        <div class="row">
+            <div class="col-md-7 blog-main">
+                <div class="blog-post">
+                    <div class="card-deck">
+                        <% if (!user.lesson && lesson.price != 0) { %>
+                            <!-- <h3>今なら初回無料！<%= lesson.price %><%= __('dashboard.Yen') %>が0<%= __('dashboard.Yen') %>で！</h3> -->
+                            <% } %>
+                                <div class="card mb-3" style="min-width: 47vh; max-width: 80vh; margin-top: 30px;">
+                                    <a href="#">
                             <img style="height: 100%; width: 100%; display: block;" src="data:image/<%=lesson.thumbnail.contentType%>;base64, <%=lesson.thumbnail.data.toString('base64')%>"
                                 alt="thumbnail of the lesson">
                         </a>
+                                </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <aside class="col-md-5 blog-sidebar">
-            <div class="p-3">
-                <h1>
-                    <%= lesson.title %> by <a href="/choreographer/<%= choreographer.googleId %>">
-                        <%= choreographer.username %>
-                    </a>
-                </h1>
-                <ol class="list-unstyled">
-                    <li><%= __(`dashboard.search.level.${lesson.level[0]}`) %> | <%= __(`dashboard.search.genre.${lesson.genre[0]}`) %> | <%= __(`dashboard.search.mood.${lesson.mood[0]}`) %></li>
-                </ol>
-                <h4><%= lesson.price %> <%= __('dashboard.Yen') %> | <%=  moment(lesson.time).format('MM/DD HH:mm'); %></h4>
-                <hr>
-                <div class="text-center">
-                    <% if (id != undefined) { %>
-                        <button class="btn btn-danger btn-lg btn-block" id="checkout-button"><%= __('reservation.purchase') %></button>
-                    <% } else { %>
-                        <a href="/success/<%= params %>" class="btn btn-danger btn-lg btn-block"><%= __('reservation.purchase') %></a>
-                    <% } %>
+            <aside class="col-md-5 blog-sidebar">
+                <div class="p-3">
+                    <h1>
+                        <%= lesson.title %> by
+                            <a href="/choreographer/<%= choreographer.googleId %>">
+                                <%= choreographer.username %>
+                            </a>
+                    </h1>
+                    <ol class="list-unstyled">
+                        <li>
+                            <%= __(`dashboard.search.level.${lesson.level[0]}`) %> |
+                                <%= __(`dashboard.search.genre.${lesson.genre[0]}`) %> |
+                                    <%= __(`dashboard.search.mood.${lesson.mood[0]}`) %>
+                        </li>
+                    </ol>
+                    <h4>
+                        <%= lesson.price %>
+                            <%= __('dashboard.Yen') %> |
+                                <%=  moment(lesson.time).format('MM/DD HH:mm'); %>
+                    </h4>
+                    <hr>
+                    <div class="text-center">
+                        <% if (id != undefined) { %>
+                            <button class="btn btn-danger btn-lg btn-block" id="checkout-button"><%= __('reservation.purchase') %></button>
+                            <% } else { %>
+                                <a href="/success/<%= params %>" class="btn btn-danger btn-lg btn-block">
+                                    <%= __('reservation.purchase') %>
+                                </a>
+                                <% } %>
+                    </div>
                 </div>
-            </div>
 
-            <div class="p-3 mb-3 bg-light rounded">
-                <div class="text-center">
-                    <h4><%= __('reservation.choreo') %></h4>
-                    <a href="/choreographer/<%= choreographer.googleId %>" style="font-size: 22px;">
-                    <% if (typeof choreographer.userPhotoDef !="undefined" ) { %>
-                    <img src="data:image/<%= choreographer.userPhotoDef.contentType%>;base64, <%= choreographer.userPhotoDef.data.toString('base64')%>"
-                                height="100" width="100" style="border-radius: 50%;" alt="user photo">
-                    <% } else { %>
-                    <img src="<%= choreographer.userPhoto %>" height="60" width="60" style="border-radius: 50%;" alt="user photo">
-                    <% } %>
+                <div class="p-3 mb-3 bg-light rounded">
+                    <div class="text-center">
+                        <h4>
+                            <%= __('reservation.choreo') %>
+                        </h4>
+                        <a href="/choreographer/<%= choreographer.googleId %>" style="font-size: 22px;">
+                    <img src="<%= choreographer.userPhoto.url %>" height="100" width="100" style="border-radius: 50%;" alt="user photo">
                     <br><%= choreographer.username %></a>
-                    <br><h5 style="white-space:pre-wrap;"><%= choreographer.bio %></h5>
-                    <p class="mb-0"><%= __('reservation.contact') %>: <a href="mailto:<%= choreographer.email %>"><%= choreographer.email %></a></p>
-                </div>
-        </aside>
-    </div>
+                        <br>
+                        <h5 style="white-space:pre-wrap;">
+                            <%= choreographer.bio %>
+                        </h5>
+                        <p class="mb-0">
+                            <%= __('reservation.contact') %>:
+                                <a href="mailto:<%= choreographer.email %>">
+                                    <%= choreographer.email %>
+                                </a>
+                        </p>
+                    </div>
+            </aside>
+            </div>
 </main>
 
 <script>

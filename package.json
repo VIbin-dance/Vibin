@@ -22,6 +22,7 @@
     "@aws-sdk/client-s3": "^3.18.0",
     "@videojs/themes": "^1.0.1",
     "async": "^3.2.0",
+    "aws-sdk": "^2.1050.0",
     "bytes": "^3.1.0",
     "compression": "^1.7.4",
     "concat-stream": "^2.0.0",
