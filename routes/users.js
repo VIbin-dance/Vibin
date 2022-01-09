@@ -96,7 +96,7 @@ router.post("/profile/edit", ensureAuthenticated, upload.single("userPhoto"), as
         const buffer = await sharp(req.file.buffer).resize(320, 320, { fit: "inside" }).toBuffer()
 
         const params = {
-            Bucket: process.env.AWS_BUCKET_NAME,
+            Bucket: process.env.PROFILE_BUCKET_NAME,
             Key: req.session.user._id,
             Body: buffer,
             ACL: "public-read-write",

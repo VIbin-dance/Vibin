@@ -370,6 +370,7 @@ router.get("/create", ensureAuthenticated, async(req, res) => {
 
     if (req.session.user.stripeID) {
         const account = await stripe.accounts.retrieve(req.session.user.stripeID);
+        console.log(account);
         let loginLink;
 
         if (account.external_accounts.total_count > 0) {
@@ -385,6 +386,7 @@ router.get("/create", ensureAuthenticated, async(req, res) => {
 
         render.account = account;
         render.loginLink = loginLink;
+
     } else if (!req.session.user.stripeID) {
         try {
             const account = await stripe.accounts.create({ type: "express" });
@@ -401,7 +403,9 @@ router.get("/create", ensureAuthenticated, async(req, res) => {
                     req.session.user = user;
                 }
             );
+
             render.loginLink = loginLink;
+
         } catch (err) {
             res.status(500).send({
                 error: err.message,
@@ -414,9 +418,7 @@ router.get("/create", ensureAuthenticated, async(req, res) => {
 
 router.post("/create", upload.single("thumbnail"), async(req, res) => {
     const { title, time, price, level, genre, mood } = req.body;
-    const user = await User.findOne({ email: req.user._json.email })
-        .lean()
-        .exec();
+    const user = await User.findOne({ email: req.user._json.email }).lean().exec();
     const choreographerID = user.googleId;
     const host = req.get("host");
     let errors = [];
@@ -471,16 +473,21 @@ router.post("/create", upload.single("thumbnail"), async(req, res) => {
             mood,
         });
     } else {
-        const buffer = await sharp(req.file.buffer).resize(640, 360).toBuffer();
-        const thumbnail = {
-            data: buffer,
-            originalname: req.file.originalname,
-            contentType: req.file.mimetype,
+        const buffer = await sharp(req.file.buffer).resize(640, 360).toBuffer()
+
+        const params = {
+            Bucket: process.env.THUMBNAIL_BUCKET_NAME,
+            Key: title,
+            Body: buffer,
+            ACL: "public-read-write",
+            ContentType: "image/jpeg",
         };
+
+        const thumbnail = await s3.upload(params).promise();
 
         const newLesson = new Lesson({
             title,
-            thumbnail,
+            thumbnail: thumbnail.Location,
             choreographerID,
             time,
             price,
@@ -488,6 +495,7 @@ router.post("/create", upload.single("thumbnail"), async(req, res) => {
             genre,
             mood,
         });
+
         newLesson
             .save()
             .then((lesson) => {
@@ -502,7 +510,7 @@ router.post("/create", upload.single("thumbnail"), async(req, res) => {
                 });
 
                 const text = `
-                <p>この度はレッスンをご登録いただきまして、誠にありがとうございます。</p>
+                <p>レッスンの登録、誠にありがとうございます！</p>
                 <p>▼登録内容▼</p>
                 <p>--------------------------------------------</p>
                 <p>${lesson.title}</p>
@@ -523,10 +531,8 @@ router.post("/create", upload.single("thumbnail"), async(req, res) => {
     }
     Lesson.updateMany({}, {
             $addToSet: {
-                // language: ["any"],
                 level: ["any"],
                 genre: ["any"],
-                // purpose: ["any"],
                 mood: ["any"],
             },
         },
