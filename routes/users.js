@@ -74,7 +74,6 @@ router.get("/profile/edit", ensureAuthenticated, (req, res) => {
             user: req.session.user,
             bio: req.session.user.bio,
             userPhoto: req.session.user.userPhoto,
-            userPhotoDef: req.session.user.userPhotoDef,
             email: req.session.user.email,
             username: req.session.user.username,
         });
