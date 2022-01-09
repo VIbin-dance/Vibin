@@ -373,7 +373,7 @@ router.get("/create", ensureAuthenticated, async(req, res) => {
         console.log(account);
         let loginLink;
 
-        if (account.external_accounts.total_count > 0) {
+        if (account.payouts_enabled == true) {
             loginLink = await stripe.accounts.createLoginLink(account.id);
         } else {
             loginLink = await stripe.accountLinks.create({
@@ -426,7 +426,7 @@ router.post("/create", upload.single("thumbnail"), async(req, res) => {
 
     const account = await stripe.accounts.retrieve(req.session.user.stripeID);
 
-    if (account.external_accounts.total_count > 0) {
+    if (account.payouts_enabled == true) {
         loginLink = await stripe.accounts.createLoginLink(account.id);
     } else {
         loginLink = await stripe.accountLinks.create({
@@ -437,7 +437,7 @@ router.post("/create", upload.single("thumbnail"), async(req, res) => {
         });
     }
 
-    if (account.external_accounts.total_count > 0) {
+    if (account.payouts_enabled == false) {
         errors.push({ msg: res.__("銀行口座の情報を設定してください。") });
     }
 
