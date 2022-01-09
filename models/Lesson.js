@@ -7,10 +7,7 @@ const LessonSchema = new mongoose.Schema({
         required: true
     },
     thumbnail: {
-        type: Object,
-        data: Buffer,
-        originalname: String,
-        contentType: String,
+        type: String,
         required: true
     },
     language: {
