@@ -104,9 +104,7 @@ router.post("/profile/edit", ensureAuthenticated, upload.single("userPhoto"), as
         };
 
         const userPhoto = await s3.upload(params).promise();
-        query.$set.userPhoto = userPhoto
-        query.$set.userPhoto.url = userPhoto.Location
-        query.$set.userPhoto.key = userPhoto.key
+        query.$set.userPhoto = userPhoto.Location
     }
 
     if (username == "") {

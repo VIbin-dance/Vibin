@@ -17,12 +17,7 @@ const UserSchema = new mongoose.Schema({
         default: 0
     },
     userPhoto: {
-        url: {
-            type: String,
-        },
-        key: {
-            type: String,
-        }
+        type: String,
     },
     name: {
         familyName: {

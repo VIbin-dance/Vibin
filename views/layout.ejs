@@ -228,7 +228,7 @@
             text-align: center
         }
         
-        :root {
+         :root {
             --blue: #007bff;
             --indigo: #6610f2;
             --purple: #6f42c1;
@@ -354,7 +354,7 @@
             -webkit-appearance: none
         }
         
-        ::-webkit-file-upload-button {
+         ::-webkit-file-upload-button {
             font: inherit;
             -webkit-appearance: button
         }
@@ -863,7 +863,7 @@
                         <nav class="nav-menu d-none d-lg-block">
                             <ul>
                                 <li class="drop-down">
-                                    <img src="<%= user.userPhoto.url %>" height="40" width="40" style="border-radius: 50%;" alt="user photo">
+                                    <img src="<%= user.userPhoto %>" height="40" width="40" style="border-radius: 50%;" alt="user photo">
                                     <ul>
                                         <li>
                                             <a href="/users/profile">
@@ -922,7 +922,7 @@
                                     </li>
                                     <li>
                                         <a href="/users/profile">
-                        <img src="<%= user.userPhoto.url %>" height="27" width="27" style="border-radius: 50%;"
+                        <img src="<%= user.userPhoto %>" height="27" width="27" style="border-radius: 50%;"
                         alt="user photo">
                     </a>
                                     </li>

@@ -12,7 +12,7 @@
                             <label for="Photo"><%= __('profile.photo') %><p><small><%= __('profile.choose photo') %></small>
                         </p></label>
                             <div class="text-center">
-                                <img id="output" src="<%= user.userPhoto.url %>" height="80" width="80" style="border-radius: 50%;" alt="user photo">
+                                <img id="output" src="<%= user.userPhoto %>" height="80" width="80" style="border-radius: 50%;" alt="user photo">
                                 <br><br><input type="file" id="userPhoto" name="userPhoto" accept="image/*" onchange="loadFile(event)" />
                             </div>
                         </div>

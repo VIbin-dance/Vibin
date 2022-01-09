@@ -16,19 +16,11 @@
     <input type="hidden" name="ch_arn" id="ch_arn" value="<%= ch_arn %>">
     <% if (typeof user.username != "undefined" ) { %>
         <input type="hidden" name="username" id="username" value="<%= user.username %>">
-    <% } else { %>
-        <input type="hidden" name="username" id="username" value="empty">
-    <% } %>
+        <% } else { %>
+            <input type="hidden" name="username" id="username" value="empty">
+            <% } %>
 
-    <% if (typeof user.userPhotoDef != "undefined" ) { %>
-        <input type="hidden" name="userphotoDefData" id="userphotoDefData" value="<%= user.userPhotoDef.data.toString('base64')%>">
-        <input type="hidden" name="userphotoDefType" id="userphotoDefType" value="<%= user.userPhotoDef.contentType %>">
-    <% } else { %>
-        <input type="hidden" name="userphotoDefData" id="userphotoDefData" value="undefined">
-        <input type="hidden" name="userphotoDefType" id="userphotoDefType" value="undefined">
-    <% } %>
-
-    <input type="hidden" name="userphoto" id="userphoto" value="<%= user.userPhoto %>">
+                <input type="hidden" name="userphoto" id="userphoto" value="<%= user.userPhoto %>">
                 <input type="hidden" name="chat_room_id" id="chat_room_id" value="<%= ch_streamkey %>">
                 <div class="live_grid">
                     <div class="video_grid ">
@@ -51,11 +43,7 @@
                                         <div class="outline"></div>
                                         <div class="inner_img">
                                             <figure>
-                                                <% if (typeof user.userPhotoDef !="undefined" ) { %>
-                                                <img src="data:image/<%=user.userPhotoDef.contentType%>;base64, <%=user.userPhotoDef.data.toString('base64')%>" alt="user photo">
-                                                <% } else if (typeof user.userPhoto !="undefined" ) { %>
                                                 <img src="<%= user.userPhoto %>" alt="user photo">
-                                                <% } %>
                                             </figure>
                                         </div>
                                     </a>
@@ -83,17 +71,7 @@
                         <div class="contain">
                             <div class="chat_header">CHAT</div>
                             <div class="message_wrap">
-                                <ul class="message_list">
-                                    <!-- <li>
-                            <figure class="avatar">
-                                <img src="/assets/img/profile/user01.png" alt="">
-                            </figure>
-                            <div class="message">
-                                地よば脈無ナ夫率ヌエラ写以コア全約シフ見高にぱげえ交広ホラミ日載な物子せルッ医席まに開季次でなイ止12索スリ記校ツケヲ前無ネ天72要ヱマ病聞ネホモ尿意あへ上座牛参さイゃし。
-                                <span class="time">7:24 AM</span>
-                            </div>
-                        </li> -->
-                                </ul>
+                                <ul class="message_list"></ul>
                             </div>
                             <div class="input_wrap">
                                 <!-- <button class="btn1">投げ銭</button> -->
