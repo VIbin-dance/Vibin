@@ -104,7 +104,8 @@
 				"Beginner": "初心者",
 				"Intermediate": "中級者",
 				"Advanced": "上級者",
-				"Intermediate,any": "dashboard.search.level.Intermediate,any"
+				"Intermediate,any": "dashboard.search.level.Intermediate,any",
+				"undefined": "dashboard.search.level.undefined"
 			},
 			"genre": {
 				"top": "ジャンル",
@@ -123,7 +124,8 @@
 				"Skill Improvements": "上達",
 				"Health and Exercise": "健康",
 				"Entertainment": "鑑賞",
-				"undefined": "dashboard.search.purpose.undefined"
+				"undefined": "dashboard.search.purpose.undefined",
+				"null": "dashboard.search.purpose.null"
 			},
 			"mood": {
 				"top": "ムード・特徴",

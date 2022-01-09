@@ -10,7 +10,8 @@
                             <li>下記のメールアドレスに詳細を送りました: <b><%= user.email %></b></li><br>
                             <li>参加方法</li>
                             <li>1. ご自身の<a href="/users/profile">プロフィール</a>または<a href="/calendar">カレンダー</a>ページにてご購入したレッスンを参照してください。</li>
-                            <li>2. 予定の時刻：<%= moment(lesson.time).format('MM/DD HH:mm'); %>にレッスンをクリック、先生がライブ配信を開始します</li>
+                            <li>2. 予定の時刻：
+                                <%= moment(lesson.time).format('MM/DD HH:mm'); %>にレッスンをクリック、先生がライブ配信を開始します</li>
                             <li>エラー・不具合等の問題が発生した場合、先生またはVibin'にご連絡ください。</li>
                         </ol>
                         <!-- <a href="#">
@@ -21,42 +22,60 @@
                 </div>
             </div>
         </div>
-        
+
         <aside class="col-md-5 blog-sidebar">
             <div class="p-3">
                 <h4>購入したレッスン</h4>
                 <a href="/lesson/student/<%= lesson.choreographerID %>">
                 <img style="height: 100%; width: 100%; display: block;" src="data:image/<%=lesson.thumbnail.contentType%>;base64, <%=lesson.thumbnail.data.toString('base64')%>"
                 alt="thumbnail of the lesson"></a><br>
-                <h1><%= lesson.title %> by 
-                    <a href="/choreographer/<%= choreographer.googleId %>"><%= choreographer.username %></a>
+                <h1>
+                    <%= lesson.title %> by
+                        <a href="/choreographer/<%= choreographer.googleId %>">
+                            <%= choreographer.username %>
+                        </a>
                 </h1>
                 <ol class="list-unstyled">
-                    <li><%= __(`dashboard.search.level.${lesson.level[0]}`) %> | <%= __(`dashboard.search.genre.${lesson.genre[0]}`) %> | <%= __(`dashboard.search.mood.${lesson.mood[0]}`) %></li>
+                    <li>
+                        <%= __(`dashboard.search.level.${lesson.level[0]}`) %> |
+                            <%= __(`dashboard.search.genre.${lesson.genre[0]}`) %> |
+                                <%= __(`dashboard.search.mood.${lesson.mood[0]}`) %>
+                    </li>
                 </ol>
-                <h4><%= lesson.price %> <%= __('dashboard.Yen') %> | <%= moment(lesson.time).format('MM/DD HH:mm'); %></h4>
+                <h4>
+                    <%= lesson.price %>
+                        <%= __('dashboard.Yen') %> |
+                            <%= moment(lesson.time).format('MM/DD HH:mm'); %>
+                </h4>
                 <hr>
                 <div class="text-center">
-                        <!-- <button class="btn btn-danger btn-lg btn-block" id="checkout-button"><%= __('reservation.purchase') %></button> -->
-                        <!-- <a href="" class="btn btn-danger btn-lg btn-block">Purchased</a> -->
+                    <!-- <button class="btn btn-danger btn-lg btn-block" id="checkout-button"><%= __('reservation.purchase') %></button> -->
+                    <!-- <a href="" class="btn btn-danger btn-lg btn-block">Purchased</a> -->
                 </div>
             </div>
 
             <div class="p-3 mb-3 bg-light rounded">
                 <div class="text-center">
-                    <h4><%= __('reservation.choreo') %></h4>
-                    <% if (typeof choreographer.userPhotoDef !="undefined" ) { %>
-                    <img src="data:image/<%= choreographer.userPhotoDef.contentType%>;base64, <%= choreographer.userPhotoDef.data.toString('base64')%>"
-                                height="100" width="100" style="border-radius: 50%;" alt="user photo">
-                    <% } else { %>
-                    <img src="<%= choreographer.userPhoto %>" height="60" width="60" style="border-radius: 50%;" alt="user photo">
-                    <% } %>
-                </div>         
-                <div class="text-center">
-                <a href="/choreographer/<%= choreographer.googleId %>" style="font-size: 22px;"><%= choreographer.username %></a>
+                    <h4>
+                        <%= __('reservation.choreo') %>
+                    </h4>
+                    <img src="<%= choreographer.userPhoto %>" height="100" width="100" style="border-radius: 50%;" alt="user photo">
                 </div>
-                <br><h5 style="white-space:pre-wrap;"><%= choreographer.bio %></h5>
-                <p class="mb-0"><%= __('reservation.contact') %>: <a href="mailto:<%= choreographer.email %>"><%= choreographer.email %></a></p>
+                <div class="text-center">
+                    <a href="/choreographer/<%= choreographer.googleId %>" style="font-size: 22px;">
+                        <%= choreographer.username %>
+                    </a>
+                </div>
+                <br>
+                <h5 style="white-space:pre-wrap;">
+                    <%= choreographer.bio %>
+                </h5>
+                <p class="mb-0">
+                    <%= __('reservation.contact') %>:
+                        <a href="mailto:<%= choreographer.email %>">
+                            <%= choreographer.email %>
+                        </a>
+                </p>
             </div>
         </aside>
     </div>
