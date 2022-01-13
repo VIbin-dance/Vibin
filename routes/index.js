@@ -480,7 +480,7 @@ router.post("/create", upload.single("thumbnail"), async(req, res) => {
             Key: title,
             Body: buffer,
             ACL: "public-read-write",
-            ContentType: "image/jpeg",
+            ContentType: "image/webp",
         };
 
         const thumbnail = await uploadObject(params);
