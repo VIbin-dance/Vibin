@@ -18,26 +18,18 @@
                     </a>
                         <h4 id="tickets.title<%= i %>">
                             <%= tickets[i].title %>
-                                <a class="btn btn-sm btn-dark float-right" href="/lesson/student/details/<%= tickets[i]._id %>">詳細</a>
                         </h4>
                         <a class="special" href="/choreographer/<%= tickets[i].choreographerID %>">
                             <%= choreographer[i].username %>
                         </a>
-                        <p>
-                            <%= tickets[i].price %> Yen |
-                                <%= moment(tickets[i].time).format('MM/DD HH:mm'); %>
-                        </p>
-                        <p class="mb-0">
-                            <%= __(`dashboard.search.level.${tickets[i].level[0]}`) %> |
-                                <%= __(`dashboard.search.genre.${tickets[i].genre[0]}`) %> |
-                                    <%= __(`dashboard.search.mood.${tickets[i].mood[0]}`) %>
-                        </p>
                         <p>
                             <%= tickets[i].price %>
                                 <%= __('dashboard.Yen') %> |
                                     <%= moment(tickets[i].time).format('MM/DD HH:mm'); %> |
                                         <%= __(`dashboard.search.level.${tickets[i].level[0]}`) %> |
                                             <%= __(`dashboard.search.genre.${tickets[i].genre[0]}`) %>
+                                                <a class="btn btn-sm btn-dark" href="/lesson/student/details/<%= tickets[i]._id %>">詳細</a>
+
                         </p>
                     </div>
                 </div>

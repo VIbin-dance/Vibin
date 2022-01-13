@@ -315,7 +315,7 @@ router.get("/reservation/:id", checkSession, async(req, res) => {
 router.get("/success/:id", ensureAuthenticated, async(req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.id }).lean().exec();
     // const choreographer = await User.findOne({ googleId: lesson.choreographerID }).lean().exec();
-    // const dateTime = moment(lesson.time).format('MM/DD HH:mm');
+    const dateTime = moment(lesson.time).format('MM/DD HH:mm');
 
     let session;
     if (req.query.session_id) {
@@ -353,7 +353,7 @@ router.get("/success/:id", ensureAuthenticated, async(req, res) => {
         <p>--------------------------------------------</p>`;
 
                 sendMail(user.email, "ご予約を受付いたしました！", text);
-                // addCalendar(user, lesson.title, dateTime);
+                addCalendar(user, lesson.title, dateTime);
                 res.redirect(`/reservation/${req.params.id}`);
             }
         );
