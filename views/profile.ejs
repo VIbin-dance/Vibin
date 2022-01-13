@@ -31,7 +31,7 @@
                         <div class="col-lg-3 col-xs-6 pad">
                             <div class="box">
                                 <a href="/lesson/teacher/<%= lesson[i]._id %>">
-                                <img src="data:image/<%=lesson[i].thumbnail.contentType%>;base64, <%=lesson[i].thumbnail.data.toString('base64')%>"
+                                <img src="<%=lesson[i].thumbnail%>"
                                     alt="thumbnail">
                             </a>
                                 <h4 id="lesson.title<%= i %>">
@@ -65,7 +65,7 @@
                                 <div class="col-lg-3 col-xs-6 pad">
                                     <div class="box">
                                         <a href="/lesson/student/<%= tickets[i]._id %>">
-                                <img src="data:image/<%=tickets[i].thumbnail.contentType%>;base64, <%=tickets[i].thumbnail.data.toString('base64')%>"
+                                <img src="<%=tickets[i].thumbnail%>"
                                     alt="thumbnail">
                             </a>
                                         <h4 id="tickets.title<%= i %>">
