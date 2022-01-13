@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const moment = require("moment");
 const { ensureAuthenticated } = require("../config/auth");
+const { uploadObject } = require("../config/aws/s3");
 const Aws = require("aws-sdk");
 const multer = require("multer");
 const sharp = require("sharp");
@@ -11,11 +12,6 @@ const upload = multer({ storage: storage });
 
 const User = require("../models/User");
 const Lesson = require("../models/Lesson");
-
-const s3 = new Aws.S3({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_ACCESS_KEY_SECRET,
-});
 
 findLesson = (id) => {
     return Lesson.find({ choreographerID: id }, null, {
@@ -93,7 +89,7 @@ router.post("/profile/edit", ensureAuthenticated, upload.single("userPhoto"), as
     };
 
     if (req.file) {
-        const buffer = await sharp(req.file.buffer).resize(320, 320, { fit: "inside" }).toBuffer()
+        const buffer = await sharp(req.file.buffer).resize(320, 320).toBuffer()
 
         const params = {
             Bucket: process.env.PROFILE_BUCKET_NAME,
@@ -103,7 +99,7 @@ router.post("/profile/edit", ensureAuthenticated, upload.single("userPhoto"), as
             ContentType: "image/jpeg",
         };
 
-        const userPhoto = await s3.upload(params).promise();
+        const userPhoto = await uploadObject(params);
         query.$set.userPhoto = userPhoto.Location
     }
 

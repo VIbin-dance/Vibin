@@ -13,6 +13,7 @@ const { checkSession } = require("../config/session");
 const { sendMail } = require("../config/email");
 const { addCalendar } = require("../config/calendar");
 const { createChannel } = require("../config/aws/channel");
+const { uploadObject } = require("../config/aws/s3");
 
 const User = require("../models/User");
 const Lesson = require("../models/Lesson");
@@ -483,7 +484,7 @@ router.post("/create", upload.single("thumbnail"), async(req, res) => {
             ContentType: "image/jpeg",
         };
 
-        const thumbnail = await s3.upload(params).promise();
+        const thumbnail = await uploadObject(params);
 
         const newLesson = new Lesson({
             title,
