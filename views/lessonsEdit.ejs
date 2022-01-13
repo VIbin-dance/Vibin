@@ -15,7 +15,7 @@
                     </div>
                     <h3>
                         <%= lesson.title %> by
-                            <a href="/choreographer/<%= user.googleId %>">
+                            <a href="/choreographer/<%= user._id %>">
                                 <%= user.username %>
                             </a>
                     </h3>
@@ -48,7 +48,7 @@
                         <img src="<%= user.userPhoto %>" height="100" width="100" style="border-radius: 50%;" alt="user photo">
                     </div>
                     <div class="text-center">
-                        <a href="/choreographer/<%= user.googleId %>" style="font-size: 22px;">
+                        <a href="/choreographer/<%= user._id %>" style="font-size: 22px;">
                             <%= user.username %>
                         </a>
                         <br>

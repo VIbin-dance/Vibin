@@ -20,7 +20,7 @@ router.get('/channel', ensureAuthenticated, async(req, res) => {
             let ch_latency = "";
             let ch_type = "";
             let ch_arn = "";
-            Channel.findOne({ googleId: req.user.id }, (err, ch) => {
+            Channel.findOne({ userId: req.session.user._id }, (err, ch) => {
                 if (!ch) {
                     req.flash('error_msg', '現在所有しているチャンネルがありません。');
                     ch_count = 0;
@@ -60,7 +60,7 @@ router.get('/channel', ensureAuthenticated, async(req, res) => {
 });
 
 router.post('/create_channel', ensureAuthenticated, async(req, res) => {
-    const ch_name = req.session.user.googleId;
+    const ch_name = req.session.user._id;
     createChannel(req, res, ch_name);
 });
 
@@ -70,8 +70,8 @@ router.post('/delete_channel', ensureAuthenticated, function(req, res) {
 
 router.get('/teacher/:lesson_id', ensureAuthenticated, async(req, res) => {
     const ls = await Lesson.findOne({ _id: req.params.lesson_id }).lean().exec();
-    if (ls.choreographerID === req.session.user.googleId) {
-        Channel.findOne({ googleId: req.user.id }, (err, ch) => {
+    if (ls.choreographerID === req.session.user._id) {
+        Channel.findOne({ userId: req.session.user._id }, (err, ch) => {
             if (!ch) {
                 req.flash('error_msg', '現在所有しているチャンネルがありません。');
                 res.redirect('/lesson/channel');
@@ -111,12 +111,12 @@ router.get('/student/:lesson_id', checkSession, async(req, res) => {
             req.flash('error_msg', '選択したレッスンは購入されていません。');
             res.redirect(`/reservation/${req.params.lesson_id}`);
         } else {
-            Channel.findOne({ googleId: ls.choreographerID }, async(err, ch) => {
+            Channel.findOne({ userId: ls.choreographerID }, async(err, ch) => {
                 if (!ch) {
                     req.flash('error_msg', '先生側の配信に何か問題が起きました。');
                     res.redirect('/users/profile');
                 } else {
-                    const choreographer = await User.findOne({ googleId: ls.choreographerID }).lean().exec();
+                    const choreographer = await User.findOne({ _id: ls.choreographerID }).lean().exec();
                     res.render('student', {
                         user: user,
                         choreographer: choreographer,
@@ -136,7 +136,7 @@ router.get('/student/:lesson_id', checkSession, async(req, res) => {
 router.get('/edit/:id', ensureAuthenticated, async(req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.id }).lean().exec();
 
-    if (lesson.choreographerID === req.session.user.googleId) {
+    if (lesson.choreographerID === req.session.user._id) {
         const attendee = await User.find({ lesson: lesson._id }, 'username').lean().exec();
         res.render("lessonsEdit", {
             attendee: attendee,
@@ -178,7 +178,7 @@ router.get('/student/details/:lesson_id', ensureAuthenticated, async(req, res) =
         req.flash('error_msg', '選択したレッスンは購入されていません');
         res.redirect(`/reservation/${req.params.lesson_id}`);
     } else {
-        const choreographer = await User.findOne({ googleId: lesson.choreographerID }).lean().exec();
+        const choreographer = await User.findOne({ _id: lesson.choreographerID }).lean().exec();
         res.render("lessonDet", {
             id: req.params.lesson_id,
             lesson: lesson,

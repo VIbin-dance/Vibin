@@ -77,7 +77,7 @@ router.get("/", checkSession, async(req, res) => {
 
             // find a better way to iterate pushing into choreographer array
             for (let i = 0; i < lesson.docs.length; i++) {
-                choreographer[i] = await User.findOne({ googleId: lesson.docs[i].choreographerID.toString() },
+                choreographer[i] = await User.findOne({ _id: lesson.docs[i].choreographerID.toString() },
                         "username"
                     )
                     .lean()
@@ -119,7 +119,7 @@ router.post("/", checkSession, async(req, res) => {
             } else {
                 const choreographer = [];
                 for (let i = 0; i < lesson.docs.length; i++) {
-                    choreographer[i] = await User.findOne({ googleId: lesson.docs[i].choreographerID.toString() },
+                    choreographer[i] = await User.findOne({ _id: lesson.docs[i].choreographerID.toString() },
                         "username"
                     ).exec();
                 }
@@ -147,7 +147,7 @@ router.get("/choreographer/:id", checkSession, async(req, res) => {
             sort: { time: -1 },
         },
         async(err, lesson) => {
-            User.findOne({ googleId: req.params.id }, (err, choreographer) => {
+            User.findOne({ _id: req.params.id }, (err, choreographer) => {
                 res.render("choreographer", {
                     user: user,
                     lesson: lesson,
@@ -200,7 +200,7 @@ router.get("/calendar", ensureAuthenticated, (req, res) => {
                 const choreographer = [];
                 if (req.session.user.lesson) {
                     for (let i = 0; i < req.session.user.lesson.length; i++) {
-                        choreographer[i] = await User.findOne({ googleId: tickets[i].choreographerID },
+                        choreographer[i] = await User.findOne({ _id: tickets[i].choreographerID },
                                 "username"
                             )
                             .lean()
@@ -253,7 +253,7 @@ router.get("/calendar", ensureAuthenticated, (req, res) => {
 
 router.get("/reservation/:id", checkSession, async(req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.id }).lean().exec();
-    const choreographer = await User.findOne({ googleId: lesson.choreographerID })
+    const choreographer = await User.findOne({ _id: lesson.choreographerID })
         .lean()
         .exec();
 
@@ -315,7 +315,7 @@ router.get("/reservation/:id", checkSession, async(req, res) => {
 router.get("/success/:id", ensureAuthenticated, async(req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.id }).lean().exec();
     // const choreographer = await User.findOne({ googleId: lesson.choreographerID }).lean().exec();
-    // const dateTime = moment(lesson.time).format('MM/DD HH:mm');
+    const dateTime = moment(lesson.time).format('MM/DD HH:mm');
 
     let session;
     if (req.query.session_id) {
@@ -353,7 +353,7 @@ router.get("/success/:id", ensureAuthenticated, async(req, res) => {
         <p>--------------------------------------------</p>`;
 
                 sendMail(user.email, "ご予約を受付いたしました！", text);
-                // addCalendar(user, lesson.title, dateTime);
+                addCalendar(user, lesson.title, dateTime);
                 res.redirect(`/reservation/${req.params.id}`);
             }
         );
@@ -371,7 +371,6 @@ router.get("/create", ensureAuthenticated, async(req, res) => {
 
     if (req.session.user.stripeID) {
         const account = await stripe.accounts.retrieve(req.session.user.stripeID);
-        console.log(account);
         let loginLink;
 
         if (account.payouts_enabled == true) {
@@ -420,7 +419,7 @@ router.get("/create", ensureAuthenticated, async(req, res) => {
 router.post("/create", upload.single("thumbnail"), async(req, res) => {
     const { title, time, price, level, genre, mood } = req.body;
     const user = await User.findOne({ email: req.user._json.email }).lean().exec();
-    const choreographerID = user.googleId;
+    const choreographerID = user._id;
     const host = req.get("host");
     let errors = [];
     let loginLink;
@@ -474,14 +473,14 @@ router.post("/create", upload.single("thumbnail"), async(req, res) => {
             mood,
         });
     } else {
-        const buffer = await sharp(req.file.buffer).resize(640, 360).toBuffer()
+        const buffer = await sharp(req.file.buffer).resize(640, 360).webp().toBuffer();
 
         const params = {
             Bucket: process.env.THUMBNAIL_BUCKET_NAME,
             Key: title,
             Body: buffer,
             ACL: "public-read-write",
-            ContentType: "image/jpeg",
+            ContentType: "image/webp",
         };
 
         const thumbnail = await uploadObject(params);

@@ -10,7 +10,7 @@
                     <img src="<%= choreographer.userPhoto %>" height="100" width="100" style="border-radius: 50%;" alt="user photo">
                 </div>
                 <div class="text-center">
-                    <a href="/choreographer/<%= choreographer.googleId %>" style="font-size: 22px;">
+                    <a href="/choreographer/<%= choreographer._id %>" style="font-size: 22px;">
                         <%= choreographer.username %>
                     </a>
                     <br><br>
@@ -39,7 +39,7 @@
                             <h4 id="title<%= i %>">
                                 <%= lesson.docs[i].title %>
                             </h4>
-                            <a class="special" href="/choreographer/<%= choreographer.googleId %>">
+                            <a class="special" href="/choreographer/<%= choreographer._id %>">
                                 <%= choreographer.username %>
                             </a>
                             <p>

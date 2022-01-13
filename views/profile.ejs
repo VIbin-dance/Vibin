@@ -36,9 +36,8 @@
                             </a>
                                 <h4 id="lesson.title<%= i %>">
                                     <%= lesson[i].title %>
-                                        <a class="btn btn-sm btn-dark float-right" href="/lesson/edit/<%= lesson[i]._id %>">詳細</a>
                                 </h4>
-                                <a class="special" href="/choreographer/<%= user.googleId%>">
+                                <a class="special" href="/choreographer/<%= user._id%>">
                                     <%= user.username %>
                                 </a>
                                 <p>
@@ -47,6 +46,7 @@
                                             <%= moment(lesson[i].time).format('MM/DD HH:mm'); %> |
                                                 <%= __(`dashboard.search.level.${lesson[i].level[0]}`) %> |
                                                     <%= __(`dashboard.search.genre.${lesson[i].genre[0]}`) %>
+                                                        <a class="btn btn-sm btn-dark" href="/lesson/edit/<%= lesson[i]._id %>">詳細</a>
                                 </p>
                             </div>
                         </div>
@@ -70,19 +70,17 @@
                             </a>
                                         <h4 id="tickets.title<%= i %>">
                                             <%= tickets[i].title %>
-                                                <a class="btn btn-sm btn-dark float-right" href="/lesson/student/details/<%= tickets[i]._id %>">詳細</a>
                                         </h4>
                                         <a class="special" href="/choreographer/<%= tickets[i].choreographerID %>">
                                             <%= choreographer[i].username %>
                                         </a>
                                         <p>
-                                            <%= tickets[i].price %> Yen |
+                                            <%= tickets[i].price %> 円 |
                                                 <%= moment(tickets[i].time).format('MM/DD HH:mm'); %>
-                                        </p>
-                                        <p class="mb-0">
-                                            <%= __(`dashboard.search.level.${tickets[i].level[0]}`) %> |
-                                                <%= __(`dashboard.search.genre.${tickets[i].genre[0]}`) %> |
-                                                    <%= __(`dashboard.search.mood.${tickets[i].mood[0]}`) %>
+                                                    <%= __(`dashboard.search.level.${tickets[i].level[0]}`) %> |
+                                                        <%= __(`dashboard.search.genre.${tickets[i].genre[0]}`) %>
+                                                            <a class="btn btn-sm btn-dark" href="/lesson/student/details/<%= tickets[i]._id %>">詳細</a>
+
                                         </p>
                                     </div>
                                 </div>
