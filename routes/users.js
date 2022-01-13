@@ -32,7 +32,7 @@ router.get("/login", (req, res) => res.render("login"));
 
 router.get("/profile", ensureAuthenticated, async(req, res) => {
     const [lesson, tickets, user] = await Promise.all([
-        findLesson(req.session.user.googleId),
+        findLesson(req.session.user._id),
         findTicket(req.session.user.lesson),
         findUser(req.session.user._id),
     ]);
@@ -42,7 +42,7 @@ router.get("/profile", ensureAuthenticated, async(req, res) => {
 
     if (user.lesson) {
         for (let i = 0; i < user.lesson.length; i++) {
-            choreographer[i] = await User.findOne({ googleId: tickets[i].choreographerID },
+            choreographer[i] = await User.findOne({ _id: tickets[i].choreographerID },
                     "username"
                 )
                 .lean()

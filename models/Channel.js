@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const ChannelSchema = new mongoose.Schema({
-    googleId: {
+    userId: {
         type: String,
         require: true,
         unique: true
@@ -46,15 +46,15 @@ const ChannelSchema = new mongoose.Schema({
     streamKey: {
         arn: {
             type: String,
-            require: true 
+            require: true
         },
         channelArn: {
             type: String,
-            require: true 
+            require: true
         },
         value: {
             type: String,
-            require: true 
+            require: true
         }
     }
 });
