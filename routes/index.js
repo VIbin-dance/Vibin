@@ -474,7 +474,7 @@ router.post("/create", upload.single("thumbnail"), async(req, res) => {
             mood,
         });
     } else {
-        const buffer = await sharp(req.file.buffer).resize(640, 360).toBuffer()
+        const buffer = await sharp(req.file.buffer).resize(640, 360).webp().toBuffer();
 
         const params = {
             Bucket: process.env.THUMBNAIL_BUCKET_NAME,

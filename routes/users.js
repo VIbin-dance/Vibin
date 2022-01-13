@@ -89,14 +89,15 @@ router.post("/profile/edit", ensureAuthenticated, upload.single("userPhoto"), as
     };
 
     if (req.file) {
-        const buffer = await sharp(req.file.buffer).resize(320, 320).toBuffer()
+        const buffer = await sharp(req.file.buffer).webp().resize(320, 320).toBuffer();
+        console.log(buffer);
 
         const params = {
             Bucket: process.env.PROFILE_BUCKET_NAME,
             Key: req.session.user._id,
             Body: buffer,
             ACL: "public-read-write",
-            ContentType: "image/jpeg",
+            ContentType: "image/webp",
         };
 
         const userPhoto = await uploadObject(params);
