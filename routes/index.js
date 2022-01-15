@@ -67,8 +67,6 @@ router.get(
 );
 
 router.get("/", checkSession, async(req, res) => {
-    sendMail(user.email, "lessonCreate.ejs");
-
     Lesson.paginate({}, {
             page: req.query.page,
             limit: req.query.limit,
