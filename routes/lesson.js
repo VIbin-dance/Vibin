@@ -1,9 +1,10 @@
 var express = require('express');
 var router = express.Router();
 const moment = require('moment');
+
 const { ensureAuthenticated } = require('../config/auth');
 const { checkSession } = require("../config/session");
-const { createChannel, getRecording, deleteChannel } = require('../config/aws/channel');
+const { createChannel, updateStreamKey } = require('../config/aws/channel');
 
 const User = require('../models/User');
 const Channel = require('../models/Channel');
@@ -20,7 +21,7 @@ router.get('/channel', ensureAuthenticated, async(req, res) => {
             let ch_latency = "";
             let ch_type = "";
             let ch_arn = "";
-            Channel.findOne({ userId: req.session.user._id }, (err, ch) => {
+            Channel.findOne({ ch_name: req.session.user._id }, (err, ch) => {
                 if (!ch) {
                     req.flash('error_msg', '現在所有しているチャンネルがありません。');
                     ch_count = 0;
@@ -64,28 +65,18 @@ router.post('/create_channel', ensureAuthenticated, async(req, res) => {
     createChannel(req, res, ch_name);
 });
 
-router.post('/delete_channel', ensureAuthenticated, function(req, res) {
-    deleteChannel(req, res);
+router.post('/reset_streamkey', ensureAuthenticated, function(req, res) {
+    updateStreamKey(req, res);
 });
 
 router.get('/teacher/:lesson_id', ensureAuthenticated, async(req, res) => {
     const ls = await Lesson.findOne({ _id: req.params.lesson_id }).lean().exec();
     if (ls.choreographerID === req.session.user._id) {
-        Channel.findOne({ userId: req.session.user._id }, (err, ch) => {
+        Channel.findOne({ ch_name: req.session.user._id }, (err, ch) => {
             if (!ch) {
                 req.flash('error_msg', '現在所有しているチャンネルがありません。');
                 res.redirect('/lesson/channel');
             } else {
-                // ch_count = 1;
-                // let url;
-
-                // if (moment().isAfter(ls.time)) {
-                //     console.log('iz after bitch')
-                //     getRecording(req, res)
-                // } else {
-                //     url = ch.playbackUrl
-                // }
-
                 res.render('teacher', {
                     user: req.session.user,
                     ch_name: ls.title,
@@ -111,7 +102,7 @@ router.get('/student/:lesson_id', checkSession, async(req, res) => {
             req.flash('error_msg', '選択したレッスンは購入されていません。');
             res.redirect(`/reservation/${req.params.lesson_id}`);
         } else {
-            Channel.findOne({ userId: ls.choreographerID }, async(err, ch) => {
+            Channel.findOne({ ch_name: ls.choreographerID }, async(err, ch) => {
                 if (!ch) {
                     req.flash('error_msg', '先生側の配信に何か問題が起きました。');
                     res.redirect('/users/profile');

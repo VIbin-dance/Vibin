@@ -1,16 +1,12 @@
 const mongoose = require('mongoose');
 
 const ChannelSchema = new mongoose.Schema({
-    userId: {
+    ch_name: {
         type: String,
         require: true,
         unique: true
     },
     choreographerID: {
-        type: String,
-        require: true
-    },
-    ch_name: {
         type: String,
         require: true
     },
@@ -45,10 +41,6 @@ const ChannelSchema = new mongoose.Schema({
     },
     streamKey: {
         arn: {
-            type: String,
-            require: true
-        },
-        channelArn: {
             type: String,
             require: true
         },

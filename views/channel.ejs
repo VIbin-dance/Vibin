@@ -1,61 +1,67 @@
 <!-- live video & chat section -->
 <div class="top-space">
-<section id="channel_grid">
-    <div class="container">
-        <%- include ('partials/messages') %>
-            <p class="block_label">チャンネル一覧</p>
-            <p>詳しいOBSの使用方法の説明は<a href="https://vibin.notion.site/OBS-ec51a2f21ae2460280870017a1b38a06" target="blank">こちら</a></p>
-            <form action="/lesson/delete_channel" method="post">
-                <% if (count !=0) { %>
-                    <div class="channel_infor">
-                        <div class="label">チャンネル名</div>
-                        <div class="content"><%= ch_name %></div>
-                        <div class="label">Channel Latency</div>
-                        <div class="content"><%= ch_latency %></div>
-                        <div class="label">Channel Type</div>
-                        <div class="content"><%= ch_type %></div>
-                        <div class="label">Channel ARN</div>
-                        <div class="content"><%= ch_arn %></div>
-                        <div class="label">Ingest server</div>
-                        <div class="content"><input type="text" readonly class="ch_infor" value="<%= ch_ingest %>" id="ch_ingest"> <button type="button" class="copy_btn" id="copy_ingest" title="copy Ingest server"><img src="/assets/img/copy.png" alt=""></button></div>
-                        <div class="label">Stream key</div>
-                        <div class="content"><input type="text" readonly class="ch_infor" value="<%= ch_streamkey %>" id="ch_streamkey"> <button type="button" class="copy_btn" id="copy_skey" title="copy Stream key"><img src="/assets/img/copy.png" alt=""></button></div>
-                        
-                        <div class="btn_grid">
-                            <button type="submit" class="btn btn-dark">チャンネル削除</button>
-                            <!-- <a href="/lesson/teacher" class="btn btn-dark">レッスンを開始する</a> -->
+    <section id="channel_grid">
+        <div class="container">
+            <%- include ('partials/messages') %>
+                <p class="block_label">チャンネル一覧</p>
+                <p>詳しいOBSの使用方法の説明は<a href="https://vibin.notion.site/OBS-ec51a2f21ae2460280870017a1b38a06" target="blank">こちら</a></p>
+                <form action="/lesson/reset_streamkey" method="post">
+                    <% if (count !=0) { %>
+                        <div class="channel_infor">
+                            <div class="label">チャンネル名</div>
+                            <div class="content">
+                                <%= ch_name %>
+                            </div>
+                            <div class="label">遅延タイプ</div>
+                            <div class="content">
+                                <%= ch_latency %>
+                            </div>
+                            <!-- <div class="label">Channel Type</div>
+                            <div class="content">
+                                <%= ch_type %>
+                            </div>
+                            <div class="label">Channel ARN</div>
+                            <div class="content">
+                                <%= ch_arn %>
+                            </div> -->
+                            <div class="label">取り込みサーバー</div>
+                            <div class="content"><input type="text" readonly class="ch_infor" value="<%= ch_ingest %>" id="ch_ingest"> <button type="button" class="copy_btn" id="copy_ingest" title="copy Ingest server"><img src="/assets/img/copy.png" alt=""></button></div>
+                            <div class="label">ストリームキー</div>
+                            <div class="content"><input type="password" readonly class="ch_infor" value="<%= ch_streamkey %>" id="ch_streamkey">
+                                <button type="button" class="copy_btn" id="copy_skey" title="copy Stream key"><img src="/assets/img/copy.png" alt=""></button>
+                                <p>ストリームキーは誰にも教えないでください。配信で見せるようなことも決してしないでください！</p>
+                                <label class="form-check-label">
+                                    <input type="checkbox" onclick="showStreamKey()">表示する
+                                </label>
+                            </div>
+
+                            <div class="btn_grid">
+                                <button type="submit" class="btn btn-dark">ストリームキーをリセットする</button>
+                            </div>
                         </div>
+                        <% } %>
+                </form>
+
+                <% if (count==0) { %>
+                    <div class="channel_box">
+                        <form action="/lesson/create_channel" method="post">
+                            <p class="desc">新規チャンネルを登録するには「チャンネル新規作成」ボタンをクリックしてください。</p>
+                            <div class="btn_line">
+                                <button type="submit" class="btn btn-dark">チャンネル新規作成</button>
+                            </div>
+                        </form>
                     </div>
-                <% } %>
-            </form>
+                    <% } %>
+        </div>
+    </section>
 
-            <% if (count==0) { %>
-                <!-- <p class="block_label">チャンネル設定</p> -->
-                <div class="channel_box">
-                    <form action="/lesson/create_channel" method="post">
-                        <p class="desc">新規チャンネルを登録するには「チャンネル新規作成」ボタンをクリックしてください。</p>
-                        <!-- <div class="input_line">
-                            <label for="ch_name">チャンネル名</label>
-                            <input type="text" name="ch_name" id="ch_name">
-                        </div> -->
-                        <!-- <div class="input_line">
-                    <label for="ch_tag">タグ内容</label>
-                    <input type="text" name="ch_tag" id="ch_tag" placeholder="タグの内容はカンマ(,)で区切って入力してください。">
-                </div> -->
-                        <div class="btn_line">
-                            <button type="submit" class="btn btn-dark">チャンネル新規作成</button>
-                        </div>
-                    </form>
-                </div>
-                <% } %>
-    </div>
-</section>
-
-
-<!-- Video Player JS File -->
-<!-- <script src="/assets/js/video.js"></script> -->
-
-
-<!-- AWS IVS service SDK -->
-
-<!-- <script src="/assets/js/video.techer.config.js"></script> -->
+    <script>
+        function showStreamKey() {
+            var check = document.getElementById("ch_streamkey");
+            if (check.type === "password") {
+                check.type = "text";
+            } else {
+                check.type = "password";
+            }
+        }
+    </script>
