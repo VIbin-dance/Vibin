@@ -1,13 +1,12 @@
-<h3>レッスンが登録されました &#10024;</h3>
-<a href="/reservation/<%= idLesson[i] %>">
-      <img src="<%= thumbnailLesson[i] %>" alt="thumbnail">
-    </a>
-<h4>
-    <%= titleLesson[i] %>
-</h4>
-<a href="/choreographer/<%= choreographerLesson[i] %>">
-    <%= choreographerLesson[i] %>
-</a>
+<h2>レッスンの登録、誠にありがとうございます！</h2>
+<p>▼登録内容▼</p>
 <p>
-    <%= __(`dashboard.search.level.${levelLesson[i]}`) %>
+    <%= lesson.title %>
 </p>
+<a href="/reservation/<%= lesson.id %>">
+<img src="data:image/<%=lesson.thumbnail.contentType%>;base64, <%=lesson.thumbnail.data.toString('base64')%>" alt="thumbnail">
+</a>
+<p>日時：${dateTime}</p>
+<p>価格：${lesson.price} Yen</p>
+<p>${lesson.level[0]} | ${lesson.genre[0]} | ${lesson.mood[0]}</p>
+<p>--------------------------------------------</p>
