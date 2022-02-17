@@ -314,7 +314,6 @@ router.get("/reservation/:id", checkSession, async(req, res) => {
 
 router.get("/success/:id", ensureAuthenticated, async(req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.id }).lean().exec();
-    // const choreographer = await User.findOne({ googleId: lesson.choreographerID }).lean().exec();
     const dateTime = moment(lesson.time).format('MM/DD HH:mm');
 
     let session;
@@ -502,7 +501,7 @@ router.post("/create", upload.single("thumbnail"), async(req, res) => {
                 const dateTime = moment(time).format("YYYY-MM-DDTHH:mm");
                 addCalendar(user, title, dateTime);
 
-                Channel.findOne({ googleId: choreographerID }).then((channel) => {
+                Channel.findOne({ ch_name: choreographerID }).then((channel) => {
                     if (!channel) {
                         const ch_name = choreographerID;
                         createChannel(req, res, ch_name);
