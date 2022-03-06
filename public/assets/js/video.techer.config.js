@@ -2,13 +2,11 @@
 autosize(document.querySelector("#chat_msg"));
 
 // Initialize IVS player
-(function () {
+(function() {
     'use strict';
     // get playback channel url
     const temp = document.querySelector("#ch_playurl");
     let STREAM_PLAY_URL = temp.value;
-    // STREAM_PLAY_URL = "https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.DmumNckWFTqz.m3u8";
-    // STREAM_PLAY_URL = "https://vibin-archive-recordingconfig.s3-us-west-2.amazonaws.com/2021-05-23+15-00-57.mkv";
 
     // Set up IVS playback tech and quality plugin
     registerIVSTech(videojs);
@@ -26,7 +24,7 @@ autosize(document.querySelector("#chat_msg"));
     });
 
     // Use the player API once the player instance's ready callback is fired
-    const readyCallback = function () {
+    const readyCallback = function() {
         // This executes after video.js is initialized and ready
         window.videoJSPlayer = videoJSPlayer;
 
@@ -83,6 +81,3 @@ autosize(document.querySelector("#chat_msg"));
 
     document.querySelector(".vjs-volume-panel").classList.add("vjs-hover");
 })();
-
-
-
