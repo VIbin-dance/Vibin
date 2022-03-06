@@ -49,6 +49,9 @@ const LessonSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    archiveURL: {
+        type: String
+    }
 });
 
 LessonSchema.plugin(mongoosePaginate);
