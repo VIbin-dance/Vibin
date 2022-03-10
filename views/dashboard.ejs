@@ -1,15 +1,16 @@
 <section id="searchBar" class="searchBar">
     <div class="search-bar">
         <form action="/" method="POST">
-            <h2 class="user">
-                <%= __('dashboard.welcome.welcome') %>
-                    <% if (user != undefined) { %>
+            <% if (user != "") { %>
+                <h2 class="user">
+                    <%= __('dashboard.welcome.welcome') %>
                         <%= user.username %>
-                            <% } %>
-                                <%= __('dashboard.Quote.top') %> <span id="random"></span>
-            </h2><br>
-            <div class="form-group">
-                <select class="form-control chosen-value" type="level" id="level" name="level">
+                            <%= __('dashboard.Quote.top') %> <span id="random"></span>
+                </h2>
+                <% } %>
+                    <br>
+                    <div class="form-group">
+                        <select class="form-control chosen-value" type="level" id="level" name="level">
                         <option selected="null" value="any">
                             <%= __('dashboard.search.level.top') %>
                         </option>
@@ -23,10 +24,10 @@
                             <%= __('dashboard.search.level.Advanced') %>
                         </option>
                     </select>
-            </div>
+                    </div>
 
-            <div class="form-group">
-                <select class="form-control chosen-value" type="genre" id="genre" name="genre">
+                    <div class="form-group">
+                        <select class="form-control chosen-value" type="genre" id="genre" name="genre">
                         <option selected="null" value="any">
                             <%= __('dashboard.search.genre.top') %>
                         </option>
@@ -55,9 +56,9 @@
                             <%= __('dashboard.search.genre.TikTok') %>
                         </option>
                     </select>
-            </div>
-            <div class="form-group">
-                <select class="form-control chosen-value" type="mood" id="mood" name="mood">
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control chosen-value" type="mood" id="mood" name="mood">
                         <option selected="null" value="any">
                             <%= __('dashboard.search.mood.top') %>
                         </option>
@@ -104,9 +105,9 @@
                             <%= __('dashboard.search.mood.Savage') %>
                         </option>
                     </select>
-            </div>
-            <input type="search" id="search" name="search" class="chosen-value" placeholder="<%= __('dashboard.search.search') %>" value="<%= typeof search != 'undefined' ? search : '' %>" />
-            <input class="chosen-value" type="submit" style="background-color: #ff7583;">
+                    </div>
+                    <input type="search" id="search" name="search" class="chosen-value" placeholder="<%= __('dashboard.search.search') %>" value="<%= typeof search != 'undefined' ? search : '' %>" />
+                    <input class="chosen-value" type="submit" style="background-color: #ff7583;">
         </form>
     </div>
 </section>
