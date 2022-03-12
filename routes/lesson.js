@@ -128,13 +128,15 @@ router.get('/edit/:id', ensureAuthenticated, async(req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.id }).lean().exec();
 
     if (lesson.choreographerID === req.session.user._id) {
-        const attendee = await User.find({ lesson: lesson._id }, 'username').lean().exec();
+        const attendee = await User.find({ lesson: lesson._id.toString() }, 'username').lean().exec();
+        const revenue = attendee.length * lesson.price * 0.85
         res.render("lessonsEdit", {
             attendee: attendee,
             id: req.params.id,
             lesson: lesson,
             user: req.session.user,
             userPhoto: req.session.user.userPhoto,
+            revenue: revenue,
         })
     } else {
         req.flash('error_msg', 'アカウント情報が正しくありません。');

@@ -39,6 +39,17 @@ h6 {
     font-family: "Raleway", sans-serif;
 }
 
+textarea,
+input.text,
+input[type="search"],
+input[type="text"],
+input[type="button"],
+input[type="submit"],
+.input-checkbox {
+    -webkit-appearance: none;
+    border-radius: 0;
+}
+
 
 /*--------------------------------------------------------------
 # Back to top button
@@ -78,7 +89,7 @@ h6 {
 #header {
     transition: all 0.5s;
     z-index: 997;
-    background:#fff;
+    background: #fff;
 }
 
 #header.header-scrolled,
@@ -344,8 +355,8 @@ select {
     .chosen-value,
     .search-bar input {
         width: 100px;
-        height: 4rem;
-        font-size: 15px;
+        height: 3.5rem;
+        font-size: 14px;
     }
     .search-bar input {
         width: 80vw;
@@ -1813,6 +1824,7 @@ section {
     box-shadow: 10px 15px 30px rgba(0, 0, 0, 0.18);
 }
 
+
 /* .results .box:hover span,
 .results .box:hover h4,
 .results .box:hover p,
@@ -1839,6 +1851,9 @@ section {
         margin-top: 0px;
         box-shadow: 0px 0px 0px rgba(255, 255, 255, 0);
     }
+    .results h3 {
+        font-size: 22px;
+    }
     .results .box h4,
     .follow .box h4 {
         font-size: 14px;
@@ -1864,15 +1879,12 @@ section {
         /* padding: 0px; */
         box-shadow: 0px 0px 0px rgba(255, 255, 255, 0);
     }
-
     .results .box:hover h4 {
         color: #545454;
     }
-
     .results .box:hover a {
         color: #686868;
     }
-
     .results .box:hover p,
     .results .box:hover span {
         color: #aaaaaa;
@@ -2036,7 +2048,7 @@ section {
 
 .navbar {
     visibility: hidden;
-    margin:0;
+    margin: 0;
     padding: 3px;
 }
 
