@@ -277,6 +277,7 @@ router.get("/reservation/:id", checkSession, async(req, res) => {
             lesson: lesson,
             choreographer: choreographer,
             moment: moment,
+            stripePublicKey: process.env.stripePublicKey,
             user: user,
         });
     } else {
@@ -291,6 +292,7 @@ router.get("/reservation/:id", checkSession, async(req, res) => {
                 quantity: 1,
             }, ],
             customer_email: user.email,
+            allow_promotion_codes: true,
             payment_intent_data: {
                 application_fee_amount: lesson.price * 0.15,
                 transfer_data: {
@@ -307,6 +309,7 @@ router.get("/reservation/:id", checkSession, async(req, res) => {
             lesson: lesson,
             choreographer: choreographer,
             moment: moment,
+            stripePublicKey: process.env.stripePublicKey,
             user: user,
         });
     }
@@ -332,7 +335,7 @@ router.get("/success/:id", ensureAuthenticated, async(req, res) => {
         (session != undefined && session.payment_status == "paid")
     ) {
         User.findByIdAndUpdate(
-            req.session.user._id, { $push: { lesson: lesson._id } }, { upsert: true, new: true, setDefaultsOnInsert: true },
+            req.session.user._id, { $push: { lesson: lesson._id.toString() } }, { upsert: true, new: true, setDefaultsOnInsert: true },
             (err, user) => {
                 console.log(err || user);
                 console.log(session);
@@ -501,7 +504,7 @@ router.post("/create", upload.single("thumbnail"), async(req, res) => {
                 const dateTime = moment(time).format("YYYY-MM-DDTHH:mm");
                 addCalendar(user, title, dateTime);
 
-                Channel.findOne({ ch_name: choreographerID }).then((channel) => {
+                Channel.findOne({ ch_name: choreographerID.toString() }).then((channel) => {
                     if (!channel) {
                         const ch_name = choreographerID;
                         createChannel(req, res, ch_name);
