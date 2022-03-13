@@ -74,7 +74,7 @@
 </main>
 
 <script>
-    const stripe = Stripe('pk_live_51JZFVIAJfw8ehZPneMBTj34zZ5W4oslpDp2J95LFecNu4yRUJwGyANAh4D2auIzuywT3mRuzJk15ZrHvhcSBlIE300XCpW6vvn');
+    const stripe = Stripe('<%= stripePublicKey %>');
     const checkoutButton = document.getElementById('checkout-button');
 
     checkoutButton.addEventListener('click', () => {

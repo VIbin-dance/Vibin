@@ -277,6 +277,7 @@ router.get("/reservation/:id", checkSession, async(req, res) => {
             lesson: lesson,
             choreographer: choreographer,
             moment: moment,
+            stripePublicKey: process.env.stripePublicKey,
             user: user,
         });
     } else {
@@ -291,6 +292,7 @@ router.get("/reservation/:id", checkSession, async(req, res) => {
                 quantity: 1,
             }, ],
             customer_email: user.email,
+            allow_promotion_codes: true,
             payment_intent_data: {
                 application_fee_amount: lesson.price * 0.15,
                 transfer_data: {
@@ -307,6 +309,7 @@ router.get("/reservation/:id", checkSession, async(req, res) => {
             lesson: lesson,
             choreographer: choreographer,
             moment: moment,
+            stripePublicKey: process.env.stripePublicKey,
             user: user,
         });
     }
