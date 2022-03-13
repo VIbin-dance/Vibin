@@ -332,7 +332,7 @@ router.get("/success/:id", ensureAuthenticated, async(req, res) => {
         (session != undefined && session.payment_status == "paid")
     ) {
         User.findByIdAndUpdate(
-            req.session.user._id, { $push: { lesson: lesson._id } }, { upsert: true, new: true, setDefaultsOnInsert: true },
+            req.session.user._id, { $push: { lesson: lesson._id.toString() } }, { upsert: true, new: true, setDefaultsOnInsert: true },
             (err, user) => {
                 console.log(err || user);
                 console.log(session);
