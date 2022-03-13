@@ -35,7 +35,17 @@ const {
 const app = express();
 const Server = http.createServer(app);
 
-const io = socketio(Server);
+// const io = socketio(Server);
+const io = socketio(Server, {
+    cors: {
+        origin: "https://vibin.tokyo",
+        methods: ["GET", "POST"],
+        transports: ['websocket', 'polling'],
+        credentials: true
+    },
+    allowEIO3: true
+});
+
 app.use(cors());
 // require('newrelic');
 // app.use(logger('dev'));
