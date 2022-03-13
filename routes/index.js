@@ -504,7 +504,7 @@ router.post("/create", upload.single("thumbnail"), async(req, res) => {
                 const dateTime = moment(time).format("YYYY-MM-DDTHH:mm");
                 addCalendar(user, title, dateTime);
 
-                Channel.findOne({ ch_name: choreographerID }).then((channel) => {
+                Channel.findOne({ ch_name: choreographerID.toString() }).then((channel) => {
                     if (!channel) {
                         const ch_name = choreographerID;
                         createChannel(req, res, ch_name);
