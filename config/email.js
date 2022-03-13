@@ -5,8 +5,8 @@ const path = require('path');
 
 
 const sendMail = (to, subject, html) => {
-    const text = ejs.renderFile(`../public/email/${file}`, { lesson: data });
-    console.log(text);
+    // const text = ejs.renderFile(`../public/email/${file}`, { lesson: data });
+    // console.log(text);
     // fs.readFile(`public/email/${file}`, "utf-8", (err, file) => {
     //     console.log(err || file);
     // })

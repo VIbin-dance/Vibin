@@ -292,7 +292,7 @@ router.get("/reservation/:id", checkSession, async(req, res) => {
             }, ],
             customer_email: user.email,
             payment_intent_data: {
-                application_fee_amount: lesson.price * 0.2,
+                application_fee_amount: lesson.price * 0.15,
                 transfer_data: {
                     destination: account.id,
                 },
