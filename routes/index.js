@@ -373,6 +373,7 @@ router.get("/create", ensureAuthenticated, async(req, res) => {
 
     if (req.session.user.stripeID) {
         const account = await stripe.accounts.retrieve(req.session.user.stripeID);
+        console.log(account);
         let loginLink;
 
         if (account.payouts_enabled == true) {

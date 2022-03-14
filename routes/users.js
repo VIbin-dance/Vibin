@@ -50,9 +50,9 @@ router.get("/profile", checkSession, ensureAuthenticated, async(req, res) => {
     }
 
     res.render("profile", {
-        user: req.session.user,
-        bio: req.session.user.bio,
-        userPhoto: req.session.user.userPhoto,
+        user: user,
+        bio: user.bio,
+        userPhoto: user.userPhoto,
         lesson: lesson,
         tickets: tickets,
         choreographer: choreographer,
