@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const moment = require("moment");
 const { ensureAuthenticated } = require("../config/auth");
+const { checkSession } = require("../config/session");
 const { uploadObject } = require("../config/aws/s3");
 const Aws = require("aws-sdk");
 const multer = require("multer");
@@ -20,7 +21,7 @@ findLesson = (id) => {
 };
 
 findTicket = (id) => {
-    return Lesson.find({ _id: id }, null, { sort: { time: -1 } }).lean();
+    return Lesson.find({ _id: { $in: id } }, null, { sort: { time: -1 } }).lean();
 };
 
 findUser = (id) => {
@@ -30,14 +31,12 @@ findUser = (id) => {
 router.get("/register", (req, res) => res.render("register"));
 router.get("/login", (req, res) => res.render("login"));
 
-router.get("/profile", ensureAuthenticated, async(req, res) => {
-    const [lesson, tickets, user] = await Promise.all([
-        findLesson(req.session.user._id),
-        findTicket(req.session.user.lesson),
-        findUser(req.session.user._id),
+router.get("/profile", checkSession, ensureAuthenticated, async(req, res) => {
+    const [lesson, tickets] = await Promise.all([
+        findLesson(user._id),
+        findTicket(user.lesson),
     ]);
 
-    req.session.user = user;
     const choreographer = [];
 
     if (user.lesson) {

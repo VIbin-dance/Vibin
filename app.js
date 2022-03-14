@@ -37,7 +37,13 @@ const Server = http.createServer(app);
 
 // const io = socketio(Server);
 const io = socketio(Server, {
-    transports: ['websocket'],
+    cors: {
+        origin: "https://vibin.tokyo",
+        methods: ["GET", "POST"],
+        transports: ['websocket', 'polling'],
+        credentials: true
+    },
+    allowEIO3: true
 });
 
 app.use(cors());
