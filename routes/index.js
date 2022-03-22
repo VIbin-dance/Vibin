@@ -253,6 +253,18 @@ router.get("/calendar", ensureAuthenticated, (req, res) => {
 
 router.get("/reservation/:id", checkSession, async(req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.id }).lean().exec();
+    const newLesson = await Lesson.find({}, null, { sort: { time: -1 }, limit: 4 }).lean().exec();
+    const newChoreographer = [];
+
+    // find a better way to iterate pushing into choreographer array
+    for (let i = 0; i < newLesson.length; i++) {
+        newChoreographer[i] = await User.findOne({ _id: newLesson[i].choreographerID.toString() },
+                "username"
+            )
+            .lean()
+            .exec();
+    }
+
     const choreographer = await User.findOne({ _id: lesson.choreographerID })
         .lean()
         .exec();
@@ -275,7 +287,9 @@ router.get("/reservation/:id", checkSession, async(req, res) => {
             id: undefined,
             params: req.params.id,
             lesson: lesson,
+            newLesson: newLesson,
             choreographer: choreographer,
+            newChoreographer: newChoreographer,
             moment: moment,
             stripePublicKey: process.env.stripePublicKey,
             user: user,
@@ -307,7 +321,9 @@ router.get("/reservation/:id", checkSession, async(req, res) => {
         res.render("reservation", {
             id: session.id,
             lesson: lesson,
+            newLesson: newLesson,
             choreographer: choreographer,
+            newChoreographer: newChoreographer,
             moment: moment,
             stripePublicKey: process.env.stripePublicKey,
             user: user,

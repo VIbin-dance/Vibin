@@ -73,13 +73,46 @@
             </div>
 </main>
 
-<script>
-    const stripe = Stripe('<%= stripePublicKey %>');
-    const checkoutButton = document.getElementById('checkout-button');
+<% if (newLesson.length) { %>
+    <section id="results" class="results">
+        <div class="">
+            <h3>
+                他にもオススメのレッスン&#10024;</h3>
+            <div class="row">
+                <% for(let i=0; i < newLesson.length; i++) { %>
+                    <div class="col-lg-3 col-xs-6">
+                        <div class="box">
+                            <a href="/reservation/<%= newLesson[i].id %>">
+                                            <img src="<%= newLesson[i].thumbnail %>" alt="thumbnail">
+                                        </a>
+                            <h4 id="title<%= i %>">
+                                <%= newLesson[i].title %>
+                            </h4>
+                            <a class="special" href="/choreographer/<%= newLesson[i].choreographerID %>">
+                                <%= newChoreographer[i].username %>
+                            </a>
+                            <p>
+                                <%= newLesson[i].price %>
+                                    <%= __('dashboard.Yen') %> |
+                                        <%= moment(newLesson[i].time).format('MM/DD HH:mm'); %> |
+                                            <%= __(`dashboard.search.level.${newLesson[i].level[0]}`) %> |
+                                                <%= __(`dashboard.search.genre.${newLesson[i].genre[0]}`) %>
+                            </p>
+                        </div>
+                    </div>
+                    <% } %>
+            </div>
+        </div>
+    </section>
+    <% } %>
 
-    checkoutButton.addEventListener('click', () => {
-        stripe.redirectToCheckout({
-            sessionId: '<%= id %>'
-        })
-    });
-</script>
+        <script>
+            const stripe = Stripe('<%= stripePublicKey %>');
+            const checkoutButton = document.getElementById('checkout-button');
+
+            checkoutButton.addEventListener('click', () => {
+                stripe.redirectToCheckout({
+                    sessionId: '<%= id %>'
+                })
+            });
+        </script>
