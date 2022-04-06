@@ -389,7 +389,6 @@ router.get("/create", ensureAuthenticated, async(req, res) => {
 
     if (req.session.user.stripeID) {
         const account = await stripe.accounts.retrieve(req.session.user.stripeID);
-        console.log(account);
         let loginLink;
 
         if (account.payouts_enabled == true) {
@@ -443,122 +442,124 @@ router.post("/create", upload.single("thumbnail"), async(req, res) => {
     let errors = [];
     let loginLink;
 
-    const account = await stripe.accounts.retrieve(req.session.user.stripeID);
+    console.log(req.body)
 
-    if (account.payouts_enabled == true) {
-        loginLink = await stripe.accounts.createLoginLink(account.id);
-    } else {
-        loginLink = await stripe.accountLinks.create({
-            account: account.id,
-            refresh_url: `https://${host}/create`,
-            return_url: `https://${host}/create`,
-            type: "account_onboarding",
-        });
-    }
+    // const account = await stripe.accounts.retrieve(req.session.user.stripeID);
 
-    if (account.payouts_enabled == false) {
-        errors.push({ msg: res.__("銀行口座の情報を設定してください。") });
-    }
+    // if (account.payouts_enabled == true) {
+    //     loginLink = await stripe.accounts.createLoginLink(account.id);
+    // } else {
+    //     loginLink = await stripe.accountLinks.create({
+    //         account: account.id,
+    //         refresh_url: `https://${host}/create`,
+    //         return_url: `https://${host}/create`,
+    //         type: "account_onboarding",
+    //     });
+    // }
 
-    if (
-        title == "" ||
-        req.file == undefined ||
-        time == "" ||
-        price == "" ||
-        level == undefined ||
-        genre == undefined ||
-        mood == undefined
-    ) {
-        errors.push({ msg: res.__("msg.error.fill") });
-    }
+    // if (account.payouts_enabled == false) {
+    //     errors.push({ msg: res.__("銀行口座の情報を設定してください。") });
+    // }
 
-    Lesson.findOne({ title: title }).then((lesson) => {
-        if (lesson) {
-            errors.push({ msg: res.__("msg.error.dupl") });
-        }
-    });
+    // if (
+    //     title == "" ||
+    //     req.file == undefined ||
+    //     time == "" ||
+    //     price == "" ||
+    //     level == undefined ||
+    //     genre == undefined ||
+    //     mood == undefined
+    // ) {
+    //     errors.push({ msg: res.__("msg.error.fill") });
+    // }
 
-    if (errors.length > 0) {
-        res.render("create", {
-            errors,
-            account: account,
-            loginLink: loginLink,
-            user: req.session.user,
-            title,
-            choreographer: req.session.user.username,
-            price,
-            level,
-            genre,
-            mood,
-        });
-    } else {
-        const buffer = await sharp(req.file.buffer).resize(640, 360).webp().toBuffer();
+    // Lesson.findOne({ title: title }).then((lesson) => {
+    //     if (lesson) {
+    //         errors.push({ msg: res.__("msg.error.dupl") });
+    //     }
+    // });
 
-        const params = {
-            Bucket: process.env.THUMBNAIL_BUCKET_NAME,
-            Key: title,
-            Body: buffer,
-            ACL: "public-read-write",
-            ContentType: "image/webp",
-        };
+    // if (errors.length > 0) {
+    //     res.render("create", {
+    //         errors,
+    //         account: account,
+    //         loginLink: loginLink,
+    //         user: req.session.user,
+    //         title,
+    //         choreographer: req.session.user.username,
+    //         price,
+    //         level,
+    //         genre,
+    //         mood,
+    //     });
+    // } else {
+    //     const buffer = await sharp(req.file.buffer).resize(640, 360).webp().toBuffer();
 
-        const thumbnail = await uploadObject(params);
+    //     const params = {
+    //         Bucket: process.env.THUMBNAIL_BUCKET_NAME,
+    //         Key: title,
+    //         Body: buffer,
+    //         ACL: "public-read-write",
+    //         ContentType: "image/webp",
+    //     };
 
-        const newLesson = new Lesson({
-            title,
-            thumbnail: thumbnail.Location,
-            choreographerID,
-            time,
-            price,
-            level,
-            genre,
-            mood,
-        });
+    //     const thumbnail = await uploadObject(params);
 
-        newLesson
-            .save()
-            .then((lesson) => {
-                const dateTime = moment(time).format("YYYY-MM-DDTHH:mm");
-                addCalendar(user, title, dateTime);
+    //     const newLesson = new Lesson({
+    //         title,
+    //         thumbnail: thumbnail.Location,
+    //         choreographerID,
+    //         time,
+    //         price,
+    //         level,
+    //         genre,
+    //         mood,
+    //     });
 
-                Channel.findOne({ ch_name: choreographerID.toString() }).then((channel) => {
-                    if (!channel) {
-                        const ch_name = choreographerID;
-                        createChannel(req, res, ch_name);
-                    }
-                });
+    //     newLesson
+    //         .save()
+    //         .then((lesson) => {
+    //             const dateTime = moment(time).format("YYYY-MM-DDTHH:mm");
+    //             addCalendar(user, title, dateTime);
 
-                const text = `
-                <p>レッスンの登録、誠にありがとうございます！</p>
-                <p>▼登録内容▼</p>
-                <p>--------------------------------------------</p>
-                <p>${lesson.title}</p>
-                <a href="/reservation/<%= lesson.id %>">
-                <img src="data:image/<%=lesson.thumbnail.contentType%>;base64, <%=lesson.thumbnail.data.toString('base64')%>" alt="thumbnail">
-                </a>
-                <p>日時：${dateTime}</p>
-                <p>価格：${lesson.price} Yen</p>
-                <p>${lesson.level[0]} | ${lesson.genre[0]} | ${lesson.mood[0]}</p>
-                <p>--------------------------------------------</p>`;
+    //             Channel.findOne({ ch_name: choreographerID.toString() }).then((channel) => {
+    //                 if (!channel) {
+    //                     const ch_name = choreographerID;
+    //                     createChannel(req, res, ch_name);
+    //                 }
+    //             });
 
-                sendMail(user.email, "レッスンの登録を受付いたしました！", text);
+    //             const text = `
+    //             <p>レッスンの登録、誠にありがとうございます！</p>
+    //             <p>▼登録内容▼</p>
+    //             <p>--------------------------------------------</p>
+    //             <p>${lesson.title}</p>
+    //             <a href="/reservation/<%= lesson.id %>">
+    //             <img src="data:image/<%=lesson.thumbnail.contentType%>;base64, <%=lesson.thumbnail.data.toString('base64')%>" alt="thumbnail">
+    //             </a>
+    //             <p>日時：${dateTime}</p>
+    //             <p>価格：${lesson.price} Yen</p>
+    //             <p>${lesson.level[0]} | ${lesson.genre[0]} | ${lesson.mood[0]}</p>
+    //             <p>--------------------------------------------</p>`;
 
-                req.flash("success_msg", res.__("msg.success.schedule"));
-                res.redirect(`/lesson/edit/${lesson._id}`);
-            })
-            .catch((err) => console.log(err));
-    }
-    Lesson.updateMany({}, {
-            $addToSet: {
-                level: ["any"],
-                genre: ["any"],
-                mood: ["any"],
-            },
-        },
-        (err, result) => {
-            console.log(err || result);
-        }
-    );
+    //             sendMail(user.email, "レッスンの登録を受付いたしました！", text);
+
+    //             req.flash("success_msg", res.__("msg.success.schedule"));
+    //             res.redirect(`/lesson/edit/${lesson._id}`);
+    //         })
+    //         .catch((err) => console.log(err));
+    // }
+    // Lesson.updateMany({}, {
+    //         $addToSet: {
+    //             level: ["any"],
+    //             genre: ["any"],
+    //             mood: ["any"],
+    //         },
+    //     },
+    //     (err, result) => {
+    //         console.log(err || result);
+    //     }
+    // );
 });
 
 // Match the raw body to content type application/json
