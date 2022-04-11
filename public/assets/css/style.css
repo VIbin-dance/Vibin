@@ -1567,6 +1567,13 @@ section {
     color: #EB5160;
 }
 
+#footer .footer-top .footer-contact .logo {
+    padding-top: 30px;
+    display: block;
+    max-width: 50%;
+    height: auto;
+}
+
 #footer .footer-top .footer-contact p {
     font-size: 14px;
     line-height: 24px;
