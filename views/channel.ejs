@@ -25,10 +25,10 @@
                                 <%= ch_arn %>
                             </div> -->
                             <div class="label">取り込みサーバー</div>
-                            <div class="content"><input type="text" readonly class="ch_infor" value="<%= ch_ingest %>" id="ch_ingest"> <button type="button" class="copy_btn" id="copy_ingest" title="copy Ingest server"><img src="/assets/img/copy.png" alt=""></button></div>
+                            <div class="content"><input type="text" readonly class="ch_infor" value="<%= ch_ingest %>" id="ch_ingest"> <button type="button" class="copy_btn" id="copy_ingest" title="copy Ingest server" onclick="copyIngest()"><img src="/assets/img/copy.png" alt=""></button></div>
                             <div class="label">ストリームキー</div>
                             <div class="content"><input type="password" readonly class="ch_infor" value="<%= ch_streamkey %>" id="ch_streamkey">
-                                <button type="button" class="copy_btn" id="copy_skey" title="copy Stream key"><img src="/assets/img/copy.png" alt=""></button>
+                                <button type="button" class="copy_btn" id="copy_skey" title="copy Stream key" onclick="copyStream()"><img src="/assets/img/copy.png" alt=""></button>
                                 <p>ストリームキーは誰にも教えないでください。配信で見せるようなことも決してしないでください！</p>
                                 <label class="form-check-label">
                                     <input type="checkbox" onclick="showStreamKey()">表示する
@@ -63,5 +63,23 @@
             } else {
                 check.type = "password";
             }
+        }
+
+        function copyIngest() {
+            var copyText = document.getElementById("ch_ingest");
+
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+            navigator.clipboard.writeText(copyText.value);
+        }
+
+        function copyStream() {
+            var copyText = document.getElementById("ch_streamkey");
+
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+            navigator.clipboard.writeText(copyText.value);
         }
     </script>
