@@ -87,13 +87,13 @@
                                 <input type="choreographer" id="choreographer" name="choreographer" class="form-control" placeholder="Enter The Choreographer" value="<%= typeof choreographer != 'undefined' ? choreographer : '' %>" readonly/>
                             </div>
 
-                            <div class="row">
+                            <div class="row align-items-center form-group">
                                 <div class="col-lg-6">
                                     <label for="time">開始時刻</label>
                                     <input type="datetime-local" id="time" name="time" class="form-control" value="<%= typeof time != 'undefined' ? time : '' %>">
                                 </div>
                                 <div class="col-lg-6">
-                                    <label for="time">終了時刻（任意）</label>
+                                    <label for="time">終了時刻</label>
                                     <input type="time" id="time" name="time" class="form-control" value="<%= typeof time != 'undefined' ? time : '' %>">
                                 </div>
                             </div>
@@ -288,6 +288,15 @@
     };
 
     function showInput() {
+        let radio_btns = document.querySelectorAll(`input[type='radio'][name='type']`);
+
+        for (let target of radio_btns) {
+            target.addEventListener(`change`, () => {
+                document.querySelector(`#output`).innerHTML = `${target.value} : ${target.checked}`;
+            });
+        }
+
+        console.log("hi")
         const others = document.getElementById("others");
         const genreInput = document.getElementById("genreInput");
 
