@@ -1,172 +1,154 @@
 <body onload="setTime()">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
-<div class="top-space"></div>
-<div class="col-lg-8 m-auto">
-    <h1 class="text-center mb-3"><i class="fas fa-user-plus"></i><%= __('create.create') %></h1>
-    <p class="text-center mb-3">詳しい作成方法の説明は<a href="https://vibin.notion.site/66792233892f49cfa4e5b198c93fec1a" target="blank">こちら</a></p>
-    <%- include ('partials/messages') %>
+    <div class="top-space"></div>
+    <div class="col-lg-8 m-auto">
+        <h1 class="text-center mb-3"><i class="fas fa-user-plus"></i>
+            <%= __('create.create') %>
+        </h1>
+        <p class="text-center mb-3">詳しい作成方法の説明は<a href="https://vibin.notion.site/66792233892f49cfa4e5b198c93fec1a" target="blank">こちら</a></p>
+        <%- include ('partials/messages') %>
 
-        <% if (typeof account == "undefined" || account.external_accounts.data.length === 0) { %>
-            <div class="card">
-                <div class="card-body">
-                    <p>レッスンを作成するには、口座設定を完了してください。下のボタンから設定をしてください</p>
-                    <a class="btn btn-danger" href="<%= loginLink.url %>" target="_blank" role="button">Stripeで口座の設定をする</a>
-                </div>
-            </div>
-        <% } else if (typeof account != "undefined"  && account.external_accounts.data.length != 0) { %>
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title"><%= __('create.bank') %></h3>
-                    <p>
-                        <%= account.email %>
-                    </p>
-                    <p>
-                        <%= account.external_accounts.data[0].bank_name %>
-                    </p>
-                    <p>
-                        <%= account.external_accounts.data[0].account_holder_name %>
-                    </p>
-                    <p>**** ****
-                        <%= account.external_accounts.data[0].last4 %>
-                    </p>
-                    <a class="btn btn-danger" href="<%= loginLink.url %>" target="_blank" role="button"><%= __('create.stripe') %></a>
-                </div>
-            </div>
-        <% } %>
-
-                <form action="/create" method="POST" enctype="multipart/form-data" style="margin-top: 3%;">
-
-                    <div class="form-group">
-                        <label for="title"><%= __('create.title') %></label>
-                        <input type="title" id="title" name="title" class="form-control" placeholder="<%= __('create.titlePlace') %>"
-                            value="<%= typeof title != 'undefined' ? title : '' %>" />
+            <% if (typeof account == "undefined" || account.external_accounts.data.length === 0) { %>
+                <div class="card">
+                    <div class="card-body">
+                        <small>注意：口座設定を完了するまでレッスン代金を振り込まれません。</small>
+                        <p>レッスンを作成する前に、口座設定を完了することを推奨しています。下のボタンから設定をしてください</p>
+                        <a class="btn btn-danger" href="<%= loginLink.url %>" target="_blank" role="button">Stripeで口座の設定をする</a>
                     </div>
+                </div>
+                <% } else if (typeof account != "undefined"  && account.external_accounts.data.length != 0) { %>
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">
+                                <%= __('create.bank') %>
+                            </h3>
+                            <p>
+                                <%= account.email %>
+                            </p>
+                            <p>
+                                <%= account.external_accounts.data[0].bank_name %>
+                            </p>
+                            <p>
+                                <%= account.external_accounts.data[0].account_holder_name %>
+                            </p>
+                            <p>****
+                                <%= account.external_accounts.data[0].last4 %>
+                            </p>
+                            <a class="btn btn-danger" href="<%= loginLink.url %>" target="_blank" role="button">
+                                <%= __('create.stripe') %>
+                            </a>
+                        </div>
+                    </div>
+                    <% } %>
 
-                    <!-- <div class="form-group">
-                        <label for="thumbnail">Thumbnail</label>
-                        <input type="thumbnail" id="thumbnail" name="thumbnail" class="form-control"
-                            placeholder="Enter The Thumbnail"
-                            value="<%= typeof thumbnail != 'undefined' ? thumbnail : '' %>" />
-                    </div> -->
+                        <form action="/create" method="POST" enctype="multipart/form-data" style="margin-top: 3%;">
 
-                    <div class="form-group">
-                        <label for="Photo"><%= __('create.thumbnail') %><p><small><%= __('create.thumbnailDesc') %></small>
+                            <div class="form-group">
+                                <label for="title"><%= __('create.title') %></label>
+                                <input type="title" id="title" name="title" class="form-control" placeholder="<%= __('create.titlePlace') %>" value="<%= typeof title != 'undefined' ? title : '' %>" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Photo"><%= __('create.thumbnail') %><p><small><%= __('create.thumbnailDesc') %></small>
                             </p></label>
-                            <br><img id="output" src="" height="180" width="320" alt="thumbnail" style="margin-bottom: 2%; display:none"/>
-                            <input type="file" id="thumbnail" name="thumbnail" accept="image/*" onchange="loadFile(event)" />
-                    </div>
+                                <br><img id="output" src="" height="180" width="320" alt="thumbnail" style="margin-bottom: 2%; display:none" />
+                                <input type="file" id="thumbnail" name="thumbnail" accept="image/*" onchange="loadFile(event)" />
+                            </div>
 
-                    <!-- <div class="form-group" id="languageDrop">
-                        <label for="language"><%= __('dashboard.search.language.top') %></label>
-                        <select class="form-control" type="language" id="inputState" name="language">
-                            <option selected="null" value="any">
-                                <%= __('dashboard.search.language.top') %>
-                            </option>
-                            <option value="ja">
-                                <%= __('dashboard.search.language.Japanese') %>
-                            </option>
-                            <option value="en">
-                                <%= __('dashboard.search.language.English') %>
-                            </option>
-                            <option value="ko">
-                                <%= __('dashboard.search.language.Korean') %>
-                            </option>
-                            <option value="es">
-                                <%= __('dashboard.search.language.Spanish') %>
-                            </option>
-                        </select>
-                    </div> -->
+                            <div class="form-group">
+                                <label for="choreographer"><%= __('create.choreo') %></label>
+                                <input type="choreographer" id="choreographer" name="choreographer" class="form-control" placeholder="Enter The Choreographer" value="<%= typeof choreographer != 'undefined' ? choreographer : '' %>" readonly/>
+                            </div>
 
-                    <div class="form-group">
-                        <label for="choreographer"><%= __('create.choreo') %></label>
-                        <input type="choreographer" id="choreographer" name="choreographer" class="form-control"
-                            placeholder="Enter The Choreographer"
-                            value="<%= typeof choreographer != 'undefined' ? choreographer : '' %>" readonly/>
-                    </div>
+                            <div class="row align-items-center form-group">
+                                <div class="col-lg-6">
+                                    <label for="time">開始時刻</label>
+                                    <input type="datetime-local" id="time" name="time" class="form-control" value="<%= typeof time != 'undefined' ? time : '' %>">
+                                </div>
+                                <div class="col-lg-6">
+                                    <label for="time">終了時刻</label>
+                                    <input type="time" id="time" name="time" class="form-control" value="<%= typeof time != 'undefined' ? time : '' %>">
+                                </div>
+                            </div>
 
-                    <div class="form-group">
-                        <label for="time"><%= __('create.time') %></label>
-                        <input type="datetime-local" id="time" name="time" class="form-control"
-                            value="<%= typeof time != 'undefined' ? time : '' %>">
-                    </div>
+                            <!-- <div class="form-group">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                <input id="repeat" name="repeat" class="form-check-input" class="form-check-input"
+                                    type="checkbox" value="Repeat" onchange="showMonth()">このレッスンを毎週繰り返す
+                                    <small>（同様の内容のレッスンを毎週同じ時間に続ける場合はチェックしてください）</small>任意</label>
+                                </div>
+                                <div class="col-lg-6" id="repeatUntil" style="display: none;">
+                                    <input type="month" id="repeatUntil" name="repeatUntil" class="form-control" value="<%= typeof repeatUntil != 'undefined' ? repeatUntil : '' %>">
+                                    <small>選択した月の終わりまで、レッスンが繰り返されます</small>
+                                </div>
+                            </div> -->
 
-                    <div class="form-group">
-                        <label for="price"><%= __('create.price') %></label>
-                        <input type="number" id="price" name="price" class="form-control" placeholder="<%= __('create.pricePlace') %>"
-                            value="<%= typeof price != 'undefined' ? price : '' %>" min="0" step="100" />
-                    </div>
+                            <div class="form-group">
+                                <label for="price"><%= __('create.price') %></label>
+                                <input type="number" id="price" name="price" class="form-control" placeholder="<%= __('create.pricePlace') %>" value="<%= typeof price != 'undefined' ? price : '' %>" min="0" step="100" />
+                            </div>
 
-                    <div class="form-group">
-                        <label for="level"><%= __('dashboard.search.level.top') %></label>
-                        <fieldset class="form-group">
-                            <div class="form-check">
-                                <label class="form-check-label">
+                            <div class="form-group">
+                                <label for="level"><%= __('dashboard.search.level.top') %></label>
+                                <fieldset class="form-group">
+                                    <div class="form-check">
+                                        <label class="form-check-label">
                                     <input id="level" name="level" class="form-check-input" type="checkbox"
                                         value="Beginner"><%= __('dashboard.search.level.Beginner') %></label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
+                                    </div>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
                                     <input id="level" name="level" class="form-check-input" class="form-check-input"
                                         type="checkbox" value="Intermediate"><%= __('dashboard.search.level.Intermediate') %></label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
+                                    </div>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
                                     <input id="level" name="level" class="form-check-input" class="form-check-input"
                                         type="checkbox" value="Advanced"><%= __('dashboard.search.level.Advanced') %></label>
+                                    </div>
                             </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="genre"><%= __('dashboard.search.genre.top') %></label>
-                        <fieldset class="form-group">
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="genre" name="genre" class="form-check-input" type="checkbox"
+                            <div class="form-group">
+                                <label for="genre"><%= __('dashboard.search.genre.top') %></label>
+                                <fieldset class="form-group">
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                    <input id="genre" name="genre" class="form-check-input" type="radio"
                                         value="Hip Hop"><%= __('dashboard.search.genre.Hip Hop') %></label>
+                                    </div>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                    <input id="genre" name="genre" class="form-check-input" type="radio" value="Locking"><%= __('dashboard.search.genre.Locking') %></label>
+                                    </div>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                    <input id="genre" name="genre" class="form-check-input" type="radio" value="Jazz"><%= __('dashboard.search.genre.Jazz') %></label>
+                                    </div>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                    <input id="genre" name="genre" class="form-check-input" type="radio" value="Breakin"><%= __('dashboard.search.genre.Breakin') %></label>
+                                    </div>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                    <input id="genre" name="genre" class="form-check-input" type="radio" value="House"><%= __('dashboard.search.genre.House') %></label>
+                                    </div>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                    <input id="genre" name="genre" class="form-check-input" type="radio" value="Popping"><%= __('dashboard.search.genre.Popping') %></label>
+                                    </div>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                    <input id="genre" name="genre" class="form-check-input" type="radio" value="K-POP"><%= __('dashboard.search.genre.K-POP') %></label>
+                                    </div>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input id="others" name="genre" class="form-check-input" onchange="showInput()" type="radio" value="">その他</label>
+                                        <input type="" id="genreInput" name="genreInput" class="form-control" placeholder="その他のジャンル名を入力してください" value="<%= typeof others != 'undefined' ? others : '' %>" disabled/>
+                                    </div>
                             </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="genre" name="genre" class="form-check-input" class="form-check-input"
-                                        type="checkbox" value="Locking"><%= __('dashboard.search.genre.Locking') %></label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="genre" name="genre" class="form-check-input" class="form-check-input"
-                                        type="checkbox" value="Jazz"><%= __('dashboard.search.genre.Jazz') %></label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="genre" name="genre" class="form-check-input" class="form-check-input"
-                                        type="checkbox" value="Breakin"><%= __('dashboard.search.genre.Breakin') %></label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="genre" name="genre" class="form-check-input" class="form-check-input"
-                                        type="checkbox" value="House"><%= __('dashboard.search.genre.House') %></label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="genre" name="genre" class="form-check-input" class="form-check-input"
-                                        type="checkbox" value="Popping"><%= __('dashboard.search.genre.Popping') %></label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="genre" name="genre" class="form-check-input" class="form-check-input"
-                                        type="checkbox" value="K-POP"><%= __('dashboard.search.genre.K-POP') %></label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="genre" name="genre" class="form-check-input" class="form-check-input"
-                                        type="checkbox" value="TikTok"><%= __('dashboard.search.genre.TikTok') %></label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input id="genre" name="genre" class="form-check-input" class="form-check-input"
-                                        type="checkbox" value="Bollywood"><%= __('dashboard.search.genre.Bollywood') %></label>
-                            </div>
-                    </div>
 
-                    <!-- <div class="form-group">
+                            <!-- <div class="form-group">
                         <label for="purpose"><%= __('dashboard.search.purpose.top') %></label>
                         <fieldset class="form-group">
                             <div class="form-check">
@@ -186,106 +168,145 @@
                             </div>
                     </div> -->
 
-                    <div class="form-group">
-                        <label for="mood"><%= __('dashboard.search.mood.top') %></label>
-                        <fieldset class="form-group">
-                            <div class="form-check">
-                                <label class="form-check-label">
+                            <div class="form-group">
+                                <label for="mood"><%= __('dashboard.search.mood.top') %></label>
+                                <fieldset class="form-group">
+                                    <div class="form-check">
+                                        <label class="form-check-label">
                                     <input id="mood" name="mood" class="form-check-input" type="checkbox"
                                         value="Groovy"><%= __('dashboard.search.mood.Groovy') %></label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
+                                    </div>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
                                     <input id="mood" name="mood" class="form-check-input" class="form-check-input"
                                         type="checkbox" value="Funky"><%= __('dashboard.search.mood.Funky') %></label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
+                                    </div>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
                                     <input id="mood" name="mood" class="form-check-input" class="form-check-input"
                                         type="checkbox" value="Chill"><%= __('dashboard.search.mood.Chill') %></label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
+                                    </div>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
                                     <input id="mood" name="mood" class="form-check-input" class="form-check-input"
                                         type="checkbox" value="Romantic"><%= __('dashboard.search.mood.Romantic') %></label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
+                                    </div>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
                                     <input id="mood" name="mood" class="form-check-input" class="form-check-input"
                                         type="checkbox" value="Sexy"><%= __('dashboard.search.mood.Sexy') %></label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
+                                    </div>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
                                     <input id="mood" name="mood" class="form-check-input" class="form-check-input"
                                         type="checkbox" value="Calm"><%= __('dashboard.search.mood.Calm') %></label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
+                                    </div>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
                                     <input id="mood" name="mood" class="form-check-input" class="form-check-input"
                                         type="checkbox" value="Angry"><%= __('dashboard.search.mood.Angry') %></label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
+                                    </div>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
                                     <input id="mood" name="mood" class="form-check-input" class="form-check-input"
                                         type="checkbox" value="Peaceful"><%= __('dashboard.search.mood.Peaceful') %></label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
+                                    </div>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
                                     <input id="mood" name="mood" class="form-check-input" class="form-check-input"
                                         type="checkbox" value="Sad"><%= __('dashboard.search.mood.Sad') %></label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
+                                    </div>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
                                     <input id="mood" name="mood" class="form-check-input" class="form-check-input"
                                         type="checkbox" value="Fearful"><%= __('dashboard.search.mood.Fearful') %></label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
+                                    </div>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
                                     <input id="mood" name="mood" class="form-check-input" class="form-check-input"
                                         type="checkbox" value="Happy"><%= __('dashboard.search.mood.Happy') %></label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
+                                    </div>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
                                     <input id="mood" name="mood" class="form-check-input" class="form-check-input"
                                         type="checkbox" value="Tense"><%= __('dashboard.search.mood.Tense') %></label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
+                                    </div>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
                                     <input id="mood" name="mood" class="form-check-input" class="form-check-input"
                                         type="checkbox" value="Sassy"><%= __('dashboard.search.mood.Sassy') %></label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
+                                    </div>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
                                     <input id="mood" name="mood" class="form-check-input" class="form-check-input"
                                         type="checkbox" value="Savage"><%= __('dashboard.search.mood.Savage') %></label>
+                                    </div>
                             </div>
-                    </div>
 
-                    <div class="text-center" style="margin:3%;">
-                        <p>レッスンを作成することで
-                            <a href="/privacy-policy"><%= __('register.sub2') %></a> 
-                            <%= __('register.sub3') %> 
-                            <a href="/terms-of-service"><%= __('register.sub4') %></a>
-                            に同意したものとみなします。<br>
-                            また、<%= user.email %>があなたの連絡先として公開されます。</p>
-                            <button class="btn btn-danger btn-lg" type="submit"><%= __('create.create') %></button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </body>
+                            <div class="text-center" style="margin:3%;">
+                                <p>レッスンを作成することで
+                                    <a href="/privacy-policy">
+                                        <%= __('register.sub2') %>
+                                    </a>
+                                    <%= __('register.sub3') %>
+                                        <a href="/terms-of-service">
+                                            <%= __('register.sub4') %>
+                                        </a>
+                                        に同意したものとみなします。<br> また、
+                                        <%= user.email %>があなたの連絡先として公開されます。</p>
+                                <button class="btn btn-danger btn-lg" type="submit"><%= __('create.create') %></button>
+                            </div>
+    </div>
+    </form>
+    </div>
+</body>
 
 <script>
-    const loadFile = function (event) {
+    const loadFile = function(event) {
         const image = document.getElementById('output');
         image.src = URL.createObjectURL(event.target.files[0]);
         image.style.display = "block"
-        console.log(image.style.display)
     };
 
     function setTime() {
-        const min = moment().add(1, 'd')
+        const min = moment().add(1, 'm')
         document.getElementById('time').min = min.format('YYYY-MM-DDThh:mm')
-        console.log(document.getElementById('time').min)
     };
+
+    function showInput() {
+        let radio_btns = document.querySelectorAll(`input[type='radio'][id='genre']`);
+        const others = document.getElementById("others");
+        const genreInput = document.getElementById("genreInput");
+
+        for (let target of radio_btns) {
+            target.addEventListener(`change`, () => {
+                if (others.checked) {
+                    // genreInput = "disabled";
+                    genreInput.removeAttribute("disabled")
+                } else {
+                    // genreInput.type = "disabled";
+                    genreInput.setAttribute("disabled", true)
+                }
+            });
+        }
+
+        if (others.checked) {
+            // genreInput = "disabled";
+            genreInput.removeAttribute("disabled")
+        } else {
+            // genreInput.type = "disabled";
+            genreInput.setAttribute("disabled", true)
+        }
+    }
+
+    function showMonth() {
+        const repeat = document.getElementById("repeat");
+        const repeatUntil = document.getElementById("repeatUntil");
+
+        if (repeat.checked == true) {
+            repeatUntil.style.display = "block";
+        } else {
+            repeatUntil.style.display = "none";
+        }
+    }
 </script>

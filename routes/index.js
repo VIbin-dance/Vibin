@@ -253,6 +253,18 @@ router.get("/calendar", ensureAuthenticated, (req, res) => {
 
 router.get("/reservation/:id", checkSession, async(req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.id }).lean().exec();
+    const newLesson = await Lesson.find({}, null, { sort: { time: -1 }, limit: 3 }).lean().exec();
+    const newChoreographer = [];
+
+    // find a better way to iterate pushing into choreographer array
+    for (let i = 0; i < newLesson.length; i++) {
+        newChoreographer[i] = await User.findOne({ _id: newLesson[i].choreographerID.toString() },
+                "username"
+            )
+            .lean()
+            .exec();
+    }
+
     const choreographer = await User.findOne({ _id: lesson.choreographerID })
         .lean()
         .exec();
@@ -275,7 +287,9 @@ router.get("/reservation/:id", checkSession, async(req, res) => {
             id: undefined,
             params: req.params.id,
             lesson: lesson,
+            newLesson: newLesson,
             choreographer: choreographer,
+            newChoreographer: newChoreographer,
             moment: moment,
             stripePublicKey: process.env.stripePublicKey,
             user: user,
@@ -307,7 +321,9 @@ router.get("/reservation/:id", checkSession, async(req, res) => {
         res.render("reservation", {
             id: session.id,
             lesson: lesson,
+            newLesson: newLesson,
             choreographer: choreographer,
+            newChoreographer: newChoreographer,
             moment: moment,
             stripePublicKey: process.env.stripePublicKey,
             user: user,
@@ -373,7 +389,6 @@ router.get("/create", ensureAuthenticated, async(req, res) => {
 
     if (req.session.user.stripeID) {
         const account = await stripe.accounts.retrieve(req.session.user.stripeID);
-        console.log(account);
         let loginLink;
 
         if (account.payouts_enabled == true) {
@@ -420,15 +435,18 @@ router.get("/create", ensureAuthenticated, async(req, res) => {
 });
 
 router.post("/create", upload.single("thumbnail"), async(req, res) => {
-    const { title, time, price, level, genre, mood } = req.body;
+    const { title, time, repeatUntil, price, level, genre, genreInput, mood } = req.body;
     const user = await User.findOne({ email: req.user._json.email }).lean().exec();
     const choreographerID = user._id;
     const host = req.get("host");
+    const lessonGenre = (!genreInput) ? genre : genreInput;
     let errors = [];
     let loginLink;
 
-    const account = await stripe.accounts.retrieve(req.session.user.stripeID);
+    console.log(req.body)
 
+    const account = await stripe.accounts.retrieve(req.session.user.stripeID);
+    // console.log(account)
     if (account.payouts_enabled == true) {
         loginLink = await stripe.accounts.createLoginLink(account.id);
     } else {
@@ -440,9 +458,9 @@ router.post("/create", upload.single("thumbnail"), async(req, res) => {
         });
     }
 
-    if (account.payouts_enabled == false) {
-        errors.push({ msg: res.__("銀行口座の情報を設定してください。") });
-    }
+    // if (account.payouts_enabled == false) {
+    // errors.push({ msg: res.__("銀行口座の情報を設定してください。") });
+    // }
 
     if (
         title == "" ||
@@ -456,11 +474,17 @@ router.post("/create", upload.single("thumbnail"), async(req, res) => {
         errors.push({ msg: res.__("msg.error.fill") });
     }
 
-    Lesson.findOne({ title: title }).then((lesson) => {
-        if (lesson) {
-            errors.push({ msg: res.__("msg.error.dupl") });
-        }
-    });
+    // Lesson.findOne({ title: title }).then((lesson) => {
+    //     if (lesson) {
+    //         errors.push({ msg: res.__("msg.error.dupl") });
+    //     }
+    // });
+
+
+    // implementing repeatuntil feature. if repeatuntil is chosen, then new lessons are created every week until the selected month
+    // end of a month fromnow in days /7 = number of lessons
+    // const repeat = moment().date(1).day();
+    // console.log(repeat)
 
     if (errors.length > 0) {
         res.render("create", {
@@ -471,6 +495,7 @@ router.post("/create", upload.single("thumbnail"), async(req, res) => {
             title,
             choreographer: req.session.user.username,
             price,
+            time,
             level,
             genre,
             mood,
@@ -495,7 +520,7 @@ router.post("/create", upload.single("thumbnail"), async(req, res) => {
             time,
             price,
             level,
-            genre,
+            genre: lessonGenre,
             mood,
         });
 
@@ -513,15 +538,15 @@ router.post("/create", upload.single("thumbnail"), async(req, res) => {
                 });
 
                 const text = `
-                <p>レッスンの登録、誠にありがとうございます！</p>
+                <h2>レッスンの登録、誠にありがとうございます！</h2>
                 <p>▼登録内容▼</p>
                 <p>--------------------------------------------</p>
                 <p>${lesson.title}</p>
-                <a href="/reservation/<%= lesson.id %>">
-                <img src="data:image/<%=lesson.thumbnail.contentType%>;base64, <%=lesson.thumbnail.data.toString('base64')%>" alt="thumbnail">
+                <a href="https://vibin.tokyo/reservation/${lesson.id}">
+                <img src="${lesson.thumbnail}" alt="thumbnail">
                 </a>
                 <p>日時：${dateTime}</p>
-                <p>価格：${lesson.price} Yen</p>
+                <p>価格：${lesson.price} 円</p>
                 <p>${lesson.level[0]} | ${lesson.genre[0]} | ${lesson.mood[0]}</p>
                 <p>--------------------------------------------</p>`;
 

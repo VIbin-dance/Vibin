@@ -105,7 +105,7 @@
 				"Intermediate": "中級者",
 				"Advanced": "上級者",
 				"Intermediate,any": "dashboard.search.level.Intermediate,any",
-				"undefined": "dashboard.search.level.undefined"
+				"undefined": "未選択"
 			},
 			"genre": {
 				"top": "ジャンル",
@@ -117,7 +117,8 @@
 				"Popping": "ポップ",
 				"K-POP": "K-POP",
 				"TikTok": "TikTok",
-				"Bollywood": "ボリウッド"
+				"Bollywood": "ボリウッド",
+				"ワック": "dashboard.search.genre.ワック"
 			},
 			"purpose": {
 				"top": "目的",
@@ -168,7 +169,7 @@
 		}
 	},
 	"reservation": {
-		"purchase": "購入",
+		"purchase": "購入する",
 		"choreo": "この先生について",
 		"contact": "連絡先"
 	},
