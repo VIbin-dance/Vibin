@@ -136,6 +136,12 @@ body::-webkit-scrollbar-thumb {
     }
 }
 
+@media (orientation:landscape) and (max-width: 768px) {
+    .live_grid .video_grid {
+        width: 70%;
+    }
+}
+
 .live_grid .video_grid.collapseOff {
     width: 100%;
 }
@@ -1052,6 +1058,12 @@ body::-webkit-scrollbar-thumb {
     }
 }
 
+@media (orientation:landscape) and (max-width: 768px) {
+    .live_grid .chat_grid.collapseOn {
+        width: 30%;
+    }
+}
+
 .live_grid .chat_grid .contain {
     height: 90%;
     display: -webkit-box;
@@ -1099,6 +1111,12 @@ body::-webkit-scrollbar-thumb {
 @media screen and (max-width: 768px) {
     .live_grid .chat_grid .contain .input_wrap {
         padding: 0.5rem 1rem;
+    }
+}
+
+@media (orientation:landscape) and (max-width: 768px) {
+    .live_grid .chat_grid .contain .input_wrap {
+        padding: 0rem 0rem;
     }
 }
 
@@ -1260,6 +1278,17 @@ body::-webkit-scrollbar-thumb {
     }
     .live_grid .chat_grid .contain .message_wrap ul li .message .time {
         padding: 0;
+    }
+    .live_grid .chat_grid .contain .message_wrap ul li .message {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.7rem;
+    }
+}
+
+@media (orientation:landscape) and (max-width: 768px) {
+    .live_grid .chat_grid .contain .message_wrap ul li .avatar {
+        width: 2rem;
+        height: 2rem;
     }
 }
 

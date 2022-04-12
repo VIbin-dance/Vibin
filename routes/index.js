@@ -253,7 +253,7 @@ router.get("/calendar", ensureAuthenticated, (req, res) => {
 
 router.get("/reservation/:id", checkSession, async(req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.id }).lean().exec();
-    const newLesson = await Lesson.find({}, null, { sort: { time: -1 }, limit: 4 }).lean().exec();
+    const newLesson = await Lesson.find({}, null, { sort: { time: -1 }, limit: 3 }).lean().exec();
     const newChoreographer = [];
 
     // find a better way to iterate pushing into choreographer array
@@ -435,43 +435,44 @@ router.get("/create", ensureAuthenticated, async(req, res) => {
 });
 
 router.post("/create", upload.single("thumbnail"), async(req, res) => {
-    const { title, time, price, level, genre, mood } = req.body;
+    const { title, time, repeatUntil, price, level, genre, genreInput, mood } = req.body;
     const user = await User.findOne({ email: req.user._json.email }).lean().exec();
     const choreographerID = user._id;
     const host = req.get("host");
+    const lessonGenre = (!genreInput) ? genre : genreInput;
     let errors = [];
     let loginLink;
 
     console.log(req.body)
 
-    // const account = await stripe.accounts.retrieve(req.session.user.stripeID);
-
-    // if (account.payouts_enabled == true) {
-    //     loginLink = await stripe.accounts.createLoginLink(account.id);
-    // } else {
-    //     loginLink = await stripe.accountLinks.create({
-    //         account: account.id,
-    //         refresh_url: `https://${host}/create`,
-    //         return_url: `https://${host}/create`,
-    //         type: "account_onboarding",
-    //     });
-    // }
+    const account = await stripe.accounts.retrieve(req.session.user.stripeID);
+    // console.log(account)
+    if (account.payouts_enabled == true) {
+        loginLink = await stripe.accounts.createLoginLink(account.id);
+    } else {
+        loginLink = await stripe.accountLinks.create({
+            account: account.id,
+            refresh_url: `https://${host}/create`,
+            return_url: `https://${host}/create`,
+            type: "account_onboarding",
+        });
+    }
 
     // if (account.payouts_enabled == false) {
-    //     errors.push({ msg: res.__("銀行口座の情報を設定してください。") });
+    // errors.push({ msg: res.__("銀行口座の情報を設定してください。") });
     // }
 
-    // if (
-    //     title == "" ||
-    //     req.file == undefined ||
-    //     time == "" ||
-    //     price == "" ||
-    //     level == undefined ||
-    //     genre == undefined ||
-    //     mood == undefined
-    // ) {
-    //     errors.push({ msg: res.__("msg.error.fill") });
-    // }
+    if (
+        title == "" ||
+        req.file == undefined ||
+        time == "" ||
+        price == "" ||
+        level == undefined ||
+        genre == undefined ||
+        mood == undefined
+    ) {
+        errors.push({ msg: res.__("msg.error.fill") });
+    }
 
     // Lesson.findOne({ title: title }).then((lesson) => {
     //     if (lesson) {
@@ -479,87 +480,94 @@ router.post("/create", upload.single("thumbnail"), async(req, res) => {
     //     }
     // });
 
-    // if (errors.length > 0) {
-    //     res.render("create", {
-    //         errors,
-    //         account: account,
-    //         loginLink: loginLink,
-    //         user: req.session.user,
-    //         title,
-    //         choreographer: req.session.user.username,
-    //         price,
-    //         level,
-    //         genre,
-    //         mood,
-    //     });
-    // } else {
-    //     const buffer = await sharp(req.file.buffer).resize(640, 360).webp().toBuffer();
 
-    //     const params = {
-    //         Bucket: process.env.THUMBNAIL_BUCKET_NAME,
-    //         Key: title,
-    //         Body: buffer,
-    //         ACL: "public-read-write",
-    //         ContentType: "image/webp",
-    //     };
+    // implementing repeatuntil feature. if repeatuntil is chosen, then new lessons are created every week until the selected month
+    // end of a month fromnow in days /7 = number of lessons
+    // const repeat = moment().date(1).day();
+    // console.log(repeat)
 
-    //     const thumbnail = await uploadObject(params);
+    if (errors.length > 0) {
+        res.render("create", {
+            errors,
+            account: account,
+            loginLink: loginLink,
+            user: req.session.user,
+            title,
+            choreographer: req.session.user.username,
+            price,
+            time,
+            level,
+            genre,
+            mood,
+        });
+    } else {
+        const buffer = await sharp(req.file.buffer).resize(640, 360).webp().toBuffer();
 
-    //     const newLesson = new Lesson({
-    //         title,
-    //         thumbnail: thumbnail.Location,
-    //         choreographerID,
-    //         time,
-    //         price,
-    //         level,
-    //         genre,
-    //         mood,
-    //     });
+        const params = {
+            Bucket: process.env.THUMBNAIL_BUCKET_NAME,
+            Key: title,
+            Body: buffer,
+            ACL: "public-read-write",
+            ContentType: "image/webp",
+        };
 
-    //     newLesson
-    //         .save()
-    //         .then((lesson) => {
-    //             const dateTime = moment(time).format("YYYY-MM-DDTHH:mm");
-    //             addCalendar(user, title, dateTime);
+        const thumbnail = await uploadObject(params);
 
-    //             Channel.findOne({ ch_name: choreographerID.toString() }).then((channel) => {
-    //                 if (!channel) {
-    //                     const ch_name = choreographerID;
-    //                     createChannel(req, res, ch_name);
-    //                 }
-    //             });
+        const newLesson = new Lesson({
+            title,
+            thumbnail: thumbnail.Location,
+            choreographerID,
+            time,
+            price,
+            level,
+            genre: lessonGenre,
+            mood,
+        });
 
-    //             const text = `
-    //             <p>レッスンの登録、誠にありがとうございます！</p>
-    //             <p>▼登録内容▼</p>
-    //             <p>--------------------------------------------</p>
-    //             <p>${lesson.title}</p>
-    //             <a href="/reservation/<%= lesson.id %>">
-    //             <img src="data:image/<%=lesson.thumbnail.contentType%>;base64, <%=lesson.thumbnail.data.toString('base64')%>" alt="thumbnail">
-    //             </a>
-    //             <p>日時：${dateTime}</p>
-    //             <p>価格：${lesson.price} Yen</p>
-    //             <p>${lesson.level[0]} | ${lesson.genre[0]} | ${lesson.mood[0]}</p>
-    //             <p>--------------------------------------------</p>`;
+        newLesson
+            .save()
+            .then((lesson) => {
+                const dateTime = moment(time).format("YYYY-MM-DDTHH:mm");
+                addCalendar(user, title, dateTime);
 
-    //             sendMail(user.email, "レッスンの登録を受付いたしました！", text);
+                Channel.findOne({ ch_name: choreographerID.toString() }).then((channel) => {
+                    if (!channel) {
+                        const ch_name = choreographerID;
+                        createChannel(req, res, ch_name);
+                    }
+                });
 
-    //             req.flash("success_msg", res.__("msg.success.schedule"));
-    //             res.redirect(`/lesson/edit/${lesson._id}`);
-    //         })
-    //         .catch((err) => console.log(err));
-    // }
-    // Lesson.updateMany({}, {
-    //         $addToSet: {
-    //             level: ["any"],
-    //             genre: ["any"],
-    //             mood: ["any"],
-    //         },
-    //     },
-    //     (err, result) => {
-    //         console.log(err || result);
-    //     }
-    // );
+                const text = `
+                <h2>レッスンの登録、誠にありがとうございます！</h2>
+                <p>▼登録内容▼</p>
+                <p>--------------------------------------------</p>
+                <p>${lesson.title}</p>
+                <a href="https://vibin.tokyo/reservation/${lesson.id}">
+                <img src="${lesson.thumbnail}" alt="thumbnail">
+                </a>
+                <p>日時：${dateTime}</p>
+                <p>価格：${lesson.price} 円</p>
+                <p>${lesson.level[0]} | ${lesson.genre[0]} | ${lesson.mood[0]}</p>
+                <p>--------------------------------------------</p>`;
+
+                sendMail(user.email, "レッスンの登録を受付いたしました！", text);
+
+                req.flash("success_msg", res.__("msg.success.schedule"));
+                res.redirect(`/lesson/edit/${lesson._id}`);
+            })
+            .catch((err) => console.log(err));
+    }
+    Lesson.updateMany({}, {
+            $addToSet: {
+                level: ["any"],
+                genre: ["any"],
+                mood: ["any"],
+            },
+        },
+        (err, result) => {
+            console.log(err || result);
+        }
+    );
 });
 
 // Match the raw body to content type application/json

@@ -43,10 +43,11 @@
                                 <p>
                                     <%= lesson[i].price %>
                                         <%= __('dashboard.Yen') %> |
-                                            <%= moment(lesson[i].time).format('MM/DD HH:mm'); %> |
-                                                <%= __(`dashboard.search.level.${lesson[i].level[0]}`) %> |
-                                                    <%= __(`dashboard.search.genre.${lesson[i].genre[0]}`) %>
-                                                        <a class="btn btn-sm btn-dark" href="/lesson/edit/<%= lesson[i]._id %>">詳細</a>
+                                            <%= moment(lesson[i].time[0]).format('MM/DD HH:mm'); %> ~
+                                                <%= lesson[i].time[1] %> |
+                                                    <%= __(`dashboard.search.level.${lesson[i].level[0]}`) %> |
+                                                        <%= __(`dashboard.search.genre.${lesson[i].genre[0]}`) %>
+                                                            <a class="btn btn-sm btn-dark" href="/lesson/edit/<%= lesson[i]._id %>">詳細</a>
                                 </p>
                             </div>
                         </div>

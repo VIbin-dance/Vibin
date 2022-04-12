@@ -49,6 +49,7 @@ router.get('/channel', ensureAuthenticated, async(req, res) => {
                     count: ch_count,
                     ch_name: ch_name,
                     ch_latency: ch_latency,
+                    ch_chatURL: `https://vibin.tokyo/lesson/chat/${user._id}`,
                     ch_type: ch_type,
                     ch_arn: ch_arn,
                     ch_ingest: "rtmps://" + ch_ingest + ":443/app/",
@@ -198,5 +199,22 @@ router.post('/student/details/:lesson_id', ensureAuthenticated, async(req, res) 
             });
     }
 })
+
+router.get('/chat/:userId', checkSession, async(req, res) => {
+    Channel.findOne({ ch_name: req.params.userId }, async(err, ch) => {
+        if (ch.ch_name != user._id) {
+            req.flash('error_msg', 'このページへのアクセス権がありません。');
+            res.redirect('/');
+        } else {
+            res.render('chat', {
+                layout: false,
+                user: user,
+                ch_arn: ch.arn,
+                ch_streamkey: ch.streamKey.value,
+                ch_playURL: ch.playbackUrl,
+            })
+        }
+    });
+});
 
 module.exports = router;
