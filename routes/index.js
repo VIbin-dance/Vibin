@@ -269,6 +269,12 @@ router.get("/reservation/:id", checkSession, async(req, res) => {
         .lean()
         .exec();
 
+    // const account = await stripe.accounts.retrieve(choreographer.stripeID);
+    // if (account.payouts_enabled == true) {
+    //     req.flash("error_msg", "先生側の設定が完了していません。");
+    //     res.redirect(`/`);
+    // }
+
     if (moment().isAfter(lesson.time) && lesson.price === 0) {
         res.redirect(`/lesson/student/${req.params.id}`);
     } else if (
@@ -448,17 +454,17 @@ router.post("/create", upload.single("thumbnail"), async(req, res) => {
     console.log(req.body)
 
     const account = await stripe.accounts.retrieve(req.session.user.stripeID);
-    // console.log(account)
-    if (account.payouts_enabled == true) {
-        loginLink = await stripe.accounts.createLoginLink(account.id);
-    } else {
-        loginLink = await stripe.accountLinks.create({
-            account: account.id,
-            refresh_url: `https://${host}/create`,
-            return_url: `https://${host}/create`,
-            type: "account_onboarding",
-        });
-    }
+    console.log(account)
+        // if (account.payouts_enabled == true) {
+        // loginLink = await stripe.accounts.createLoginLink(account.id);
+        // } else {
+        //     loginLink = await stripe.accountLinks.create({
+        //         account: account.id,
+        //         refresh_url: `https://${host}/create`,
+        //         return_url: `https://${host}/create`,
+        //         type: "account_onboarding",
+        //     });
+        // }
 
     // if (account.payouts_enabled == false) {
     // errors.push({ msg: res.__("銀行口座の情報を設定してください。") });
@@ -492,7 +498,7 @@ router.post("/create", upload.single("thumbnail"), async(req, res) => {
         res.render("create", {
             errors,
             account: account,
-            loginLink: loginLink,
+            loginLink: "loginLink",
             user: req.session.user,
             title,
             choreographer: req.session.user.username,
