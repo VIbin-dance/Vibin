@@ -440,6 +440,8 @@ router.post("/create", upload.single("thumbnail"), async(req, res) => {
     const choreographerID = user._id;
     const host = req.get("host");
     const lessonGenre = (!genreInput) ? genre : genreInput;
+    // const lessonTime = time.join('/')
+    // const finTime = moment(lessonTime).format('MM/DD HH:mm')
     let errors = [];
     let loginLink;
 
