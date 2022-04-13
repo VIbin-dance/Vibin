@@ -23,7 +23,7 @@ const LessonSchema = new mongoose.Schema({
         require: true,
     },
     time: {
-        type: Array,
+        type: Date,
         require: true,
     },
     level: {
