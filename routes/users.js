@@ -28,10 +28,19 @@ findUser = (id) => {
     return User.findOne({ _id: id }).lean();
 };
 
-router.get("/register", (req, res) => res.render("register"));
-router.get("/login", (req, res) => res.render("login"));
+router.get("/register", (req, res) => {
+    res.render("lp/signup", {
+        layout: false
+    });
+})
 
-router.get("/profile", checkSession, ensureAuthenticated, async(req, res) => {
+router.get("/login", (req, res) => {
+    res.render("lp/signin", {
+        layout: false
+    });
+})
+
+router.get("/profile", checkSession, ensureAuthenticated, async (req, res) => {
     const [lesson, tickets] = await Promise.all([
         findLesson(user._id),
         findTicket(user.lesson),
@@ -42,8 +51,8 @@ router.get("/profile", checkSession, ensureAuthenticated, async(req, res) => {
     if (user.lesson) {
         for (let i = 0; i < user.lesson.length; i++) {
             choreographer[i] = await User.findOne({ _id: tickets[i].choreographerID },
-                    "username"
-                )
+                "username"
+            )
                 .lean()
                 .exec();
         }
@@ -75,7 +84,7 @@ router.get("/profile/edit", ensureAuthenticated, (req, res) => {
     }
 });
 
-router.post("/profile/edit", ensureAuthenticated, upload.single("userPhoto"), async(req, res) => {
+router.post("/profile/edit", ensureAuthenticated, upload.single("userPhoto"), async (req, res) => {
     const { username, bio, level, genre } = req.body;
     let errors = [];
 

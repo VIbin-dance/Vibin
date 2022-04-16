@@ -20,18 +20,23 @@ const Lesson = require("../models/Lesson");
 const Channel = require("../models/Channel");
 
 // put these functions in one folder and reference to use more than once
-findLesson = function(id) {
+findLesson = function (id) {
     return Lesson.find({ choreographerID: id });
 };
 
-findTicket = function(id) {
+findTicket = function (id) {
     return Lesson.find({ _id: id });
 };
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-router.get("/about", async(req, res) => res.render("landing"));
+router.get("/rjd8kPWDg9AaJZUC", async (req, res) => {
+    res.render("lp/lp-v1", {
+        layout: false
+    });
+})
+
 router.get("/error", (req, res) => res.send("Login error"));
 
 router.get("/logout", (req, res) => {
@@ -57,7 +62,7 @@ router.get(
         failureRedirect: "/error",
         session: true,
     }),
-    async(req, res) => {
+    async (req, res) => {
         User.findOne({ email: req.user._json.email }, (err, user) => {
             req.session.user = user;
             req.flash("success_msg", res.__("msg.success.login"));
@@ -66,20 +71,20 @@ router.get(
     }
 );
 
-router.get("/", checkSession, async(req, res) => {
+router.get("/", checkSession, async (req, res) => {
     Lesson.paginate({}, {
-            page: req.query.page,
-            limit: req.query.limit,
-            sort: { time: -1 },
-        },
-        async(err, lesson) => {
+        page: req.query.page,
+        limit: req.query.limit,
+        sort: { time: -1 },
+    },
+        async (err, lesson) => {
             const choreographer = [];
 
             // find a better way to iterate pushing into choreographer array
             for (let i = 0; i < lesson.docs.length; i++) {
                 choreographer[i] = await User.findOne({ _id: lesson.docs[i].choreographerID.toString() },
-                        "username"
-                    )
+                    "username"
+                )
                     .lean()
                     .exec();
             }
@@ -98,7 +103,7 @@ router.get("/", checkSession, async(req, res) => {
     );
 });
 
-router.post("/", checkSession, async(req, res) => {
+router.post("/", checkSession, async (req, res) => {
     const { level, genre, mood, search } = req.body;
     const searchQuery = new RegExp(escapeRegex(search), "gi");
     const query = {
@@ -108,11 +113,11 @@ router.post("/", checkSession, async(req, res) => {
 
     Lesson.paginate(
         query, {
-            page: req.query.page,
-            limit: 100,
-            sort: { time: -1 },
-        },
-        async(err, lesson) => {
+        page: req.query.page,
+        limit: 100,
+        sort: { time: -1 },
+    },
+        async (err, lesson) => {
             if (!lesson.docs.length) {
                 req.flash("error_msg", res.__("msg.error.video"));
                 res.redirect("/");
@@ -140,13 +145,13 @@ router.post("/", checkSession, async(req, res) => {
 
 router.get("/results", (req, res) => res.render("results"));
 
-router.get("/choreographer/:id", checkSession, async(req, res) => {
+router.get("/choreographer/:id", checkSession, async (req, res) => {
     Lesson.paginate({ choreographerID: req.params.id }, {
-            page: req.query.page,
-            limit: req.query.limit,
-            sort: { time: -1 },
-        },
-        async(err, lesson) => {
+        page: req.query.page,
+        limit: req.query.limit,
+        sort: { time: -1 },
+    },
+        async (err, lesson) => {
             User.findOne({ _id: req.params.id }, (err, choreographer) => {
                 res.render("choreographer", {
                     user: user,
@@ -164,14 +169,14 @@ router.get("/choreographer/:id", checkSession, async(req, res) => {
 
 router.get("/calendar", ensureAuthenticated, (req, res) => {
     fetch(
-            `https://www.googleapis.com/calendar/v3/calendars/${req.session.user.email}/events?orderBy=startTime&q=vibin&singleEvents=true&key=${process.env.API_key}`, {
-                headers: {
-                    Authorization: `Bearer ${req.session.user.accessToken}`,
-                },
-            }
-        )
+        `https://www.googleapis.com/calendar/v3/calendars/${req.session.user.email}/events?orderBy=startTime&q=vibin&singleEvents=true&key=${process.env.API_key}`, {
+        headers: {
+            Authorization: `Bearer ${req.session.user.accessToken}`,
+        },
+    }
+    )
         .then((response) => response.json())
-        .then(async(data) => {
+        .then(async (data) => {
             if (data.items == undefined) {
                 req.flash("error_msg", res.__("msg.error.auth"));
                 res.redirect("/");
@@ -201,8 +206,8 @@ router.get("/calendar", ensureAuthenticated, (req, res) => {
                 if (req.session.user.lesson) {
                     for (let i = 0; i < req.session.user.lesson.length; i++) {
                         choreographer[i] = await User.findOne({ _id: tickets[i].choreographerID },
-                                "username"
-                            )
+                            "username"
+                        )
                             .lean()
                             .exec();
                     }
@@ -251,7 +256,7 @@ router.get("/calendar", ensureAuthenticated, (req, res) => {
 //     );
 // });
 
-router.get("/reservation/:id", checkSession, async(req, res) => {
+router.get("/reservation/:id", checkSession, async (req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.id }).lean().exec();
     const newLesson = await Lesson.find({}, null, { sort: { time: -1 }, limit: 3 }).lean().exec();
     const newChoreographer = [];
@@ -259,8 +264,8 @@ router.get("/reservation/:id", checkSession, async(req, res) => {
     // find a better way to iterate pushing into choreographer array
     for (let i = 0; i < newLesson.length; i++) {
         newChoreographer[i] = await User.findOne({ _id: newLesson[i].choreographerID.toString() },
-                "username"
-            )
+            "username"
+        )
             .lean()
             .exec();
     }
@@ -310,7 +315,7 @@ router.get("/reservation/:id", checkSession, async(req, res) => {
                 amount: lesson.price,
                 currency: "jpy",
                 quantity: 1,
-            }, ],
+            },],
             customer_email: user.email,
             allow_promotion_codes: true,
             payment_intent_data: {
@@ -337,7 +342,7 @@ router.get("/reservation/:id", checkSession, async(req, res) => {
     }
 });
 
-router.get("/success/:id", ensureAuthenticated, async(req, res) => {
+router.get("/success/:id", ensureAuthenticated, async (req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.id }).lean().exec();
     const dateTime = moment(lesson.time).format('MM/DD HH:mm');
 
@@ -386,7 +391,7 @@ router.get("/success/:id", ensureAuthenticated, async(req, res) => {
     }
 });
 
-router.get("/create", ensureAuthenticated, async(req, res) => {
+router.get("/create", ensureAuthenticated, async (req, res) => {
     const host = req.get("host");
     let render = {
         user: req.session.user,
@@ -440,7 +445,7 @@ router.get("/create", ensureAuthenticated, async(req, res) => {
     res.render("create", render);
 });
 
-router.post("/create", upload.single("thumbnail"), async(req, res) => {
+router.post("/create", upload.single("thumbnail"), async (req, res) => {
     const { title, time, repeatUntil, price, level, genre, genreInput, mood } = req.body;
     const user = await User.findOne({ email: req.user._json.email }).lean().exec();
     const choreographerID = user._id;
@@ -455,16 +460,16 @@ router.post("/create", upload.single("thumbnail"), async(req, res) => {
 
     const account = await stripe.accounts.retrieve(req.session.user.stripeID);
     console.log(account)
-        // if (account.payouts_enabled == true) {
-        // loginLink = await stripe.accounts.createLoginLink(account.id);
-        // } else {
-        //     loginLink = await stripe.accountLinks.create({
-        //         account: account.id,
-        //         refresh_url: `https://${host}/create`,
-        //         return_url: `https://${host}/create`,
-        //         type: "account_onboarding",
-        //     });
-        // }
+    // if (account.payouts_enabled == true) {
+    // loginLink = await stripe.accounts.createLoginLink(account.id);
+    // } else {
+    //     loginLink = await stripe.accountLinks.create({
+    //         account: account.id,
+    //         refresh_url: `https://${host}/create`,
+    //         return_url: `https://${host}/create`,
+    //         type: "account_onboarding",
+    //     });
+    // }
 
     // if (account.payouts_enabled == false) {
     // errors.push({ msg: res.__("銀行口座の情報を設定してください。") });
@@ -566,12 +571,12 @@ router.post("/create", upload.single("thumbnail"), async(req, res) => {
             .catch((err) => console.log(err));
     }
     Lesson.updateMany({}, {
-            $addToSet: {
-                level: ["any"],
-                genre: ["any"],
-                mood: ["any"],
-            },
+        $addToSet: {
+            level: ["any"],
+            genre: ["any"],
+            mood: ["any"],
         },
+    },
         (err, result) => {
             console.log(err || result);
         }
@@ -600,7 +605,7 @@ router.post("/webhook", (req, res) => {
             // Then define and call a method to handle the successful attachment of a PaymentMethod.
             // handlePaymentMethodAttached(paymentMethod);
             break;
-            // ... handle other event types
+        // ... handle other event types
         default:
             console.log(`Unhandled event type ${event.type}`);
     }
