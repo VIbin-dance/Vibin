@@ -51,7 +51,7 @@
                 <div class="container">
                     <!-- navbar -->
                     <nav class="navbar navbar-expand-lg navbar-light">
-                        <a class="navbar-brand" href="../../lp/index.html">
+                        <a class="navbar-brand" href="/about">
                             <img class="logo" src="../../assets/img/Vibin logo.webp" alt="logo" />
                         </a>
 
@@ -69,8 +69,7 @@
                             <ul class="navbar-nav mx-auto nav-pills">
                             </ul>
                             <div class="nav_account btn_demo3">
-                                <a href="/users/login" type="button" class="btn btn-default" data-toggle="modal"
-                                    data-target="#">
+                                <a href="/users/login" class="btn btn-default">
                                     ログイン
                                 </a>
                                 <a href="/users/register"
@@ -116,6 +115,116 @@
                     </div>
                 </section>
                 <!-- End Banner -->
+
+                <!-- Start banner_about -->
+                <section class="pt_banner_inner no-before banner_px_image blog-banner_without_image">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-8 col-lg-6">
+                                <div class="banner_title_inner margin-b-3">
+                                    <h1 data-aos="fade-up" data-aos-delay="0" class="aos-init aos-animate">
+                                        レッスンを探してみる
+                                    </h1>
+                                    <p data-aos="fade-up" data-aos-delay="100" class="aos-init aos-animate">
+                                        Share your stories and news with everyone.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="filter_form aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
+                            <form class="row">
+                                <div class="col-md-6 col-lg-3">
+                                    <div class="simple_search">
+                                        <div class="form-group">
+                                            <div class="input_group">
+                                                <input type="search" class="form-control"
+                                                    placeholder="Type your search word">
+                                                <i class="tio search"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-2">
+                                    <div class="form-group">
+                                        <select class="form-control custom-select" id="exampleFormControlSelect1">
+                                            <option>Categories</option>
+                                            <option>Forests</option>
+                                            <option>Oceans</option>
+                                            <option>Science</option>
+                                            <option>Policy</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+                <!-- End banner_about -->
+
+                <!-- Start blog_masonry -->
+                <section class="blog_masonry three_column">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card-columns">
+                                    <% for (let i=0; i < lesson.docs.length; i++) { %>
+                                        <div class="card">
+                                            <a href="/reservation/<%= lesson.docs[i]._id %>" class="link_poet">
+                                                <div class="cover_link">
+                                                    <img class="main_img" src="<%= lesson.docs[i].thumbnail %>"
+                                                        alt="...">
+                                                    <div class="auther_post">
+                                                        <div class="media">
+                                                            <img src="<%= choreographer[i].userPhoto %>"
+                                                                alt="先生のプロフィール画像">
+                                                            <div class="media-body my-auto">
+                                                                <div class="txt">
+                                                                    <h4>
+                                                                        <%= choreographer[i].username %>
+                                                                    </h4>
+                                                                    <!-- <p>
+                                                                        <%= lesson.docs[i].date %>
+                                                                    </p> -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div class="card-body">
+                                                <div class="about_post">
+                                                    <span class="c_ategory">
+                                                        <a href="#Design">
+                                                            <%= __(`dashboard.search.level.${lesson.docs[i].level[0]}`)
+                                                                %>
+                                                        </a>
+                                                        <a href="#Developer">
+                                                            <%= __(`dashboard.search.genre.${lesson.docs[i].genre[0]}`)
+                                                                %>
+                                                        </a>
+                                                    </span>
+                                                    <span class="dot"></span>
+                                                    <time>
+                                                        <%= moment(lesson.docs[i].time).format('MM/DD HH:mm'); %>
+                                                    </time>
+                                                </div>
+                                                <a href="#" class="d-block">
+                                                    <h5 class="card-title">
+                                                        <%= lesson.docs[i].title %>
+                                                    </h5>
+                                                    <p class="card-text">
+                                                        <%= lesson.docs[i].price %>円
+                                                    </p>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- End. blog_masonry -->
 
                 <section class="pt_banner_inner">
                     <div class="container">
