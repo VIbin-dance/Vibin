@@ -32,9 +32,35 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 router.get("/rjd8kPWDg9AaJZUC", async (req, res) => {
-    res.render("lp/lp-v1", {
-        layout: false
-    });
+    Lesson.paginate({}, {
+        page: req.query.page,
+        limit: 3,
+        sort: { time: -1 },
+    },
+        async (err, lesson) => {
+            const choreographer = [];
+
+            // find a better way to iterate pushing into choreographer array
+            for (let i = 0; i < lesson.docs.length; i++) {
+                choreographer[i] = await User.findOne({ _id: lesson.docs[i].choreographerID.toString() },
+                    "username userPhoto"
+                )
+                    .lean()
+                    .exec();
+            }
+
+            res.render("lp/lp-v1", {
+                layout: false,
+                lesson: lesson,
+                choreographer: choreographer,
+                moment: moment,
+                // currentSort: req.params.sort,
+                // currentPage: lesson.page,
+                // pageCount: lesson.pages,
+                // pages: paginate.getArrayPages(req)(3, lesson.pages, req.query.page),
+            });
+        }
+    );
 })
 
 router.get("/error", (req, res) => res.send("Login error"));
