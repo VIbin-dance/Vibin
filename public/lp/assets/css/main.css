@@ -1611,6 +1611,10 @@ img {
   color: #ffffff !important;
 }
 
+.c-snow {
+  color: #f7f8fa !important;
+}
+
 .c-blue {
   color: #165df5 !important;
 }
@@ -4549,14 +4553,14 @@ header .navbar .navbar-collapse .nav_account.btn_demo3 .btn_sm_primary {
   transition: 0.4s !important;
 }
 .header-nav-center .navbar-collapse .nav-item .nav-link:hover {
-  color: #165df5;
+  color: #eb5160;
 }
 .header-nav-center .navbar-collapse .nav-item .nav-link.active {
-  color: #165df5;
+  color: #eb5160;
   background-color: transparent;
 }
 .header-nav-center .navbar-collapse .nav-item.active .nav-link {
-  color: #165df5;
+  color: #eb5160;
   background-color: transparent;
 }
 
@@ -5426,11 +5430,11 @@ header .navbar .navbar-collapse .nav_account.btn_demo3 .btn_sm_primary {
   banner_demo7
 -----------------------------*/
 .banner_demo7 {
-  background: #ffe7aa !important;
+  background: #1A5155 !important;
   border-radius: 12px !important;
   margin-top: 5.625rem;
   padding-top: 0 !important;
-  padding-bottom: 16rem;
+  padding-bottom: 0rm;
   width: 93%;
   padding-left: 15px;
   padding-right: 15px;
@@ -6012,7 +6016,7 @@ header .navbar .navbar-collapse .nav_account.btn_demo3 .btn_sm_primary {
   Banner - padding top ( inner page)
 -----------------------------*/
 .pt_banner_inner {
-  padding-top: 10rem;
+  padding-top: 6rem;
 }
 
 /*-----------------------------
@@ -6056,7 +6060,7 @@ header .navbar .navbar-collapse .nav_account.btn_demo3 .btn_sm_primary {
 .banner_px_image {
   position: relative;
   overflow: hidden;
-  height: 400px;
+  height: 300px;
 }
 @media (max-width: 767px) {
   .banner_px_image {
@@ -6446,7 +6450,7 @@ header .navbar .navbar-collapse .nav_account.btn_demo3 .btn_sm_primary {
   font-size: 14px;
 }
 .single_blog .about_post .c_ategory a:hover {
-  color: #165df5;
+  color: #eb5160;
 }
 .single_blog .about_post .c_ategory a::before {
   content: ", ";
@@ -11091,10 +11095,20 @@ software_web
   faq_section
 -----------------------------*/
 .faq_section {
-  background-color: #f7f8fa;
+    background: #FCCB37 !important;
+    border-radius: 12px !important;
+    margin-top: 5.625rem;
+    padding-top: 5.625rem !important;
+    padding-bottom: 0rm;
+    width: 93%;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-left: auto;
+    margin-right: auto;
+  /* background-color: #f7f8fa; */
   padding-top: 25rem;
   padding-bottom: 7.5rem;
-  margin-top: -15rem;
+  /* margin-top: -15rem; */
 }
 @media (max-width: 991px) {
   .faq_section {
@@ -13724,11 +13738,11 @@ software_web
 }
 .tabs_works .nav-pills .nav-link.active {
   background-color: transparent;
-  -webkit-box-shadow: -5px 0px 0px 0px #165df5 !important;
-  -moz-box-shadow: -5px 0px 0px 0px #165df5 !important;
-  -o-box-shadow: -5px 0px 0px 0px #165df5 !important;
-  -ms-box-shadow: -5px 0px 0px 0px #165df5 !important;
-  box-shadow: -5px 0px 0px 0px #165df5 !important;
+  -webkit-box-shadow: -5px 0px 0px 0px #eb5160 !important;
+  -moz-box-shadow: -5px 0px 0px 0px #eb5160 !important;
+  -o-box-shadow: -5px 0px 0px 0px #eb5160 !important;
+  -ms-box-shadow: -5px 0px 0px 0px #eb5160 !important;
+  box-shadow: -5px 0px 0px 0px #eb5160 !important;
   border-radius: 0;
 }
 .tabs_works .img--tabs .tab-pane .--img {
@@ -15976,7 +15990,7 @@ software_web
   font-size: 14px;
 }
 .blog_masonry .card .card-body .about_post .c_ategory a:hover {
-  color: #165df5;
+  color: #eb5160;
 }
 .blog_masonry .card .card-body .about_post .c_ategory a::before {
   content: ", ";

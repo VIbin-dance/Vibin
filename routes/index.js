@@ -34,7 +34,7 @@ const upload = multer({ storage: storage });
 router.get("/rjd8kPWDg9AaJZUC", async (req, res) => {
     Lesson.paginate({}, {
         page: req.query.page,
-        limit: 3,
+        limit: 6,
         sort: { time: -1 },
     },
         async (err, lesson) => {
