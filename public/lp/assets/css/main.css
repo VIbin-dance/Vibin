@@ -298,6 +298,10 @@ img {
   display: inline-block;
 }
 
+.bold {
+  font-weight: 500;
+}
+
 /*-----------------------------
   Selection
 -----------------------------*/
@@ -5058,6 +5062,11 @@ header .navbar .navbar-collapse .nav_account.btn_demo3 .btn_sm_primary {
 }
 .demo_1.banner_section .image_product img {
   width: 90%;
+  z-index: 1;
+  position: relative;
+}
+.demo_1.banner_section .image_product video {
+  width: 85%;
   z-index: 1;
   position: relative;
 }
