@@ -130,12 +130,12 @@ router.post("/profile/edit", ensureAuthenticated, upload.single("userPhoto"), as
             genre,
         });
     } else {
-        User.findOneAndUpdate({ email: req.user._json.email }, query, (err, user) => {
+        const newProf = await User.findOneAndUpdate({ email: req.user._json.email }, query).lean().exec();
+        User.findOne({ _id: req.session.user._id }, (err, user) => {
             req.session.user = user;
-        }).lean();
-
-        req.flash("success_msg", res.__("msg.success.profile"));
-        res.redirect("/users/profile");
+            req.flash("success_msg", res.__("msg.success.profile"));
+            res.redirect("/users/profile");
+        })
     }
 });
 
