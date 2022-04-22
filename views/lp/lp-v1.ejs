@@ -8,10 +8,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description"
-        content="本当にダンスが上達するオンラインのダンスレッスンを探すならVibin'で。刺激的なレッスンで自分の伸びしろを知りませんか？今日から始めましょう。" />
-    <meta name="keywords"
-        content="オンラインダンス, オンラインダンスレッスン, 上達, ダンス, ダンス初心者, 教える" />
+    <meta name="description" content="本当にダンスが上達するオンラインのダンスレッスンを探すならVibin'で。刺激的なレッスンで自分の伸びしろを知りませんか？今日から始めましょう。" />
+    <meta name="keywords" content="オンラインダンス, オンラインダンスレッスン, 上達, ダンス, ダンス初心者, 教える" />
     <meta name="author" content="Vibin' - 「上達」するオンラインダンスレッスン" />
 
     <title>「上達」するオンラインダンスレッスン | Vibin'</title>
@@ -52,22 +50,20 @@
                     <!-- navbar -->
                     <nav class="navbar navbar-expand-lg navbar-light">
                         <a class="navbar-brand" href="/about">
-                            <img class="logo" src="../../lp/assets/img/logo.svg" alt="logo" />
+                            <img class="logo" src="../../assets/img/Vibin logo.webp" alt="logo" />
                         </a>
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="navbar-nav ml-auto nav-pills">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#Services">Vibin'とは？</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#Works">先生になる</a>
-                                </li>
+                                <!-- <li class="nav-item">
+                                                                                                                                                                                                                                                                                                                                    <a class="nav-link" href="/">先生になる</a>
+                                                                                                                                                                                                                                                                                                                                </li> -->
                             </ul>
                             <div class="nav_account btn_demo3">
                                 <a href="/users/login" class="btn btn-default">
-                                ログイン
+                                    ログイン
                                 </a>
-                                <a href="/users/register" class="btn scale btn_sm_primary bg-pink c-white effect-letter rounded-pill">
+                                <a href="/users/register"
+                                    class="btn scale btn_sm_primary bg-pink c-white effect-letter rounded-pill">
                                     <div><span style="--move:0; --rotate:1; --part:1;">無</span><span
                                             style="--move:0.333333; --rotate:0.666667; --part:1;">料</span><span
                                             style="--move:0.666667; --rotate:0.333333; --part:1;">で</span><span
@@ -75,7 +71,7 @@
                                             style="--move:0.333333; --rotate:0.666667; --part:-1;">め</span><span
                                             style="--move:0; --rotate:1; --part:-1;">る</span></div>
                                 </a>
-                                </div>
+                            </div>
                         </div>
                     </nav>
                     <!-- End Navbar -->
@@ -94,15 +90,17 @@
                                 <div class="banner_title margin-b-10">
                                     <h1>「上達」する<br>オンラインダンスレッスンを</h1>
                                     <p>
-                                        オンラインでどこでも、いつでも、ダンスをしませんか？<br>
+                                        <span class="pcOnly">
+                                            オンラインでどこでも、いつでも、ダンスをしませんか？<br>
+                                        </span>
                                         初心者から上級者まで、実力派のダンサーのレッスンを気軽に受講するならVibin'で。
                                     </p>
-                                    <button type="button"
+                                    <a type="button" href="/users/register"
                                         class="btn btn_xl_primary scale border-0 sweep_letter sweep_top bg-pink c-white rounded-pill">
                                         <div class="inside_item">
                                             <span data-hover="Let's vibe👋">無料で始める</span>
                                         </div>
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                             <!-- image Product -->
@@ -118,21 +116,21 @@
                 <!-- End Banner -->
 
                 <!-- Start banner_about -->
-                <section class="pt_banner_inner no-before banner_px_image blog-banner_without_image">
+                <section class="pt_banner_inner no-before blog-banner_without_image">
                     <div class="container">
                         <div class="row">
                             <div class="col-md-8 col-lg-6">
-                                <div class="banner_title_inner margin-b-3">
+                                <div class="banner_title_inner">
                                     <h1 data-aos="fade-up" data-aos-delay="0" class="aos-init aos-animate">
                                         レッスンを探してみる
                                     </h1>
                                     <p data-aos="fade-up" data-aos-delay="100" class="aos-init aos-animate">
-                                        ここにも身体が勝手にダンスを検索してしまう言葉を挿入🤔
+                                        豊富なジャンルや難易度のオンラインレッスンをご用意⚡
                                     </p>
                                 </div>
                             </div>
                         </div>
-                        <div class="filter_form aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
+                        <!-- <div class="filter_form aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
                             <form class="row">
                                 <div class="col-md-6 col-lg-3">
                                     <div class="simple_search">
@@ -250,7 +248,7 @@
                                                 </div>
                                             </div>
                             </form>
-                        </div>
+                        </div> -->
                     </div>
                 </section>
                 <!-- End banner_about -->
@@ -288,11 +286,11 @@
                                             <div class="card-body">
                                                 <div class="about_post">
                                                     <span class="c_ategory">
-                                                        <a href="#Design">
+                                                        <a href="#">
                                                             <%= __(`dashboard.search.level.${lesson.docs[i].level[0]}`)
                                                                 %>
                                                         </a>
-                                                        <a href="#Developer">
+                                                        <a href="#">
                                                             <%= __(`dashboard.search.genre.${lesson.docs[i].genre[0]}`)
                                                                 %>
                                                         </a>
@@ -302,7 +300,7 @@
                                                         <%= moment(lesson.docs[i].time).format('MM/DD HH:mm'); %>
                                                     </time>
                                                 </div>
-                                                <a href="#" class="d-block">
+                                                <a href="/reservation/<%= lesson.docs[i]._id %>" class="d-block">
                                                     <h5 class="card-title">
                                                         <%= lesson.docs[i].title %>
                                                     </h5>
@@ -319,6 +317,21 @@
                     </div>
                 </section>
                 <!-- End. blog_masonry -->
+
+                <div class="container">
+                    <div class="row justify-content-md-center text-center">
+                        <div class="col-md-8 col-lg-8">
+                            <div class="banner_title margin-t-3">
+                                <a type="button" href="/"
+                                    class="btn btn_xl_primary scale border-0 sweep_letter sweep_top bg-pink c-white rounded-pill">
+                                    <div class="inside_item">
+                                        <span data-hover="Let's vibe👋">無料のレッスンを探してみる</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <section class="pt_banner_inner">
                     <div class="container">
@@ -338,7 +351,7 @@
                 <!-- End banner_about -->
 
                 <!-- Start Section Products -->
-                <section class="products_section product_demo2 bg-white margin-b-6">
+                <section class="products_section product_demo2 bg-white margin-b-6" id="feature">
                     <div class="container">
                         <div class="tabs_works ">
                             <div class="row pt-0">
@@ -348,7 +361,9 @@
                                             機能
                                         </h2>
                                         <p class="c-gray">
-                                            オンラインダンスレッスンをリアルなスタジオでのレッスンのように。
+                                            世界中どこからでもアクセスできる<br>
+                                            動くダンススタジオ。
+                                            <!-- オンラインダンスレッスンをリアルなスタジオでのレッスンのように。 -->
                                         </p>
                                     </div>
 
@@ -357,25 +372,26 @@
                                         <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill"
                                             href="#v-pills-home" role="tab" aria-controls="v-pills-home"
                                             aria-selected="true">
-                                            <h4 class="margin-b-2 font-s-20 c-dark">鏡機能</h4>
+                                            <h4 class="margin-b-2 c-dark">鏡機能</h4>
                                             <p>
-                                                ウェブカメラをバーチャル空間の鏡として使い、先生の真横で踊りましょう。
+                                                ウェブカメラをバーチャル空間の鏡として使い、先生と一緒に踊りましょう🪞
                                             </p>
                                         </a>
                                         <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill"
                                             href="#v-pills-profile" role="tab" aria-controls="v-pills-profile"
                                             aria-selected="false">
-                                            <h4 class="margin-b-2 font-s-20 c-dark">チャット機能</h4>
+                                            <h4 class="margin-b-2 c-dark">チャット機能</h4>
                                             <p>
-                                                チャットで他の生徒や先生と質問や話をして、オンラインなのに実際のレッスンのような体験を味わえます。
+                                                チャットで他の生徒や先生と質問や話をして、オンラインで盛り上がりましょう🎉
                                             </p>
                                         </a>
                                         <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill"
                                             href="#v-pills-messages" role="tab" aria-controls="v-pills-messages"
                                             aria-selected="false">
-                                            <h4 class="margin-b-2 font-s-20 c-dark">画面反転機能</h4>
+                                            <h4 class="margin-b-2 c-dark">画面反転機能</h4>
                                             <p>
-                                                どっちが右でどっちが左かでもう悩むことはありません。
+                                                どっちが右？どっちが左？<br>
+                                                もう悩むことはありません😖
                                             </p>
                                         </a>
                                     </div>
@@ -384,18 +400,20 @@
                                     <div class="tab-content img--tabs" id="v-pills-tabContent">
                                         <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
                                             aria-labelledby="v-pills-home-tab">
-                                            <img class="--img" src="../../lp/assets/img/04.png" alt="" />
-                                        </div>
+                                            <video class="--img" autoplay muted loop>
+                                                <source src="../../lp/assets/img/webcam_feature.mp4" type="video/mp4">
+                                            </video>                                        </div>
                                         <div class="tab-pane fade" id="v-pills-profile" role="tabpanel"
                                             aria-labelledby="v-pills-profile-tab">
-                                            <!-- <img class="--img" src="../../lp/assets/img/01.png" alt="" /> -->
                                             <video class="--img" autoplay muted loop>
                                                 <source src="../../lp/assets/img/service_video.mp4" type="video/mp4">
                                             </video>
                                         </div>
                                         <div class="tab-pane fade" id="v-pills-messages" role="tabpanel"
                                             aria-labelledby="v-pills-messages-tab">
-                                            <img class="--img" src="../../lp/assets/img/02.png" alt="" />
+                                            <video class="--img" autoplay muted loop>
+                                                <source src="../../lp/assets/img/mirror_feature.mp4" type="video/mp4">
+                                            </video>
                                         </div>
                                     </div>
                                 </div>
@@ -408,19 +426,8 @@
                 <!-- End Section Products -->
 
                 <!-- Start Services -->
-                <section class="services_section padding-t-12" id="Services">
+                <!-- <section class="services_section padding-t-12" id="Services">
                     <div class="container">
-                        <!-- <div class="row justify-content-md-center">
-                            <div class="col-md-8 col-lg-6 text-center">
-                                <div class="title_sections">
-                                    <div class="before_title">
-                                        <span>Working</span>
-                                        <span>Process</span>
-                                    </div>
-                                    <h2>Our Featured Service that We Provide</h2>
-                                </div>
-                            </div>
-                        </div> -->
                         <div class="row">
                             <div class="col-md-6 col-lg-4 mb-4 mb-lg-0">
                                 <div class="items_serv" data-aos="fade-up" data-aos-delay="0">
@@ -478,7 +485,7 @@
                             </div>
                         </div>
                     </div>
-                </section>
+                </section> -->
                 <!-- End Services -->
 
                 <!-- Start FAQ -->
@@ -514,11 +521,12 @@
                                                     data-parent="#accordionExample">
                                                     <div class="card-body">
                                                         <p>
-                                                            Vibin'はダンスをするために開発されたプラットフォームです。自由にレッスンを教えられるからこそ、最高の質のダンスレッスンをお届けすることだできます。
+                                                            Vibin'は「ダンスをするため」に開発されたプラットフォームです。自由にレッスンを教え、教わることのできるプラットフォームはVibin'だけです。
                                                         </p>
                                                         <p>
                                                             ダンサー目線で作られたサービスだからこそ、必要な機能やクオリティが揃っています。
                                                         </p>
+                                                        <a href="#feature" class="c-pink">便利な機能を見てみる💡</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -528,7 +536,7 @@
                                                         <button class="btn btn-link" type="button"
                                                             data-toggle="collapse" data-target="#collapseTwo"
                                                             aria-expanded="true" aria-controls="collapseTwo">
-                                                            Can I have team members on different plans?
+                                                            入会金はいくらですか？
                                                         </button>
                                                     </h3>
                                                 </div>
@@ -537,17 +545,12 @@
                                                     data-parent="#accordionExample">
                                                     <div class="card-body">
                                                         <p>
-                                                            Serenity Is Multi-Faceted Blockchain Based
-                                                            Ecosystem, Energy Retailer For The People,
-                                                            Focusing On The Promotion Of Sustainable Living,
-                                                            Renewable Energy Production And Smart Energy
-                                                            Grid Utility Services.
+                                                            入会金はありません！Vibin'で踊り始めるための初期費用は<span
+                                                                class="c-pink">「完全無料」</span>です。<br>
+                                                            まずは無料でアカウントを登録しませんか？
+                                                            たくさんのレッスンの中から一押しを探しましょう！
                                                         </p>
-                                                        <p>
-                                                            We Aim To Become The Incubator For New Renewable
-                                                            Energy-Related Projects By Using The Power Of
-                                                            Crowd.
-                                                        </p>
+                                                        <a href="/" class="c-pink">無料で開催されているレッスンを探す💡</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -557,7 +560,7 @@
                                                         <button class="btn btn-link" type="button"
                                                             data-toggle="collapse" data-target="#collapseThree"
                                                             aria-expanded="true" aria-controls="collapseThree">
-                                                            How this technology works?
+                                                            どこからでも参加可能ですか？
                                                         </button>
                                                     </h3>
                                                 </div>
@@ -566,46 +569,9 @@
                                                     data-parent="#accordionExample">
                                                     <div class="card-body">
                                                         <p>
-                                                            Serenity Is Multi-Faceted Blockchain Based
-                                                            Ecosystem, Energy Retailer For The People,
-                                                            Focusing On The Promotion Of Sustainable Living,
-                                                            Renewable Energy Production And Smart Energy
-                                                            Grid Utility Services.
+                                                            はい、世界中どこからでも端末一つでダンスレッスンを受講できます。
                                                         </p>
-                                                        <p>
-                                                            We Aim To Become The Incubator For New Renewable
-                                                            Energy-Related Projects By Using The Power Of
-                                                            Crowd.
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="card">
-                                                <div class="card-header" id="headingFour">
-                                                    <h3 class="mb-0">
-                                                        <button class="btn btn-link" type="button"
-                                                            data-toggle="collapse" data-target="#collapseFour"
-                                                            aria-expanded="true" aria-controls="collapseFour">
-                                                            What is the comunity benefit?
-                                                        </button>
-                                                    </h3>
-                                                </div>
 
-                                                <div id="collapseFour" class="collapse" aria-labelledby="headingFour"
-                                                    data-parent="#accordionExample">
-                                                    <div class="card-body">
-                                                        <p>
-                                                            Serenity Is Multi-Faceted Blockchain Based
-                                                            Ecosystem, Energy Retailer For The People,
-                                                            Focusing On The Promotion Of Sustainable Living,
-                                                            Renewable Energy Production And Smart Energy
-                                                            Grid Utility Services.
-                                                        </p>
-                                                        <p>
-                                                            We Aim To Become The Incubator For New Renewable
-                                                            Energy-Related Projects By Using The Power Of
-                                                            Crowd.
-                                                        </p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -632,17 +598,13 @@
                                                     <div class="swiper-wrapper">
                                                         <div class="swiper-slide">
                                                             <div class="app_image">
-                                                                <img src="../../lp/assets/img/app/slider01.png" alt="">
+                                                                <img src="../../lp/assets/img/mobile_lessons.png"
+                                                                    alt="">
                                                             </div>
                                                         </div>
                                                         <div class="swiper-slide">
                                                             <div class="app_image">
-                                                                <img src="../../lp/assets/img/app/002.png" alt="">
-                                                            </div>
-                                                        </div>
-                                                        <div class="swiper-slide">
-                                                            <div class="app_image">
-                                                                <img src="../../lp/assets/img/app/003.png" alt="">
+                                                                <img src="../../lp/assets/img/mobile_stream.png" alt="">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -652,80 +614,51 @@
                                             </div>
                                         </div>
                                         <div class="col-md-5 col-lg-6">
-                                        
+
                                             <div class="item_block">
                                                 <div class="media">
                                                     <div class="ioco">
                                                     </div>
+                                                </div>
+                                            </div>
+                                            <div class="item_block mb-0">
+                                                <div class="media">
+                                                    <div class="ioco">
                                                     </div>
-                                                    </div>
-                                                    <div class="item_block mb-0">
-                                                        <div class="media">
-                                                            <div class="ioco">
-                                                            </div>
-                                                            <div class="media-body">
+                                                    <div class="media-body">
                                                     </div>
                                                     <div class="banner_title">
                                                         <div class="offer bg-snow">
                                                             <!-- <span class="c-dark">Vibesを</span> -->
                                                             <!-- <span class="c-pink">感じる🎧</span> -->
                                                             <span class="c-black">Vibesを感じる🎧</span>
+                                                        </div>
+                                                        <h1 class="c-snow">
+                                                            あなたと動く<br>
+                                                            ダンススタジオ🕺
+                                                        </h1>
+                                                        <p class="c-white">
+                                                            どこでも、いつでも、だれでも、
+                                                            <span class="">気軽に</span>
+                                                        </p>
+                                                        <a href="/users/register" type="button"
+                                                            class="btn btn_xl_primary scale border-0 sweep_letter sweep_top bg-pink c-white rounded-pill">
+                                                            <div class="inside_item">
+                                                                <span data-hover="Let's vibe👋">無料で始める</span>
                                                             </div>
-                                                            <h1 class="c-snow">
-                                                                あなたと動く<br>
-                                                                ダンススタジオ🕺
-                                                            </h1>
-                                                            <p class="c-white">
-                                                                どこでも、いつでも、だれでも、
-                                                                <span class="">気軽に</span>
-                                                                </p>
-                                                            <button type="button" class="btn btn_xl_primary scale border-0 sweep_letter sweep_top bg-pink c-white rounded-pill">
-                                                                <div class="inside_item">
-                                                                    <span data-hover="Let's vibe👋">無料レッスンを探す</span>
-                                                                </div>
-                                                            </button>
-                                                            </div>
-                                                            </div>
-                                                            </div>
-                                                            </div>
-                                                            </div>
-                                                            </div>
-                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
                 </section>
                 <!-- End. service_mobile_app -->
         </div>
-        </div>
-        </section>
-
-
-    <!-- Start Simple Contact -->
-    <!-- <section class="simplecontact_section padding-py-12">
-                    <div class="container">
-                        <div class="row justify-content-md-center">
-                            <div class="col-md-6 text-center">
-                                <div class="title_sections mb-0">
-                                    <h2>Still need help?</h2>
-                                    <p>
-                                        Click on the blue round button at the bottom right corner
-                                        of this page. You can also email our support team at
-                                        <a class="c-pink" href="mailto:info@vibin.tokyo">info@vibin.tokyo</a>.
-                                    </p>
-                                    <button type="button"
-                                        class="btn rounded-pill btn_md_primary c-white scale ripple bg-pink">
-                                        Contact With Us
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="circle-ripple"></div>
-                        <div class="circle-ripple">
-                            <div class="ripple ripple-1"></div>
-                            <div class="ripple ripple-2"></div>
-                            <div class="ripple ripple-3"></div>
-                        </div>
-                    </div>
-                </section> -->
-    <!-- End Simple Contact -->
+    </div>
+    </section>
     </main>
     <!-- end main -->
     </div>
@@ -754,11 +687,8 @@
                         </a>
                     </div>
                     <div class="other--links">
-                        <a href="#">レッスンを受ける</a>
-                        <a href="#">Support</a>
-                        <a href="#">API</a>
-                        <a href="#">プライバシーポリシー</a>
-                        <a href="#">Cookie Policy</a>
+                        <a href="/">レッスンを受ける</a>
+                        <a href="/users/login">ログインする</a>
                     </div>
                     <div class="opyright">
                         <p>
@@ -773,14 +703,7 @@
     </footer>
     <!-- End Footer -->
 
-    <!-- Back to top with progress indicator-->
-    <!-- <div class="prgoress_indicator">
-        <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
-            <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" />
-        </svg>
-    </div> -->
-
-    <!-- Tosts -->
+    <!-- Toasts -->
     <div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center">
         <div class="toast toast_demo" id="myTost" role="alert" aria-live="assertive" aria-atomic="true"
             data-animation="true" data-autohide="false">
@@ -794,99 +717,6 @@
         </div>
     </div>
     <!-- End. Toasts -->
-
-    <!-- Start Section Loader -->
-    <!-- <section class="loading_overlay">
-        <div class="loader_logo">
-            <img class="logo" src="../../lp/assets/img/Vibin logo.webp" />
-        </div>
-    </section> -->
-    <!-- End. Loader -->
-
-    <!-- Video Modal -->
-    <div class="modal mdll_video fade" id="mdllVideo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <!-- Close -->
-        <button type="button" class="close bbt_close ripple_circle" data-dismiss="modal" aria-label="Close">
-            <i class="tio clear"></i>
-        </button>
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div class="embed-responsive embed-responsive-16by9">
-                        <iframe class="embed-responsive-item" src="" id="video" allowscriptaccess="always"
-                            allow="autoplay"></iframe>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Login Modal  -->
-    <div class="modal mdllaccount fade" id="mdllLogin" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <i class="tio clear"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="form_account">
-                        <div class="head_account">
-                            <div class="img_profile">
-                                <img src="../../lp/assets/img/gif/avatar_01.jpg" />
-                            </div>
-                            <div class="title">
-                                <h4>Rakon.</h4>
-                                <p>
-                                    Welcome back again,<br />
-                                    Please sign in
-                                </p>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="col-12">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label>Email / Username</label>
-                                            <input type="email" class="form-control" placeholder="E-mail / Username" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="form-group mb-1 --password" id="show_hide_password">
-                                            <label>Password</label>
-                                            <div class="input-group">
-                                                <input type="password" class="form-control" data-toggle="password"
-                                                    placeholder="+6 Characters" required="" />
-                                                <div class="input-group-prepend hide_show">
-                                                    <a href=""><span
-                                                            class="input-group-text tio hidden_outlined"></span></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <a href="#" class="btn mt-2 font-s-12 font-w-400 c-gray p-0">Forgot
-                                            Passowrd?</a>
-                                    </div>
-                                    <div class="col-12 mt-4">
-                                        <a href="#" class="btn rounded-6 btn_xl_primary btn_login effect-letter">Sign
-                                            in</a>
-                                        <a href="#" class="btn mt-3 font-s-15 c-dark text-center w-100">Create new
-                                            account</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End. Modal -->
-    </div>
-    <!-- End. wrapper -->
 
     <!-- jquery -->
     <script src="../../lp/assets/js/jquery-3.5.0.js" type="text/javascript"></script>

@@ -28,16 +28,9 @@
                         <%- include ('partials/messages') %>
 
                             <div class="channelView-ivs">
-
-                                <!-- vjs-theme-fantasy -->
-                                <!-- vjs-theme-city -->
-                                <!-- vjs-theme-forest -->
-                                <!-- vjs-theme-sea -->
-                                <!-- vjs-fluid, vjs-16-9, or vjs-4-3 -->
                                 <div id="live_screen">
-                                    <video id="amazon-ivs-videojs" class="video-js vjs-fluid vjs-fill vjs-big-play-centered" preload="auto" controls autoplay playsinline></video>
+                                    <video id="amazon-ivs-videojs" class="video-js vjs-fluid vjs-fill vjs-big-play-centered" preload="auto" controls autoplay playsinline autoPictureInPicture></video>
                                 </div>
-                                <!-- <video id="self_camera" autoplay playsinline preload="auto"></video> -->
                                 <div id="self_camera"></div>
                             </div>
 
@@ -85,7 +78,7 @@
                                     </div>
                                 </div>
 
-                                <!-- <div class="count_info">
+                                <div class="count_info">
                                     <div class="btn_grid">
                                         <button id="mirror" onclick="mirrorToggle()">
                                             <svg width="2.5em" height="2.5em" viewBox="0 0 16 16" class="bi bi-aspect-ratio" fill="currentColor"
@@ -96,14 +89,14 @@
                                             d="M2 4.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1H3v2.5a.5.5 0 0 1-1 0v-3zm12 7a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1H13V8.5a.5.5 0 0 1 1 0v3z" />
                                             </svg>
                                         </button>
-                                        <button class="favorite"><img src="/assets/img/like.png" alt=""></button>
-                                        <button class="follow">フォロー</button>
+                                        <!-- <button class="favorite"><img src="/assets/img/like.png" alt=""></button>
+                                        <button class="follow">フォロー</button> -->
                                     </div>
-                                    <div class="channel_status">
+                                    <!-- <div class="channel_status">
                                         <p class="login_users"></p>
                                         <p class="live_time"></p>
-                                    </div>
-                                </div> -->
+                                    </div> -->
+                                </div>
                             </div>
                             <div class="chinfo p-3 mb-3 rounded">
                                 <div class="text-center">
@@ -179,7 +172,7 @@
 <script>
     function mirrorToggle() {
         document.getElementById("live_screen").classList.toggle("mirror");
-        console.log('mirrored')
+        // console.log('mirrored')
     }
 </script>
 

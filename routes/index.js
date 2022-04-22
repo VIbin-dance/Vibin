@@ -31,10 +31,10 @@ findTicket = function (id) {
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-router.get("/rjd8kPWDg9AaJZUC", async (req, res) => {
+router.get("/about", async (req, res) => {
     Lesson.paginate({}, {
         page: req.query.page,
-        limit: 6,
+        limit: 3,
         sort: { time: -1 },
     },
         async (err, lesson) => {
@@ -444,6 +444,17 @@ router.get("/create", ensureAuthenticated, async (req, res) => {
 
     } else if (!req.session.user.stripeID) {
         try {
+            // const account = await stripe.accounts.create({
+            //     country: 'Japan',
+            //     type: 'express',
+            //     capabilities: {
+            //         card_payments: { requested: true },
+            //         //   transfers: {requested: true},
+            //     },
+            //     business_type: 'individual',
+            //     business_profile: { url: 'https://example.com' },
+            // });
+            console.log(account)
             const account = await stripe.accounts.create({ type: "express" });
             const loginLink = await stripe.accountLinks.create({
                 account: account.id,
