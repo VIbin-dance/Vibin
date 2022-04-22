@@ -302,6 +302,12 @@ img {
   font-weight: 500;
 }
 
+@media (max-width: 991px) {
+  .pcOnly {
+    display: none;
+  }
+}
+
 /*-----------------------------
   Selection
 -----------------------------*/
@@ -4462,7 +4468,7 @@ header .navbar .navbar-brand {
 header .navbar .navbar-brand .logo {
   vertical-align: bottom;
   margin-right: 0.5rem;
-  width: 27px;
+  width: 90px;
 }
 header .navbar .navbar-collapse {
   margin-top: 0.4rem;
@@ -5043,11 +5049,6 @@ header .navbar .navbar-collapse .nav_account.btn_demo3 .btn_sm_primary {
   height: 100%;
   padding-top: 10rem;
 }
-@media (max-width: 767px) {
-  .demo_1.banner_section {
-    padding-top: 6rem;
-  }
-}
 .demo_1.banner_section .banner_title {
   margin-bottom: 30px;
 }
@@ -5081,6 +5082,14 @@ header .navbar .navbar-collapse .nav_account.btn_demo3 .btn_sm_primary {
   top: -5%;
   right: 0;
   z-index: 0;
+}
+@media (max-width: 767px) {
+  .demo_1.banner_section {
+    padding-top: 6rem;
+  }
+  .demo_1.banner_section .banner_title h1 {
+    font-size: 39px;
+  }
 }
 
 /*-----------------------------
@@ -5506,6 +5515,11 @@ header .navbar .navbar-collapse .nav_account.btn_demo3 .btn_sm_primary {
   width: 100%;
   margin: 2rem 0;
 }
+@media (max-width: 767px) {
+  .banner_demo7 .banner_title h1 {
+    display: flex;
+  }
+}
 
 /*-----------------------------
   banner_demo8
@@ -5622,6 +5636,12 @@ header .navbar .navbar-collapse .nav_account.btn_demo3 .btn_sm_primary {
 }
 .banner_title_inner .btn {
   margin-top: 0.625rem;
+}
+
+@media (max-width: 767px) {
+  .banner_title_inner h1 {
+    font-size: 2rem;
+  }
 }
 
 /*-----------------------------
@@ -7974,6 +7994,11 @@ header .navbar .navbar-collapse .nav_account.btn_demo3 .btn_sm_primary {
   width: 100%;
   padding: 0 20px;
 }
+@media (max-width: 991px) {
+  .service_mobile_app .slider_mobile_ap {
+    display: none;
+  }
+}
 .service_mobile_app .slider_mobile_ap .swiper-pagination-bullets {
   left: 10px;
 }
@@ -8001,7 +8026,7 @@ header .navbar .navbar-collapse .nav_account.btn_demo3 .btn_sm_primary {
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.12);
+  /* background-color: rgba(255, 255, 255, 0.12); */
   margin-right: 30px;
 }
 .service_mobile_app .item_block .ioco svg {
@@ -8030,6 +8055,11 @@ header .navbar .navbar-collapse .nav_account.btn_demo3 .btn_sm_primary {
 }
 @media (max-width: 991px) {
   .service_mobile_app .shape_image_01 {
+    display: none;
+  }
+}
+@media (max-width: 991px) {
+  .service_mobile_app .item_block .ioco, .service_mobile_app .item_block .media-body {
     display: none;
   }
 }
@@ -9493,6 +9523,11 @@ header .navbar .navbar-collapse .nav_account.btn_demo3 .btn_sm_primary {
 .product_demo2 .item_pro .icon_t span {
   text-align: center;
   text-align: center;
+}
+@media (max-width: 991px) {
+  .product_demo2 .title_sections {
+    display: none;
+  }
 }
 
 /*-----------------------------
@@ -11128,6 +11163,7 @@ software_web
   border-radius: 8px;
   border: 0;
   margin-bottom: 1rem;
+  width: 100%;
 }
 .faq_section .accordion .card .card-header {
   border-color: #edeef1;
@@ -13279,13 +13315,13 @@ software_web
   margin-bottom: 0;
 }
 .signup_full .signup_two .list__point .item:first-child .icob {
-  background-color: #165df5;
+  background-color: #1A5155;
 }
 .signup_full .signup_two .list__point .item:nth-child(2) .icob {
-  background-color: #58d5d3;
+  background-color: #eb5160;
 }
 .signup_full .signup_two .list__point .item:nth-child(3) .icob {
-  background-color: #ffce53;
+  background-color: #FCCB37;
 }
 
 /*
@@ -13738,6 +13774,9 @@ software_web
   -ms-transition: 0.3s !important;
   transition: 0.3s !important;
 }
+.tabs_works .nav-pills .nav-link h4 {
+  font-size: 20px;
+}
 .tabs_works .nav-pills .nav-link p {
   font-size: 16px;
   font-weight: 400;
@@ -13767,6 +13806,16 @@ software_web
 @media (max-width: 767px) {
   .tabs_works .img--tabs .tab-pane .--img {
     width: 100%;
+    display: flex;
+  }
+  .tabs_works .nav-pills .nav-link {
+    margin-bottom: 1rem;
+  }
+  .tabs_works .nav-pills .nav-link h4 {
+    font-size: 17px;
+  }
+  .tabs_works .nav-pills .nav-link p {
+    font-size: 14px;
   }
 }
 .tabs_works .img--tabs.slide_bottom .tab-pane .--img {
@@ -15913,7 +15962,7 @@ software_web
   top: 30px;
 }
 .blog_masonry .card:hover .card-title {
-  color: #165df5 !important;
+  color: #eb5160 !important;
 }
 .blog_masonry .card .link_poet {
   display: block;

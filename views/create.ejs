@@ -11,7 +11,7 @@
             <% if (typeof account == "undefined" || account.external_accounts.data.length === 0) { %>
                 <div class="card">
                     <div class="card-body">
-                        <small>注意：口座設定を完了するまでレッスン代金を振り込まれません。</small>
+                        <small>注意：口座設定を完了するまでレッスン代金は振り込まれません。</small>
                         <p>レッスンを作成する前に、口座設定を完了することを推奨しています。下のボタンから設定をしてください</p>
                         <a class="btn btn-danger" href="<%= loginLink.url %>" target="_blank" role="button">Stripeで口座の設定をする</a>
                     </div>

@@ -28,20 +28,20 @@ findUser = (id) => {
     return User.findOne({ _id: id }).lean();
 };
 
-router.get("/register", (req, res) => res.render("register"));
-router.get("/login", (req, res) => res.render("login"));
+// router.get("/register", (req, res) => res.render("register"));
+// router.get("/login", (req, res) => res.render("login"));
 
-// router.get("/register", (req, res) => {
-//     res.render("lp/signup", {
-//         layout: false
-//     });
-// })
+router.get("/register", (req, res) => {
+    res.render("lp/signup", {
+        layout: false
+    });
+})
 
-// router.get("/login", (req, res) => {
-//     res.render("lp/signin", {
-//         layout: false
-//     });
-// })
+router.get("/login", (req, res) => {
+    res.render("lp/signin", {
+        layout: false
+    });
+})
 
 
 router.get("/profile", checkSession, ensureAuthenticated, async (req, res) => {
