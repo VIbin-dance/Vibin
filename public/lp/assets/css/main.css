@@ -4516,7 +4516,7 @@ header .navbar .navbar-collapse .nav_account.btn_demo3 .btn_sm_primary {
     font-size: 18px !important;
   }
   header .navbar-brand .logo {
-    width: 24px !important;
+    width: 64px !important;
   }
   header .navbar-collapse {
     margin-left: 0 !important;
@@ -13794,7 +13794,7 @@ software_web
   border-radius: 0;
 }
 .tabs_works .img--tabs .tab-pane .--img {
-  width: 65vw;
+  width: 55vw;
   border-radius: 8px;
   -webkit-animation: slide-in-right 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)
     both !important;
