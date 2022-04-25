@@ -431,6 +431,7 @@ router.get("/create", ensureAuthenticated, async (req, res) => {
         if (account.payouts_enabled == true) {
             loginLink = await stripe.accounts.createLoginLink(account.id);
         } else {
+            const account = await stripe.accounts.create({ type: "express" });
             loginLink = await stripe.accountLinks.create({
                 account: account.id,
                 refresh_url: `https://${host}/create`,
