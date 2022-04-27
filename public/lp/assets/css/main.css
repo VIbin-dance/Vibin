@@ -5127,7 +5127,7 @@ header .navbar .navbar-collapse .nav_account.btn_demo3 .btn_sm_primary {
   demo_3
 -----------------------------*/
 .demo_3.banner_section {
-  background-color: #381840;
+  background-color: #1A5155;
   position: relative;
   overflow: hidden;
   height: 820px;
@@ -5145,7 +5145,7 @@ header .navbar .navbar-collapse .nav_account.btn_demo3 .btn_sm_primary {
 }
 .demo_3.banner_section:before {
   content: "";
-  background-image: url("../img/shpaeboxes.svg");
+  /* background-image: url("../img/shpaeboxes.svg"); */
   background-repeat: no-repeat;
   position: absolute;
   top: 10%;
@@ -5180,11 +5180,12 @@ header .navbar .navbar-collapse .nav_account.btn_demo3 .btn_sm_primary {
   background-color: transparent;
   margin-right: 0.2rem;
 }
-.demo_3 .img--elements img {
+.demo_3 .img--elements video {
   position: absolute;
+  border-radius: 8px;
   top: -2%;
   left: 0;
-  width: 923px;
+  width: 800px;
 }
 @media (max-width: 767px) {
   .demo_3 .img--elements {
@@ -11555,7 +11556,8 @@ software_web
   Try it
 -----------------------------*/
 .tryit_now {
-  background-color: #381840;
+  /* background-color: #381840; */
+  background-color: #1A5155;
   position: relative;
   overflow: hidden;
   margin-top: -6rem;
@@ -11566,7 +11568,6 @@ software_web
 }
 .tryit_now:before {
   content: "";
-  background-image: url("../img/shpaeboxes.svg");
   background-repeat: no-repeat;
   position: absolute;
   top: 0;

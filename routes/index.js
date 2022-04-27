@@ -39,7 +39,6 @@ router.get("/about", async (req, res) => {
     },
         async (err, lesson) => {
             const choreographer = [];
-
             // find a better way to iterate pushing into choreographer array
             for (let i = 0; i < lesson.docs.length; i++) {
                 choreographer[i] = await User.findOne({ _id: lesson.docs[i].choreographerID.toString() },
@@ -50,17 +49,19 @@ router.get("/about", async (req, res) => {
             }
 
             res.render("lp/lp-v1", {
-                layout: false,
+                layout: "lp/lplayouts",
                 lesson: lesson,
                 choreographer: choreographer,
                 moment: moment,
-                // currentSort: req.params.sort,
-                // currentPage: lesson.page,
-                // pageCount: lesson.pages,
-                // pages: paginate.getArrayPages(req)(3, lesson.pages, req.query.page),
             });
         }
     );
+})
+
+router.get("/become-a-teacher", async (req, res) => {
+    res.render("lp/choreo", {
+        layout: "lp/lplayouts",
+    });
 })
 
 router.get("/error", (req, res) => res.send("Login error"));
