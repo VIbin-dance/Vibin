@@ -10,7 +10,7 @@ const User = require('../models/User');
 const Channel = require('../models/Channel');
 const Lesson = require('../models/Lesson');
 
-router.get('/channel', ensureAuthenticated, async(req, res) => {
+router.get('/channel', ensureAuthenticated, async (req, res) => {
     let ch_count;
     User.findOne({ email: req.user._json.email }, (err, user) => {
         if (!user) {
@@ -61,16 +61,16 @@ router.get('/channel', ensureAuthenticated, async(req, res) => {
     })
 });
 
-router.post('/create_channel', ensureAuthenticated, async(req, res) => {
+router.post('/create_channel', ensureAuthenticated, async (req, res) => {
     const ch_name = req.session.user._id;
     createChannel(req, res, ch_name);
 });
 
-router.post('/reset_streamkey', ensureAuthenticated, function(req, res) {
+router.post('/reset_streamkey', ensureAuthenticated, function (req, res) {
     updateStreamKey(req, res);
 });
 
-router.get('/teacher/:lesson_id', ensureAuthenticated, async(req, res) => {
+router.get('/teacher/:lesson_id', ensureAuthenticated, async (req, res) => {
     const ls = await Lesson.findOne({ _id: req.params.lesson_id }).lean().exec();
     if (ls.choreographerID === req.session.user._id) {
         Channel.findOne({ ch_name: req.session.user._id }, (err, ch) => {
@@ -93,7 +93,7 @@ router.get('/teacher/:lesson_id', ensureAuthenticated, async(req, res) => {
     }
 });
 
-router.get('/student/:lesson_id', checkSession, async(req, res) => {
+router.get('/student/:lesson_id', checkSession, async (req, res) => {
     Lesson.findOne({ _id: req.params.lesson_id }, (err, ls) => {
         if (!ls) {
             req.flash('error_msg', '選択したレッスンの情報が正しくありません。');
@@ -102,7 +102,7 @@ router.get('/student/:lesson_id', checkSession, async(req, res) => {
             req.flash('error_msg', '選択したレッスンは購入されていません。');
             res.redirect(`/reservation/${req.params.lesson_id}`);
         } else {
-            Channel.findOne({ ch_name: ls.choreographerID }, async(err, ch) => {
+            Channel.findOne({ ch_name: ls.choreographerID }, async (err, ch) => {
                 if (!ch) {
                     req.flash('error_msg', '先生側の配信に何か問題が起きました。');
                     res.redirect('/users/profile');
@@ -124,7 +124,7 @@ router.get('/student/:lesson_id', checkSession, async(req, res) => {
     });
 });
 
-router.get('/edit/:id', ensureAuthenticated, async(req, res) => {
+router.get('/edit/:id', ensureAuthenticated, async (req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.id }).lean().exec();
 
     if (lesson.choreographerID === req.session.user._id) {
@@ -145,7 +145,7 @@ router.get('/edit/:id', ensureAuthenticated, async(req, res) => {
 })
 
 // add refund feature of stripe
-router.post('/edit/:id', ensureAuthenticated, async(req, res) => {
+router.post('/edit/:id', ensureAuthenticated, async (req, res) => {
     const lesson = await Lesson.findOne({ _id: req.body.id }).lean().exec();
     const time = moment(lesson.time).subtract(2, 'hours')
 
@@ -165,7 +165,7 @@ router.post('/edit/:id', ensureAuthenticated, async(req, res) => {
     }
 })
 
-router.get('/student/details/:lesson_id', ensureAuthenticated, async(req, res) => {
+router.get('/student/details/:lesson_id', ensureAuthenticated, async (req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.lesson_id }).lean().exec();
     if (!req.session.user.lesson || !req.session.user.lesson.includes(lesson._id.toString())) {
         req.flash('error_msg', '選択したレッスンは購入されていません');
@@ -182,7 +182,7 @@ router.get('/student/details/:lesson_id', ensureAuthenticated, async(req, res) =
 });
 
 // add refund feature of stripe
-router.post('/student/details/:lesson_id', ensureAuthenticated, async(req, res) => {
+router.post('/student/details/:lesson_id', ensureAuthenticated, async (req, res) => {
     const lesson = await Lesson.findOne({ _id: req.body.id }).lean().exec();
     const time = moment(lesson.time).subtract(2, 'hours')
 
@@ -200,8 +200,8 @@ router.post('/student/details/:lesson_id', ensureAuthenticated, async(req, res) 
     }
 })
 
-router.get('/chat/:userId', checkSession, async(req, res) => {
-    Channel.findOne({ ch_name: req.params.userId }, async(err, ch) => {
+router.get('/chat/:userId', checkSession, async (req, res) => {
+    Channel.findOne({ ch_name: req.params.userId }, async (err, ch) => {
         if (ch.ch_name != user._id) {
             req.flash('error_msg', 'このページへのアクセス権がありません。');
             res.redirect('/');

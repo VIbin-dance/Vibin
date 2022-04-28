@@ -48,13 +48,13 @@ const createChannel = (req, res, ch_name) => {
                     arn: data.channel.recordingConfigurationArn
                 },
             }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, ch) => {
-                if (err) {
-                    req.flash("error_msg", "チャンネルが作成されませんでした。");
-                    res.redirect('/lesson/channel');
-                } else {
-                    req.flash("success_msg", "チャンネルが作成されました。");
-                    res.redirect('/lesson/channel');
-                }
+                // if (err) {
+                //     req.flash("error_msg", "チャンネルが作成されませんでした。");
+                //     res.redirect('/lesson/channel');
+                // } else {
+                //     req.flash("success_msg", "チャンネルが作成されました。");
+                //     res.redirect('/lesson/channel');
+                // }
             });
         })
 };
