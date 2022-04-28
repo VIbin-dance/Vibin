@@ -418,101 +418,89 @@ router.get("/success/:id", ensureAuthenticated, async (req, res) => {
     }
 });
 
-router.get("/create", ensureAuthenticated, async (req, res) => {
-    const host = req.get("host");
-    let render = {
-        user: req.session.user,
-        choreographer: req.session.user.username,
-    };
+router.get("/create", checkSession, ensureAuthenticated, async (req, res) => {
+    if (!user.stripeID) {
+        const account = await stripe.accounts.create({
+            country: 'JP',
+            type: 'express',
+            email: user.email,
+            capabilities: {
+                card_payments: { requested: true },
+                transfers: { requested: true },
+            },
+            business_type: 'individual',
+        });
 
-    if (req.session.user.stripeID) {
-        const account = await stripe.accounts.retrieve(req.session.user.stripeID);
+        const loginLink = await stripe.accountLinks.create({
+            account: account.id,
+            refresh_url: `https://vibin.tokyo/create`,
+            return_url: `https://vibin.tokyo/create`,
+            type: "account_onboarding",
+        });
+
+        User.findOneAndUpdate({ email: req.user._json.email }, { stripeID: account.id }, { upsert: true, new: true, setDefaultsOnInsert: true },
+            (err, user) => {
+                console.log(err || user);
+                req.session.user = user;
+
+                res.render('create', {
+                    user: req.session.user,
+                    choreographer: user.username,
+                    account: account,
+                    loginLink: loginLink,
+                })
+            });
+    } else {
+        const account = await stripe.accounts.retrieve(user.stripeID);
         let loginLink;
 
-        if (account.payouts_enabled == true) {
+        if (account.capabilities.card_payments == 'active') {
             loginLink = await stripe.accounts.createLoginLink(account.id);
         } else {
-            const account = await stripe.accounts.create({ type: "express" });
             loginLink = await stripe.accountLinks.create({
                 account: account.id,
-                refresh_url: `https://${host}/create`,
-                return_url: `https://${host}/create`,
+                refresh_url: `https://vibin.tokyo/create`,
+                return_url: `https://vibin.tokyo/create`,
                 type: "account_onboarding",
             });
         }
 
-        render.account = account;
-        render.loginLink = loginLink;
-
-    } else if (!req.session.user.stripeID) {
-        try {
-            // const account = await stripe.accounts.create({
-            //     country: 'Japan',
-            //     type: 'express',
-            //     capabilities: {
-            //         card_payments: { requested: true },
-            //         //   transfers: {requested: true},
-            //     },
-            //     business_type: 'individual',
-            //     business_profile: { url: 'https://example.com' },
-            // });
-            console.log(account)
-            const account = await stripe.accounts.create({ type: "express" });
-            const loginLink = await stripe.accountLinks.create({
-                account: account.id,
-                refresh_url: `https://${host}/create`,
-                return_url: `https://${host}/create`,
-                type: "account_onboarding",
-            });
-
-            User.findOneAndUpdate({ email: req.user._json.email }, { stripeID: account.id }, { upsert: true, new: true, setDefaultsOnInsert: true },
-                (err, user) => {
-                    console.log(err || user);
-                    req.session.user = user;
-                }
-            );
-
-            render.loginLink = loginLink;
-
-        } catch (err) {
-            res.status(500).send({
-                error: err.message,
-            });
-        }
+        res.render('create', {
+            user: req.session.user,
+            choreographer: user.username,
+            account: account,
+            loginLink: loginLink,
+        })
     }
-
-    res.render("create", render);
 });
 
 router.post("/create", upload.single("thumbnail"), async (req, res) => {
     const { title, time, repeatUntil, price, level, genre, genreInput, mood } = req.body;
+    let errors = [];
     const user = await User.findOne({ email: req.user._json.email }).lean().exec();
     const choreographerID = user._id;
     const host = req.get("host");
     const lessonGenre = (!genreInput) ? genre : genreInput;
     // const lessonTime = time.join('/')
     // const finTime = moment(lessonTime).format('MM/DD HH:mm')
-    let errors = [];
+
     let loginLink;
-
-    console.log(req.body)
-
     const account = await stripe.accounts.retrieve(req.session.user.stripeID);
-    console.log(account)
-    // if (account.payouts_enabled == true) {
-    // loginLink = await stripe.accounts.createLoginLink(account.id);
-    // } else {
-    //     loginLink = await stripe.accountLinks.create({
-    //         account: account.id,
-    //         refresh_url: `https://${host}/create`,
-    //         return_url: `https://${host}/create`,
-    //         type: "account_onboarding",
-    //     });
-    // }
 
-    // if (account.payouts_enabled == false) {
-    // errors.push({ msg: res.__("銀行口座の情報を設定してください。") });
-    // }
+    if (account.capabilities.card_payments == 'active') {
+        loginLink = await stripe.accounts.createLoginLink(account.id);
+    } else {
+        loginLink = await stripe.accountLinks.create({
+            account: account.id,
+            refresh_url: `https://${host}/create`,
+            return_url: `https://${host}/create`,
+            type: "account_onboarding",
+        });
+    }
+
+    if (account.capabilities.card_payments != 'active') {
+        errors.push({ msg: res.__("銀行口座の情報を設定してください。") });
+    }
 
     if (
         title == "" ||
@@ -525,13 +513,6 @@ router.post("/create", upload.single("thumbnail"), async (req, res) => {
     ) {
         errors.push({ msg: res.__("msg.error.fill") });
     }
-
-    // Lesson.findOne({ title: title }).then((lesson) => {
-    //     if (lesson) {
-    //         errors.push({ msg: res.__("msg.error.dupl") });
-    //     }
-    // });
-
 
     // implementing repeatuntil feature. if repeatuntil is chosen, then new lessons are created every week until the selected month
     // end of a month fromnow in days /7 = number of lessons
@@ -592,15 +573,17 @@ router.post("/create", upload.single("thumbnail"), async (req, res) => {
                 const text = `
                 <h2>レッスンの登録、誠にありがとうございます！</h2>
                 <p>▼登録内容▼</p>
-                <p>--------------------------------------------</p>
-                <p>${lesson.title}</p>
+                <p>タイトル：${lesson.title}</p>
                 <a href="https://vibin.tokyo/reservation/${lesson.id}">
                 <img src="${lesson.thumbnail}" alt="thumbnail">
                 </a>
                 <p>日時：${dateTime}</p>
                 <p>価格：${lesson.price} 円</p>
-                <p>${lesson.level[0]} | ${lesson.genre[0]} | ${lesson.mood[0]}</p>
-                <p>--------------------------------------------</p>`;
+                <a href="https://vibin.tokyo/reservation/${lesson.id}">
+                レッスンの詳細をVibin'で見る
+                </a>
+                `;
+                // <p>${lesson.level[0]} | ${lesson.genre[0]} | ${lesson.mood[0]}</p>
 
                 sendMail(user.email, "レッスンの登録を受付いたしました！", text);
 
@@ -609,6 +592,7 @@ router.post("/create", upload.single("thumbnail"), async (req, res) => {
             })
             .catch((err) => console.log(err));
     }
+
     Lesson.updateMany({}, {
         $addToSet: {
             level: ["any"],
