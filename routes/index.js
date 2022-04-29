@@ -475,14 +475,12 @@ router.get("/create", checkSession, ensureAuthenticated, async (req, res) => {
 });
 
 router.post("/create", upload.single("thumbnail"), async (req, res) => {
-    const { title, time, repeatUntil, price, level, genre, genreInput, mood } = req.body;
+    const { title, start, end, repeatUntil, price, level, genre, genreInput, mood } = req.body;
     let errors = [];
     const user = await User.findOne({ email: req.user._json.email }).lean().exec();
     const choreographerID = user._id;
     const host = req.get("host");
     const lessonGenre = (!genreInput) ? genre : genreInput;
-    // const lessonTime = time.join('/')
-    // const finTime = moment(lessonTime).format('MM/DD HH:mm')
 
     let loginLink;
     const account = await stripe.accounts.retrieve(req.session.user.stripeID);
@@ -505,7 +503,8 @@ router.post("/create", upload.single("thumbnail"), async (req, res) => {
     if (
         title == "" ||
         req.file == undefined ||
-        time == "" ||
+        start == "" ||
+        end == "" ||
         price == "" ||
         level == undefined ||
         genre == undefined ||
@@ -528,7 +527,8 @@ router.post("/create", upload.single("thumbnail"), async (req, res) => {
             title,
             choreographer: req.session.user.username,
             price,
-            time,
+            start,
+            end,
             level,
             genre,
             mood,
@@ -550,7 +550,10 @@ router.post("/create", upload.single("thumbnail"), async (req, res) => {
             title,
             thumbnail: thumbnail.Location,
             choreographerID,
-            time,
+            time: {
+                start: start,
+                end: end,
+            },
             price,
             level,
             genre: lessonGenre,
@@ -560,7 +563,7 @@ router.post("/create", upload.single("thumbnail"), async (req, res) => {
         newLesson
             .save()
             .then((lesson) => {
-                const dateTime = moment(time).format("YYYY-MM-DDTHH:mm");
+                const dateTime = moment(start).format("YYYY-MM-DDTHH:mm");
                 addCalendar(user, title, dateTime);
 
                 Channel.findOne({ ch_name: choreographerID.toString() }).then((channel) => {

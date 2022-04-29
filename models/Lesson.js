@@ -26,8 +26,14 @@ const LessonSchema = new mongoose.Schema({
         require: true,
     },
     time: {
-        type: Date,
-        require: true,
+        start: {
+            type: String,
+            require: true,
+        },
+        end: {
+            type: String,
+            require: true,
+        }
     },
     level: {
         type: Array,
