@@ -135,7 +135,7 @@
                                     <p>
                                         <%= lesson.docs[i].price %>
                                             <%= __('dashboard.Yen') %> |
-                                                <%= moment(lesson.docs[i].time).format('MM/DD HH:mm'); %> |
+                                                <%= moment(lesson.docs[i].time.start).format('MM/DD HH:mm'); %> ~ <%= lesson.docs[i].time.end %> |
                                                     <%= __(`dashboard.search.level.${lesson.docs[i].level[0]}`) %> |
                                                         <%= __(`dashboard.search.genre.${lesson.docs[i].genre[0]}`) %>
                                     </p>
@@ -170,7 +170,7 @@
                                         <p>
                                             <%= lesson.docs[i].price %>
                                                 <%= __('dashboard.Yen') %> |
-                                                    <%= moment(lesson.docs[i].time).format('MM/DD HH:mm'); %> |
+                                                <%= moment(lesson.docs[i].time.start).format('MM/DD HH:mm'); %> ~ <%= lesson.docs[i].time.end %> |
                                                         <%= __(`dashboard.search.level.${lesson.docs[i].level[0]}`) %> |
                                                             <%= __(`dashboard.search.genre.${lesson.docs[i].genre[0]}`) %>
                                         </p>
