@@ -5127,10 +5127,10 @@ header .navbar .navbar-collapse .nav_account.btn_demo3 .btn_sm_primary {
   demo_3
 -----------------------------*/
 .demo_3.banner_section {
-  background-color: #1A5155;
+  background-color: #1a5155;
   position: relative;
   overflow: hidden;
-  height: 820px;
+  height: 100vh;
   padding: 10rem 0;
 }
 @media (max-width: 767px) {
@@ -5449,7 +5449,7 @@ header .navbar .navbar-collapse .nav_account.btn_demo3 .btn_sm_primary {
   banner_demo7
 -----------------------------*/
 .banner_demo7 {
-  background: #1A5155 !important;
+  background: #1a5155 !important;
   border-radius: 12px !important;
   margin-top: 5.625rem;
   padding-top: 0 !important;
@@ -8060,7 +8060,8 @@ header .navbar .navbar-collapse .nav_account.btn_demo3 .btn_sm_primary {
   }
 }
 @media (max-width: 991px) {
-  .service_mobile_app .item_block .ioco, .service_mobile_app .item_block .media-body {
+  .service_mobile_app .item_block .ioco,
+  .service_mobile_app .item_block .media-body {
     display: none;
   }
 }
@@ -8202,7 +8203,7 @@ header .navbar .navbar-collapse .nav_account.btn_demo3 .btn_sm_primary {
   feature_app
 -----------------------------*/
 .feature_app {
-  background-color: rgba(56, 24, 64, 0.05);
+  /* background-color: rgba(56, 24, 64, 0.05); */
 }
 .feature_app .app--crypto {
   width: 100%;
@@ -11140,16 +11141,16 @@ software_web
   faq_section
 -----------------------------*/
 .faq_section {
-    background: #FCCB37 !important;
-    border-radius: 12px !important;
-    margin-top: 5.625rem;
-    padding-top: 5.625rem !important;
-    padding-bottom: 0rm;
-    width: 93%;
-    padding-left: 15px;
-    padding-right: 15px;
-    margin-left: auto;
-    margin-right: auto;
+  background: #fccb37 !important;
+  border-radius: 12px !important;
+  margin-top: 5.625rem;
+  padding-top: 5.625rem !important;
+  padding-bottom: 0rm;
+  width: 93%;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-left: auto;
+  margin-right: auto;
   /* background-color: #f7f8fa; */
   padding-top: 25rem;
   padding-bottom: 7.5rem;
@@ -11557,7 +11558,7 @@ software_web
 -----------------------------*/
 .tryit_now {
   /* background-color: #381840; */
-  background-color: #1A5155;
+  background-color: #1a5155;
   position: relative;
   overflow: hidden;
   margin-top: -6rem;
@@ -13316,13 +13317,13 @@ software_web
   margin-bottom: 0;
 }
 .signup_full .signup_two .list__point .item:first-child .icob {
-  background-color: #1A5155;
+  background-color: #1a5155;
 }
 .signup_full .signup_two .list__point .item:nth-child(2) .icob {
   background-color: #eb5160;
 }
 .signup_full .signup_two .list__point .item:nth-child(3) .icob {
-  background-color: #FCCB37;
+  background-color: #fccb37;
 }
 
 /*
