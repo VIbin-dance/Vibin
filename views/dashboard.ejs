@@ -1,248 +1,309 @@
-<section id="searchBar" class="searchBar">
+<link rel="stylesheet" href="../../lp/assets/css/main.css" type="text/css" />
+<section id="searchBar" class="searchBar" style="padding-bottom: 0;">
     <div class="search-bar">
         <form action="/" method="POST">
-            <% if (user != "") { %>
+            <p data-aos="fade-up" data-aos-delay="100" class="aos-init aos-animate">
+                レッスンを検索してみる
+            </p>
+            <!-- <% if (user !="" ) { %>
                 <h2 class="user">
                     <%= __('dashboard.welcome.welcome') %>
                         <%= user.username %>
                             <%= __('dashboard.Quote.top') %> <span id="random"></span>
                 </h2>
-                <% } %>
-                    <br>
-                    <div class="form-group">
-                        <select class="form-control chosen-value" type="level" id="level" name="level">
-                        <option selected="null" value="any">
-                            <%= __('dashboard.search.level.top') %>
-                        </option>
-                        <option value="Beginner">
-                            <%= __('dashboard.search.level.Beginner') %>
-                        </option>
-                        <option value="Intermediate">
-                            <%= __('dashboard.search.level.Intermediate') %>
-                        </option>
-                        <option value="Advanced">
-                            <%= __('dashboard.search.level.Advanced') %>
-                        </option>
-                    </select>
-                    </div>
+                <% } %> -->
+            <br>
+            <div class="form-group">
+                <select class="form-control custom-select" type="level" id="level" name="level">
+                    <option selected="null" value="any">
+                        <%= __('dashboard.search.level.top') %>
+                    </option>
+                    <option value="Beginner">
+                        <%= __('dashboard.search.level.Beginner') %>
+                    </option>
+                    <option value="Intermediate">
+                        <%= __('dashboard.search.level.Intermediate') %>
+                    </option>
+                    <option value="Advanced">
+                        <%= __('dashboard.search.level.Advanced') %>
+                    </option>
+                </select>
+            </div>
 
-                    <div class="form-group">
-                        <select class="form-control chosen-value" type="genre" id="genre" name="genre">
-                        <option selected="null" value="any">
-                            <%= __('dashboard.search.genre.top') %>
-                        </option>
-                        <option value="Hip Hop">
-                            <%= __('dashboard.search.genre.Hip Hop') %>
-                        </option>
-                        <option value="Locking">
-                            <%= __('dashboard.search.genre.Locking') %>
-                        </option>
-                        <option value="Jazz">
-                            <%= __('dashboard.search.genre.Jazz') %>
-                        </option>
-                        <option value="Breakin">
-                            <%= __('dashboard.search.genre.Breakin') %>
-                        </option>
-                        <option value="House">
-                            <%= __('dashboard.search.genre.House') %>
-                        </option>
-                        <option value="Popping">
-                            <%= __('dashboard.search.genre.Popping') %>
-                        </option>
-                        <option value="K-POP">
-                            <%= __('dashboard.search.genre.K-POP') %>
-                        </option>
-                        <option value="TikTok">
-                            <%= __('dashboard.search.genre.TikTok') %>
-                        </option>
-                    </select>
-                    </div>
-                    <div class="form-group">
-                        <select class="form-control chosen-value" type="mood" id="mood" name="mood">
-                        <option selected="null" value="any">
-                            <%= __('dashboard.search.mood.top') %>
-                        </option>
-                        <option value="Groovy">
-                            <%= __('dashboard.search.mood.Groovy') %>
-                        </option>
-                        <option value="Funky">
-                            <%= __('dashboard.search.mood.Funky') %>
-                        </option>
-                        <option value="Chill">
-                            <%= __('dashboard.search.mood.Chill') %>
-                        </option>
-                        <option value="Romantic">
-                            <%= __('dashboard.search.mood.Romantic') %>
-                        </option>
-                        <option value="Sexy">
-                            <%= __('dashboard.search.mood.Sexy') %>
-                        </option>
-                        <option value="Calm">
-                            <%= __('dashboard.search.mood.Calm') %>
-                        </option>
-                        <option value="Angry">
-                            <%= __('dashboard.search.mood.Angry') %>
-                        </option>
-                        <option value="Peaceful">
-                            <%= __('dashboard.search.mood.Peaceful') %>
-                        </option>
-                        <option value="Sad">
-                            <%= __('dashboard.search.mood.Sad') %>
-                        </option>
-                        <option value="Fearful">
-                            <%= __('dashboard.search.mood.Fearful') %>
-                        </option>
-                        <option value="Happy">
-                            <%= __('dashboard.search.mood.Happy') %>
-                        </option>
-                        <option value="Tense">
-                            <%= __('dashboard.search.mood.Tense') %>
-                        </option>
-                        <option value="Sassy">
-                            <%= __('dashboard.search.mood.Sassy') %>
-                        </option>
-                        <option value="Savage">
-                            <%= __('dashboard.search.mood.Savage') %>
-                        </option>
-                    </select>
-                    </div>
-                    <input type="search" id="search" name="search" class="chosen-value" placeholder="<%= __('dashboard.search.search') %>" value="<%= typeof search != 'undefined' ? search : '' %>" />
-                    <input class="chosen-value" type="submit" style="background-color: #ff7583;">
+            <div class="form-group">
+                <select class="form-control custom-select" type="genre" id="genre" name="genre">
+                    <option selected="null" value="any">
+                        <%= __('dashboard.search.genre.top') %>
+                    </option>
+                    <option value="Hip Hop">
+                        <%= __('dashboard.search.genre.Hip Hop') %>
+                    </option>
+                    <option value="Locking">
+                        <%= __('dashboard.search.genre.Locking') %>
+                    </option>
+                    <option value="Jazz">
+                        <%= __('dashboard.search.genre.Jazz') %>
+                    </option>
+                    <option value="Breakin">
+                        <%= __('dashboard.search.genre.Breakin') %>
+                    </option>
+                    <option value="House">
+                        <%= __('dashboard.search.genre.House') %>
+                    </option>
+                    <option value="Popping">
+                        <%= __('dashboard.search.genre.Popping') %>
+                    </option>
+                    <option value="K-POP">
+                        <%= __('dashboard.search.genre.K-POP') %>
+                    </option>
+                    <option value="TikTok">
+                        <%= __('dashboard.search.genre.TikTok') %>
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <select class="form-control custom-select" type="mood" id="mood" name="mood">
+                    <option selected="null" value="any">
+                        <%= __('dashboard.search.mood.top') %>
+                    </option>
+                    <option value="Groovy">
+                        <%= __('dashboard.search.mood.Groovy') %>
+                    </option>
+                    <option value="Funky">
+                        <%= __('dashboard.search.mood.Funky') %>
+                    </option>
+                    <option value="Chill">
+                        <%= __('dashboard.search.mood.Chill') %>
+                    </option>
+                    <option value="Romantic">
+                        <%= __('dashboard.search.mood.Romantic') %>
+                    </option>
+                    <option value="Sexy">
+                        <%= __('dashboard.search.mood.Sexy') %>
+                    </option>
+                    <option value="Calm">
+                        <%= __('dashboard.search.mood.Calm') %>
+                    </option>
+                    <option value="Angry">
+                        <%= __('dashboard.search.mood.Angry') %>
+                    </option>
+                    <option value="Peaceful">
+                        <%= __('dashboard.search.mood.Peaceful') %>
+                    </option>
+                    <option value="Sad">
+                        <%= __('dashboard.search.mood.Sad') %>
+                    </option>
+                    <option value="Fearful">
+                        <%= __('dashboard.search.mood.Fearful') %>
+                    </option>
+                    <option value="Happy">
+                        <%= __('dashboard.search.mood.Happy') %>
+                    </option>
+                    <option value="Tense">
+                        <%= __('dashboard.search.mood.Tense') %>
+                    </option>
+                    <option value="Sassy">
+                        <%= __('dashboard.search.mood.Sassy') %>
+                    </option>
+                    <option value="Savage">
+                        <%= __('dashboard.search.mood.Savage') %>
+                    </option>
+                </select>
+            </div>
+            <!-- <input type="search" id="search" name="search" class="chosen-value"
+                placeholder="<%= __('dashboard.search.search') %>"
+                value="<%= typeof search != 'undefined' ? search : '' %>" /> -->
+            <input class="rounded-12 btn btn_lg_primary" type="submit" style="background-color: #ff7583;">
         </form>
     </div>
 </section>
 
 <% if (lesson.docs.length) { %>
-    <section id="results" class="results">
-        <div class="">
+    <section class="blog_masonry three_column" style="padding-top: 0;">
+        <div class="container">
             <%- include ('partials/messages') %>
-                <h3>
-                    <%= __('dashboard.Future vibes') %>&#10024;</h3>
                 <div class="row">
-                    <% for(let i=0; i < lesson.docs.length; i++) { %>
-                        <% if(moment(lesson.docs[i].time).isAfter(moment())) { %>
-                            <div class="col-lg-3 col-xs-6">
-                                <div class="box">
-                                    <a href="/reservation/<%= lesson.docs[i].id %>">
-                                            <img src="<%= lesson.docs[i].thumbnail %>" alt="thumbnail">
-                                        </a>
-                                    <h4 id="title<%= i %>">
-                                        <%= lesson.docs[i].title %>
-                                    </h4>
-                                    <a class="special" href="/choreographer/<%= lesson.docs[i].choreographerID %>">
-                                        <%= choreographer[i].username %>
+                    <div class="banner_title_inner">
+                        <h1 data-aos="fade-up" data-aos-delay="0" class="aos-init aos-animate">
+                            無料のレッスン&#10024;
+                        </h1>
+                    </div>
+                    <div class="card-columns">
+                        <% for (let i=0; i < lesson.docs.length; i++) { %>
+                        <% if (lesson.docs[i].price === 0) { %>
+                            <div class="card">
+                                <a href="/reservation/<%= lesson.docs[i]._id %>" class="link_poet">
+                                    <div class="cover_link">
+                                        <img class="main_img" src="<%= lesson.docs[i].thumbnail %>" alt="...">
+                                        <div class="auther_post">
+                                            <div class="media">
+                                                <img src="<%= choreographer[i].userPhoto %>" alt="先生のプロフィール画像">
+                                                <div class="media-body my-auto">
+                                                    <div class="txt">
+                                                        <h4>
+                                                            <%= choreographer[i].username %>
+                                                        </h4>
+                                                        <!-- <p>
+                                                        <%= lesson.docs[i].date %>
+                                                    </p> -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div class="card-body">
+                                    <div class="about_post">
+                                        <span class="c_ategory">
+                                            <a href="#">
+                                                <%= __(`dashboard.search.level.${lesson.docs[i].level[0]}`) %>
+                                            </a>
+                                            <a href="#">
+                                                <%= __(`dashboard.search.genre.${lesson.docs[i].genre[0]}`) %>
+                                            </a>
+                                        </span>
+                                        <span class="dot"></span>
+                                        <time>
+                                            <%= moment(lesson.docs[i].time.start).format('MM/DD HH:mm'); %> ~ <%=
+                                                    lesson.docs[i].time.end %>
+                                        </time>
+                                    </div>
+                                    <a href="/reservation/<%= lesson.docs[i]._id %>" class="d-block">
+                                        <h5 class="card-title">
+                                            <%= lesson.docs[i].title %>
+                                        </h5>
+                                        <p class="card-text">
+                                            <%= lesson.docs[i].price %>円
+                                        </p>
                                     </a>
-                                    <p>
-                                        <%= lesson.docs[i].price %>
-                                            <%= __('dashboard.Yen') %> |
-                                                <%= moment(lesson.docs[i].time.start).format('MM/DD HH:mm'); %> ~ <%= lesson.docs[i].time.end %> |
-                                                    <%= __(`dashboard.search.level.${lesson.docs[i].level[0]}`) %> |
-                                                        <%= __(`dashboard.search.genre.${lesson.docs[i].genre[0]}`) %>
-                                    </p>
                                 </div>
                             </div>
                             <% } %>
-                                <% } %>
+                            <% } %>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="banner_title_inner">
+                        <h1 data-aos="fade-up" data-aos-delay="0" class="aos-init aos-animate">
+                            人気のレッスン&#10024;
+                        </h1>
+                    </div>
+                    <div class="card-columns">
+                        <% for (let i=0; i < lesson.docs.length; i++) { %>
+                            <div class="card">
+                                <a href="/reservation/<%= lesson.docs[i]._id %>" class="link_poet">
+                                    <div class="cover_link">
+                                        <img class="main_img" src="<%= lesson.docs[i].thumbnail %>" alt="...">
+                                        <div class="auther_post">
+                                            <div class="media">
+                                                <img src="<%= choreographer[i].userPhoto %>" alt="先生のプロフィール画像">
+                                                <div class="media-body my-auto">
+                                                    <div class="txt">
+                                                        <h4>
+                                                            <%= choreographer[i].username %>
+                                                        </h4>
+                                                        <!-- <p>
+                                                        <%= lesson.docs[i].date %>
+                                                    </p> -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div class="card-body">
+                                    <div class="about_post">
+                                        <span class="c_ategory">
+                                            <a href="#">
+                                                <%= __(`dashboard.search.level.${lesson.docs[i].level[0]}`) %>
+                                            </a>
+                                            <a href="#">
+                                                <%= __(`dashboard.search.genre.${lesson.docs[i].genre[0]}`) %>
+                                            </a>
+                                        </span>
+                                        <span class="dot"></span>
+                                        <time>
+                                            <%= moment(lesson.docs[i].time.start).format('MM/DD HH:mm'); %> ~ <%=
+                                                    lesson.docs[i].time.end %>
+                                        </time>
+                                    </div>
+                                    <a href="/reservation/<%= lesson.docs[i]._id %>" class="d-block">
+                                        <h5 class="card-title">
+                                            <%= lesson.docs[i].title %>
+                                        </h5>
+                                        <p class="card-text">
+                                            <%= lesson.docs[i].price %>円
+                                        </p>
+                                    </a>
+                                </div>
+                            </div>
+                            <% } %>
+                    </div>
                 </div>
         </div>
     </section>
     <% } %>
 
-        <% if (lesson.docs.length) { %>
-            <section id="results" class="results">
-                <div class="">
-                    <h3>
-                        <%= __('dashboard.Past vibes') %>&#10024;</h3>
-                    <div class="row">
-                        <% for(let i=0; i < lesson.docs.length; i++) { %>
-                            <% if(moment(lesson.docs[i].time).isBefore(moment())) { %>
-                                <div class="col-lg-3 col-xs-6 pad">
-                                    <div class="box">
-                                        <a href="/reservation/<%= lesson.docs[i].id %>">
-                                            <img src="<%= lesson.docs[i].thumbnail %>" alt="thumbnail">                                            
-                                    </a>
-                                        <h4 id="title<%= i %>">
-                                            <%= lesson.docs[i].title %>
-                                        </h4>
-                                        <a class="special" href="/choreographer/<%= lesson.docs[i].choreographerID %>">
-                                            <%= choreographer[i].username %>
-                                        </a>
-                                        <p>
-                                            <%= lesson.docs[i].price %>
-                                                <%= __('dashboard.Yen') %> |
-                                                <%= moment(lesson.docs[i].time.start).format('MM/DD HH:mm'); %> ~ <%= lesson.docs[i].time.end %> |
-                                                        <%= __(`dashboard.search.level.${lesson.docs[i].level[0]}`) %> |
-                                                            <%= __(`dashboard.search.genre.${lesson.docs[i].genre[0]}`) %>
-                                        </p>
-                                    </div>
-                                </div>
-                                <% } %>
-                                    <% } %>
-                    </div>
-                </div>
-            </section>
-            <% } %>
-
-                <div class="dashboard-pagination">
-                    <div class="pagination">
-                        <% if (currentPage==1 && pageCount> 1) { %>
+        <div class="dashboard-pagination">
+            <div class="pagination">
+                <% if (currentPage==1 && pageCount> 1) { %>
+                    <p>
+                        <%= __('dashboard.Page') %>
+                            <%= currentPage %>
+                    </p>
+                    <a href="/dashboard/<%= currentSort %>?page=<%= parseInt(currentPage) + 1 %>&limit=15">
+                        <%= __('dashboard.Page') %>
+                            <%= parseInt(currentPage) + 1 %>
+                                <span class="iconify" data-icon="ion-ios-arrow-forward" data-inline="false"></span>
+                    </a>
+                    <% } else if (currentPage < pageCount) { %>
+                        <a href="/dashboard/<%= currentSort %>?page=<%= parseInt(currentPage) - 1 %>&limit=15">
+                            <span class="iconify" data-icon="ion-ios-arrow-back" data-inline="false"></span>
+                            <%= __('dashboard.Page') %>
+                                <%= parseInt(currentPage) - 1 %>
+                        </a>
+                        <p>
+                            <%= __('dashboard.Page') %>
+                                <%= currentPage %>
+                        </p>
+                        <a href="/dashboard/<%= currentSort %>?page=<%= parseInt(currentPage) + 1 %>&limit=15">
+                            <%= __('dashboard.Page') %>
+                                <%= parseInt(currentPage) + 1 %>
+                                    <span class="iconify" data-icon="ion-ios-arrow-forward" data-inline="false"></span>
+                        </a>
+                        <% } else if (currentPage==pageCount && pageCount> 1) { %>
+                            <a href="/dashboard/<%= currentSort %>?page=<%= parseInt(currentPage) - 1 %>&limit=15">
+                                <span class="iconify" data-icon="ion-ios-arrow-back" data-inline="false"></span>
+                                <%= __('dashboard.Page') %>
+                                    <%=parseInt(currentPage) - 1 %>
+                            </a>
                             <p>
                                 <%= __('dashboard.Page') %>
                                     <%= currentPage %>
                             </p>
-                            <a href="/dashboard/<%= currentSort %>?page=<%= parseInt(currentPage) + 1 %>&limit=15">
-                                <%= __('dashboard.Page') %>
-                                    <%= parseInt(currentPage) + 1 %>
-                                        <span class="iconify" data-icon="ion-ios-arrow-forward" data-inline="false"></span>
-                            </a>
-                            <% } else if (currentPage < pageCount) { %>
-                                <a href="/dashboard/<%= currentSort %>?page=<%= parseInt(currentPage) - 1 %>&limit=15">
-                                    <span class="iconify" data-icon="ion-ios-arrow-back" data-inline="false"></span>
-                                    <%= __('dashboard.Page') %>
-                                        <%= parseInt(currentPage) - 1 %>
-                                </a>
-                                <p>
-                                    <%= __('dashboard.Page') %>
-                                        <%= currentPage %>
-                                </p>
-                                <a href="/dashboard/<%= currentSort %>?page=<%= parseInt(currentPage) + 1 %>&limit=15">
-                                    <%= __('dashboard.Page') %>
-                                        <%= parseInt(currentPage) + 1 %>
-                                            <span class="iconify" data-icon="ion-ios-arrow-forward" data-inline="false"></span>
-                                </a>
-                                <% } else if (currentPage==pageCount && pageCount> 1) { %>
-                                    <a href="/dashboard/<%= currentSort %>?page=<%= parseInt(currentPage) - 1 %>&limit=15">
-                                        <span class="iconify" data-icon="ion-ios-arrow-back" data-inline="false"></span>
-                                        <%= __('dashboard.Page') %>
-                                            <%=parseInt(currentPage) - 1 %>
-                                    </a>
-                                    <p>
-                                        <%= __('dashboard.Page') %>
-                                            <%= currentPage %>
-                                    </p>
-                                    <% } %>
-                    </div>
-                </div>
-                </div>
-                </section>
+                            <% } %>
+            </div>
+        </div>
+        </div>
+        </section>
 
-                <script>
-                    function charCut() {
-                        for (let i = 0; i < 15; i++) {
-                            let title = document.getElementById("title" + i).innerHTML;
-                            if (title[70]) {
-                                document.getElementById("title" + i).innerHTML = title.substring(0, 70) + "...";
-                            }
-                        }
+        <script>
+            function charCut() {
+                for (let i = 0; i < 15; i++) {
+                    let title = document.getElementById("title" + i).innerHTML;
+                    if (title[70]) {
+                        document.getElementById("title" + i).innerHTML = title.substring(0, 70) + "...";
                     }
+                }
+            }
 
-                    var quotes = [
-                        "<%= __('dashboard.Quote.1') %>",
-                        "<%= __('dashboard.Quote.2') %>",
-                        "<%= __('dashboard.Quote.3') %>",
-                        "<%= __('dashboard.Quote.4') %>"
-                    ];
-                    let index = Math.floor(Math.random() * (quotes.length));
+            var quotes = [
+                "<%= __('dashboard.Quote.1') %>",
+                "<%= __('dashboard.Quote.2') %>",
+                "<%= __('dashboard.Quote.3') %>",
+                "<%= __('dashboard.Quote.4') %>"
+            ];
+            let index = Math.floor(Math.random() * (quotes.length));
 
-                    document.getElementById("random").innerHTML = quotes[index];
-                </script>
+            document.getElementById("random").innerHTML = quotes[index];
+        </script>

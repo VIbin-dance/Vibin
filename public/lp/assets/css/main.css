@@ -20136,13 +20136,13 @@ html:not(.no-js) [data-aos="fade-up"] {
 }
 .form-group input,
 .form-group select {
-  height: 55px;
+  height: 62px;
   padding-left: 1.25rem;
   color: #0b2238 !important;
-  font-size: 16px;
-  border-radius: 8px;
+  font-size: 17px;
+  border-radius: 12px;
   font-weight: 500;
-  border-color: #edeef1;
+  border-color: #6c757d;
   -webkit-transition: 0.3s !important;
   -moz-transition: 0.3s !important;
   -o-transition: 0.3s !important;
@@ -20158,7 +20158,7 @@ html:not(.no-js) [data-aos="fade-up"] {
   -o-box-shadow: none !important;
   -ms-box-shadow: none !important;
   box-shadow: none !important;
-  border-color: #165df5;
+  border-color: #eb5160;
 }
 .form-group input::placeholder,
 .form-group select::placeholder {
@@ -20680,7 +20680,7 @@ html:not(.no-js) [data-aos="fade-up"] {
 }
 
 /*-----------------------------
-  logos_section
+  logos_form-group
 -----------------------------*/
 .tooltip .arrow {
   display: none;

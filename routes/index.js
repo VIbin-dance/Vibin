@@ -110,7 +110,7 @@ router.get("/", checkSession, async (req, res) => {
             // find a better way to iterate pushing into choreographer array
             for (let i = 0; i < lesson.docs.length; i++) {
                 choreographer[i] = await User.findOne({ _id: lesson.docs[i].choreographerID.toString() },
-                    "username"
+                    "username userPhoto"
                 )
                     .lean()
                     .exec();
@@ -132,10 +132,10 @@ router.get("/", checkSession, async (req, res) => {
 
 router.post("/", checkSession, async (req, res) => {
     const { level, genre, mood, search } = req.body;
-    const searchQuery = new RegExp(escapeRegex(search), "gi");
+    // const searchQuery = new RegExp(escapeRegex(search), "gi");
     const query = {
         $and: [{ level: level }, { genre: genre }, { mood: mood }],
-        $or: [{ title: searchQuery }, { choreographer: searchQuery }],
+        // $or: [{ title: searchQuery }, { choreographer: searchQuery }],
     };
 
     Lesson.paginate(
@@ -642,8 +642,8 @@ router.post("/webhook", (req, res) => {
     });
 });
 
-function escapeRegex(text) {
-    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-}
+// function escapeRegex(text) {
+//     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+// }
 
 module.exports = router;
