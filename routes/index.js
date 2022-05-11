@@ -100,9 +100,9 @@ router.get(
 
 router.get("/", checkSession, async (req, res) => {
     Lesson.paginate({}, {
-        page: req.query.page,
-        limit: req.query.limit,
         sort: { time: -1 },
+        limit: 21,
+        page: req.query.page,
     },
         async (err, lesson) => {
             const choreographer = [];

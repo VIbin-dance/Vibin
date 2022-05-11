@@ -119,8 +119,8 @@
 </section>
 
 <% if (lesson.docs.length) { %>
-    <section class="blog_masonry three_column" style="padding-top: 0;">
-        <div class="container">
+    <section class="blog_masonry four_column" style="padding-top: 0;">
+        <div class="container col-lg-11">
             <%- include ('partials/messages') %>
                 <div class="row">
                     <div class="banner_title_inner">
@@ -130,58 +130,56 @@
                     </div>
                     <div class="card-columns">
                         <% for (let i=0; i < lesson.docs.length; i++) { %>
-                        <% if (lesson.docs[i].price === 0) { %>
-                            <div class="card">
-                                <a href="/reservation/<%= lesson.docs[i]._id %>" class="link_poet">
-                                    <div class="cover_link">
-                                        <img class="main_img" src="<%= lesson.docs[i].thumbnail %>" alt="...">
-                                        <div class="auther_post">
-                                            <div class="media">
-                                                <img src="<%= choreographer[i].userPhoto %>" alt="先生のプロフィール画像">
-                                                <div class="media-body my-auto">
-                                                    <div class="txt">
-                                                        <h4>
-                                                            <%= choreographer[i].username %>
-                                                        </h4>
-                                                        <!-- <p>
-                                                        <%= lesson.docs[i].date %>
-                                                    </p> -->
+                            <% if (lesson.docs[i].price===0) { %>
+                                <div class="card">
+                                    <a href="/reservation/<%= lesson.docs[i]._id %>" class="link_poet">
+                                        <div class="cover_link">
+                                            <img class="main_img" src="<%= lesson.docs[i].thumbnail %>" alt="...">
+                                            <div class="auther_post">
+                                                <div class="media">
+                                                    <img src="<%= choreographer[i].userPhoto %>" alt="先生のプロフィール画像">
+                                                    <div class="media-body my-auto">
+                                                        <div class="txt">
+                                                            <h4>
+                                                                <%= choreographer[i].username %>
+                                                            </h4>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </a>
-                                <div class="card-body">
-                                    <div class="about_post">
-                                        <span class="c_ategory">
-                                            <a href="#">
-                                                <%= __(`dashboard.search.level.${lesson.docs[i].level[0]}`) %>
-                                            </a>
-                                            <a href="#">
-                                                <%= __(`dashboard.search.genre.${lesson.docs[i].genre[0]}`) %>
-                                            </a>
-                                        </span>
-                                        <span class="dot"></span>
-                                        <time>
-                                            <%= moment(lesson.docs[i].time.start).format('MM/DD HH:mm'); %> ~ <%=
-                                                    lesson.docs[i].time.end %>
-                                        </time>
-                                    </div>
-                                    <a href="/reservation/<%= lesson.docs[i]._id %>" class="d-block">
-                                        <h5 class="card-title">
-                                            <%= lesson.docs[i].title %>
-                                        </h5>
-                                        <p class="card-text">
-                                            <%= lesson.docs[i].price %>円
-                                        </p>
                                     </a>
+                                    <div class="card-body">
+                                        <div class="about_post">
+                                            <span class="c_ategory">
+                                                <a href="#">
+                                                    <%= __(`dashboard.search.level.${lesson.docs[i].level[0]}`) %>
+                                                </a>
+                                                <a href="#">
+                                                    <%= __(`dashboard.search.genre.${lesson.docs[i].genre[0]}`) %>
+                                                </a>
+                                            </span>
+                                            <span class="dot"></span>
+                                            <time>
+                                                <%= moment(lesson.docs[i].time.start).format('MM/DD HH:mm'); %> ~ <%=
+                                                        lesson.docs[i].time.end %>
+                                            </time>
+                                        </div>
+                                        <a href="/reservation/<%= lesson.docs[i]._id %>" class="d-block">
+                                            <h5 class="card-title">
+                                                <%= lesson.docs[i].title %>
+                                            </h5>
+                                            <p class="card-text">
+                                                <%= lesson.docs[i].price %>円
+                                            </p>
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
-                            <% } %>
-                            <% } %>
+                                <% } %>
+                                    <% } %>
                     </div>
                 </div>
+
                 <div class="row">
                     <div class="banner_title_inner">
                         <h1 data-aos="fade-up" data-aos-delay="0" class="aos-init aos-animate">
@@ -251,13 +249,13 @@
                         <%= __('dashboard.Page') %>
                             <%= currentPage %>
                     </p>
-                    <a href="/dashboard/<%= currentSort %>?page=<%= parseInt(currentPage) + 1 %>&limit=15">
+                    <a href="/<%= currentSort %>?page=<%= parseInt(currentPage) + 1 %>">
                         <%= __('dashboard.Page') %>
                             <%= parseInt(currentPage) + 1 %>
                                 <span class="iconify" data-icon="ion-ios-arrow-forward" data-inline="false"></span>
                     </a>
                     <% } else if (currentPage < pageCount) { %>
-                        <a href="/dashboard/<%= currentSort %>?page=<%= parseInt(currentPage) - 1 %>&limit=15">
+                        <a href="/<%= currentSort %>?page=<%= parseInt(currentPage) - 1 %>">
                             <span class="iconify" data-icon="ion-ios-arrow-back" data-inline="false"></span>
                             <%= __('dashboard.Page') %>
                                 <%= parseInt(currentPage) - 1 %>
@@ -266,13 +264,13 @@
                             <%= __('dashboard.Page') %>
                                 <%= currentPage %>
                         </p>
-                        <a href="/dashboard/<%= currentSort %>?page=<%= parseInt(currentPage) + 1 %>&limit=15">
+                        <a href="/<%= currentSort %>?page=<%= parseInt(currentPage) + 1 %>">
                             <%= __('dashboard.Page') %>
                                 <%= parseInt(currentPage) + 1 %>
                                     <span class="iconify" data-icon="ion-ios-arrow-forward" data-inline="false"></span>
                         </a>
                         <% } else if (currentPage==pageCount && pageCount> 1) { %>
-                            <a href="/dashboard/<%= currentSort %>?page=<%= parseInt(currentPage) - 1 %>&limit=15">
+                            <a href="/<%= currentSort %>?page=<%= parseInt(currentPage) - 1 %>">
                                 <span class="iconify" data-icon="ion-ios-arrow-back" data-inline="false"></span>
                                 <%= __('dashboard.Page') %>
                                     <%=parseInt(currentPage) - 1 %>

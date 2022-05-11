@@ -16047,7 +16047,7 @@ software_web
 .blog_masonry .card .card-body .about_post .c_ategory a {
   color: #0b2238;
   display: inline-block;
-  font-size: 14px;
+  font-size: 12px;
 }
 .blog_masonry .card .card-body .about_post .c_ategory a:hover {
   color: #eb5160;
@@ -16097,6 +16097,21 @@ software_web
   orphans: 1;
   widows: 1;
 }
+.blog_masonry.four_column .card-columns {
+  -webkit-column-count: 4;
+  -moz-column-count: 4;
+  column-count: 4;
+  -webkit-column-gap: 1.875rem;
+  -moz-column-gap: 1.875rem;
+  column-gap: 1.875rem;
+  orphans: 1;
+  widows: 1;
+}
+
+.blog_masonry.four_column .card-body .card-title {
+  font-size: 20px;
+}
+
 .blog_masonry.three_column .card-body .card-title {
   font-size: 20px;
 }
