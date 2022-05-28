@@ -7,6 +7,7 @@ const { uploadObject } = require("../config/aws/s3");
 const Aws = require("aws-sdk");
 const multer = require("multer");
 const sharp = require("sharp");
+const stripe = require("stripe")(process.env.stripekey);
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -55,7 +56,7 @@ router.get("/profile", checkSession, ensureAuthenticated, async (req, res) => {
     if (user.lesson) {
         for (let i = 0; i < user.lesson.length; i++) {
             choreographer[i] = await User.findOne({ _id: tickets[i].choreographerID },
-                "username"
+                "username userPhoto"
             )
                 .lean()
                 .exec();
@@ -138,5 +139,146 @@ router.post("/profile/edit", ensureAuthenticated, upload.single("userPhoto"), as
         })
     }
 });
+
+// const createStripe = () => {
+//     if (!user.stripeID) {
+//         const account = await stripe.accounts.create({
+//             country: 'JP',
+//             type: 'express',
+//             email: user.email,
+//             capabilities: {
+//                 card_payments: { requested: true },
+//                 transfers: { requested: true },
+//             },
+//             business_type: 'individual',
+//         });
+
+//         const loginLink = await stripe.accountLinks.create({
+//             account: account.id,
+//             refresh_url: `https://vibin.tokyo/settings`,
+//             return_url: `https://vibin.tokyo/settings`,
+//             type: "account_onboarding",
+//         });
+
+//         User.findOneAndUpdate({ email: req.user._json.email }, { stripeID: account.id }, { upsert: true, new: true, setDefaultsOnInsert: true },
+//             (err, user) => {
+//                 console.log(err || user);
+//                 req.session.user = user;
+//             });
+//     }
+// }
+
+// const checkStripe = () => {
+//     if (!user.stripeID) {
+//         const account = await stripe.accounts.create({
+//             country: 'JP',
+//             type: 'express',
+//             email: user.email,
+//             capabilities: {
+//                 card_payments: { requested: true },
+//                 transfers: { requested: true },
+//             },
+//             business_type: 'individual',
+//         });
+
+//         const loginLink = await stripe.accountLinks.create({
+//             account: account.id,
+//             refresh_url: `https://vibin.tokyo/create`,
+//             return_url: `https://vibin.tokyo/create`,
+//             type: "account_onboarding",
+//         });
+
+//         User.findOneAndUpdate({ email: req.user._json.email }, { stripeID: account.id }, { upsert: true, new: true, setDefaultsOnInsert: true },
+//             (err, user) => {
+//                 console.log(err || user);
+//                 req.session.user = user;
+
+//                 res.render('settings', {
+//                     user: req.session.user,
+//                     choreographer: user.username,
+//                     account: account,
+//                     loginLink: loginLink,
+//                 })
+//             });
+//     } else {
+//         const account = await stripe.accounts.retrieve(user.stripeID);
+//         let loginLink;
+
+//         if (account.capabilities.card_payments == 'active') {
+//             loginLink = await stripe.accounts.createLoginLink(account.id);
+//         } else {
+//             loginLink = await stripe.accountLinks.create({
+//                 account: account.id,
+//                 refresh_url: `https://vibin.tokyo/settings`,
+//                 return_url: `https://vibin.tokyo/settings`,
+//                 type: "account_onboarding",
+//             });
+//         }
+
+//         res.render('settings', {
+//             user: req.session.user,
+//             choreographer: user.username,
+//             account: account,
+//             loginLink: loginLink,
+//         })
+//     }
+// }
+
+router.get("/settings", checkSession, ensureAuthenticated, async (req, res) => {
+    if (!user.stripeID) {
+        const account = await stripe.accounts.create({
+            country: 'JP',
+            type: 'express',
+            email: user.email,
+            capabilities: {
+                card_payments: { requested: true },
+                transfers: { requested: true },
+            },
+            business_type: 'individual',
+        });
+
+        const loginLink = await stripe.accountLinks.create({
+            account: account.id,
+            refresh_url: `https://vibin.tokyo/create`,
+            return_url: `https://vibin.tokyo/create`,
+            type: "account_onboarding",
+        });
+
+        User.findOneAndUpdate({ email: req.user._json.email }, { stripeID: account.id }, { upsert: true, new: true, setDefaultsOnInsert: true },
+            (err, user) => {
+                console.log(err || user);
+                req.session.user = user;
+
+                res.render('settings', {
+                    user: req.session.user,
+                    choreographer: user.username,
+                    account: account,
+                    loginLink: loginLink,
+                })
+            });
+    } else {
+        const account = await stripe.accounts.retrieve(user.stripeID);
+        let loginLink;
+
+        if (account.capabilities.card_payments == 'active') {
+            loginLink = await stripe.accounts.createLoginLink(account.id);
+        } else {
+            loginLink = await stripe.accountLinks.create({
+                account: account.id,
+                refresh_url: `https://vibin.tokyo/settings`,
+                return_url: `https://vibin.tokyo/settings`,
+                type: "account_onboarding",
+            });
+        }
+
+        res.render('settings', {
+            user: req.session.user,
+            choreographer: user.username,
+            account: account,
+            loginLink: loginLink,
+        })
+    }
+
+})
 
 module.exports = router;

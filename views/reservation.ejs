@@ -5,11 +5,12 @@
             <div class="col-md-8 blog-main">
                 <div class="blog-post">
                     <div class="card-deck">
-                        <% if (!user.lesson && lesson.price != 0) { %>
+                        <% if (!user.lesson && lesson.price !=0) { %>
                             <!-- <h3>今なら初回無料！<%= lesson.price %><%= __('dashboard.Yen') %>が0<%= __('dashboard.Yen') %>で！</h3> -->
                             <% } %>
                                 <div class="card mb-3" style="min-width: 47vh; margin-top: 30px;">
-                                    <img style="height: 100%; width: 100%; display: block;" src="<%=lesson.thumbnail%>" alt="thumbnail of the lesson">
+                                    <img style="height: 100%; width: 100%; display: block;" src="<%=lesson.thumbnail%>"
+                                        alt="thumbnail of the lesson">
                                 </div>
 
                                 <div class="p-3">
@@ -29,14 +30,18 @@
                                     <h5>
                                         <%= lesson.price %>
                                             <%= __('dashboard.Yen') %> |
-                                                <%=  moment(lesson.time).format('MM/DD HH:mm'); %>
+                                                <%= moment(lesson.time).format('MM/DD HH:mm'); %>
                                                     </h6>
                                                     <hr>
                                                     <div class="text-center">
-                                                        <% if (id != undefined) { %>
-                                                            <button class="btn btn-danger btn-lg btn-block" id="checkout-button"><%= __('reservation.purchase') %></button>
+                                                        <% if (id !=undefined) { %>
+                                                            <button class="btn btn-danger btn-lg btn-block"
+                                                                id="checkout-button">
+                                                                <%= __('reservation.purchase') %>
+                                                            </button>
                                                             <% } else { %>
-                                                                <a href="/success/<%= params %>" class="btn btn-danger btn-lg btn-block">
+                                                                <a href="/success/<%= params %>"
+                                                                    class="btn btn-danger btn-lg btn-block">
                                                                     <%= __('reservation.purchase') %>
                                                                 </a>
                                                                 <% } %>
@@ -46,9 +51,14 @@
                                                         <h4>
                                                             <%= __('reservation.choreo') %>
                                                         </h4>
-                                                        <a href="/choreographer/<%= choreographer._id %>" style="font-size: 22px;">
-                                    <img src="<%= choreographer.userPhoto %>" height="100" width="100" style="border-radius: 50%;" alt="user photo">
-                                    <br><%= choreographer.username %></a>
+                                                        <a href="/choreographer/<%= choreographer._id %>"
+                                                            style="font-size: 22px;">
+                                                            <img src="<%= choreographer.userPhoto %>" height="100"
+                                                                width="100" style="border-radius: 50%;"
+                                                                alt="user photo">
+                                                            <br>
+                                                            <%= choreographer.username %>
+                                                        </a>
                                                         <br>
                                                         <h5 style="white-space:pre-wrap;">
                                                             <%= choreographer.bio %>

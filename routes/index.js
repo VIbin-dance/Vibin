@@ -152,7 +152,7 @@ router.post("/", checkSession, async (req, res) => {
                 const choreographer = [];
                 for (let i = 0; i < lesson.docs.length; i++) {
                     choreographer[i] = await User.findOne({ _id: lesson.docs[i].choreographerID.toString() },
-                        "username"
+                        "username userPhoto"
                     ).exec();
                 }
 
@@ -174,9 +174,9 @@ router.get("/results", (req, res) => res.render("results"));
 
 router.get("/choreographer/:id", checkSession, async (req, res) => {
     Lesson.paginate({ choreographerID: req.params.id }, {
-        page: req.query.page,
-        limit: req.query.limit,
         sort: { time: -1 },
+        limit: 21,
+        page: req.query.page,
     },
         async (err, lesson) => {
             User.findOne({ _id: req.params.id }, (err, choreographer) => {
@@ -185,6 +185,7 @@ router.get("/choreographer/:id", checkSession, async (req, res) => {
                     lesson: lesson,
                     choreographer: choreographer,
                     moment: moment,
+                    currentSort: req.params.sort,
                     currentPage: lesson.page,
                     pageCount: lesson.pages,
                     pages: paginate.getArrayPages(req)(3, lesson.pages, req.query.page),
