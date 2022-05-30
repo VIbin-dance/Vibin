@@ -279,9 +279,8 @@ input[type="submit"],
 /* Search bar */
 
 #searchBar .search-bar {
-  font-size: 15px;
   position: relative;
-  margin: 0;
+  margin-top: 3%;
 }
 
 #searchBar .form-group {
@@ -291,6 +290,10 @@ input[type="submit"],
 #searchBar .search-bar form {
   position: relative;
   text-align: center;
+}
+
+.searchBar {
+  padding-bottom: 2%;
 }
 
 select {
@@ -1722,6 +1725,9 @@ section {
 }
 
 @media (max-width: 768px) {
+  #footer {
+    display: none;
+  }
   #footer .social-links {
     padding-left: 20px;
   }
@@ -2060,14 +2066,14 @@ section {
   }
 }
 
-.navbar {
+.navbarBottom {
   visibility: hidden;
   margin: 0;
-  padding: 3px;
+  padding: 2px 0px;
 }
 
 @media (max-width: 1023px) {
-  .navbar {
+  .navbarBottom {
     visibility: visible;
   }
 }
@@ -2078,38 +2084,39 @@ section {
   }
 }
 
-.navbar ul {
+.navbarBottom ul {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.navbar > ul {
+.navbarBottom > ul {
   display: flex;
+  justify-content: space-around;
 }
 
-.navbar > ul > li {
+.navbarBottom > ul > li {
   position: relative;
   white-space: nowrap;
-  padding: 8px 30px 8px 30px;
+  padding: 8px 15px 8px 15px;
 }
 
-.navbar a {
+.navbarBottom a {
   display: block;
   position: relative;
   color: #545454;
   transition: 0.3s;
-  font-size: 12px;
+  font-size: 10px;
   font-family: "Open Sans", sans-serif;
 }
 
-.navbar li {
+.navbarBottom li {
   font-size: 12px;
   text-align: center;
 }
 
-.navbar a:hover,
-.navbar .active > a,
-.navbar li:hover > a {
+.navbarBottom a:hover,
+.navbarBottom .active > a,
+.navbarBottom li:hover > a {
   color: #eb5160;
 }

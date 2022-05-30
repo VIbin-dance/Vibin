@@ -95,6 +95,7 @@ body::-webkit-scrollbar-thumb {
 
 #live_grid {
     padding-bottom: 0;
+    padding-top: 81px;
 }
 
 @media screen and (max-width: 768px) {
@@ -647,6 +648,9 @@ body::-webkit-scrollbar-thumb {
 }
 
 @media screen and (max-width: 768px) {
+    .live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs {
+        /* position: fixed; */
+    }
     .live_grid .video_grid .channelView-ivs #self_camera {
         width: 100%;
         height: 55vw !important;
@@ -1045,7 +1049,7 @@ body::-webkit-scrollbar-thumb {
 @media screen and (max-width: 768px) {
     .live_grid .chat_grid.collapseOn {
         width: 100%;
-        height: 55vh;
+        height: 45vh;
         position: unset;
         right: unset;
     }
@@ -1061,6 +1065,7 @@ body::-webkit-scrollbar-thumb {
 @media (orientation:landscape) and (max-width: 768px) {
     .live_grid .chat_grid.collapseOn {
         width: 30%;
+        height: 95vh;
     }
 }
 
@@ -1221,14 +1226,14 @@ body::-webkit-scrollbar-thumb {
 
 .live_grid .chat_grid .contain .message_wrap ul li .avatar {
     margin: 0;
-    width: 3rem;
-    height: 3rem;
+    width: 2.5rem;
+    height: 2.5rem;
     margin-right: 1rem;
     border-radius: 10rem;
 }
 
 .live_grid .chat_grid .contain .message_wrap ul li .avatar p {
-    font-size: 12px;
+    font-size: 10px;
     text-align: center;
 }
 
@@ -1260,6 +1265,9 @@ body::-webkit-scrollbar-thumb {
 }
 
 @media screen and (max-width: 768px) {
+    .live_grid .chat_grid .contain .message_wrap {
+        height: 90vh;
+    }
     .live_grid .chat_grid .contain .message_wrap ul li {
         /* justify-content: space-around; */
         padding-bottom: 0;
@@ -1300,7 +1308,7 @@ body::-webkit-scrollbar-thumb {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    top: 4.5rem;
+    top: 5.7rem;
     right: 300px;
     z-index: 900;
     width: 2rem;

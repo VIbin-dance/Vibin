@@ -1,18 +1,10 @@
 <link rel="stylesheet" href="../../lp/assets/css/main.css" type="text/css" />
-<section id="searchBar" class="searchBar" style="padding-bottom: 0;">
+<section id="searchBar" class="searchBar">
     <div class="search-bar">
         <form action="/" method="POST">
             <p data-aos="fade-up" data-aos-delay="100" class="aos-init aos-animate">
                 レッスンを検索してみる
             </p>
-            <!-- <% if (user !="" ) { %>
-                <h2 class="user">
-                    <%= __('dashboard.welcome.welcome') %>
-                        <%= user.username %>
-                            <%= __('dashboard.Quote.top') %> <span id="random"></span>
-                </h2>
-                <% } %> -->
-            <br>
             <div class="form-group">
                 <select class="form-control custom-select" type="level" id="level" name="level">
                     <option selected="null" value="any">
@@ -110,10 +102,9 @@
                     </option>
                 </select>
             </div>
-            <!-- <input type="search" id="search" name="search" class="chosen-value"
-                placeholder="<%= __('dashboard.search.search') %>"
-                value="<%= typeof search != 'undefined' ? search : '' %>" /> -->
-            <input class="rounded-12 btn btn_lg_primary" type="submit" style="background-color: #ff7583;">
+            <input type="submit" value="検索する"
+                class="btn btn_lg_primary scale border-0 bg-pink c-white rounded-pill">
+            </input>
         </form>
     </div>
 </section>
