@@ -67,6 +67,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         require: false,
     },
+    website: {
+        type: String,
+        require: false,
+    },
     stripeID: {
         type: String,
         require: false,

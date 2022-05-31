@@ -2,7 +2,7 @@
     <div class="p-4 m-5 bg-snow rounded">
         <%- include ('partials/messages') %>
             <div class="text-center">
-                <img src="<%= user.userPhoto %>" height="150" width="150" style="border-radius: 50%;" alt="user photo">
+                <img src="<%= userPhoto %>" height="150" width="150" style="border-radius: 50%;" alt="user photo">
                 <a type="" href="/users/profile/edit"
                     class="btn btn_sm_primary scale border-0 sweep_letter sweep_top bg-pink c-white rounded-pill m-3">
                     <span>
@@ -12,14 +12,19 @@
             </div>
             <div class="text-center">
                 <h4 class="mt-3">
-                    <%= user.username %>
+                    <%= username %>
                 </h4>
-                <p style="white-space:pre-wrap;"><%= user.bio %>
+                <p style="white-space:pre-wrap;"><%= bio %>
+                </p>
+                <p>
+                        <a href="<%= website %>" target="_blank">
+                            <%= website %>
+                        </a>
                 </p>
                 <p>
                     <%= __('reservation.contact') %>:
-                        <a href="mailto:<%= choreographer.email %>">
-                            <%= user.email %>
+                        <a href="mailto:<%= email %>">
+                            <%= email %>
                         </a>
                 </p>
             </div>
@@ -42,11 +47,11 @@
                                         <img class="main_img" src="<%= lesson[i].thumbnail %>" alt="...">
                                         <div class="auther_post">
                                             <div class="media">
-                                                <img src="<%= user.userPhoto %>" alt="先生のプロフィール画像">
+                                                <img src="<%= userPhoto %>" alt="先生のプロフィール画像">
                                                 <div class="media-body my-auto">
                                                     <div class="txt">
                                                         <h4>
-                                                            <%= user.username %>
+                                                            <%= username %>
                                                         </h4>
                                                     </div>
                                                 </div>

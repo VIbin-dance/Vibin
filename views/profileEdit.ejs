@@ -12,19 +12,19 @@
                             <label for="Photo"><%= __('profile.photo') %><p><small><%= __('profile.choose photo') %></small>
                         </p></label>
                             <div class="text-center">
-                                <img id="output" src="<%= user.userPhoto %>" height="120" width="120" style="border-radius: 50%;" alt="user photo">
+                                <img id="output" src="<%= userPhoto %>" height="120" width="120" style="border-radius: 50%;" alt="user photo">
                                 <br><br><input type="file" id="userPhoto" name="userPhoto" accept="image/*" onchange="loadFile(event)" />
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="email"><%= __('profile.email') %></label>
-                            <input type="email" id="email" name="email" class="form-control" placeholder="Enter The Email" value="<%= typeof user.email != 'undefined' ? user.email : '' %>" readonly />
+                            <input type="email" id="email" name="email" class="form-control" placeholder="Enter The Email" value="<%= typeof email != 'undefined' ? email : '' %>" readonly />
                         </div>
 
                         <div class="form-group">
                             <label for="username"><%= __('profile.username') %></label>
-                            <input type="username" id="username" name="username" class="form-control" placeholder="ユーザーネームを入力してください" value="<%= typeof user.username != 'undefined' ? user.username : '' %>" />
+                            <input type="username" id="username" name="username" class="form-control" placeholder="ユーザーネームを入力してください" value="<%= typeof username != 'undefined' ? username : '' %>" />
                         </div>
 
                         <div class="form-group">
@@ -32,10 +32,15 @@
                             <textarea rows="4" type="bio" id="bio" name="bio" class="form-control" placeholder="自己紹介を入力してください" maxlength="140" onchange="textCount(event)"><%= typeof bio != 'undefined' ? bio : '' %></textarea>
                         </div>
 
+                        <div class="form-group">
+                            <label for="website">ウェブサイト</label>
+                            <input type="url" id="website" name="website" class="form-control" placeholder="リンクを入力してください" value="<%= typeof website != 'undefined' ? website : '' %>" />
+                        </div>
+
                         <div class="form-group" id="levelDrop">
                             <label for="level"><%= __('dashboard.search.level.top') %></label>
                             <select class="form-control" type="level" id="level" name="level">
-                        <option selected value="<%= user.tags.level %>"><%= __(`dashboard.search.level.${user.tags.level}`) %></option>
+                        <option selected value="<%= tags.level %>"><%= __(`dashboard.search.level.${tags.level}`) %></option>
                         <option value="Beginner"><%= __('dashboard.search.level.Beginner') %></option>
                         <option value="Intermediate"><%= __('dashboard.search.level.Intermediate') %></option>
                         <option value="Advanced"><%= __('dashboard.search.level.Advanced') %></option>
@@ -54,7 +59,7 @@
                     </select>
                 </div> -->
 
-                        <% if (!user.tags.genre) { %>
+                        <% if (!tags.genre) { %>
                             <div class="form-group">
                                 <label for="genre"><%= __('dashboard.search.genre.top') %></label>
                                 <div class="form-check">
@@ -109,55 +114,55 @@
                                     <div class="form-check">
                                         <label class="form-check-label">
                             <input id="genre" name="genre" class="form-check-input" type="checkbox"
-                                <%= user.tags.genre.includes("Hip Hop") ? "checked" : "" %>
+                                <%= tags.genre.includes("Hip Hop") ? "checked" : "" %>
                                 value="Hip Hop"><%= __('dashboard.search.genre.Hip Hop') %></label>
                                     </div>
                                     <div class="form-check">
                                         <label class="form-check-label">
                             <input id="genre" name="genre" class="form-check-input" class="form-check-input"
-                                type="checkbox" <%= user.tags.genre.includes("Locking") ? "checked" : "" %>
+                                type="checkbox" <%= tags.genre.includes("Locking") ? "checked" : "" %>
                                 value="Locking"><%= __('dashboard.search.genre.Locking') %></label>
                                     </div>
                                     <div class="form-check">
                                         <label class="form-check-label">
                             <input id="genre" name="genre" class="form-check-input" class="form-check-input"
-                                type="checkbox" <%= user.tags.genre.includes("Jazz") ? "checked" : "" %>
+                                type="checkbox" <%= tags.genre.includes("Jazz") ? "checked" : "" %>
                                 value="Jazz"><%= __('dashboard.search.genre.Jazz') %></label>
                                     </div>
                                     <div class="form-check">
                                         <label class="form-check-label">
                             <input id="genre" name="genre" class="form-check-input" class="form-check-input"
-                                type="checkbox" <%= user.tags.genre.includes("Breakin") ? "checked" : "" %>
+                                type="checkbox" <%= tags.genre.includes("Breakin") ? "checked" : "" %>
                                 value="Breakin"><%= __('dashboard.search.genre.Breakin') %></label>
                                     </div>
                                     <div class="form-check">
                                         <label class="form-check-label">
                             <input id="genre" name="genre" class="form-check-input" class="form-check-input"
-                                type="checkbox" <%= user.tags.genre.includes("House") ? "checked" : "" %>
+                                type="checkbox" <%= tags.genre.includes("House") ? "checked" : "" %>
                                 value="House"><%= __('dashboard.search.genre.House') %></label>
                                     </div>
                                     <div class="form-check">
                                         <label class="form-check-label">
                             <input id="genre" name="genre" class="form-check-input" class="form-check-input"
-                                type="checkbox" <%= user.tags.genre.includes("Popping") ? "checked" : "" %>
+                                type="checkbox" <%= tags.genre.includes("Popping") ? "checked" : "" %>
                                 value="Popping"><%= __('dashboard.search.genre.Popping') %></label>
                                     </div>
                                     <div class="form-check">
                                         <label class="form-check-label">
                             <input id="genre" name="genre" class="form-check-input" class="form-check-input"
-                                type="checkbox" <%= user.tags.genre.includes("K-POP") ? "checked" : "" %>
+                                type="checkbox" <%= tags.genre.includes("K-POP") ? "checked" : "" %>
                                 value="K-POP"><%= __('dashboard.search.genre.K-POP') %></label>
                                     </div>
                                     <div class="form-check">
                                         <label class="form-check-label">
                             <input id="genre" name="genre" class="form-check-input" class="form-check-input"
-                                type="checkbox" <%= user.tags.genre.includes("TikTok") ? "checked" : "" %>
+                                type="checkbox" <%= tags.genre.includes("TikTok") ? "checked" : "" %>
                                 value="TikTok"><%= __('dashboard.search.genre.TikTok') %></label>
                                     </div>
                                     <div class="form-check">
                                         <label class="form-check-label">
                             <input id="genre" name="genre" class="form-check-input" class="form-check-input"
-                                type="checkbox" <%= user.tags.genre.includes("Bollywood") ? "checked" : "" %>
+                                type="checkbox" <%= tags.genre.includes("Bollywood") ? "checked" : "" %>
                                 value="Bollywood"><%= __('dashboard.search.genre.Bollywood') %></label>
                                     </div>
                                 </div>

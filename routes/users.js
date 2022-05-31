@@ -64,9 +64,11 @@ router.get("/profile", checkSession, ensureAuthenticated, async (req, res) => {
     }
 
     res.render("profile", {
-        user: user,
+        username: user.username,
         bio: user.bio,
         userPhoto: user.userPhoto,
+        website: user.website,
+        email: user.email,
         lesson: lesson,
         tickets: tickets,
         choreographer: choreographer,
@@ -74,35 +76,37 @@ router.get("/profile", checkSession, ensureAuthenticated, async (req, res) => {
     });
 });
 
-router.get("/profile/edit", ensureAuthenticated, (req, res) => {
+router.get("/profile/edit", checkSession, ensureAuthenticated, (req, res) => {
     if (!req.session.user) {
         req.flash("error_msg", res.__("msg.error.noUser"));
         res.redirect("/dashboard/-1?page=1&limit=15");
     } else {
         res.render("profileEdit", {
-            user: req.session.user,
-            bio: req.session.user.bio,
-            userPhoto: req.session.user.userPhoto,
-            email: req.session.user.email,
-            username: req.session.user.username,
+            bio: user.bio,
+            website: user.website,
+            userPhoto: user.userPhoto,
+            email: user.email,
+            tags: user.tags,
+            username: user.username,
         });
     }
 });
 
 router.post("/profile/edit", ensureAuthenticated, upload.single("userPhoto"), async (req, res) => {
-    const { username, bio, level, genre } = req.body;
+    const { username, bio, website, level, genre } = req.body;
     let errors = [];
 
     const query = {
         $set: {
             username: username,
             bio: bio,
+            website: website,
             tags: { level: level, genre: genre },
         }
     };
 
     if (req.file) {
-        const buffer = await sharp(req.file.buffer).webp().resize(320, 320).toBuffer();
+        const buffer = await sharp(req.file.buffer).webp().resize(400, 400).toBuffer();
         console.log(buffer);
 
         const params = {
@@ -127,6 +131,7 @@ router.post("/profile/edit", ensureAuthenticated, upload.single("userPhoto"), as
             user: req.session.user,
             curUsername: req.session.user.username,
             bio,
+            website,
             level,
             genre,
         });
