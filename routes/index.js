@@ -181,9 +181,12 @@ router.get("/choreographer/:id", checkSession, async (req, res) => {
         async (err, lesson) => {
             User.findOne({ _id: req.params.id }, (err, choreographer) => {
                 res.render("choreographer", {
-                    user: user,
+                    username: choreographer.username,
+                    bio: choreographer.bio,
+                    userPhoto: choreographer.userPhoto,
+                    website: choreographer.website,
+                    email: choreographer.email,
                     lesson: lesson,
-                    choreographer: choreographer,
                     moment: moment,
                     currentSort: req.params.sort,
                     currentPage: lesson.page,

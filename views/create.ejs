@@ -15,7 +15,7 @@
                     <div class="card-body">
                         <small>注意：口座設定を完了するまでレッスン代金は振り込まれません。</small>
                         <p>レッスンを作成する前に、口座設定を完了することを推奨しています。下のボタンから設定をしてください</p>
-                            <a href="<%= loginLink.url %>" target="_blank" role="button"
+                        <a href="<%= loginLink.url %>" target="_blank" role="button"
                             class="btn btn_sm_primary scale border-0 sweep_letter sweep_top bg-pink c-white rounded-pill m-3">
                             <span>
                                 Stripeで口座の設定をする
@@ -41,8 +41,11 @@
                             <p>****
                                 <%= account.external_accounts.data[0].last4 %>
                             </p>
-                            <a class="btn btn-danger" href="<%= loginLink.url %>" target="_blank" role="button">
-                                <%= __('create.stripe') %>
+                            <a href="<%= loginLink.url %>" target="_blank" role="button"
+                                class="btn btn_sm_primary scale border-0 sweep_letter sweep_top bg-pink c-white rounded-pill">
+                                <span>
+                                    <%= __('create.stripe') %>
+                                </span>
                             </a>
                         </div>
                     </div>
@@ -117,96 +120,90 @@
                                     value="<%= typeof price != 'undefined' ? price : '' %>" min="0" step="100" />
                             </div>
 
-                            <div class="form-group">
-                                <label for="level">
-                                    <%= __('dashboard.search.level.top') %>
+                            <label for="level">
+                                <%= __('dashboard.search.level.top') %>
+                            </label>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input id="level" name="level" class="form-check-input" type="checkbox"
+                                        value="Beginner">
+                                    <%= __('dashboard.search.level.Beginner') %>
                                 </label>
-                                <fieldset class="form-group">
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input id="level" name="level" class="form-check-input" type="checkbox"
-                                                value="Beginner">
-                                            <%= __('dashboard.search.level.Beginner') %>
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input id="level" name="level" class="form-check-input"
-                                                class="form-check-input" type="checkbox" value="Intermediate">
-                                            <%= __('dashboard.search.level.Intermediate') %>
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input id="level" name="level" class="form-check-input"
-                                                class="form-check-input" type="checkbox" value="Advanced">
-                                            <%= __('dashboard.search.level.Advanced') %>
-                                        </label>
-                                    </div>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input id="level" name="level" class="form-check-input" class="form-check-input"
+                                        type="checkbox" value="Intermediate">
+                                    <%= __('dashboard.search.level.Intermediate') %>
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input id="level" name="level" class="form-check-input" class="form-check-input"
+                                        type="checkbox" value="Advanced">
+                                    <%= __('dashboard.search.level.Advanced') %>
+                                </label>
                             </div>
 
-                            <div class="form-group">
-                                <label for="genre">
-                                    <%= __('dashboard.search.genre.top') %>
+                            <label for="genre">
+                                <%= __('dashboard.search.genre.top') %>
+                            </label>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input id="genre" name="genre" class="form-check-input" type="radio"
+                                        value="Hip Hop">
+                                    <%= __('dashboard.search.genre.Hip Hop') %>
                                 </label>
-                                <fieldset class="form-group">
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input id="genre" name="genre" class="form-check-input" type="radio"
-                                                value="Hip Hop">
-                                            <%= __('dashboard.search.genre.Hip Hop') %>
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input id="genre" name="genre" class="form-check-input" type="radio"
-                                                value="Locking">
-                                            <%= __('dashboard.search.genre.Locking') %>
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input id="genre" name="genre" class="form-check-input" type="radio"
-                                                value="Jazz">
-                                            <%= __('dashboard.search.genre.Jazz') %>
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input id="genre" name="genre" class="form-check-input" type="radio"
-                                                value="Breakin">
-                                            <%= __('dashboard.search.genre.Breakin') %>
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input id="genre" name="genre" class="form-check-input" type="radio"
-                                                value="House">
-                                            <%= __('dashboard.search.genre.House') %>
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input id="genre" name="genre" class="form-check-input" type="radio"
-                                                value="Popping">
-                                            <%= __('dashboard.search.genre.Popping') %>
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input id="genre" name="genre" class="form-check-input" type="radio"
-                                                value="K-POP">
-                                            <%= __('dashboard.search.genre.K-POP') %>
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input id="others" name="genre" class="form-check-input"
-                                                onchange="showInput()" type="radio" value="">その他</label>
-                                        <input type="" id="genreInput" name="genreInput" class="form-control"
-                                            placeholder="その他のジャンル名を入力してください"
-                                            value="<%= typeof others != 'undefined' ? others : '' %>" disabled />
-                                    </div>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input id="genre" name="genre" class="form-check-input" type="radio"
+                                        value="Locking">
+                                    <%= __('dashboard.search.genre.Locking') %>
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input id="genre" name="genre" class="form-check-input" type="radio" value="Jazz">
+                                    <%= __('dashboard.search.genre.Jazz') %>
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input id="genre" name="genre" class="form-check-input" type="radio"
+                                        value="Breakin">
+                                    <%= __('dashboard.search.genre.Breakin') %>
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input id="genre" name="genre" class="form-check-input" type="radio" value="House">
+                                    <%= __('dashboard.search.genre.House') %>
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input id="genre" name="genre" class="form-check-input" type="radio"
+                                        value="Popping">
+                                    <%= __('dashboard.search.genre.Popping') %>
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input id="genre" name="genre" class="form-check-input" type="radio" value="K-POP">
+                                    <%= __('dashboard.search.genre.K-POP') %>
+                                </label>
+                            </div>
+
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input id="others" name="genre" class="form-check-input" onchange="showInput()"
+                                        type="radio" value="">その他</label>
+                            </div>
+                            <div class="form-group">
+                                <input type="" id="genreInput" name="genreInput" class="form-control"
+                                    placeholder="その他のジャンル名を入力してください"
+                                    value="<%= typeof others != 'undefined' ? others : '' %>" disabled />
                             </div>
 
                             <!-- <div class="form-group">
@@ -229,109 +226,106 @@
                             </div>
                     </div> -->
 
-                            <div class="form-group">
-                                <label for="mood">
-                                    <%= __('dashboard.search.mood.top') %>
+                            <label for="mood">
+                                <%= __('dashboard.search.mood.top') %>
+                            </label>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input id="mood" name="mood" class="form-check-input" type="checkbox"
+                                        value="Groovy">
+                                    <%= __('dashboard.search.mood.Groovy') %>
                                 </label>
-                                <fieldset class="form-group">
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input id="mood" name="mood" class="form-check-input" type="checkbox"
-                                                value="Groovy">
-                                            <%= __('dashboard.search.mood.Groovy') %>
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input id="mood" name="mood" class="form-check-input"
-                                                class="form-check-input" type="checkbox" value="Funky">
-                                            <%= __('dashboard.search.mood.Funky') %>
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input id="mood" name="mood" class="form-check-input"
-                                                class="form-check-input" type="checkbox" value="Chill">
-                                            <%= __('dashboard.search.mood.Chill') %>
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input id="mood" name="mood" class="form-check-input"
-                                                class="form-check-input" type="checkbox" value="Romantic">
-                                            <%= __('dashboard.search.mood.Romantic') %>
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input id="mood" name="mood" class="form-check-input"
-                                                class="form-check-input" type="checkbox" value="Sexy">
-                                            <%= __('dashboard.search.mood.Sexy') %>
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input id="mood" name="mood" class="form-check-input"
-                                                class="form-check-input" type="checkbox" value="Calm">
-                                            <%= __('dashboard.search.mood.Calm') %>
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input id="mood" name="mood" class="form-check-input"
-                                                class="form-check-input" type="checkbox" value="Angry">
-                                            <%= __('dashboard.search.mood.Angry') %>
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input id="mood" name="mood" class="form-check-input"
-                                                class="form-check-input" type="checkbox" value="Peaceful">
-                                            <%= __('dashboard.search.mood.Peaceful') %>
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input id="mood" name="mood" class="form-check-input"
-                                                class="form-check-input" type="checkbox" value="Sad">
-                                            <%= __('dashboard.search.mood.Sad') %>
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input id="mood" name="mood" class="form-check-input"
-                                                class="form-check-input" type="checkbox" value="Fearful">
-                                            <%= __('dashboard.search.mood.Fearful') %>
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input id="mood" name="mood" class="form-check-input"
-                                                class="form-check-input" type="checkbox" value="Happy">
-                                            <%= __('dashboard.search.mood.Happy') %>
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input id="mood" name="mood" class="form-check-input"
-                                                class="form-check-input" type="checkbox" value="Tense">
-                                            <%= __('dashboard.search.mood.Tense') %>
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input id="mood" name="mood" class="form-check-input"
-                                                class="form-check-input" type="checkbox" value="Sassy">
-                                            <%= __('dashboard.search.mood.Sassy') %>
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input id="mood" name="mood" class="form-check-input"
-                                                class="form-check-input" type="checkbox" value="Savage">
-                                            <%= __('dashboard.search.mood.Savage') %>
-                                        </label>
-                                    </div>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input id="mood" name="mood" class="form-check-input" class="form-check-input"
+                                        type="checkbox" value="Funky">
+                                    <%= __('dashboard.search.mood.Funky') %>
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input id="mood" name="mood" class="form-check-input" class="form-check-input"
+                                        type="checkbox" value="Chill">
+                                    <%= __('dashboard.search.mood.Chill') %>
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input id="mood" name="mood" class="form-check-input" class="form-check-input"
+                                        type="checkbox" value="Romantic">
+                                    <%= __('dashboard.search.mood.Romantic') %>
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input id="mood" name="mood" class="form-check-input" class="form-check-input"
+                                        type="checkbox" value="Sexy">
+                                    <%= __('dashboard.search.mood.Sexy') %>
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input id="mood" name="mood" class="form-check-input" class="form-check-input"
+                                        type="checkbox" value="Calm">
+                                    <%= __('dashboard.search.mood.Calm') %>
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input id="mood" name="mood" class="form-check-input" class="form-check-input"
+                                        type="checkbox" value="Angry">
+                                    <%= __('dashboard.search.mood.Angry') %>
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input id="mood" name="mood" class="form-check-input" class="form-check-input"
+                                        type="checkbox" value="Peaceful">
+                                    <%= __('dashboard.search.mood.Peaceful') %>
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input id="mood" name="mood" class="form-check-input" class="form-check-input"
+                                        type="checkbox" value="Sad">
+                                    <%= __('dashboard.search.mood.Sad') %>
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input id="mood" name="mood" class="form-check-input" class="form-check-input"
+                                        type="checkbox" value="Fearful">
+                                    <%= __('dashboard.search.mood.Fearful') %>
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input id="mood" name="mood" class="form-check-input" class="form-check-input"
+                                        type="checkbox" value="Happy">
+                                    <%= __('dashboard.search.mood.Happy') %>
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input id="mood" name="mood" class="form-check-input" class="form-check-input"
+                                        type="checkbox" value="Tense">
+                                    <%= __('dashboard.search.mood.Tense') %>
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input id="mood" name="mood" class="form-check-input" class="form-check-input"
+                                        type="checkbox" value="Sassy">
+                                    <%= __('dashboard.search.mood.Sassy') %>
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input id="mood" name="mood" class="form-check-input" class="form-check-input"
+                                        type="checkbox" value="Savage">
+                                    <%= __('dashboard.search.mood.Savage') %>
+                                </label>
                             </div>
 
                             <div class="text-center" style="margin:3%;">
@@ -346,7 +340,7 @@
                                         に同意したものとみなします。<br> また、
                                         <%= user.email %>があなたの連絡先として公開されます。
                                 </p>
-                                    <input type="submit" value="<%= __('create.create') %>"
+                                <input type="submit" value="<%= __('create.create') %>"
                                     class="btn btn_xl_primary scale border-0 sweep_letter sweep_top bg-pink c-white rounded-pill m-3">
                                 </input>
                             </div>

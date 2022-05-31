@@ -25,11 +25,11 @@
                                     <small>注意：口座設定を完了するまでレッスン代金は振り込まれません。</small>
                                     <p>レッスンを作成する前に、口座設定を完了することを推奨しています。下のボタンから設定をしてください</p>
                                     <a href="<%= loginLink.url %>" target="_blank" role="button"
-                                    class="btn btn_sm_primary scale border-0 sweep_letter sweep_top bg-pink c-white rounded-pill m-3">
-                                    <span>
-                                        Stripeで口座の設定をする
-                                    </span>
-                                </a>
+                                        class="btn btn_sm_primary scale border-0 sweep_letter sweep_top bg-pink c-white rounded-pill m-3">
+                                        <span>
+                                            Stripeで口座の設定をする
+                                        </span>
+                                    </a>
                                 </div>
                             </div>
                             <% } else if (typeof account !="undefined" && account.external_accounts.data.length !=0) {
@@ -52,9 +52,9 @@
                                             <%= account.external_accounts.data[0].last4 %>
                                         </p>
                                         <a href="<%= loginLink.url %>" target="_blank" role="button"
-                                            class="btn btn_sm_primary scale border-0 sweep_letter sweep_top bg-pink c-white rounded-pill m-3">
+                                            class="btn btn_sm_primary scale border-0 sweep_letter sweep_top bg-pink c-white rounded-pill">
                                             <span>
-                                            <%= __('create.stripe') %>
+                                                <%= __('create.stripe') %>
                                             </span>
                                         </a>
                                     </div>
