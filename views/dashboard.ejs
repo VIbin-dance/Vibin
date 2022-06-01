@@ -102,8 +102,7 @@
                     </option>
                 </select>
             </div>
-            <input type="submit" value="検索する"
-                class="btn btn_lg_primary scale border-0 bg-pink c-white rounded-pill">
+            <input type="submit" value="検索する" class="btn btn_lg_primary scale border-0 bg-pink c-white rounded-pill">
             </input>
         </form>
     </div>
@@ -125,10 +124,11 @@
                                 <div class="card">
                                     <a href="/reservation/<%= lesson.docs[i]._id %>" class="link_poet">
                                         <div class="cover_link">
-                                            <img class="main_img" src="<%= lesson.docs[i].thumbnail %>" alt="...">
+                                            <img class="main_img" src="<%= lesson.docs[i].thumbnail %>" alt="thumbnail">
                                             <div class="auther_post">
                                                 <div class="media">
-                                                    <img src="<%= choreographer[i].userPhoto %>" alt="先生のプロフィール画像">
+                                                    <img src="<%= choreographer[i].userPhoto %>" alt="先生のプロフィール画像"
+                                                        loading="lazy">
                                                     <div class="media-body my-auto">
                                                         <div class="txt">
                                                             <h4>
@@ -182,10 +182,12 @@
                             <div class="card">
                                 <a href="/reservation/<%= lesson.docs[i]._id %>" class="link_poet">
                                     <div class="cover_link">
-                                        <img class="main_img" src="<%= lesson.docs[i].thumbnail %>" alt="...">
+                                        <img class="main_img" src="<%= lesson.docs[i].thumbnail %>" alt="..."
+                                            loading="lazy">
                                         <div class="auther_post">
                                             <div class="media">
-                                                <img src="<%= choreographer[i].userPhoto %>" alt="先生のプロフィール画像">
+                                                <img src="<%= choreographer[i].userPhoto %>" alt="先生のプロフィール画像"
+                                                    loading="lazy">
                                                 <div class="media-body my-auto">
                                                     <div class="txt">
                                                         <h4>
