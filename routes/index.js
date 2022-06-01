@@ -295,7 +295,7 @@ router.get("/reservation/:id", checkSession, async (req, res) => {
     // find a better way to iterate pushing into choreographer array
     for (let i = 0; i < newLesson.length; i++) {
         newChoreographer[i] = await User.findOne({ _id: newLesson[i].choreographerID.toString() },
-            "username"
+            "username userPhoto"
         )
             .lean()
             .exec();
