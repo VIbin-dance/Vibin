@@ -20,7 +20,14 @@
                                             </a>
                                         </span>
                                         <span class="dot"></span>
-                                        <time>15min</time>
+                                        <span class="c_ategory">
+                                            <%= lesson.price %>円
+                                        </span>
+                                        <span class="dot"></span>
+                                        <time>
+                                            <%= moment(lesson.time.start).format('MM/DD HH:mm'); %> ~
+                                                <%= lesson.time.end %>
+                                        </time>
                                     </div>
                                     <h1 class="margin-my-3 font-s-55 c-dark aos-init aos-animate" data-aos="fade-up"
                                         data-aos-delay="0">
@@ -35,18 +42,6 @@
                                                         <h4>
                                                             <%= choreographer.username %>
                                                         </h4>
-                                                        <p>30 Sep, 2020</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item_auther">
-                                            <div class="media">
-
-                                                <div class="media-body my-auto">
-                                                    <div class="txt">
-                                                        <a href="#comment">Join the Conversation</a>
-                                                        <p>3 Comments</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -56,7 +51,7 @@
                                         <button id="checkout-button"
                                             class="btn btn_xl_primary scale border-0 sweep_letter sweep_top bg-pink c-white rounded-pill mt-5">
                                             <span>
-                                                <%= __('reservation.purchase') %>
+                                                <%= lesson.price %>円で<%= __('reservation.purchase') %>
                                             </span>
                                             </but>
                                             <% } else { %>
@@ -70,7 +65,7 @@
 
                                 </div>
                             </div>
-                            <div class="col-md-3 col-lg-3 mt-5">
+                            <div class="col-md-3 col-lg-3">
                                 <img class="img_md m-3" src="<%= lesson.thumbnail %>" alt="">
                             </div>
                         </div>
@@ -86,7 +81,7 @@
                             <div class="col-lg-3">
                                 <div class="fixSide_scroll" data-sticky-for="1023" data-margin-top="100" style="">
                                     <div class="share_socail">
-                                        <div class="title">Share</div>
+                                        <div class="title">共有</div>
 
                                         <button class="btn icon" data-toggle="tooltip" data-placement="right" title=""
                                             data-sharer="facebook" data-hashtag="Vibin'"
@@ -96,47 +91,40 @@
                                         </button>
 
                                         <button class="btn icon" data-toggle="tooltip" data-placement="right" title=""
-                                            data-sharer="twitter" data-title="Checkout Rakon!"
-                                            data-hashtags="theme, Rakon"
-                                            data-url="https://themeforest.net/item/rakon-html-landing-page-templates/27849521"
+                                            data-sharer="twitter" data-title="<%= lesson.title %> | Vibin'"
+                                            data-hashtags="vibin"
+                                            data-url="https://vibin.tokyo/reservation/<%= lesson._id %>"
                                             data-original-title="Twitter">
                                             <i class="tio twitter"></i>
                                         </button>
 
                                         <button class="btn icon" data-toggle="tooltip" data-placement="right" title=""
-                                            data-sharer="whatsapp" data-title="Checkout Rakon!"
-                                            data-url="https://themeforest.net/item/rakon-html-landing-page-templates/27849521"
-                                            data-original-title="Whatsapp">
-                                            <i class="tio whatsapp_outlined"></i>
-                                        </button>
-
-                                        <button class="btn icon" data-toggle="tooltip" data-placement="right" title=""
-                                            data-sharer="telegram" data-title="Checkout Rakon!"
-                                            data-url="https://themeforest.net/item/rakon-html-landing-page-templates/27849521"
-                                            data-to="+44555-03564" data-original-title="Telegram">
-                                            <i class="tio telegram"></i>
-                                        </button>
-
-                                        <button class="btn icon" data-toggle="tooltip" data-placement="right" title=""
                                             data-sharer="pinterest"
-                                            data-url="https://themeforest.net/item/rakon-html-landing-page-templates/27849521"
+                                            data-url="https://vibin.tokyo/reservation/<%= lesson._id %>"
                                             data-original-title="Pinterest">
                                             <i class="tio pinterest_circle"></i>
                                         </button>
-
-                                        <button class="btn icon" data-toggle="tooltip" data-placement="right" title=""
-                                            data-sharer="skype"
-                                            data-url="https://themeforest.net/item/rakon-html-landing-page-templates/27849521"
-                                            data-title="Checkout Rakon!" data-original-title="skype">
-                                            <i class="tio skype"></i>
-                                        </button>
-
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-8">
+                            <div class="col-lg-8 mt-3">
                                 <div class="body_content">
-                                    <p>Hello</p>
+                                    <p class="txt_quotation">
+                                        <%= moment(lesson.time.start).format('MM/DD HH:mm'); %> ~
+                                            <%= lesson.time.end %>
+                                                <br>
+                                                <b>
+                                                    <%= lesson.price %>円
+                                                </b>
+                                    </p>
+                                    <p>Many people don’t really know the difference between
+                                        software
+                                        architecture and
+                                        software design.
+                                        Even for developers, the line is often blurry and they might mix up
+                                        elements of
+                                        software
+                                        architecture patterns and design patterns. </p>
                                 </div>
                             </div>
                         </div>
@@ -161,7 +149,32 @@
                             <div class="col-lg-9 offset-lg-3">
                                 <div class="block_auther_post margin-t-5">
                                     <div class="row">
-                                        <div class="col-lg-8">
+                                        <div class="p-4 m-5 bg-snow rounded">
+                                            <div class="text-center">
+                                                <img src="<%= choreographer.userPhoto %>" height="150" width="150"
+                                                    style="border-radius: 50%;" alt="user photo">
+                                            </div>
+                                            <div class="text-center">
+                                                <h4 class="mt-3">
+                                                    <%= choreographer.username %>
+                                                </h4>
+                                                <p style="white-space:pre-wrap;">
+                                                    <%= choreographer.bio %>
+                                                </p>
+                                                <p>
+                                                    <a href="<%= choreographer.website %>" target="_blank">
+                                                        <%= choreographer.website %>
+                                                    </a>
+                                                </p>
+                                                <p>
+                                                    <%= __('reservation.contact') %>:
+                                                        <a href="mailto:<%= choreographer.email %>">
+                                                            <%= choreographer.email %>
+                                                        </a>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="col-lg-8">
                                             <div class="media">
                                                 <img class="img_person" src="<%= choreographer.userPhoto %>" alt="">
                                                 <div class="media-body">
@@ -187,18 +200,13 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-lg-4 my-auto ml-auto text-lg-right">
-                                            <a href="#Testimonial" class="btn-social color-behance border-0  mr-2">
-                                                <i class="tio behance"></i>
+                                        </div> -->
+                                        <!-- <div class="col-lg-4 my-auto ml-auto text-lg-right">
+                                            <a href="<%= choreographer.website %>"
+                                                class="btn-social color-twitter border-0  mr-2">
+                                                <i class="tio website"></i>
                                             </a>
-                                            <a href="#Testimonial" class="btn-social color-instagram border-0 mr-2">
-                                                <i class="tio instagram"></i>
-                                            </a>
-                                            <a href="#Testimonial" class="btn-social color-twitter border-0  mr-2">
-                                                <i class="tio twitter"></i>
-                                            </a>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>
@@ -208,12 +216,14 @@
                 <!-- End. section_tag_auther -->
 
                 <!-- Start blog_masonry -->
-                <section class="blog_masonry three_column height_fixed padding-t-10">
+                <section class="blog_masonry four_column height_fixed padding-t-10">
                     <div class="container">
                         <div class="row">
-                            <div class="col-lg-5">
-                                <div class="title_sections margin-b-3">
-                                    <h2>他にもオススメのレッスン&#10024;</h2>
+                            <div class="col-lg-12">
+                                <div class="banner_title_inner">
+                                    <h1 data-aos="fade-up" data-aos-delay="0" class="aos-init aos-animate">
+                                        他にもオススメのレッスン&#10024;
+                                    </h1>
                                 </div>
                             </div>
                         </div>
@@ -323,183 +333,7 @@
     <script src="../../assets/js/vendor/aos.js" type="text/javascript"></script>
     <!-- main file -->
     <script src="../../assets/js/main.js" type="text/javascript"></script>
-</body>
-
-<!-- <main role="main" class="container col-md-9 col-sm-10" style="margin-top:5%; margin-bottom: 5%;"> -->
-<div class="top-space"></div>
-<script type=" text/javascript" src="https://js.stripe.com/v3/"></script>
-<%- include ('partials/messages') %>
-
-    <section class="blog_masonry" style="padding-top: 0;">
-        <div class="container col-lg-11">
-            <div class="row">
-                <div class="banner_title_inner">
-                    <h1 data-aos="fade-up" data-aos-delay="0" class="aos-init aos-animate">
-                        無料のレッスン&#10024;
-                    </h1>
-                </div>
-                <div class="card-columns">
-                    <div class="card">
-                        <a href="/reservation/<%= lesson._id %>" class="link_poet">
-                            <div class="cover_link">
-                                <img class="main_img" src="<%= lesson.thumbnail %>" alt="...">
-                                <div class="auther_post">
-                                    <div class="media">
-                                        <img src="<%= choreographer.userPhoto %>" alt="先生のプロフィール画像">
-                                        <div class="media-body my-auto">
-                                            <div class="txt">
-                                                <h4>
-                                                    <%= choreographer.username %>
-                                                </h4>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="card-body">
-                            <div class="about_post">
-                                <span class="c_ategory">
-                                    <a href="#">
-                                        <%= __(`dashboard.search.level.${lesson.level[0]}`) %>
-                                    </a>
-                                    <a href="#">
-                                        <%= __(`dashboard.search.genre.${lesson.genre[0]}`) %>
-                                    </a>
-                                </span>
-                                <span class="dot"></span>
-                                <time>
-                                    <%= moment(lesson.time.start).format('MM/DD HH:mm'); %> ~ <%= lesson.time.end %>
-                                </time>
-                            </div>
-                            <a href="/reservation/<%= lesson._id %>" class="d-block">
-                                <h5 class="card-title">
-                                    <%= lesson.title %>
-                                </h5>
-                                <p class="card-text">
-                                    <%= lesson.price %>円
-                                </p>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <div class="container col-lg-11">
-        <div class="row">
-            <div class="col-md-8 blog-main">
-                <div class="blog-post">
-                    <div class="card-deck">
-                        <!-- <% if (!user.lesson && lesson.price !=0) { %> -->
-                        <!-- <h3>今なら初回無料！<%= lesson.price %><%= __('dashboard.Yen') %>が0<%= __('dashboard.Yen') %>で！</h3> -->
-                        <!-- <% } %> -->
-                        <div class="card mb-3">
-                            <img style="height: 100%; width: 100%; display: block;" src="<%=lesson.thumbnail%>"
-                                alt="thumbnail of the lesson">
-                        </div>
-
-                        <div class="p-3">
-                            <h4>
-                                <%= lesson.title %>
-                            </h4>
-                            <ol class="list-unstyled">
-                                <li>
-                                    <%= __(`dashboard.search.level.${lesson.level[0]}`) %> |
-                                        <%= __(`dashboard.search.genre.${lesson.genre[0]}`) %> |
-                                            <%= __(`dashboard.search.mood.${lesson.mood[0]}`) %>
-                                </li>
-                            </ol>
-                            <h5>
-                                <%= lesson.price %>
-                                    <%= __('dashboard.Yen') %> |
-                                        <%= moment(lesson.time).format('MM/DD HH:mm'); %>
-                                            </h6>
-                                            <hr>
-                                            <div class="text-center">
-                                                <% if (id !=undefined) { %>
-                                                    <button class="btn btn-danger btn-lg btn-block"
-                                                        id="checkout-button">
-                                                        <%= __('reservation.purchase') %>
-                                                    </button>
-                                                    <% } else { %>
-                                                        <a href="/success/<%= params %>"
-                                                            class="btn btn-danger btn-lg btn-block">
-                                                            <%= __('reservation.purchase') %>
-                                                        </a>
-                                                        <% } %>
-                                            </div>
-                                            <hr>
-                        </div>
-                    </div>
-
-                    <div class="p-4 m-5 bg-snow rounded">
-                        <div class="text-center">
-                            <img src="<%= choreographer.userPhoto %>" height="150" width="150"
-                                style="border-radius: 50%;" alt="user photo">
-                        </div>
-                        <div class="text-center">
-                            <h4 class="mt-3">
-                                <%= choreographer.username %>
-                            </h4>
-                            <p style="white-space:pre-wrap;">
-                                <%= choreographer.bio %>
-                            </p>
-                            <p>
-                                <a href="<%= choreographer.website %>" target="_blank">
-                                    <%= choreographer.website %>
-                                </a>
-                            </p>
-                            <p>
-                                <%= __('reservation.contact') %>:
-                                    <a href="mailto:<%= choreographer.email %>">
-                                        <%= choreographer.email %>
-                                    </a>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <aside class="col-md-4 blog-sidebar">
-                <% if (newLesson.length) { %>
-                    <section id="results" class="results">
-                        <br><br>
-                        <h4>
-                            他にもオススメのレッスン&#10024;</h4>
-                        <div class="row">
-                            <% for(let i=0; i < newLesson.length; i++) { %>
-                                <div class="col-lg-12 col-xs-6">
-                                    <div class="box">
-                                        <a href="/reservation/<%= newLesson[i]._id %>">
-                                            <img src="<%= newLesson[i].thumbnail %>" alt="thumbnail">
-                                        </a>
-                                        <h4 id="title<%= i %>">
-                                            <%= newLesson[i].title %>
-                                        </h4>
-                                        <a class="special" href="/choreographer/<%= newLesson[i].choreographerID %>">
-                                            <%= newChoreographer[i].username %>
-                                        </a>
-                                        <p>
-                                            <%= newLesson[i].price %>
-                                                <%= __('dashboard.Yen') %> |
-                                                    <%= moment(newLesson[i].time).format('MM/DD HH:mm'); %> |
-                                                        <%= __(`dashboard.search.level.${newLesson[i].level[0]}`) %>
-                                                            |
-                                                            <%= __(`dashboard.search.genre.${newLesson[i].genre[0]}`) %>
-                                        </p>
-                                    </div>
-                                </div>
-                                <% } %>
-                        </div>
-                    </section>
-                    <% } %>
-            </aside>
-        </div>
-    </div>
-    <!-- </main> -->
-
+    
     <script>
         const stripe = Stripe('<%= stripePublicKey %>');
         const checkoutButton = document.getElementById('checkout-button');
@@ -510,3 +344,4 @@
             })
         });
     </script>
+    </body>

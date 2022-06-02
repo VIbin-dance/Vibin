@@ -6470,7 +6470,7 @@ header .navbar .navbar-collapse .nav_account.btn_demo3 .btn_sm_primary {
   blog-banner_without_image
 -----------------------------*/
 .single_blog {
-  height: 600px;
+  height: 550px;
 }
 @media (max-width: 767px) {
   .single_blog {
@@ -15752,7 +15752,7 @@ software_web
   content-Sblog
 -----------------------------*/
 .content-Sblog {
-  margin-top: 50px;
+  margin-top: 0px;
 }
 .content-Sblog .fixSide_scroll .item {
   margin-bottom: 40px;
@@ -16149,7 +16149,7 @@ software_web
 }
 
 .section_tag_auther {
-  margin-top: 50px;
+  margin-top: 0px;
 }
 .section_tag_auther .box_tags_psot h4 {
   font-size: 14px;
