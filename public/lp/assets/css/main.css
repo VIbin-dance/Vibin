@@ -5646,7 +5646,7 @@ header .navbar .navbar-collapse .nav_account.btn_demo3 .btn_sm_primary {
   }
   .banner_title_inner h1 {
     font-size: 1.8rem;
-    margin-left: 1.2rem;
+    margin-left: 1rem;
     margin-bottom: 0rem;
   }
 }
@@ -6470,7 +6470,7 @@ header .navbar .navbar-collapse .nav_account.btn_demo3 .btn_sm_primary {
   blog-banner_without_image
 -----------------------------*/
 .single_blog {
-  height: 550px;
+  height: 650px;
 }
 @media (max-width: 767px) {
   .single_blog {
@@ -6549,6 +6549,7 @@ header .navbar .navbar-collapse .nav_account.btn_demo3 .btn_sm_primary {
 }
 
 .type_background {
+  padding-top: 20vh;
   background-color: rgba(242, 142, 28, 0.05);
 }
 .type_background::before {
@@ -6566,6 +6567,12 @@ header .navbar .navbar-collapse .nav_account.btn_demo3 .btn_sm_primary {
 }
 .type_background .footer_content .item_auther .txt p {
   color: #6c7a87;
+}
+
+@media (max-width: 767px) {
+  .type_background {
+    padding-top: 3vh;
+  }
 }
 
 /*-----------------------------

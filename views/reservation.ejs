@@ -5,7 +5,7 @@
             <main data-spy="scroll" data-target="#navbar-example2" data-offset="0">
 
                 <!-- Start banner_about -->
-                <section class="pt_banner_inner banner_px_image single_blog type_background mt-5">
+                <section class="pt_banner_inner banner_px_image single_blog type_background">
                     <div class="container">
                         <div class="row">
                             <div class="col-md-7 col-lg-7">
@@ -29,8 +29,7 @@
                                                 <%= lesson.time.end %>
                                         </time>
                                     </div>
-                                    <h1 class="margin-my-3 font-s-55 c-dark aos-init aos-animate" data-aos="fade-up"
-                                        data-aos-delay="0">
+                                    <h1 class="margin-my-3 font-s-60 c-dark aos-init aos-animate" style="margin-left: 0;">
                                         <%= lesson.title %>
                                     </h1>
                                     <div class="footer_content">
@@ -49,7 +48,7 @@
                                     </div>
                                     <% if (id !=undefined) { %>
                                         <button id="checkout-button"
-                                            class="btn btn_xl_primary scale border-0 sweep_letter sweep_top bg-pink c-white rounded-pill mt-5">
+                                            class="btn btn_lg_primary scale border-0 sweep_letter sweep_top bg-pink c-white rounded-pill mt-5">
                                             <span>
                                                 <%= lesson.price %>円で<%= __('reservation.purchase') %>
                                             </span>
@@ -65,8 +64,8 @@
 
                                 </div>
                             </div>
-                            <div class="col-md-3 col-lg-3">
-                                <img class="img_md m-3" src="<%= lesson.thumbnail %>" alt="">
+                            <div class="col-md-5 col-lg-5">
+                                <img class="rounded-15 img-fluid" src="<%= lesson.thumbnail %>" alt="">
                             </div>
                         </div>
 
@@ -117,14 +116,14 @@
                                                     <%= lesson.price %>円
                                                 </b>
                                     </p>
-                                    <p>Many people don’t really know the difference between
+                                    <!-- <p>Many people don’t really know the difference between
                                         software
                                         architecture and
                                         software design.
                                         Even for developers, the line is often blurry and they might mix up
                                         elements of
                                         software
-                                        architecture patterns and design patterns. </p>
+                                        architecture patterns and design patterns. </p> -->
                                 </div>
                             </div>
                         </div>
@@ -149,32 +148,7 @@
                             <div class="col-lg-9 offset-lg-3">
                                 <div class="block_auther_post margin-t-5">
                                     <div class="row">
-                                        <div class="p-4 m-5 bg-snow rounded">
-                                            <div class="text-center">
-                                                <img src="<%= choreographer.userPhoto %>" height="150" width="150"
-                                                    style="border-radius: 50%;" alt="user photo">
-                                            </div>
-                                            <div class="text-center">
-                                                <h4 class="mt-3">
-                                                    <%= choreographer.username %>
-                                                </h4>
-                                                <p style="white-space:pre-wrap;">
-                                                    <%= choreographer.bio %>
-                                                </p>
-                                                <p>
-                                                    <a href="<%= choreographer.website %>" target="_blank">
-                                                        <%= choreographer.website %>
-                                                    </a>
-                                                </p>
-                                                <p>
-                                                    <%= __('reservation.contact') %>:
-                                                        <a href="mailto:<%= choreographer.email %>">
-                                                            <%= choreographer.email %>
-                                                        </a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <!-- <div class="col-lg-8">
+                                        <div class="col-lg-7">
                                             <div class="media">
                                                 <img class="img_person" src="<%= choreographer.userPhoto %>" alt="">
                                                 <div class="media-body">
@@ -182,7 +156,7 @@
                                                         <h4>
                                                             <%= choreographer.username %>
                                                         </h4>
-                                                        <p style="white-space:pre-line;">
+                                                        <p>
                                                             <%= choreographer.bio %>
                                                         </p>
                                                         <p>
@@ -200,13 +174,13 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div> -->
-                                        <!-- <div class="col-lg-4 my-auto ml-auto text-lg-right">
+                                        </div>
+                                        <div class="col-lg-4 my-auto ml-auto text-lg-right">
                                             <a href="<%= choreographer.website %>"
-                                                class="btn-social color-twitter border-0  mr-2">
+                                                class="btn-social color-website border-0  mr-2">
                                                 <i class="tio website"></i>
                                             </a>
-                                        </div> -->
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -216,13 +190,13 @@
                 <!-- End. section_tag_auther -->
 
                 <!-- Start blog_masonry -->
-                <section class="blog_masonry four_column height_fixed padding-t-10">
+                <section class="blog_masonry four_column">
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="banner_title_inner">
                                     <h1 data-aos="fade-up" data-aos-delay="0" class="aos-init aos-animate">
-                                        他にもオススメのレッスン&#10024;
+                                        オススメのレッスン&#10024;
                                     </h1>
                                 </div>
                             </div>
