@@ -12,9 +12,11 @@
 
 <section id="live_grid">
     <input type="hidden" name="ch_playurl" id="ch_playurl" value="<%= ch_playURL %>">
+    <!-- <input type="hidden" name="ch_playurl" id="ch_playurl"
+        value="https://vibin-archive.s3.amazonaws.com/ivs/v1/401352423179/3QO4kTn98QvQ/2022/6/6/13/15/4m6W36vol0Pl/media/hls/master.m3u8"> -->
     <input type="hidden" name="ch_playTime" id="ch_playTime" value="">
     <input type="hidden" name="ch_arn" id="ch_arn" value="<%= ch_arn %>">
-    <% if (typeof user.username != "undefined" ) { %>
+    <% if (typeof user.username !="undefined" ) { %>
         <input type="hidden" name="username" id="username" value="<%= user.username %>">
         <% } else { %>
             <input type="hidden" name="username" id="username" value="empty">
@@ -29,7 +31,9 @@
 
                             <div class="channelView-ivs">
                                 <div id="live_screen">
-                                    <video id="amazon-ivs-videojs" class="video-js vjs-fluid vjs-fill vjs-big-play-centered" preload="auto" controls autoplay playsinline autoPictureInPicture></video>
+                                    <video id="amazon-ivs-videojs"
+                                        class="video-js vjs-fluid vjs-fill vjs-big-play-centered" preload="auto"
+                                        controls autoplay playsinline autoPictureInPicture></video>
                                 </div>
                                 <div id="self_camera"></div>
                             </div>
@@ -41,7 +45,8 @@
                                         <div class="outline"></div>
                                         <div class="inner_img">
                                             <figure>
-                                                <img src="<%= choreographer.userPhoto %>" height="60" width="60" style="border-radius: 50%;" alt="user photo">
+                                                <img src="<%= choreographer.userPhoto %>" height="60" width="60"
+                                                    style="border-radius: 50%;" alt="user photo">
                                             </figure>
                                         </div>
                                     </a>
@@ -89,22 +94,24 @@
 
                             </div>
                             <div class="p-4 m-5 bg-snow rounded">
-                                    <div class="text-center">
-                                        <img src="<%= choreographer.userPhoto %>" height="100" width="100" style="border-radius: 50%;" alt="user photo">
-                                    </div>
-                                    <div class="text-center">
-                                        <h4 class="mt-3">
-                                            <%= choreographer.username %>
-                                        </h4>
-                                        <p style="white-space:pre-wrap;"><%= choreographer.bio %>
-                                        </p>
-                                        <p>
-                                            <%= __('reservation.contact') %>:
-                                                <a href="mailto:<%= choreographer.email %>">
-                                                    <%= choreographer.email %>
-                                                </a>
-                                        </p>
-                                    </div>
+                                <div class="text-center">
+                                    <img src="<%= choreographer.userPhoto %>" height="100" width="100"
+                                        style="border-radius: 50%;" alt="user photo">
+                                </div>
+                                <div class="text-center">
+                                    <h4 class="mt-3">
+                                        <%= choreographer.username %>
+                                    </h4>
+                                    <p style="white-space:pre-wrap;">
+                                        <%= choreographer.bio %>
+                                    </p>
+                                    <p>
+                                        <%= __('reservation.contact') %>:
+                                            <a href="mailto:<%= choreographer.email %>">
+                                                <%= choreographer.email %>
+                                            </a>
+                                    </p>
+                                </div>
                             </div>
                     </div>
 
@@ -117,7 +124,8 @@
                             <% if (!user._id) { %>
                                 <div class="text-center" style="padding:15px;">
                                     <h4>チャットをしませんか？<br><br></h4>
-                                        <h6><a href="/users/login">ログイン</a>してリアルタイムのレッスンに<br>参加しましょう。<br><br> 1. 他の視聴者と一緒に踊りましょう<br> 2. チャットして話したり質問しましょう</h6>
+                                    <h6><a href="/users/login">ログイン</a>してリアルタイムのレッスンに<br>参加しましょう。<br><br> 1.
+                                        他の視聴者と一緒に踊りましょう<br> 2. チャットして話したり質問しましょう</h6>
                                 </div>
                                 <p hidden id="chat_msg"></p>
                                 <p hidden class="send_btn"></p>
@@ -135,13 +143,13 @@
                     </div>
 
                     <button class="toggle_chat_btn">
-            <svg width="100%" height="100%" version="1.1" viewBox="0 0 20 20" x="0px" y="0px"
-                class="ScIconSVG-sc-1bgeryd-1 cMQeyU">
-                <g>
-                    <path d="M4 16V4H2v12h2zM13 15l-1.5-1.5L14 11H6V9h8l-2.5-2.5L13 5l5 5-5 5z"></path>
-                </g>
-            </svg>
-        </button>
+                        <svg width="100%" height="100%" version="1.1" viewBox="0 0 20 20" x="0px" y="0px"
+                            class="ScIconSVG-sc-1bgeryd-1 cMQeyU">
+                            <g>
+                                <path d="M4 16V4H2v12h2zM13 15l-1.5-1.5L14 11H6V9h8l-2.5-2.5L13 5l5 5-5 5z"></path>
+                            </g>
+                        </svg>
+                    </button>
                 </div>
 </section>
 
