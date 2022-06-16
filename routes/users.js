@@ -14,9 +14,16 @@ const upload = multer({ storage: storage });
 
 const User = require("../models/User");
 const Lesson = require("../models/Lesson");
+const Archive = require("../models/Archive");
 
 findLesson = (id) => {
     return Lesson.find({ choreographerID: id }, null, {
+        sort: { time: -1 },
+    }).lean();
+};
+
+findArchive = (id) => {
+    return Archive.find({ choreographerID: id }, null, {
         sort: { time: -1 },
     }).lean();
 };
@@ -46,9 +53,10 @@ router.get("/login", (req, res) => {
 
 
 router.get("/profile", checkSession, ensureAuthenticated, async (req, res) => {
-    const [lesson, tickets] = await Promise.all([
+    const [lesson, tickets, archive] = await Promise.all([
         findLesson(user._id),
         findTicket(user.lesson),
+        findArchive(user._id),
     ]);
 
     const choreographer = [];
@@ -71,6 +79,7 @@ router.get("/profile", checkSession, ensureAuthenticated, async (req, res) => {
         email: user.email,
         lesson: lesson,
         tickets: tickets,
+        archive: archive,
         choreographer: choreographer,
         moment: moment,
     });

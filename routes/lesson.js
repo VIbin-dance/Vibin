@@ -9,6 +9,7 @@ const { createChannel, updateStreamKey } = require('../config/aws/channel');
 const User = require('../models/User');
 const Channel = require('../models/Channel');
 const Lesson = require('../models/Lesson');
+const Archive = require('../models/Archive');
 
 router.get('/channel', ensureAuthenticated, async (req, res) => {
     let ch_count;
@@ -68,6 +69,16 @@ router.post('/create_channel', ensureAuthenticated, async (req, res) => {
 
 router.post('/reset_streamkey', ensureAuthenticated, function (req, res) {
     updateStreamKey(req, res);
+});
+
+router.get('/archive/:archive_id', ensureAuthenticated, async (req, res) => {
+    const archive = await Archive.findOne({ _id: req.params.archive_id }, (err, archive) => {
+        res.render('archive', {
+            user: req.session.user,
+            archiveName: archive.title,
+            archiveURL: archive.archiveURL
+        })
+    })
 });
 
 router.get('/teacher/:lesson_id', ensureAuthenticated, async (req, res) => {

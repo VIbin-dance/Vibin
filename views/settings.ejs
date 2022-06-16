@@ -16,7 +16,13 @@
                     <div class="col-lg-12">
                         <h3>マイチャンネル</h3>
                         <hr>
-                        <a class="btn btn-dark" href="/lesson/channel">チャンネル管理</a>
+                        <!-- <a class="btn btn-dark" href="/lesson/channel">チャンネル管理</a> -->
+                        <a href="/lesson/channel"
+                            class="btn btn_sm_primary scale border-0 sweep_letter sweep_top bg-pink c-white rounded-pill">
+                            <span>
+                                チャンネルを管理する
+                            </span>
+                        </a>
                         <h3><br>口座</h3>
                         <hr>
                         <% if (typeof account=="undefined" || account.external_accounts.data.length===0) { %>
@@ -25,7 +31,7 @@
                                     <small>注意：口座設定を完了するまでレッスン代金は振り込まれません。</small>
                                     <p>レッスンを作成する前に、口座設定を完了することを推奨しています。下のボタンから設定をしてください</p>
                                     <a href="<%= loginLink.url %>" target="_blank" role="button"
-                                        class="btn btn_sm_primary scale border-0 sweep_letter sweep_top bg-pink c-white rounded-pill m-3">
+                                        class="btn btn_sm_primary scale border-0 sweep_letter sweep_top bg-pink c-white rounded-pill">
                                         <span>
                                             Stripeで口座の設定をする
                                         </span>

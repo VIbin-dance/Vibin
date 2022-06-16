@@ -56,7 +56,7 @@ const LessonSchema = new mongoose.Schema({
         default: Date.now
     },
     archiveURL: {
-        type: String
+        type: Array
     }
 });
 

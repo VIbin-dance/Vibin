@@ -4,7 +4,9 @@
         <div class="container">
             <%- include ('partials/messages') %>
                 <p class="block_label">チャンネル一覧</p>
-                <p>詳しいOBSの使用方法の説明は<a href="https://support.vibin.tokyo/page/OBS%E3%81%AE%E8%A8%AD%E5%AE%9A%E6%96%B9%E6%B3%95%E3%82%92%E6%95%99%E3%81%88%E3%81%A6%E3%81%8F%E3%81%A0%E3%81%95%E3%81%84" target="blank">こちら</a></p>
+                <p>詳しいOBSの使用方法の説明は<a
+                        href="https://support.vibin.tokyo/page/OBS%E3%81%AE%E8%A8%AD%E5%AE%9A%E6%96%B9%E6%B3%95%E3%82%92%E6%95%99%E3%81%88%E3%81%A6%E3%81%8F%E3%81%A0%E3%81%95%E3%81%84"
+                        target="blank">こちら</a></p>
                 <form action="/lesson/reset_streamkey" method="post">
                     <% if (count !=0) { %>
                         <div class="channel_infor">
@@ -32,10 +34,15 @@
                                 <%= ch_arn %>
                             </div> -->
                             <div class="label">取り込みサーバー</div>
-                            <div class="content"><input type="text" readonly class="ch_infor" value="<%= ch_ingest %>" id="ch_ingest"> <button type="button" class="copy_btn" id="copy_ingest" title="copy Ingest server" onclick="copyIngest()"><img src="/assets/img/copy.png" alt=""></button></div>
+                            <div class="content"><input type="text" readonly class="ch_infor" value="<%= ch_ingest %>"
+                                    id="ch_ingest"> <button type="button" class="copy_btn" id="copy_ingest"
+                                    title="copy Ingest server" onclick="copyIngest()"><img src="/assets/img/copy.png"
+                                        alt=""></button></div>
                             <div class="label">ストリームキー</div>
-                            <div class="content"><input type="password" readonly class="ch_infor" value="<%= ch_streamkey %>" id="ch_streamkey">
-                                <button type="button" class="copy_btn" id="copy_skey" title="copy Stream key" onclick="copyStream()"><img src="/assets/img/copy.png" alt=""></button>
+                            <div class="content"><input type="password" readonly class="ch_infor"
+                                    value="<%= ch_streamkey %>" id="ch_streamkey">
+                                <button type="button" class="copy_btn" id="copy_skey" title="copy Stream key"
+                                    onclick="copyStream()"><img src="/assets/img/copy.png" alt=""></button>
                                 <p>ストリームキーは誰にも教えないでください。配信で見せるようなことも決してしないでください！</p>
                                 <label class="form-check-label">
                                     <input type="checkbox" onclick="showStreamKey()">表示する
