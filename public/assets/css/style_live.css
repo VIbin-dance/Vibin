@@ -772,6 +772,9 @@ body::-webkit-scrollbar-thumb {
     .live_grid .video_grid .channel_info.student .count_info .channel_status {
         display: inline;
     }
+    .live_grid .video_grid .choreographer {
+        display: none;
+    }
     .chat_grid #temp_btn {
         display: none;
     }
@@ -1049,7 +1052,7 @@ body::-webkit-scrollbar-thumb {
 @media screen and (max-width: 768px) {
     .live_grid .chat_grid.collapseOn {
         width: 100%;
-        height: 45vh;
+        height: 50vh;
         position: unset;
         right: unset;
     }
@@ -1065,7 +1068,7 @@ body::-webkit-scrollbar-thumb {
 @media (orientation:landscape) and (max-width: 768px) {
     .live_grid .chat_grid.collapseOn {
         width: 30%;
-        height: 95vh;
+        height: 90vh;
     }
 }
 
@@ -1266,35 +1269,38 @@ body::-webkit-scrollbar-thumb {
 
 @media screen and (max-width: 768px) {
     .live_grid .chat_grid .contain .message_wrap {
-        height: 90vh;
+        height: 95vh;
     }
     .live_grid .chat_grid .contain .message_wrap ul li {
-        /* justify-content: space-around; */
+        padding: 0.4rem 0;
         padding-bottom: 0;
     }
     .live_grid .chat_grid .contain .message_wrap ul li .avatar {
-        width: 2.6rem;
-        height: 2.6rem;
+        width: 2rem;
+        height: 2rem;
+        margin-right: 0rem;
     }
     .live_grid .chat_grid .contain .message_wrap ul li .avatar p {
-        font-size: 8px;
-        text-align: center;
-    }
-    .live_grid .chat_grid .contain .message_wrap ul li .message {
-        padding: 0.5rem 0.7rem;
-        font-size: 0.7rem;
+        font-size: 4px;
+        /* display: none; */
+    }    
+    .live_grid .chat_grid .contain .message_wrap ul li .avatar img {
+        width: 100%;
+        height: 100%;
     }
     .live_grid .chat_grid .contain .message_wrap ul li .message .time {
         padding: 0;
     }
     .live_grid .chat_grid .contain .message_wrap ul li .message {
-        padding: 0.3rem 0.5rem;
+        width: calc( 100% - 3rem);
+        padding: 0.4rem 0.4rem;
         font-size: 0.7rem;
     }
 }
 
 @media (orientation:landscape) and (max-width: 768px) {
     .live_grid .chat_grid .contain .message_wrap ul li .avatar {
+        width: calc( 100% - 2rem);
         width: 2rem;
         height: 2rem;
     }
