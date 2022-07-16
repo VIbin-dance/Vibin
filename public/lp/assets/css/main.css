@@ -5643,10 +5643,10 @@ header .navbar .navbar-collapse .nav_account.btn_demo3 .btn_sm_primary {
   .banner_title_inner {
     margin-bottom: 2rem;
     margin-top: 2rem;
+    margin-left: 1rem;
   }
   .banner_title_inner h1 {
     font-size: 1.8rem;
-    margin-left: 1rem;
     margin-bottom: 0rem;
   }
 }

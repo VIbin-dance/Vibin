@@ -1281,7 +1281,7 @@ body::-webkit-scrollbar-thumb {
         margin-right: 0rem;
     }
     .live_grid .chat_grid .contain .message_wrap ul li .avatar p {
-        font-size: 4px;
+        font-size: 8px;
         /* display: none; */
     }    
     .live_grid .chat_grid .contain .message_wrap ul li .avatar img {
