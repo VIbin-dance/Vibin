@@ -347,9 +347,11 @@ router.post('/create-checkout-session/:id', checkSession, ensureAuthenticated, a
         line_items: [{
             name: lesson.title,
             amount: lesson.price,
+            images: [lesson.thumbnail],
             currency: "jpy",
             quantity: "1"
         },],
+        payment_method_types: ['card'],
         customer_email: user.email,
         allow_promotion_codes: true,
         payment_intent_data: {

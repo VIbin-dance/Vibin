@@ -55,7 +55,7 @@
     "request": "^2.88.2",
     "sharp": "^0.28.3",
     "socket.io": "^4.4.1",
-    "stripe": "^8.140.0",
+    "stripe": "^8.222.0",
     "video.js": "^7.7.4"
   },
   "devDependencies": {
