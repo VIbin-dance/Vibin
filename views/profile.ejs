@@ -174,3 +174,71 @@
             </div>
         </div>
     </section>
+
+    <section class="blog_masonry four_column" style="padding-top: 0;">
+        <div class="container col-lg-11">
+            <div class="row">
+                <div class="banner_title_inner">
+                    <h1 data-aos="fade-up" data-aos-delay="0" class="aos-init aos-animate">
+                        アーカイブしたレッスン一覧&#10024;
+                    </h1>
+                </div>
+                <% if (archive.length> 0) { %>
+                    <div class="card-columns">
+                        <% for (let i=0; i < archive.length; i++) { %>
+                            <div class="card">
+                                <a href="/lesson/archive/<%= archive[i]._id %>" class="link_poet">
+                                    <div class="cover_link">
+                                        <img class="main_img" src="<%= archive[i].thumbnail %>" alt="...">
+                                        <div class="auther_post">
+                                            <div class="media">
+                                                <img src="<%= userPhoto %>" alt="先生のプロフィール画像">
+                                                <div class="media-body my-auto">
+                                                    <div class="txt">
+                                                        <h4>
+                                                            <%= username %>
+                                                        </h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div class="card-body">
+                                    <div class="about_post">
+                                        <!-- <span class="c_ategory">
+                                            <a href="#">
+                                            </a>
+                                            <a href="#">
+                                            </a>
+                                        </span>
+                                        <span class="dot"></span> -->
+                                        <time>
+                                            <%= archive[i].duration %>
+                                        </time>
+                                    </div>
+                                    <a href="/lesson/archive/<%= archive[i]._id %>" class="d-block">
+                                        <h5 class="card-title">
+                                            <%= archive[i].title %>
+                                        </h5>
+                                        <p class="card-text">
+                                        </p>
+                                    </a>
+                                </div>
+                            </div>
+                            <% } %>
+                    </div>
+                    <% } else { %>
+                        <div class="container col-12">
+                        </div>
+                        <div class="banner_title_inner">
+                            <h4 data-aos="fade-up" data-aos-delay="0" class="aos-init aos-animate">
+                                まだアーカイブはないようです...
+                            </h4>
+                            <p>アーカイブ機能は現在ベータ版です<br>
+                            ご質問等ございましたらお気軽に<a href="mailto:info@vibin.tokyo">info@vibin.tokyo</a>までご連絡ください。</p>
+                        </div>
+                        <% } %>
+            </div>
+        </div>
+    </section> 

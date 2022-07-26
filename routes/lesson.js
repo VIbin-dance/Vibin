@@ -119,6 +119,11 @@ router.get('/student/:lesson_id', checkSession, async (req, res) => {
                     res.redirect('/users/profile');
                 } else {
                     const choreographer = await User.findOne({ _id: ls.choreographerID }).lean().exec();
+
+                    const date = ls.time.start.substring(0, ls.time.start.indexOf('T'))
+                    const endDate = date + "T" + ls.time.end
+                    const liveStatus = moment().isBetween(ls.time.start, endDate)
+
                     res.render('student', {
                         user: user,
                         choreographer: choreographer,
@@ -128,6 +133,7 @@ router.get('/student/:lesson_id', checkSession, async (req, res) => {
                         ch_arn: ch.arn,
                         ch_streamkey: ch.streamKey.value,
                         ch_playURL: ch.playbackUrl,
+                        liveStatus: liveStatus
                     })
                 }
             });
