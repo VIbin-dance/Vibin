@@ -8,7 +8,7 @@
                 <section class="pt_banner_inner banner_px_image single_blog type_background">
                     <div class="container">
                         <div class="row">
-                            <div class="col-md-7 col-lg-7">
+                            <div class="col-md-6 col-lg-6">
                                 <div class="banner_title_inner">
                                     <div class="about_post">
                                         <span class="c_ategory">
@@ -28,6 +28,9 @@
                                             <%= moment(lesson.time.start).format('MM/DD HH:mm'); %> ~
                                                 <%= lesson.time.end %>
                                         </time>
+                                    </div>
+                                    <div class="m-3 mt-4 mobileThumb">
+                                        <img class="rounded-15 img-fluid" src="<%= lesson.thumbnail %>" alt="">
                                     </div>
                                     <h1 class="margin-my-3 font-s-60 c-dark aos-init aos-animate" style="margin-left: 0;">
                                         <%= lesson.title %>
@@ -57,7 +60,7 @@
                                         </form>
                                 </div>
                             </div>
-                            <div class="col-md-5 col-lg-5">
+                            <div class="col-md-6 col-lg-6 pcThumb">
                                 <img class="rounded-15 img-fluid" src="<%= lesson.thumbnail %>" alt="">
                             </div>
                         </div>
