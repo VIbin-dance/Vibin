@@ -71,15 +71,16 @@ router.post('/reset_streamkey', ensureAuthenticated, function (req, res) {
     updateStreamKey(req, res);
 });
 
-router.get('/archive/:archive_id', ensureAuthenticated, async (req, res) => {
-    const archive = await Archive.findOne({ _id: req.params.archive_id }, (err, archive) => {
-        res.render('archive', {
-            user: req.session.user,
-            archiveName: archive.title,
-            archiveURL: archive.archiveURL
-        })
-    })
-});
+// router.get('/archive/:archive_id', ensureAuthenticated, async (req, res) => {
+//     Lesson.findOne({ _id: req.params.archive_id }, (err, archive) => {
+//         console.log(archive)
+//         res.render('archive', {
+//             user: req.session.user,
+//             archiveName: archive.title,
+//             archiveURL: archive.s3.archiveURL
+//         })
+//     })
+// });
 
 router.get('/teacher/:lesson_id', ensureAuthenticated, async (req, res) => {
     const ls = await Lesson.findOne({ _id: req.params.lesson_id }).lean().exec();
@@ -105,20 +106,35 @@ router.get('/teacher/:lesson_id', ensureAuthenticated, async (req, res) => {
 });
 
 router.get('/student/:lesson_id', checkSession, async (req, res) => {
-    Lesson.findOne({ _id: req.params.lesson_id }, (err, ls) => {
+    Lesson.findOne({ _id: req.params.lesson_id }, async (err, ls) => {
+        const choreographer = await User.findOne({ _id: ls.choreographerID }).lean().exec();
+        const date = ls.time.start.substring(0, ls.time.start.indexOf('T'))
+        const endDate = date + "T" + ls.time.end
+        const liveStatus = moment().isBetween(ls.time.start, endDate)
+
         if (!ls) {
             req.flash('error_msg', '選択したレッスンの情報が正しくありません。');
             res.redirect('/users/profile');
         } else if (ls.price != 0 && !user.lesson.includes(ls._id.toString())) {
             req.flash('error_msg', '選択したレッスンは購入されていません。');
             res.redirect(`/reservation/${req.params.lesson_id}`);
+        } else if (moment().isAfter(ls.time)) {
+            res.redirect(`/lesson/archive/${ls._id}`)
+            // res.render('student', {
+            //     user: user,
+            //     choreographer: choreographer,
+            //     teacherPhoto: choreographer.userPhoto,
+            //     lesson: ls,
+            //     ch_name: ls.title,
+            //     ch_playURL: ls.s3.archiveURL,
+            //     liveStatus: liveStatus
+            // })
         } else {
             Channel.findOne({ ch_name: ls.choreographerID }, async (err, ch) => {
                 if (!ch) {
                     req.flash('error_msg', '先生側の配信に何か問題が起きました。');
                     res.redirect('/users/profile');
                 } else {
-                    const choreographer = await User.findOne({ _id: ls.choreographerID }).lean().exec();
                     res.render('student', {
                         user: user,
                         choreographer: choreographer,
@@ -128,6 +144,7 @@ router.get('/student/:lesson_id', checkSession, async (req, res) => {
                         ch_arn: ch.arn,
                         ch_streamkey: ch.streamKey.value,
                         ch_playURL: ch.playbackUrl,
+                        liveStatus: liveStatus
                     })
                 }
             });

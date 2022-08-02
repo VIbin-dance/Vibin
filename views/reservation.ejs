@@ -8,7 +8,7 @@
                 <section class="pt_banner_inner banner_px_image single_blog type_background">
                     <div class="container">
                         <div class="row">
-                            <div class="col-md-7 col-lg-7">
+                            <div class="col-md-6 col-lg-6">
                                 <div class="banner_title_inner">
                                     <div class="about_post">
                                         <span class="c_ategory">
@@ -29,6 +29,9 @@
                                                 <%= lesson.time.end %>
                                         </time>
                                     </div>
+                                    <div class="m-3 mt-4 mobileThumb">
+                                        <img class="rounded-15 img-fluid" src="<%= lesson.thumbnail %>" alt="">
+                                    </div>
                                     <h1 class="margin-my-3 font-s-60 c-dark aos-init aos-animate" style="margin-left: 0;">
                                         <%= lesson.title %>
                                     </h1>
@@ -46,25 +49,18 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <% if (id !=undefined) { %>
-                                        <button id="checkout-button"
+                                    <section>
+                                        <form action="/create-checkout-session/<%= params %>" method="POST">
+                                            <button type="submit" id="checkout-button"
                                             class="btn btn_lg_primary scale border-0 sweep_letter sweep_top bg-pink c-white rounded-pill mt-5">
-                                            <span>
-                                                <%= lesson.price %>円で<%= __('reservation.purchase') %>
-                                            </span>
-                                            </but>
-                                            <% } else { %>
-                                                <a href="/success/<%= params %>"
-                                                    class="btn btn_xl_primary scale border-0 sweep_letter sweep_top bg-pink c-white rounded-pill mt-5">
-                                                    <span>
-                                                        <%= __('reservation.purchase') %>
-                                                    </span>
-                                                </a>
-                                                <% } %>
-
+                                                <span>
+                                                    レッスンを<%= __('reservation.purchase') %>
+                                                </span>
+                                            </button>
+                                        </form>
                                 </div>
                             </div>
-                            <div class="col-md-5 col-lg-5">
+                            <div class="col-md-6 col-lg-6 pcThumb">
                                 <img class="rounded-15 img-fluid" src="<%= lesson.thumbnail %>" alt="">
                             </div>
                         </div>
@@ -80,7 +76,7 @@
                             <div class="col-lg-3">
                                 <div class="fixSide_scroll" data-sticky-for="1023" data-margin-top="100" style="">
                                     <div class="share_socail">
-                                        <div class="title">共有</div>
+                                        <div class="title">共有する</div>
 
                                         <button class="btn icon" data-toggle="tooltip" data-placement="right" title=""
                                             data-sharer="facebook" data-hashtag="Vibin'"
@@ -116,14 +112,6 @@
                                                     <%= lesson.price %>円
                                                 </b>
                                     </p>
-                                    <!-- <p>Many people don’t really know the difference between
-                                        software
-                                        architecture and
-                                        software design.
-                                        Even for developers, the line is often blurry and they might mix up
-                                        elements of
-                                        software
-                                        architecture patterns and design patterns. </p> -->
                                 </div>
                             </div>
                         </div>
@@ -307,15 +295,4 @@
     <script src="../../assets/js/vendor/aos.js" type="text/javascript"></script>
     <!-- main file -->
     <script src="../../assets/js/main.js" type="text/javascript"></script>
-    
-    <script>
-        const stripe = Stripe('<%= stripePublicKey %>');
-        const checkoutButton = document.getElementById('checkout-button');
-
-        checkoutButton.addEventListener('click', () => {
-            stripe.redirectToCheckout({
-                sessionId: '<%= id %>'
-            })
-        });
-    </script>
     </body>

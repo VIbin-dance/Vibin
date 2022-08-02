@@ -55,9 +55,14 @@ const LessonSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    archiveURL: {
-        type: Array
-    }
+    // s3: {
+    //     duration: {
+    //         type: String
+    //     },
+    //     archiveURL: {
+    //         type: String
+    //     }
+    // }
 });
 
 LessonSchema.plugin(mongoosePaginate);

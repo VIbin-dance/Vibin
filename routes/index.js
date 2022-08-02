@@ -289,6 +289,7 @@ router.get("/calendar", ensureAuthenticated, (req, res) => {
 
 router.get("/reservation/:id", checkSession, async (req, res) => {
     const lesson = await Lesson.findOne({ _id: req.params.id }).lean().exec();
+    const choreographer = await User.findOne({ _id: lesson.choreographerID }).lean().exec();
     const newLesson = await Lesson.find({}, null, { sort: { time: -1 }, limit: 3 }).lean().exec();
     const newChoreographer = [];
 
@@ -300,16 +301,6 @@ router.get("/reservation/:id", checkSession, async (req, res) => {
             .lean()
             .exec();
     }
-
-    const choreographer = await User.findOne({ _id: lesson.choreographerID })
-        .lean()
-        .exec();
-
-    // const account = await stripe.accounts.retrieve(choreographer.stripeID);
-    // if (account.payouts_enabled == true) {
-    //     req.flash("error_msg", "先生側の設定が完了していません。");
-    //     res.redirect(`/`);
-    // }
 
     if (moment().isAfter(lesson.time) && lesson.price === 0) {
         res.redirect(`/lesson/student/${req.params.id}`);
@@ -326,51 +317,56 @@ router.get("/reservation/:id", checkSession, async (req, res) => {
         });
     } else if (lesson.price === 0 || !req.session.user) {
         res.render("reservation", {
-            id: undefined,
             params: req.params.id,
             lesson: lesson,
             newLesson: newLesson,
             choreographer: choreographer,
             newChoreographer: newChoreographer,
             moment: moment,
-            stripePublicKey: process.env.stripePublicKey,
             user: user,
         });
     } else {
-        const host = req.get("host");
-        const account = await stripe.accounts.retrieve(choreographer.stripeID);
-        const session = await stripe.checkout.sessions.create({
-            payment_method_types: ["card"],
-            line_items: [{
-                name: lesson.title,
-                amount: lesson.price,
-                currency: "jpy",
-                quantity: 1,
-            },],
-            customer_email: user.email,
-            allow_promotion_codes: true,
-            payment_intent_data: {
-                application_fee_amount: lesson.price * 0.15,
-                transfer_data: {
-                    destination: account.id,
-                },
-            },
-            success_url: `https://${host}/success/${req.params.id}` +
-                "?session_id={CHECKOUT_SESSION_ID}",
-            cancel_url: `https://${host}/reservation/${req.params.id}`,
-        });
-
         res.render("reservation", {
-            id: session.id,
+            params: req.params.id,
             lesson: lesson,
             newLesson: newLesson,
             choreographer: choreographer,
             newChoreographer: newChoreographer,
             moment: moment,
-            stripePublicKey: process.env.stripePublicKey,
             user: user,
         });
     }
+});
+
+router.post('/create-checkout-session/:id', checkSession, ensureAuthenticated, async (req, res) => {
+    const lesson = await Lesson.findOne({ _id: req.params.id }).lean().exec();
+    const choreographer = await User.findOne({ _id: lesson.choreographerID }).lean().exec();
+    const host = req.get("host");
+    const account = await stripe.accounts.retrieve(choreographer.stripeID);
+    const session = await stripe.checkout.sessions.create({
+        line_items: [{
+            name: lesson.title,
+            amount: lesson.price,
+            images: [lesson.thumbnail],
+            currency: "jpy",
+            quantity: "1"
+        },],
+        payment_method_types: ['card'],
+        customer_email: user.email,
+        allow_promotion_codes: true,
+        payment_intent_data: {
+            application_fee_amount: lesson.price * 0.15,
+            transfer_data: {
+                destination: account.id,
+            },
+        },
+        mode: 'payment',
+        success_url: `https://${host}/success/${req.params.id}` +
+            "?session_id={CHECKOUT_SESSION_ID}",
+        cancel_url: `https://${host}/reservation/${req.params.id}`,
+    });
+
+  res.redirect(303, session.url);
 });
 
 router.get("/success/:id", ensureAuthenticated, async (req, res) => {

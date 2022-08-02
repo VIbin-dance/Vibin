@@ -11,7 +11,11 @@
 <!-- live video & chat section -->
 
 <section id="live_grid">
-    <input type="hidden" name="ch_playurl" id="ch_playurl" value="<%= ch_playURL %>">
+    <% if (liveStatus === true) { %>
+        <input type="hidden" name="ch_playurl" id="ch_playurl" value="<%= ch_playURL %>">
+    <% } else { %>
+        <input type="hidden" name="ch_playurl" id="ch_playurl" value="https://vibin-staticvideo.s3.amazonaws.com/%E3%81%93%E3%81%AE%E3%83%81%E3%83%A3%E3%83%B3%E3%83%8D%E3%83%AB%E3%81%AF%E7%8F%BE%E5%9C%A8%E3%82%AA%E3%83%B3%E3%83%A9%E3%82%A4%E3%83%B3%E3%81%A7%E3%81%AF%E3%81%82%E3%82%8A%E3%81%BE%E3%81%9B%E3%82%93.mp4">
+    <% } %>
     <!-- <input type="hidden" name="ch_playurl" id="ch_playurl"
         value="https://vibin-archive.s3.amazonaws.com/ivs/v1/401352423179/3QO4kTn98QvQ/2022/6/6/13/15/4m6W36vol0Pl/media/hls/master.m3u8"> -->
     <input type="hidden" name="ch_playTime" id="ch_playTime" value="">
