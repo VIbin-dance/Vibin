@@ -118,8 +118,8 @@ router.get('/student/:lesson_id', checkSession, async (req, res) => {
         } else if (ls.price != 0 && !user.lesson.includes(ls._id.toString())) {
             req.flash('error_msg', '選択したレッスンは購入されていません。');
             res.redirect(`/reservation/${req.params.lesson_id}`);
-        } else if (moment().isAfter(ls.time)) {
-            res.redirect(`/lesson/archive/${ls._id}`)
+        // } else if (moment().isAfter(ls.time)) {
+            // res.redirect(`/lesson/archive/${ls._id}`)
             // res.render('student', {
             //     user: user,
             //     choreographer: choreographer,

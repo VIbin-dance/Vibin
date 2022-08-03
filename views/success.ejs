@@ -14,7 +14,7 @@
                             <li>1. ご自身の<a href="/users/profile">プロフィール</a>または<a
                                     href="/calendar">カレンダー</a>ページにてご購入したレッスンを参照してください。</li>
                             <li>2. 予定の時刻：
-                                <%= moment(lesson.time).format('MM/DD HH:mm'); %>にレッスンをクリック、先生がライブ配信を開始します
+                                <%= moment(lesson.time.start).format('MM/DD HH:mm'); %>にレッスンをクリック、先生がライブ配信を開始します
                             </li>
                             <li>エラー・不具合等の問題が発生した場合、先生またはVibin'にご連絡ください。</li>
                         </ol>
@@ -45,7 +45,8 @@
                 <h4>
                     <%= lesson.price %>
                         <%= __('dashboard.Yen') %> |
-                            <%= moment(lesson.time).format('MM/DD HH:mm'); %>
+                        <%= moment(lesson.time.start).format('MM/DD HH:mm'); %> ~
+                        <%= lesson.time.end %>
                 </h4>
                 <hr>
                 <div class="text-center">
