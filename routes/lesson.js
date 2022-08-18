@@ -245,4 +245,8 @@ router.get('/chat/:userId', checkSession, async (req, res) => {
     });
 });
 
+router.get('/broadcast', async (req, res) => {
+    res.render('broadcast');
+})
+
 module.exports = router;
