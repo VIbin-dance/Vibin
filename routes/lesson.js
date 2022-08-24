@@ -71,16 +71,16 @@ router.post('/reset_streamkey', ensureAuthenticated, function (req, res) {
     updateStreamKey(req, res);
 });
 
-// router.get('/archive/:archive_id', ensureAuthenticated, async (req, res) => {
-//     Lesson.findOne({ _id: req.params.archive_id }, (err, archive) => {
-//         console.log(archive)
-//         res.render('archive', {
-//             user: req.session.user,
-//             archiveName: archive.title,
-//             archiveURL: archive.s3.archiveURL
-//         })
-//     })
-// });
+router.get('/archive/:archive_id', ensureAuthenticated, async (req, res) => {
+    Lesson.findOne({ _id: req.params.archive_id }, (err, archive) => {
+        console.log(archive)
+        res.render('archive', {
+            user: req.session.user,
+            archiveName: archive.title,
+            archiveURL: archive.s3.archiveURL
+        })
+    })
+});
 
 router.get('/teacher/:lesson_id', ensureAuthenticated, async (req, res) => {
     const ls = await Lesson.findOne({ _id: req.params.lesson_id }).lean().exec();
