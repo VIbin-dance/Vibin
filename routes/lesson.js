@@ -4,7 +4,7 @@ const moment = require('moment');
 
 const { ensureAuthenticated } = require('../config/auth');
 const { checkSession } = require("../config/session");
-const { createChannel, updateStreamKey } = require('../config/aws/channel');
+const { createChannel, updateStreamKey, checkStream } = require('../config/aws/channel');
 
 const User = require('../models/User');
 const Channel = require('../models/Channel');
@@ -118,7 +118,7 @@ router.get('/student/:lesson_id', checkSession, async (req, res) => {
         } else if (ls.price != 0 && !user.lesson.includes(ls._id.toString())) {
             req.flash('error_msg', '選択したレッスンは購入されていません。');
             res.redirect(`/reservation/${req.params.lesson_id}`);
-        // } else if (moment().isAfter(ls.time)) {
+            // } else if (moment().isAfter(ls.time)) {
             // res.redirect(`/lesson/archive/${ls._id}`)
             // res.render('student', {
             //     user: user,
@@ -245,8 +245,13 @@ router.get('/chat/:userId', checkSession, async (req, res) => {
     });
 });
 
-router.get('/broadcast', async (req, res) => {
-    res.render('broadcast');
+router.get('/broadcast', ensureAuthenticated, checkSession, async (req, res) => {
+    Channel.findOne({ ch_name: user._id }, (err, ch) => {
+        // checkStream(req, res)
+        res.render('broadcast', {
+            ch: ch,
+        });
+    })
 })
 
 module.exports = router;

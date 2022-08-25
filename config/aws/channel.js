@@ -8,7 +8,8 @@ const {
     // DeleteChannelCommand,
     DeleteStreamKeyCommand,
     CreateStreamKeyCommand,
-    GetRecordingConfigurationCommand
+    GetRecordingConfigurationCommand,
+    GetStreamCommand,
 } = require("@aws-sdk/client-ivs");
 
 const aivs_client = new IvsClient({
@@ -161,4 +162,21 @@ const updateStreamKey = (req, res) => {
     });
 };
 
-module.exports = { createChannel, updateStreamKey };
+const checkStream = (req, res) => {
+    Channel.findOne({ ch_name: req.session.user._id }, (err, ch) => {
+        const checkStream_option = {
+            "channelArn": ch.arn
+        };
+        
+        console.log(ch.arn);
+        const checkStream = new GetStreamCommand(checkStream_option);
+
+        aivs_client.send(checkStream)
+            .then((stream, err) => {
+                console.log(stream || err);
+                return;
+            })
+    });
+}
+
+module.exports = { createChannel, updateStreamKey, checkStream };
