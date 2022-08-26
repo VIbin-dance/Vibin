@@ -253,8 +253,8 @@ router.get('/broadcast', ensureAuthenticated, checkSession, (req, res) => {
 
         // setInterval(intervalFunc, 5000);
 
-        const stream = checkStream(req, res)
-        console.log(stream)
+        // const stream = checkStream(req, res)
+        // console.log(stream)
 
         res.render('broadcast', {
             ch: ch,

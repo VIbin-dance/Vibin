@@ -30,208 +30,233 @@
             </div>
     </div>
 
-    <section class="blog_masonry four_column" style="padding-top: 0;">
-        <div class="container col-lg-11">
-            <div class="row">
-                <div class="banner_title_inner">
-                    <h1 data-aos="fade-up" data-aos-delay="0" class="aos-init aos-animate">
-                        教えるレッスン&#10024;
-                    </h1>
-                </div>
-                <% if (lesson.length> 0) { %>
-                    <div class="card-columns">
-                        <% for (let i=0; i < lesson.length; i++) { %>
-                            <div class="card">
-                                <a href="/lesson/teacher/<%= lesson[i]._id %>" class="link_poet">
-                                    <div class="cover_link">
-                                        <img class="main_img" src="<%= lesson[i].thumbnail %>" alt="...">
-                                        <div class="auther_post">
-                                            <div class="media">
-                                                <img src="<%= userPhoto %>" alt="先生のプロフィール画像">
-                                                <div class="media-body my-auto">
-                                                    <div class="txt">
-                                                        <h4>
-                                                            <%= username %>
-                                                        </h4>
+    <hr>
+    <ul class="nav justify-content-center" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link scale border-0 c-dark mb-5 active" data-toggle="tab" href="#tickets" role="tab" aria-controls="tickets" aria-selected="true">
+            購入したレッスン
+        </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link scale border-0 c-dark mb-5" data-toggle="tab" href="#lesson" role="tab" aria-controls="lesson" aria-selected="true">
+            教えるレッスン&#10024;
+        </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link scale border-0 c-dark mb-5" data-toggle="tab" href="#archive" role="tab" aria-controls="archive" aria-selected="true">
+            アーカイブしたレッスン
+        </a>
+        </li>
+        </ul>
+      <div class="tab-content">
+        <div class="tab-pane fade show active" id="tickets" role="tabpanel" aria-labelledby="tickets">
+            <section class="blog_masonry four_column" style="padding-top: 0;">
+                <div class="container col-lg-11">
+                    <div class="row">
+                        <!-- <div class="banner_title_inner">
+                            <h1 data-aos="fade-up" data-aos-delay="0" class="aos-init aos-animate">
+                                購入したレッスン一覧&#10024;
+                            </h1>
+                        </div> -->
+                        <% if (tickets.length> 0) { %>
+                            <div class="card-columns">
+                                <% for (let i=0; i < tickets.length; i++) { %>
+                                    <div class="card">
+                                        <a href="/lesson/student/<%= tickets[i]._id %>" class="link_poet">
+                                            <div class="cover_link">
+                                                <img class="main_img" src="<%= tickets[i].thumbnail %>" alt="...">
+                                                <div class="auther_post">
+                                                    <div class="media">
+                                                        <img src="<%= choreographer[i].userPhoto %>" alt="先生のプロフィール画像">
+                                                        <div class="media-body my-auto">
+                                                            <div class="txt">
+                                                                <h4>
+                                                                    <%= choreographer[i].username %>
+                                                                </h4>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
+                                        </a>
+                                        <div class="card-body">
+                                            <div class="about_post">
+                                                <span class="c_ategory">
+                                                    <a href="#">
+                                                        <%= __(`dashboard.search.level.${tickets[i].level[0]}`) %>
+                                                    </a>
+                                                    <a href="#">
+                                                        <%= __(`dashboard.search.genre.${tickets[i].genre[0]}`) %>
+                                                    </a>
+                                                </span>
+                                                <span class="dot"></span>
+                                                <time>
+                                                    <%= moment(tickets[i].time.start).format('MM/DD HH:mm'); %> ~
+                                                        <%= tickets[i].time.end %>
+                                                </time>
+                                            </div>
+                                            <a href="/lesson/student/<%= tickets[i]._id %>" class="d-block">
+                                                <h5 class="card-title">
+                                                    <%= tickets[i].title %>
+                                                </h5>
+                                                <p class="card-text">
+                                                    <%= tickets[i].price %>円
+                                                </p>
+                                            </a>
+                                            <!-- <a href="/lesson/student/details/<%= tickets[i]._id %>">
+                                                詳細
+                                            </a> -->
                                         </div>
                                     </div>
-                                </a>
-                                <div class="card-body">
-                                    <div class="about_post">
-                                        <span class="c_ategory">
-                                            <a href="#">
-                                                <%= __(`dashboard.search.level.${lesson[i].level[0]}`) %>
-                                            </a>
-                                            <a href="#">
-                                                <%= __(`dashboard.search.genre.${lesson[i].genre[0]}`) %>
-                                            </a>
-                                        </span>
-                                        <span class="dot"></span>
-                                        <time>
-                                            <%= moment(lesson[i].time.start).format('MM/DD HH:mm'); %> ~
-                                                <%= lesson[i].time.end %>
-                                        </time>
-                                    </div>
-                                    <a href="/lesson/teacher/<%= lesson[i]._id %>" class="d-block">
-                                        <h5 class="card-title">
-                                            <%= lesson[i].title %>
-                                        </h5>
-                                        <p class="card-text">
-                                            <%= lesson[i].price %>円
-                                        </p>
-                                    </a>
-                                </div>
+                                    <% } %>
                             </div>
-                            <% } %>
+                            <% } else { %>
+                                <div class="container col-12">
+                                </div>
+                                <div class="banner_title_inner">
+                                    <h4 data-aos="fade-up" data-aos-delay="0" class="aos-init aos-animate">
+                                        レッスンをまだ購入していないようです...
+                                    </h4>
+                                    <a href="/">レッスンを探す</a>
+                                </div>
+                                <% } %>
                     </div>
-                    <% } else { %>
-                        <div class="container col-12">
-                        </div>
-                        <div class="banner_title_inner">
-                            <h4 data-aos="fade-up" data-aos-delay="0" class="aos-init aos-animate">
-                                教える予定のレッスンがまだ無いようです...
-                            </h4>
-                            <a href="/create">レッスンを作成する</a>
-                        </div>
-                        <% } %>
-            </div>
+                </div>
+            </section>
         </div>
-    </section>
+        <div class="tab-pane fade" id="lesson" role="tabpanel" aria-labelledby="lesson">
+            <section class="blog_masonry four_column" style="padding-top: 0;">
+                <div class="container col-lg-11">
+                    <div class="row">
+                        <!-- <div class="banner_title_inner">
+                            <h1 data-aos="fade-up" data-aos-delay="0" class="aos-init aos-animate">
+                                教えるレッスン&#10024;
+                            </h1>
+                        </div> -->
+                        <% if (lesson.length> 0) { %>
+                            <div class="card-columns">
+                                <% for (let i=0; i < lesson.length; i++) { %>
+                                    <div class="card">
+                                        <a href="/lesson/teacher/<%= lesson[i]._id %>" class="link_poet">
+                                            <div class="cover_link">
+                                                <img class="main_img" src="<%= lesson[i].thumbnail %>" alt="...">
+                                                <div class="auther_post">
+                                                    <div class="media">
+                                                        <img src="<%= userPhoto %>" alt="先生のプロフィール画像">
+                                                        <div class="media-body my-auto">
+                                                            <div class="txt">
+                                                                <h4>
+                                                                    <%= username %>
+                                                                </h4>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div class="card-body">
+                                            <div class="about_post">
+                                                <span class="c_ategory">
+                                                    <a href="#">
+                                                        <%= __(`dashboard.search.level.${lesson[i].level[0]}`) %>
+                                                    </a>
+                                                    <a href="#">
+                                                        <%= __(`dashboard.search.genre.${lesson[i].genre[0]}`) %>
+                                                    </a>
+                                                </span>
+                                                <span class="dot"></span>
+                                                <time>
+                                                    <%= moment(lesson[i].time.start).format('MM/DD HH:mm'); %> ~
+                                                        <%= lesson[i].time.end %>
+                                                </time>
+                                            </div>
+                                            <a href="/lesson/teacher/<%= lesson[i]._id %>" class="d-block">
+                                                <h5 class="card-title">
+                                                    <%= lesson[i].title %>
+                                                </h5>
+                                                <p class="card-text">
+                                                    <%= lesson[i].price %>円
+                                                </p>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <% } %>
+                            </div>
+                            <% } else { %>
+                                <div class="container col-12">
+                                </div>
+                                <div class="banner_title_inner">
+                                    <h4 data-aos="fade-up" data-aos-delay="0" class="aos-init aos-animate">
+                                        教える予定のレッスンがまだ無いようです...
+                                    </h4>
+                                    <a href="/create">レッスンを作成する</a>
+                                </div>
+                                <% } %>
+                    </div>
+                </div>
+            </section>
 
-    <section class="blog_masonry four_column" style="padding-top: 0;">
-        <div class="container col-lg-11">
-            <div class="row">
-                <div class="banner_title_inner">
-                    <h1 data-aos="fade-up" data-aos-delay="0" class="aos-init aos-animate">
-                        購入したレッスン一覧&#10024;
-                    </h1>
-                </div>
-                <% if (tickets.length> 0) { %>
-                    <div class="card-columns">
-                        <% for (let i=0; i < tickets.length; i++) { %>
-                            <div class="card">
-                                <a href="/lesson/student/<%= tickets[i]._id %>" class="link_poet">
-                                    <div class="cover_link">
-                                        <img class="main_img" src="<%= tickets[i].thumbnail %>" alt="...">
-                                        <div class="auther_post">
-                                            <div class="media">
-                                                <img src="<%= choreographer[i].userPhoto %>" alt="先生のプロフィール画像">
-                                                <div class="media-body my-auto">
-                                                    <div class="txt">
-                                                        <h4>
-                                                            <%= choreographer[i].username %>
-                                                        </h4>
+        </div>
+        <div class="tab-pane fade" id="archive" role="tabpanel" aria-labelledby="archive">
+            <section class="blog_masonry four_column" style="padding-top: 0;">
+                <div class="container col-lg-11">
+                    <div class="row">
+                        <!-- <div class="banner_title_inner">
+                            <h1 data-aos="fade-up" data-aos-delay="0" class="aos-init aos-animate">
+                                アーカイブしたレッスン一覧&#10024;
+                            </h1>
+                        </div> -->
+                        <% if (archive.length> 0) { %>
+                            <div class="card-columns">
+                                <% for (let i=0; i < archive.length; i++) { %>
+                                    <div class="card">
+                                        <a href="/lesson/archive/<%= archive[i]._id %>" class="link_poet">
+                                            <div class="cover_link">
+                                                <img class="main_img" src="<%= archive[i].thumbnail %>" alt="...">
+                                                <div class="auther_post">
+                                                    <div class="media">
+                                                        <img src="<%= userPhoto %>" alt="先生のプロフィール画像">
+                                                        <div class="media-body my-auto">
+                                                            <div class="txt">
+                                                                <h4>
+                                                                    <%= username %>
+                                                                </h4>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </a>
-                                <div class="card-body">
-                                    <div class="about_post">
-                                        <span class="c_ategory">
-                                            <a href="#">
-                                                <%= __(`dashboard.search.level.${tickets[i].level[0]}`) %>
-                                            </a>
-                                            <a href="#">
-                                                <%= __(`dashboard.search.genre.${tickets[i].genre[0]}`) %>
-                                            </a>
-                                        </span>
-                                        <span class="dot"></span>
-                                        <time>
-                                            <%= moment(tickets[i].time.start).format('MM/DD HH:mm'); %> ~
-                                                <%= tickets[i].time.end %>
-                                        </time>
-                                    </div>
-                                    <a href="/lesson/student/<%= tickets[i]._id %>" class="d-block">
-                                        <h5 class="card-title">
-                                            <%= tickets[i].title %>
-                                        </h5>
-                                        <p class="card-text">
-                                            <%= tickets[i].price %>円
-                                        </p>
-                                    </a>
-                                    <!-- <a href="/lesson/student/details/<%= tickets[i]._id %>">
-                                        詳細
-                                    </a> -->
-                                </div>
-                            </div>
-                            <% } %>
-                    </div>
-                    <% } else { %>
-                        <div class="container col-12">
-                        </div>
-                        <div class="banner_title_inner">
-                            <h4 data-aos="fade-up" data-aos-delay="0" class="aos-init aos-animate">
-                                レッスンをまだ購入していないようです...
-                            </h4>
-                            <a href="/">レッスンを探す</a>
-                        </div>
-                        <% } %>
-            </div>
-        </div>
-    </section>
-
-    <!-- <section class="blog_masonry four_column" style="padding-top: 0;">
-        <div class="container col-lg-11">
-            <div class="row">
-                <div class="banner_title_inner">
-                    <h1 data-aos="fade-up" data-aos-delay="0" class="aos-init aos-animate">
-                        アーカイブしたレッスン一覧&#10024;
-                    </h1>
-                </div>
-                <% if (archive.length> 0) { %>
-                    <div class="card-columns">
-                        <% for (let i=0; i < archive.length; i++) { %>
-                            <div class="card">
-                                <a href="/lesson/archive/<%= archive[i]._id %>" class="link_poet">
-                                    <div class="cover_link">
-                                        <img class="main_img" src="<%= archive[i].thumbnail %>" alt="...">
-                                        <div class="auther_post">
-                                            <div class="media">
-                                                <img src="<%= userPhoto %>" alt="先生のプロフィール画像">
-                                                <div class="media-body my-auto">
-                                                    <div class="txt">
-                                                        <h4>
-                                                            <%= username %>
-                                                        </h4>
-                                                    </div>
-                                                </div>
+                                        </a>
+                                        <div class="card-body">
+                                            <div class="about_post">
+                                                <time>
+                                                    <%= archive[i].duration %>
+                                                </time>
                                             </div>
+                                            <a href="/lesson/archive/<%= archive[i]._id %>" class="d-block">
+                                                <h5 class="card-title">
+                                                    <%= archive[i].title %>
+                                                </h5>
+                                                <p class="card-text">
+                                                </p>
+                                            </a>
                                         </div>
                                     </div>
-                                </a>
-                                <div class="card-body">
-                                    <div class="about_post">                                        
-                                        <time>
-                                            <%= archive[i].duration %>
-                                        </time>
-                                    </div>
-                                    <a href="/lesson/archive/<%= archive[i]._id %>" class="d-block">
-                                        <h5 class="card-title">
-                                            <%= archive[i].title %>
-                                        </h5>
-                                        <p class="card-text">
-                                        </p>
-                                    </a>
-                                </div>
+                                    <% } %>
                             </div>
-                            <% } %>
+                            <% } else { %>
+                                <div class="container col-12">
+                                </div>
+                                <div class="banner_title_inner">
+                                    <h4 data-aos="fade-up" data-aos-delay="0" class="aos-init aos-animate">
+                                        まだアーカイブはないようです...
+                                    </h4>
+                                    <p>アーカイブ機能は現在ベータ版です<br>
+                                    ご質問等ございましたらお気軽に<a href="mailto:info@vibin.tokyo">info@vibin.tokyo</a>までご連絡ください。</p>
+                                </div>
+                                <% } %>
                     </div>
-                    <% } else { %>
-                        <div class="container col-12">
-                        </div>
-                        <div class="banner_title_inner">
-                            <h4 data-aos="fade-up" data-aos-delay="0" class="aos-init aos-animate">
-                                まだアーカイブはないようです...
-                            </h4>
-                            <p>アーカイブ機能は現在ベータ版です<br>
-                            ご質問等ございましたらお気軽に<a href="mailto:info@vibin.tokyo">info@vibin.tokyo</a>までご連絡ください。</p>
-                        </div>
-                        <% } %>
-            </div>
+                </div>
+            </section>
         </div>
-    </section>  -->
+      </div>
