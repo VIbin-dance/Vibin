@@ -33,10 +33,14 @@
 
 
         <div class="config d-flex justify-content-center p-3">
-          <button type="button" class="btn-social border-0 mr-3" id="muteAudio" onclick="muteAudio()"><i
-              class="tio microphone"></i></button>
-          <button type="button" class="btn-social border-0 mr-3" id="hideVideo" onclick="hideVideo()"><i
-              class="tio video_camera"></i></button>
+
+          <button type="button" id="toggleAudioBtn" class="btn-social border-0 mr-3" onclick="toggleAudio()">
+            <i class="tio volume_up" id="toggleAudioIcon"></i>
+          </button>
+
+          <button type="button" id="toggleVideoBtn" class="btn-social border-0 mr-3" onclick="toggleVideo()">
+            <i class="tio video_camera" id="toggleVideoIcon"></i>
+          </button>
 
           <!-- Settings trigger modal -->
           <button type="button" class="btn-social border-0 mr-3" id="setting" data-toggle="modal"
@@ -56,15 +60,15 @@
                 <div class="modal-body">
                   <div class="form-group m-3">
                     <label for="video-devices">カメラ</label>
-                    <select disabled class="form-control" id="video-devices">
+                    <select class="form-control" id="video-devices">
                       <option selected disabled>Choose Option</option>
                     </select>
                     <label for="audio-devices">マイク</label>
-                    <select disabled class="form-control" id="audio-devices">
+                    <select class="form-control" id="audio-devices">
                       <option selected disabled>Choose Option</option>
                     </select>
                     <label for="stream-config">配信コンフィグ（消去予定）</label>
-                    <select disabled class="form-control" id="stream-config">
+                    <select class="form-control" id="stream-config">
                       <option selected disabled>Choose Option</option>
                     </select>
                     <input type="text" id="ingest-endpoint" value="<%= ch.ingestEndpoint %>" hidden />
@@ -82,8 +86,9 @@
           </div>
 
           <button class="btn btn_sm_primary scale border-0 bg-pink c-white rounded-pill mr-3" id="start" disabled
-            onclick="startBroadcast()">配信開始</button>
-          <!-- <button class="button" id="stop" disabled onclick="stopBroadcast()">Stop Broadcast</button> -->
+            onclick="startBroadcast()">配信を開始</button>
+          <button class="btn btn_sm_primary scale border-0 bg-dark c-white rounded-pill mr-3" id="stop" disabled
+            onclick="stopBroadcast()" hidden>配信を終了</button>
         </div>
     </div>
 

@@ -226,49 +226,71 @@ async function startBroadcast() {
   const streamKeyEl = document.getElementById("stream-key");
   const endpointEl = document.getElementById("ingest-endpoint");
   const start = document.getElementById("start");
+  const stop = document.getElementById("stop");
 
   try {
     start.disabled = true;
+    start.hidden = true;
+    stop.hidden = false;
     await window.client.startBroadcast(streamKeyEl.value, endpointEl.value);
   } catch (err) {
     start.disabled = false;
+    start.hidden = false;
+    stop.hidden = true;
     setError(err.toString());
   }
 }
 
 // Stop the broadcast
 async function stopBroadcast() {
+  const start = document.getElementById("start");
+  const stop = document.getElementById("stop");
+  
   try {
+    start.hidden = false;
+    stop.hidden = true;
     await window.client.stopBroadcast();
   } catch (err) {
+    start.hidden = true;
+    stop.hidden = false;
     setError(err.toString());
   }
 }
 // mute microphone
-async function muteAudio() {
-  const muteAudio = document.getElementById("muteAudio");
+async function toggleAudio() {
+  const toggleAudioIcon = document.getElementById("toggleAudioIcon");
+  const toggleAudioBtn = document.getElementById("toggleAudioBtn");
 
-  console.log(window.client)
-  console.log(window.client.peerClient.establishConnection)
-  console.log(window.client.peerClient.analyticsTracker)
-  console.log(window.client.peerStatsTracker.audioLatencySamples)
-  console.log(window.client.peerStatsTracker.mediaStreamManager)
   try {
-    await window.client.disableAudio()
-
-    muteAudio.style.backgroundColor = "red";
+    if (toggleAudioIcon.classList.contains("volume_up")) {
+      await window.client.disableAudio()
+      toggleAudioIcon.classList.replace('volume_up', 'volume_off');
+      toggleAudioBtn.classList.add('bg-red');
+    } else if (toggleAudioIcon.classList.contains("volume_off")) {
+      await window.client.enableAudio()
+      toggleAudioIcon.classList.replace('volume_off', 'volume_up');
+      toggleAudioBtn.classList.remove('bg-red');
+    }
   } catch (err) {
     setError(err.toString());
   }
 }
 
 // turn off camera
-async function hideVideo() {
-  const hideVideo = document.getElementById("hideVideo");
+async function toggleVideo() {
+  const toggleVideoIcon = document.getElementById("toggleVideoIcon");
+  const toggleVideoBtn = document.getElementById("toggleVideoBtn");
 
   try {
-    await window.client.disableVideo();
-    hideVideo.style.backgroundColor = "red";
+    if (toggleVideoIcon.classList.contains("video_camera")) {
+      await window.client.disableVideo()
+      toggleVideoIcon.classList.replace('video_camera', 'video_camera_off');
+      toggleVideoBtn.classList.add('bg-red');
+    } else if (toggleVideoIcon.classList.contains("video_camera_off")) {
+      await window.client.enableVideo()
+      toggleVideoIcon.classList.replace('video_camera_off', 'video_camera');
+      toggleVideoBtn.classList.remove('bg-red');
+    }
   } catch (err) {
     setError(err.toString());
   }
