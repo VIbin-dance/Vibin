@@ -3,13 +3,11 @@ const Channel = require("../../models/Channel");
 const {
     IvsClient,
     CreateChannelCommand,
-    // CreateRecordingConfigurationCommand,
-    // DeleteRecordingConfigurationCommand,
-    // DeleteChannelCommand,
     DeleteStreamKeyCommand,
     CreateStreamKeyCommand,
     GetRecordingConfigurationCommand,
     GetStreamCommand,
+    GetStreamSessionCommand,
 } = require("@aws-sdk/client-ivs");
 
 const aivs_client = new IvsClient({
@@ -167,14 +165,23 @@ const checkStream = (req, res) => {
         const checkStream_option = {
             "channelArn": ch.arn
         };
-        
-        console.log(ch.arn);
+
         const checkStream = new GetStreamCommand(checkStream_option);
 
         aivs_client.send(checkStream)
             .then((stream, err) => {
-                console.log(stream || err);
-                return;
+                try {
+                    const streamInfo = {
+                        health: stream.stream.health,
+                        state: stream.stream.state,
+                        viewerCount: stream.stream.viewerCount,
+                        startTime: stream.stream.startTime,
+                    }
+
+                    return streamInfo;
+                } catch (err) {
+                    return err;
+                }
             })
     });
 }

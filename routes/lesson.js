@@ -245,9 +245,17 @@ router.get('/chat/:userId', checkSession, async (req, res) => {
     });
 });
 
-router.get('/broadcast', ensureAuthenticated, checkSession, async (req, res) => {
+router.get('/broadcast', ensureAuthenticated, checkSession, (req, res) => {
     Channel.findOne({ ch_name: user._id }, (err, ch) => {
-        // checkStream(req, res)
+        // const intervalFunc = async () => {
+        //     const stream = await checkStream(req, res)
+        // }
+
+        // setInterval(intervalFunc, 5000);
+
+        const stream = checkStream(req, res)
+        console.log(stream)
+
         res.render('broadcast', {
             ch: ch,
         });
