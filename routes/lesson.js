@@ -4,7 +4,7 @@ const moment = require('moment');
 
 const { ensureAuthenticated } = require('../config/auth');
 const { checkSession } = require("../config/session");
-const { createChannel, updateStreamKey, checkStream } = require('../config/aws/channel');
+const { createChannel, updateStreamKey, checkStream, sendMetadata } = require('../config/aws/channel');
 
 const User = require('../models/User');
 const Channel = require('../models/Channel');
@@ -247,6 +247,7 @@ router.get('/chat/:userId', checkSession, async (req, res) => {
 
 router.get('/broadcast', ensureAuthenticated, checkSession, (req, res) => {
     Channel.findOne({ ch_name: user._id }, (err, ch) => {
+        // sendMetadata(req, res)
         // const intervalFunc = async () => {
         //     const stream = await checkStream(req, res)
         // }

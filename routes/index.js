@@ -366,7 +366,7 @@ router.post('/create-checkout-session/:id', checkSession, ensureAuthenticated, a
         cancel_url: `https://${host}/reservation/${req.params.id}`,
     });
 
-  res.redirect(303, session.url);
+    res.redirect(303, session.url);
 });
 
 router.get("/success/:id", ensureAuthenticated, async (req, res) => {

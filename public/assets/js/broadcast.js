@@ -1,3 +1,5 @@
+// const moment = require('moment');
+
 // Possible configurations
 const channelConfigs = [
   ["Basic: Landscape", window.IVSBroadcastClient.BASIC_LANDSCAPE],
@@ -245,7 +247,7 @@ async function startBroadcast() {
 async function stopBroadcast() {
   const start = document.getElementById("start");
   const stop = document.getElementById("stop");
-  
+
   try {
     start.hidden = false;
     stop.hidden = true;
@@ -291,6 +293,16 @@ async function toggleVideo() {
       toggleVideoIcon.classList.replace('video_camera_off', 'video_camera');
       toggleVideoBtn.classList.remove('bg-red');
     }
+  } catch (err) {
+    setError(err.toString());
+  }
+}
+
+async function getSessionTime() {
+  const currentTime = moment();
+
+  try {
+    console.log(currentTime)
   } catch (err) {
     setError(err.toString());
   }

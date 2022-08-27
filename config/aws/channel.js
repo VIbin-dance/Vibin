@@ -8,6 +8,7 @@ const {
     GetRecordingConfigurationCommand,
     GetStreamCommand,
     GetStreamSessionCommand,
+    PutMetadataCommand,
 } = require("@aws-sdk/client-ivs");
 
 const aivs_client = new IvsClient({
@@ -186,4 +187,26 @@ const checkStream = (req, res) => {
     });
 }
 
-module.exports = { createChannel, updateStreamKey, checkStream };
+const sendMetadata = (req, res) => {
+    Channel.findOne({ ch_name: req.session.user._id }, (err, ch) => {
+        const sendMetadata_option = {
+            channelArn: ch.arn,
+            metadata: "hello test"
+        };
+
+        const sendMetadata = new PutMetadataCommand(sendMetadata_option);
+
+        aivs_client.send(sendMetadata)
+            .then((result, err) => {
+                try {
+                    console.log(result || err)
+
+                    return result;
+                } catch (err) {
+                    return err;
+                }
+            })
+    })
+}
+
+module.exports = { createChannel, updateStreamKey, checkStream, sendMetadata };
