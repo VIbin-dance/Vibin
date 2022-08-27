@@ -257,6 +257,7 @@ router.get('/broadcast', ensureAuthenticated, checkSession, (req, res) => {
         // console.log(stream)
 
         res.render('broadcast', {
+            layout: "layouts/noFooter",
             ch: ch,
         });
     })

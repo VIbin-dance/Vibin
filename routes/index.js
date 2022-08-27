@@ -49,7 +49,7 @@ router.get("/about", async (req, res) => {
             }
 
             res.render("lp/lp-v1", {
-                layout: "lp/lplayouts",
+                layout: "layouts/lplayouts",
                 lesson: lesson,
                 choreographer: choreographer,
                 moment: moment,
@@ -60,7 +60,7 @@ router.get("/about", async (req, res) => {
 
 router.get("/become-a-teacher", async (req, res) => {
     res.render("lp/choreo", {
-        layout: "lp/lplayouts",
+        layout: "layouts/lplayouts",
     });
 })
 
