@@ -7,9 +7,9 @@
 
 <section id="live_grid">
   <div class="live_grid">
-    <div class="video_grid ">
+    <div class="video_grid">
       <%- include ('partials/messages') %>
-        <div class="channel_info student">
+        <!-- <div class="channel_info student">
           <div class="user_info">
             <div class="infor">
               <p class="name">
@@ -19,25 +19,55 @@
                 <div class="channel_status">
                   <p class="login_users mr-3"></p>
                   <p class="live_time mr-3"></p>
-                  <!-- <p>時間：</p>
+                  <p>時間：</p>
                   <button type="button" class="btn-social border-0 mr-3" onclick="getSessionTime()">
                     <i class="tio video_camera"></i>
-                  </button> -->
+                  </button>
                   <p class="mr-3"><b>配信状況：</b>正常</p>
                   <p class="mr-3"><b>ビットレート：</b>1500kbps</p>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="channelView-ivs">
-          <canvas id="preview" class="video-js vjs-fluid vjs-fill vjs-big-play-centered"></canvas>
-          <h3 id="error"></h3>
-        </div>
+        </div> -->
 
+        <!-- <div class="container-fluid">
+          <div class="row"> -->
+            <!-- <div class="col-md-2">
+              <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">
+                        タイトル
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">
+                      配信状況
+                    </h3>
+                    <p class="mr-3">正常</p>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">
+                      ビットレート
+                    </h3>
+                    <p class="mr-3">1500kbps</p>
+                </div>
+              </div>
+            </div> -->
+            <div class="">
+              <canvas id="preview" class="video-js vjs-fluid vjs-fill vjs-big-play-centered" style="border-radius:0px;"></canvas>
+              <h3 id="error"></h3>
+            </div>
+          <!-- </div>
+        </div> -->
 
         <div class="config d-flex justify-content-center p-3">
-
+          <div class="d-flex mr-auto mt-auto">
+            <p class="ml-3 mr-3"><b>セッション時間：</b>00:12:52</p>
+            <p class="mr-3"><b>視聴者数：</b>10</p>
+            <p class="mr-3"><b>配信状況：</b>正常</p>
+            <p class="mr-3"><b>ビットレート：</b>1500kbps</p>
+          </div>
           <button type="button" id="toggleAudioBtn" class="btn-social border-0 mr-3" onclick="toggleAudio()">
             <i class="tio volume_up" id="toggleAudioIcon"></i>
           </button>

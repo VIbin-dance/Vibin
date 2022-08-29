@@ -1,4 +1,5 @@
 @charset "UTF-8";
+
 .bd_red {
     border: solid red 1px;
 }
@@ -12,14 +13,17 @@
         -webkit-transform: rotate(0deg);
         transform: rotate(0deg);
     }
+
     10% {
         -webkit-transform: rotate(180deg);
         transform: rotate(180deg);
     }
+
     20% {
         -webkit-transform: rotate(1turn);
         transform: rotate(1turn);
     }
+
     to {
         -webkit-transform: rotate(1turn);
         transform: rotate(1turn);
@@ -31,14 +35,17 @@
         -webkit-transform: rotate(0deg);
         transform: rotate(0deg);
     }
+
     10% {
         -webkit-transform: rotate(180deg);
         transform: rotate(180deg);
     }
+
     20% {
         -webkit-transform: rotate(1turn);
         transform: rotate(1turn);
     }
+
     to {
         -webkit-transform: rotate(1turn);
         transform: rotate(1turn);
@@ -50,10 +57,12 @@
         -webkit-transform: rotate(0deg);
         transform: rotate(0deg);
     }
+
     50% {
         -webkit-transform: rotate(180deg);
         transform: rotate(180deg);
     }
+
     to {
         -webkit-transform: rotate(1turn);
         transform: rotate(1turn);
@@ -65,10 +74,12 @@
         -webkit-transform: rotate(0deg);
         transform: rotate(0deg);
     }
+
     50% {
         -webkit-transform: rotate(180deg);
         transform: rotate(180deg);
     }
+
     to {
         -webkit-transform: rotate(1turn);
         transform: rotate(1turn);
@@ -125,7 +136,7 @@ body::-webkit-scrollbar-thumb {
 
 .live_grid .video_grid {
     position: relative;
-    width: calc( 100% - 350px);
+    width: calc(100% - 450px);
     -webkit-box-ordinal-group: 2;
     -ms-flex-order: 1;
     order: 1;
@@ -651,6 +662,7 @@ body::-webkit-scrollbar-thumb {
     .live_grid .video_grid .channelView-ivs #live_screen #amazon-ivs-videojs {
         /* position: fixed; */
     }
+
     .live_grid .video_grid .channelView-ivs #self_camera {
         width: 100%;
         height: 55vw !important;
@@ -726,41 +738,50 @@ body::-webkit-scrollbar-thumb {
         flex-wrap: wrap;
         padding: 0.5rem;
     }
+
     .live_grid .video_grid .channel_info.student .user_info {
         width: 100%;
     }
+
     .live_grid .video_grid .channel_info.student .user_info .avatar.live_status .outline {
         width: 50px;
         height: 50px;
     }
+
     .live_grid .video_grid .channel_info.student .user_info .avatar.live_status::after {
         bottom: -7px;
         font-size: 10px;
         line-height: 15px;
     }
+
     .live_grid .video_grid .channel_info.student .user_info .infor {
         padding-right: 0;
         overflow: hidden;
     }
+
     .live_grid .video_grid .channel_info.student .user_info .infor .name {
         font-size: 0.8rem;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
     }
+
     .live_grid .video_grid .channel_info .user_info .infor p.level {
         margin: 0;
         font-size: 0.4rem;
         line-height: 1.5;
     }
+
     .live_grid .video_grid .channel_info.student .user_info .infor .category_grid {
         display: none;
     }
+
     .live_grid .video_grid .channel_info.student .count_info {
         width: 100%;
         text-align: left;
         /* padding-top: 1rem; */
     }
+
     .live_grid .video_grid .channel_info.student .count_info .btn_grid {
         display: -webkit-inline-box;
         display: -ms-inline-flexbox;
@@ -769,12 +790,15 @@ body::-webkit-scrollbar-thumb {
         -ms-flex-pack: start;
         justify-content: flex-start;
     }
+
     .live_grid .video_grid .channel_info.student .count_info .channel_status {
         display: inline;
     }
+
     .live_grid .video_grid .choreographer {
         display: none;
     }
+
     .chat_grid #temp_btn {
         display: none;
     }
@@ -813,8 +837,8 @@ body::-webkit-scrollbar-thumb {
     left: 50%;
     top: 50%;
     background: #fff;
-    width: calc( 100% - 4px);
-    height: calc( 100% - 4px);
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
     padding: 2px;
     border-radius: 10rem;
 }
@@ -1043,7 +1067,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 .live_grid .chat_grid.collapseOn {
-    width: 350px;
+    width: 450px;
     border-left: solid #0000001f 1px;
     position: fixed;
     right: 0;
@@ -1249,7 +1273,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 .live_grid .chat_grid .contain .message_wrap ul li .message {
-    width: calc( 100% - 4rem);
+    width: calc(100% - 4rem);
     padding: 0.5rem 1.3rem;
     background: #eb5160;
     border-radius: 0 1rem 1rem;
@@ -1271,28 +1295,34 @@ body::-webkit-scrollbar-thumb {
     .live_grid .chat_grid .contain .message_wrap {
         height: 95vh;
     }
+
     .live_grid .chat_grid .contain .message_wrap ul li {
         padding: 0.4rem 0;
         padding-bottom: 0;
     }
+
     .live_grid .chat_grid .contain .message_wrap ul li .avatar {
         width: 2rem;
         height: 2rem;
         margin-right: 0rem;
     }
+
     .live_grid .chat_grid .contain .message_wrap ul li .avatar p {
         font-size: 8px;
         /* display: none; */
-    }    
+    }
+
     .live_grid .chat_grid .contain .message_wrap ul li .avatar img {
         width: 100%;
         height: 100%;
     }
+
     .live_grid .chat_grid .contain .message_wrap ul li .message .time {
         padding: 0;
     }
+
     .live_grid .chat_grid .contain .message_wrap ul li .message {
-        width: calc( 100% - 3rem);
+        width: calc(100% - 3rem);
         padding: 0.4rem 0.4rem;
         font-size: 0.7rem;
     }
@@ -1300,7 +1330,7 @@ body::-webkit-scrollbar-thumb {
 
 @media (orientation:landscape) and (max-width: 768px) {
     .live_grid .chat_grid .contain .message_wrap ul li .avatar {
-        width: calc( 100% - 2rem);
+        width: calc(100% - 2rem);
         width: 2rem;
         height: 2rem;
     }
@@ -1315,7 +1345,7 @@ body::-webkit-scrollbar-thumb {
     -ms-flex-align: center;
     align-items: center;
     top: 5.7rem;
-    right: 300px;
+    right: 400px;
     z-index: 900;
     width: 2rem;
     height: 2rem;
@@ -1356,7 +1386,7 @@ body::-webkit-scrollbar-thumb {
 #results {
     position: relative;
     width: 100%;
-    min-height: calc( 100vh - 35rem);
+    min-height: calc(100vh - 35rem);
     padding: 0 16px 5rem;
 }
 
@@ -1512,7 +1542,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 #channel_grid .channel_infor .content {
-    width: calc( 100% - 10rem);
+    width: calc(100% - 10rem);
     line-height: 2.5;
 }
 
@@ -1572,7 +1602,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 #channel_grid .channel_box .input_line input {
-    width: calc( 100% - 8rem);
+    width: calc(100% - 8rem);
 }
 
 #channel_grid .channel_box .btn_line {
