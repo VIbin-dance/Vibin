@@ -5,6 +5,7 @@ const moment = require('moment');
 const { ensureAuthenticated } = require('../config/auth');
 const { checkSession } = require("../config/session");
 const { createChannel, updateStreamKey, checkStream, sendMetadata } = require('../config/aws/channel');
+const { getMetric } = require('../config/aws/metric');
 
 const User = require('../models/User');
 const Channel = require('../models/Channel');
@@ -256,6 +257,8 @@ router.get('/broadcast', ensureAuthenticated, checkSession, (req, res) => {
 
         // const stream = checkStream(req, res)
         // console.log(stream)
+
+        // getMetric(req, res)
 
         res.render('broadcast', {
             layout: "layouts/noFooter",
