@@ -161,33 +161,31 @@ const updateStreamKey = (req, res) => {
     });
 };
 
-const checkStream = (req, res) => {
-    Channel.findOne({ ch_name: req.session.user._id }, (err, ch) => {
-        const checkStream_option = {
-            "channelArn": ch.arn
-        };
+const checkStream = (req, arn) => {
+    const checkStream_option = {
+        "channelArn": arn
+    };
 
-        const checkStream = new GetStreamCommand(checkStream_option);
+    const checkStream = new GetStreamCommand(checkStream_option);
 
-        aivs_client.send(checkStream)
-            .then((stream, err) => {
-                try {
-                    const streamInfo = {
-                        health: stream.stream.health,
-                        state: stream.stream.state,
-                        viewerCount: stream.stream.viewerCount,
-                        startTime: stream.stream.startTime,
-                    }
-
-                    return streamInfo;
-                } catch (err) {
-                    return err;
+    aivs_client.send(checkStream)
+        .then((stream, err) => {
+            try {
+                const streamInfo = {
+                    health: stream.stream.health,
+                    state: stream.stream.state,
+                    viewerCount: stream.stream.viewerCount,
+                    startTime: stream.stream.startTime,
                 }
-            })
-    });
+
+                console.log(streamInfo);
+            } catch (err) {
+                return err;
+            }
+        })
 }
 
-const sendMetadata = (req, res) => {
+const sendMetadata = (req, arn) => {
     Channel.findOne({ ch_name: req.session.user._id }, (err, ch) => {
         const sendMetadata_option = {
             channelArn: ch.arn,

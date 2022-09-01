@@ -1,11 +1,11 @@
 const moment = require('moment');
+const Channel = require("../../models/Channel");
+const { forEach } = require("async");
 
 const {
     CloudWatchClient,
-    ListMetricsCommand,
-    GetMetricStatisticsCommand,
+    GetMetricDataCommand,
 } = require("@aws-sdk/client-cloudwatch");
-const { forEach } = require("async");
 
 const aivs_client = new CloudWatchClient({
     credentials: {
@@ -15,45 +15,77 @@ const aivs_client = new CloudWatchClient({
     region: process.env.AWS_REGION
 });
 
-const getMetric = (req, res) => {
-    const chArn = "yGUo8U4W1oCA"
-
-    // const getMetric_option = {
-    //     Namespace: "AWS/IVS",
-    //     Dimensions: [{
-    //         Name: "Channel",
-    //         Value: chArn
-    //     }],
-    // };
-
-    const StartTime = moment().subtract(1, 'day').format("YYYY-MM-DDTHH:mm:ss+09:00")
-    const EndTime = moment().format("YYYY-MM-DDTHH:mm:ss+09:00")
-    console.log(StartTime)
-    console.log(new Date(StartTime))
-    console.log(EndTime)
+const getMetric = async (req, arn) => {
+    const StartTime = moment.utc().subtract(30, 'seconds').format("YYYY-MM-DDTHH:mm:ssZ")
+    const EndTime = moment.utc().format("YYYY-MM-DDTHH:mm:ssZ")
 
     const getMetric_option = {
-        Namespace: "AWS/IVS",
-        MetricName: "LiveDeliveredTime",
         StartTime: new Date(StartTime),
         EndTime: new Date(EndTime),
-        Period: 60,
-        Dimensions: [{
-            Name: "Channel",
-            Value: chArn
-        }],
-        Statistics: ["SampleCount", "Average", "Sum"]
-    };
+        MetricDataQueries: [{
+            "Id": "views",
+            "MetricStat": {
+                "Metric": {
+                    Namespace: "AWS/IVS",
+                    MetricName: "ConcurrentViews",
 
-    // const getMetric = new ListMetricsCommand(getMetric_option);
-    const getMetric = new GetMetricStatisticsCommand(getMetric_option);
+                    Dimensions: [{
+                        Name: "Channel",
+                        Value: arn
+                    }],
+                },
+                "Period": 30,
+                "Stat": "Maximum"
+            },
+            "ReturnData": true
+        },
+        {
+            "Id": "bitrate",
+            "MetricStat": {
+                "Metric": {
+                    Namespace: "AWS/IVS",
+                    MetricName: "IngestVideoBitrate",
+                    Dimensions: [{
+                        Name: "Channel",
+                        Value: arn
+                    }],
+                },
+                "Period": 30,
+                "Stat": "Average"
+            },
+            "ReturnData": true
+        },
+        {
+            "Id": "fps",
+            "MetricStat": {
+                "Metric": {
+                    Namespace: "AWS/IVS",
+                    MetricName: "IngestFramerate",
+                    Dimensions: [{
+                        Name: "Channel",
+                        Value: arn
+                    }],
+                },
+                "Period": 30,
+                "Stat": "Average"
+            },
+            "ReturnData": true
+        },
+        ]
+    }
+
+    const getMetric = new GetMetricDataCommand(getMetric_option);
 
     aivs_client.send(getMetric)
         .then((data) => {
             try {
-                console.log(data)
-                // console.log(data.Metrics[0].Dimensions)
-                // data.Metrics.forEach(metric => console.log(metric))
+                data.MetricDataResults.forEach(metric => {
+                    return {
+                        name: metric.Id,
+                        time: metric.Timestamps,
+                        value: metric.Values,
+                    }
+                })
             } catch (err) {
                 console.log(err)
             }
