@@ -1,5 +1,5 @@
 // Initialize - Digital Stopwatch
-(function() {
+(function () {
     "use strict";
 
     let TimeHolder = 0,
@@ -157,8 +157,8 @@
         li.innerHTML = `<figure class="avatar">
                         <img src="${user_photo}" alt="">
                         <p>${user_name}</p>
-                    </figure>
-                    <div class="message">${chat_msg}<span class="time">${chat_time}</span></div>`;
+                        </figure>
+                        <div class="message">${chat_msg}<span class="time">${chat_time}</span></div>`;
         chat_list.appendChild(li);
         chat_wrap.scrollTo(0, chat_wrap.scrollHeight);
     });
