@@ -287,11 +287,11 @@ async function toggleVideo() {
     if (toggleVideoIcon.classList.contains("video_camera")) {
       await window.client.disableVideo()
       toggleVideoIcon.classList.replace('video_camera', 'video_camera_off');
-      toggleVideoBtn.classList.add('bg-red');
+      toggleVideoBtn.classList.replace('color-light', 'bg-red');
     } else if (toggleVideoIcon.classList.contains("video_camera_off")) {
       await window.client.enableVideo()
       toggleVideoIcon.classList.replace('video_camera_off', 'video_camera');
-      toggleVideoBtn.classList.remove('bg-red');
+      toggleVideoBtn.classList.replace('bg-red', 'color-light');
     }
   } catch (err) {
     setError(err.toString());

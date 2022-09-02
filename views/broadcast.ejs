@@ -16,32 +16,33 @@
   <div class="live_grid">
     <div class="video_grid">
       <%- include ('partials/messages') %>
-            <div class="">
-              <canvas id="preview" class="video-js vjs-fluid vjs-fill vjs-big-play-centered"></canvas>
-              <h3 id="error"></h3>
-            </div>
+        <div class="streamVideo">
+          <canvas id="preview" class="video-js vjs-fluid vjs-fill vjs-big-play-centered"></canvas>
+            <h3 id="error"></h3>
+        </div>
 
-        <div class="config d-flex justify-content-center p-3">
-          <div class="d-flex mr-auto mt-auto">
-            <p class="ml-3 mr-3">視聴者数：<b class="login_users"></b></p>
+        <div class="control justify-content-center">
+          <div class="streamInfo d-flex mt-auto mr-3">
+            <p class="mr-3">視聴者数：<b class="login_users"></b></p>
             <p class="mr-3">セッション時間：<b class="live_time"></b></p>
             <!-- <p class="mr-3"><b>配信状況：</b>正常</p>
             <p class="mr-3"><b>ビットレート：</b>1500kbps</p> -->
           </div>
-          <button type="button" id="toggleAudioBtn" class="btn-social border-0 mr-3" onclick="toggleAudio()">
-            <i class="tio volume_up" id="toggleAudioIcon"></i>
-          </button>
+          <div class="streamConfig d-flex">
+           <button type="button" id="toggleAudioBtn" class="btn-social color-light border-0 mr-2" onclick="toggleAudio()">
+              <i class="tio volume_up" id="toggleAudioIcon"></i>
+            </button>
 
-          <button type="button" id="toggleVideoBtn" class="btn-social border-0 mr-3" onclick="toggleVideo()">
-            <i class="tio video_camera" id="toggleVideoIcon"></i>
-          </button>
+            <button type="button" id="toggleVideoBtn" class="btn-social color-light border-0 mr-2" onclick="toggleVideo()">
+              <i class="tio video_camera" id="toggleVideoIcon"></i>
+            </button>
 
           <!-- Settings trigger modal -->
-          <button type="button" class="btn-social border-0 mr-3" id="setting" data-toggle="modal"
+            <button type="button" class="btn-social color-light border-0 mr-2" id="setting" data-toggle="modal"
             data-target="#settingModal"><i class="tio settings"></i></button>
 
           <!-- Modal -->
-          <div class="modal fade" id="settingModal" tabindex="-1" role="dialog"
+            <div class="modal fade" id="settingModal" tabindex="-1" role="dialog"
             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
               <div class="modal-content">
@@ -73,16 +74,17 @@
                   <button type="button" class="btn btn_sm_primary scale border-0 bg-gray c-white rounded-pill m-1"
                     data-dismiss="modal">閉じる</button>
                   <button type="button"
-                    class="btn btn_sm_primary scale border-0 bg-pink c-white rounded-pill m-1">保存</button>
+                    class="btn btn_sm_primary scale border-0 bg-pink c-white rounded-pill m-1" data-dismiss="modal">保存</button>
                 </div>
               </div>
             </div>
-          </div>
+            </div>
 
-          <button class="btn btn_sm_primary scale border-0 bg-pink c-white rounded-pill mr-3" id="start" disabled
-            onclick="startBroadcast()">配信を開始</button>
-          <button class="btn btn_sm_primary scale border-0 bg-dark c-white rounded-pill mr-3" id="stop" disabled
-            onclick="stopBroadcast()" hidden>配信を終了</button>
+            <button class="btn btn_md_primary scale border-0 bg-pink c-white rounded-pill mr-3" id="start" disabled
+             onclick="startBroadcast()">配信を開始</button>
+            <button class="btn btn_md_primary scale border-0 bg-dark c-white rounded-pill mr-3" id="stop" disabled
+             onclick="stopBroadcast()" hidden>配信を終了</button>
+          </div>
         </div>
     </div>
 

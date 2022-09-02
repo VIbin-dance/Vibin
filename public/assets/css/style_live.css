@@ -1054,6 +1054,29 @@ body::-webkit-scrollbar-thumb {
     margin-right: 0.5rem;
 }
 
+.live_grid .video_grid .control {
+    display: flex;
+    padding: 15px;
+}
+
+@media screen and (max-width: 820px) {
+    .live_grid .video_grid .control {
+        font-size: 0.8rem;
+        display: block;
+        padding: 0px;
+    }
+
+    .live_grid .video_grid .control .streamInfo {
+        font-size: 0.8rem;
+        justify-content: center;
+    }
+
+    .live_grid .video_grid .control .streamConfig {
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+}
+
 .live_grid .chat_grid {
     position: relative;
     width: 0;
@@ -1636,6 +1659,7 @@ body::-webkit-scrollbar-thumb {
     font-size: 0.9rem;
     line-height: 1.4;
 }
+
 
 
 /*# sourceMappingURL=style_live.css.map */
