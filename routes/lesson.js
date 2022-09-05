@@ -248,6 +248,15 @@ router.get('/chat/:userId', checkSession, async (req, res) => {
 
 router.get('/broadcast', ensureAuthenticated, checkSession, (req, res) => {
     Channel.findOne({ ch_name: user._id }, (err, ch) => {
+        if (!ch) {
+            const ch_name = req.session.user._id;
+            createChannel(req, res, ch_name);
+        } else {
+            res.render('broadcast', {
+                layout: "layouts/noFooter",
+                ch: ch,
+            });
+        }
         // const arn = ch.arn.substring(ch.arn.lastIndexOf('/') + 1);
         // const intervalFunc = async () => {
         //     const stream = await getMetric(req, arn)
@@ -256,11 +265,6 @@ router.get('/broadcast', ensureAuthenticated, checkSession, (req, res) => {
         // }
 
         // setInterval(intervalFunc, 5000);
-
-        res.render('broadcast', {
-            layout: "layouts/noFooter",
-            ch: ch,
-        });
     })
 })
 

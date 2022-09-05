@@ -49,7 +49,7 @@ const createChannel = (req, res, ch_name) => {
                 },
             }, { upsert: true, new: true, setDefaultsOnInsert: true }, (err, ch) => {
                 if (err) {
-                    req.flash("error_msg", "チャンネルが作成されませんでした。");
+                    req.flash("error_msg", "チャンネル作成に問題が起きました。");
                     res.redirect('/lesson/channel');
                 } else {
                     req.flash("success_msg", "チャンネルが作成されました。");
