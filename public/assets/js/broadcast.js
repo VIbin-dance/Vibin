@@ -129,7 +129,17 @@ async function getDevices() {
 async function handleAudioDeviceSelect() {
   const id = "microphone";
   const audioSelectEl = document.getElementById("audio-devices");
-  const { audioDevices: devices } = await getDevices();
+
+  // const capture = { video: true, audio: true };
+  // const stream = await navigator.mediaDevices.getDisplayMedia(capture);
+  // console.log(stream)
+  // const audioctx = new AudioContext();
+  // const deviceAudio = audioctx.createMediaStreamSource(stream);
+  // console.log(deviceAudio)
+
+  // const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+  // console.log(stream)
+
   if (window.client.getAudioInputDevice(id)) {
     window.client.removeAudioInputDevice(id);
   }
